@@ -1,0 +1,52 @@
+import { ThemeWrapper } from "@/components/ThemeWrapper";
+import {
+  Inter_400Regular,
+  Inter_500Medium,
+  Inter_600SemiBold,
+  Inter_700Bold,
+  useFonts,
+} from "@expo-google-fonts/inter";
+import { SplashScreen, Stack } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import { Suspense, useEffect } from "react";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import "react-native-reanimated";
+import Toast from "react-native-toast-message";
+
+export const unstable_settings = {
+  initialRouteName: "(authen)",
+};
+SplashScreen.preventAutoHideAsync();
+
+export default function RootLayout() {
+  const [loaded, error] = useFonts({
+    "Inter-Regular": Inter_400Regular,
+    "Inter-Medium": Inter_500Medium,
+    "Inter-SemiBold": Inter_600SemiBold,
+    "Inter-Bold": Inter_700Bold,
+  });
+
+  useEffect(() => {
+    if (loaded || error) {
+      SplashScreen.hideAsync();
+    }
+  }, [loaded, error]);
+
+  if (!loaded && !error) {
+    return null;
+  }
+  return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <Suspense fallback={<StatusBar style="auto" />}>
+        <ThemeWrapper>
+          <Stack>
+            <Stack.Screen name="(authen)" options={{ headerShown: false }} />
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          </Stack>
+          <Toast />
+          <StatusBar style="auto" />
+        </ThemeWrapper>
+      </Suspense>
+    </GestureHandlerRootView>
+  );
+}
