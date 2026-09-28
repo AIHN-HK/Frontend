@@ -48,9 +48,8 @@ Thumbs.db
 *.swp
 *.swo
 .idea/
-.vscode/*
-!.vscode/settings.json
-!.vscode/extensions.json
+.vscode/
+_vscode/
 
 # Caches & build info
 .eslintcache
