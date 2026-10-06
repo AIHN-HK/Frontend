@@ -1,37 +1,27 @@
 import { z } from "zod";
 
-export const signUpSchema = z
-  .object({
-    fullName: z.string().min(1, "Họ tên không được để trống"),
-    email: z.string().email("Email không hợp lệ").trim(),
-    birthDate: z
-      .string()
-      .nullable()
-      .refine(
-        (val): val is string | null =>
-          val === null || /^\d{4}-\d{2}-\d{2}$/.test(val),
-        {
-          message: "Định dạng ngày không đúng (yyyy-mm-dd)",
-        },
-      )
-      .refine((val) => val === null || new Date(val) <= new Date(), {
-        message: "Ngày sinh không được ở tương lai",
-      }),
-
-    countryCode: z.string().min(2, "Vui lòng chọn mã quốc gia"),
-    phone: z.string().regex(/^0\d{9}$/, "Số điện thoại không hợp lệ"),
-    password: z
-      .string()
-      .min(8, "Mật khẩu ít nhất 8 ký tự")
-      .regex(/[a-z]/, "Phải có ít nhất 1 chữ cái thường (a-z)")
-      .regex(/[A-Z]/, "Phải có ít nhất 1 chữ cái in hoa (A-Z)")
-      .regex(/[0-9]/, "Phải có ít nhất 1 chữ số (0-9)")
-      .regex(/[^a-zA-Z0-9]/, "Phải có ít nhất 1 ký tự đặc biệt "),
-    confirmPassword: z.string().min(1, "Vui lòng nhập lại mật khẩu"),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Mật khẩu không khớp",
-    path: ["confirmPassword"],
-  });
-
-export type SignUpFormData = z.infer<typeof signUpSchema>;
+export const profileSchema = z.object({
+  fullname: z.string().trim().min(1, "Họ tên không được để trống").max(120, "Họ tên tối đa 120 ký tự"),
+  phone: z.string().trim().regex(/^0\d{9}$/, "Nhập số điện thoại 10 chữ số, bắt đầu bằng 0"),
+  address: z.string().trim().max(500, "Địa chỉ tối đa 500 ký tự").transform(value => value || null),
+  gender: z.enum(["", "MALE", "FEMALE", "OTHER"]).transform(value => value || null),
+  class: z.string().trim().refine(value => value === "" || /^(?:[1-9]|1[0-2])$/.test(value), "Lớp phải là số nguyên từ 1 đến 12").transform(value => value === "" ? null : Number(value)),
+});
+export type ProfileDraft = z.input<typeof profileSchema>;
+export type UpdatePersonalProfile = z.output<typeof profileSchema>;
+export type UserProfile = {
+  fullname: string;
+  email: string;
+  age: number;
+  phone: string | null;
+  address: string | null;
+  gender: "MALE" | "FEMALE" | "OTHER" | null;
+  class: number | null;
+};
+export const toProfileDraft = (profile: UserProfile): ProfileDraft => ({
+  fullname: profile.fullname,
+  phone: profile.phone ?? "",
+  address: profile.address ?? "",
+  gender: profile.gender ?? "",
+  class: profile.class?.toString() ?? "",
+});

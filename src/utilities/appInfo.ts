@@ -1,4 +1,4 @@
 export const AppConfig = {
-  environmentDev: "https://api.dailystyletouches.online",
+  environmentDev: "http://localhost:3000",
 };
-export const SOCKET_URL = "https://api.dailystyletouches.online";
+export const SOCKET_URL = "http://localhost:3000";

@@ -1,5 +1,6 @@
 export enum UserAPI {
-  GET_USER_DETAIL = "/user/me",
+  GET_USER_DETAIL = "/api/v1/users/me",
+  UPDATE_USER_DETAIL = "/api/v1/users/me",
 }
 export enum QuizzAPI {
   GET_ALL_QUIZ = "/api/v1/question",

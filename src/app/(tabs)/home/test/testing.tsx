@@ -33,6 +33,8 @@ const StartScreen = () => {
     submitSession,
   } = useQuizStore();
   const [exitModalVisible, setExitModalVisible] = React.useState(false);
+  const isWeb = useIsDesktopWeb();
+
   const section = questions[currentQuestionIndex];
   if (!section) {
     return (
@@ -41,6 +43,7 @@ const StartScreen = () => {
       </SafeAreaView>
     );
   }
+
   const onSubmit = async () => {
     const result = await submitSession();
     if (!result.success || !result.id) return;
@@ -68,8 +71,6 @@ const StartScreen = () => {
   if (currentQuestionIndex === questions.length - 1) {
     nextButtonText = "Hoàn thành";
   }
-
-  const isWeb = useIsDesktopWeb();
 
   const spacing = {
     paddingHorizontal: isWeb ? 760 : 24,
