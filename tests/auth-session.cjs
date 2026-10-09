@@ -1,0 +1,22 @@
+const assert=require('node:assert/strict');
+const ts=require('typescript');
+require.extensions['.ts']=(module,file)=>module._compile(ts.transpileModule(require('fs').readFileSync(file,'utf8'),{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.CommonJS,esModuleInterop:true}}).outputText,file);
+(async()=>{
+ const {createSessionManager}=require('../src/helpers/sessionManager.ts');
+ const data=new Map();let fail=false;
+ const storage={getItem:async k=>data.get(k)??null,setItem:async(k,v)=>{if(fail)throw Error('disk full');data.set(k,v);},removeItem:async k=>data.delete(k),multiRemove:async keys=>keys.forEach(k=>data.delete(k))};
+ const s=createSessionManager(storage);let resets=[];s.subscribe(async (userId,reason)=>{if(reason==='account')resets.push(userId);});
+ await s.establish({accessToken:'A',refreshToken:'RA',user:{id:1,fullname:'An'}});
+ assert.equal((await s.read()).userId,1);
+ data.set('huong-nghiep-quiz:1','draft-A');
+ await s.clear('A');assert.equal((await s.read()).accessToken,null);assert.equal(data.get('huong-nghiep-quiz:1'),'draft-A');assert.equal(data.has('USER_NAME'),false);
+ await s.establish({accessToken:'B',refreshToken:'RB',user:{id:2,fullname:'Binh'}});
+ await s.clear('A');assert.equal((await s.read()).accessToken,'B','late A 401 must not sign out B');
+ assert.equal(await s.rotate('A',{accessToken:'old',refreshToken:'oldR'}),false);
+ assert.equal(await s.rotate('B',{accessToken:'B2',refreshToken:'RB2'}),true);
+ assert.equal((await s.read()).accessToken,'B2');
+ fail=true;await assert.rejects(s.establish({accessToken:'C',refreshToken:'RC',user:{id:3,fullname:'C'}}));fail=false;
+ assert.equal((await s.read()).accessToken,null,'failed session persistence must not leave authenticated partial state');
+ assert.deepEqual(resets.filter(x=>x!==null),[1,2]);assert.ok(resets.includes(null));
+ console.log('PASS: session establishment, logout, draft retention, account switch, stale 401/refresh, storage failure');
+})().catch(e=>{console.error(e);process.exitCode=1;});

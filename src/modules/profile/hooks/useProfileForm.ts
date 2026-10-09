@@ -1,3 +1,4 @@
+import { authSession } from '@/helpers/authSession';
 import { AsyncStorageKey, asyncStorageService } from "@/helpers/asyncStorageService";
 import { profileService } from "@/services/profile";
 import { isAxiosError } from "axios";
@@ -78,6 +79,21 @@ export const useProfileForm = () => {
   useFocusEffect(useCallback(() => {
     active.current = true;
     void load();
+    const unsubscribe = authSession.subscribe((userId, reason) => {
+      if (reason === 'token') {
+        void authSession.read().then(session => {
+          if (!active.current || !session.accessToken) return;
+          owner.current = session.accessToken;
+          void load(true);
+        });
+        return;
+      }
+      ++generation.current;
+      owner.current = null;
+      setProfile(null); setDraft(null); setSaving(false); setErrors({});
+      if (userId === null) { setLoading(false); setSignedOut(true); }
+      else void load();
+    });
     const appState = AppState.addEventListener("change", state => {
       if (state === "active") void getToken().then(token => {
         if (active.current && token !== owner.current) void load();
@@ -92,6 +108,7 @@ export const useProfileForm = () => {
       ++generation.current;
       owner.current = null;
       busy.current = false;
+      unsubscribe();
       appState.remove();
       if (Platform.OS === "web") window.removeEventListener("storage", onStorage);
     };

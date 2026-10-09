@@ -1,3 +1,4 @@
+import { authSession } from './authSession';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export enum AsyncStorageKey {
@@ -5,11 +6,16 @@ export enum AsyncStorageKey {
   REFRESH_TOKEN = "refresh_token",
   LANGUAGE = "language",
   USER_NAME = "USER_NAME",
+  USER_ID = "USER_ID",
 }
 
 class AsyncStorageService {
   getSyncedFromDevice = async (name: string) => {
     try {
+      if (name === AsyncStorageKey.ACCESS_TOKEN) return (await authSession.read()).accessToken;
+      if (name === AsyncStorageKey.REFRESH_TOKEN) return (await authSession.read()).refreshToken;
+      if (name === AsyncStorageKey.USER_ID) return (await authSession.read()).userId;
+      if (name === AsyncStorageKey.USER_NAME && !(await authSession.read()).accessToken) return null;
       const object = await AsyncStorage.getItem(name);
       if (object !== null) {
         return JSON.parse(object);
@@ -31,10 +37,7 @@ class AsyncStorageService {
   };
 
   clearAll = async () => {
-    await AsyncStorage.multiRemove([
-      AsyncStorageKey.ACCESS_TOKEN,
-      AsyncStorageKey.REFRESH_TOKEN,
-    ]);
+    await authSession.clear();
   };
 
   clearItemInDevice = async (name: string) => {

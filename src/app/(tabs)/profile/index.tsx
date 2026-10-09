@@ -1,3 +1,6 @@
+import auth from '@/services/auth';
+import { showErrorToast } from '@/utilities';
+import { useRef, useState } from 'react';
 import { useProfileForm } from "@/modules/profile/hooks/useProfileForm";
 import { COLORS } from "@/utilities/colors";
 import { router } from "expo-router";
@@ -6,6 +9,15 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function ProfileScreen() {
   const form = useProfileForm();
+  const logoutBusy = useRef(false);
+  const [loggingOut, setLoggingOut] = useState(false);
+  const logout = async () => {
+    if (logoutBusy.current) return;
+    logoutBusy.current = true; setLoggingOut(true);
+    try { await auth.logout(); }
+    catch { showErrorToast('Phiên đã bị khoá trên thiết bị. Không hoàn tất được đăng xuất; hãy thử lại.'); }
+    finally { logoutBusy.current = false; setLoggingOut(false); router.replace('/(authen)'); }
+  };
   const busy = form.loading || form.saving;
   const button = (title: string, testID: string, onPress: () => void, disabled = false, primary = false) => (
     <Pressable testID={testID} accessibilityRole="button" accessibilityLabel={title}
@@ -70,6 +82,7 @@ export default function ProfileScreen() {
               {button("Hủy thay đổi", "profile-cancel", form.cancel, busy || form.unknownOutcome)}
               {button("Tải lại hồ sơ", "profile-reload", form.reload, busy)}
             </View>
+            {button(loggingOut ? "Đang đăng xuất…" : "Đăng xuất", "profile-logout", logout, busy || loggingOut)}
             <Text testID="profile-hint" style={styles.hint}>* Trường bắt buộc. Tải lại giữ dữ liệu đang nhập để bạn kiểm tra. Hủy thay đổi dùng hồ sơ đã tải gần nhất.</Text>
           </>}
         </View>

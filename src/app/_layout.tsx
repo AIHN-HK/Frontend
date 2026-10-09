@@ -1,3 +1,6 @@
+import { authSession } from '@/helpers/authSession';
+import '@/store/ExamStore';
+import { Platform } from 'react-native';
 import { ThemeWrapper } from "@/components/ThemeWrapper";
 import {
   Inter_400Regular,
@@ -19,6 +22,16 @@ export const unstable_settings = {
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
+  useEffect(() => {
+    void authSession.initialize().catch(() => authSession.clear());
+    const onStorage = (event: StorageEvent) => {
+      if (event.key === 'access_token' || event.key === 'USER_ID' || event.key === 'SESSION_SIGNED_OUT' || event.key === null) {
+        void authSession.initialize().catch(() => authSession.clear());
+      }
+    };
+    if (Platform.OS === 'web') window.addEventListener('storage', onStorage);
+    return () => { if (Platform.OS === 'web') window.removeEventListener('storage', onStorage); };
+  }, []);
   const [loaded, error] = useFonts({
     "Inter-Regular": Inter_400Regular,
     "Inter-Medium": Inter_500Medium,

@@ -90,7 +90,7 @@ export const useHistory = () => {
           setHasMore(false);
         }
       } catch (err: any) {
-        console.error("Lỗi khi lấy lịch sử quiz:", err);
+        console.error("Không tải được lịch sử quiz");
         setError(err.message || "Không thể tải lịch sử test");
       } finally {
         setLoading(false);

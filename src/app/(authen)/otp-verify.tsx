@@ -1,11 +1,13 @@
+import auth from '@/services/auth';
+import { passwordRecovery } from '@/helpers/passwordRecovery';
+import { showErrorToast } from '@/utilities';
 import IconPtit from "@/assets/icon/ic_logoPtit";
 import ButtonType2 from "@/components/ButtonType2";
-import { ResultEmail } from "@/modules/authentication/type/auth";
 import { useIsDesktopWeb } from "@/hooks/useIsDesktopWeb";
 import { COLORS } from "@/utilities/colors";
 import { Padding, TYPOGRAPHY } from "@/utilities/typography";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Platform,
   StyleSheet,
@@ -32,23 +34,27 @@ const OtpVerifyScreen = () => {
     value,
     setValue,
   });
-  const [resetData, setResetData] = useState<ResultEmail | null>(null);
+  const submitting = useRef(false);
+  const [busy, setBusy] = useState(false);
 
   useEffect(() => {
     setValue("");
   }, []);
 
   const handleSubmit = async () => {
+    if (submitting.current) return;
     if (value.length !== CELL_COUNT) {
       alert("Vui lòng nhập đủ 6 số");
       return;
     }
+    submitting.current = true; setBusy(true);
     try {
-      router.push({
-        pathname: "/(authen)/newpassword",
-        params: { email: email || "", otp: value },
-      });
-    } catch (error: any) {}
+      await auth.verifyPasswordOtp(email || '', value);
+      passwordRecovery.set({email: email || '', otp: value});
+      router.push('/(authen)/newpassword');
+    } catch (error: any) { showErrorToast(error.response?.data?.message || 'Không xác thực được OTP. Vui lòng thử lại.'); }
+    finally { submitting.current = false; setBusy(false); }
+
   };
 
   const isWeb = useIsDesktopWeb();
@@ -121,7 +127,7 @@ const OtpVerifyScreen = () => {
             <View style={{ marginTop: spacing.subtitleToCode, width: "100%" }}>
               <View style={{ marginBottom: spacing.codeToButton }}>
                 <ButtonType2
-                  title="Xác nhận"
+                  title={busy ? "Đang xác thực…" : "Xác nhận"}
                   colorsbackground={COLORS.green1}
                   colorText={COLORS.blackText}
                   onPress={handleSubmit}

@@ -7,7 +7,6 @@ export default {
       const response = await axiosBear.get(QuizzAPI.GET_ALL_QUIZ);
       return response.data;
     } catch (error) {
-      console.error("Get quiz error:", error);
       throw error;
     }
   },
@@ -19,7 +18,7 @@ export default {
       console.log("SessionStatus: ", data);
       return data;
     } catch (error) {
-      console.error("Lỗi kết nối backend", error);
+      throw error;
     }
   },
 
@@ -35,7 +34,7 @@ export default {
         console.log("Error submit");
       }
     } catch (error) {
-      console.log(error);
+      throw error;
     }
   },
 
@@ -53,7 +52,7 @@ export default {
         console.log("Error submit");
       }
     } catch (error) {
-      console.log(error);
+      throw error;
     }
   },
   async getHistoryQuiz(
@@ -85,7 +84,6 @@ export default {
         console.log("Error");
       }
     } catch (error) {
-      console.error("Error fetching quiz history:", error);
       throw error;
     }
   },

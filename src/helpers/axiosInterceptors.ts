@@ -1,6 +1,8 @@
+import { router } from 'expo-router';
 import { AppConfig } from "@/utilities/appInfo";
 import axios from "axios";
-import { AsyncStorageKey, asyncStorageService } from "./asyncStorageService";
+import { authSession } from './authSession';
+import { installSessionInterceptors } from './sessionInterceptors';
 export const URL_HOST = AppConfig.environmentDev;
 
 let headers = {
@@ -41,34 +43,15 @@ export const handleAxiosError = (
   return defaultMessage;
 };
 
-axiosBear.interceptors.request.use(
-  async (config) => {
-    try {
-      const token = await asyncStorageService.getSyncedFromDevice(
-        AsyncStorageKey.ACCESS_TOKEN,
-      );
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-      }
-      return config;
-    } catch (error) {
-      console.log("Lỗi khi lấy token từ AsyncStorage:", error);
-      return config;
-    }
+installSessionInterceptors(axiosBear, authSession, {
+  refresh: async token => {
+    const response = await axiosIns.post('/api/v1/auth/refresh', undefined, {
+      timeout: 10000,
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data.data;
   },
-  (error) => {
-    return Promise.reject(error);
+  onSignedOut: () => {
+    router.replace('/(authen)');
   },
-);
-
-axiosBear.interceptors.response.use(
-  (response) => response,
-  async (error) => {
-    if (error.response?.status === 401) {
-      await asyncStorageService.clearAll();
-      const { router } = require("expo-router");
-      router.replace("/(authen)");
-    }
-    return Promise.reject(error);
-  },
-);
+});

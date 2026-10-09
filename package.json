@@ -12,7 +12,8 @@
     "lint": "expo lint",
     "draft": "npx eas-cli@latest workflow:run create-draft.yml",
     "development-builds": "npx eas-cli@latest workflow:run create-development-builds.yml",
-    "deploy": "npx eas-cli@latest workflow:run deploy-to-production.yml"
+    "deploy": "npx eas-cli@latest workflow:run deploy-to-production.yml",
+    "test:auth": "node tests/auth-session.cjs && node tests/auth-interceptors.cjs && node tests/quiz-draft-storage.cjs && node tests/quiz-session.cjs && node tests/password-recovery.cjs && node tests/session-review-regressions.cjs && node tests/socket-auth.cjs"
   },
   "dependencies": {
     "@expo-google-fonts/inter": "^0.4.2",

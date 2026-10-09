@@ -1,5 +1,7 @@
 import quizz from "@/services/quizz";
-import { asyncStorageAdapter } from "@/storage/asyncStorageAdapter";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { createQuizDraftStorage } from '@/storage/quizDraftStorage';
+import { authSession } from '@/helpers/authSession';
 import { QuizState } from "@/types/testTypes";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
@@ -8,6 +10,7 @@ import {
   flattenAndNormalizeQuestions,
   formatQuizAnswers,
 } from "../utilities/formatData";
+const quizDraftStorage = createQuizDraftStorage(AsyncStorage);
 
 export const useQuizStore = create<QuizState>()(
   persist(
@@ -100,7 +103,8 @@ export const useQuizStore = create<QuizState>()(
     })),
     {
       name: "huong-nghiep-quiz",
-      storage: createJSONStorage(() => asyncStorageAdapter),
+      storage: createJSONStorage(() => quizDraftStorage),
+      skipHydration: true,
       partialize: (state) => ({
         sessionId: state.sessionId,
         questions: state.questions,
@@ -110,3 +114,12 @@ export const useQuizStore = create<QuizState>()(
     },
   ),
 );
+
+// Suspend writes before clearing memory so logout never overwrites the saved draft.
+authSession.subscribe(async (userId, reason) => {
+  if (reason === 'token') return;
+  quizDraftStorage.setOwner(null);
+  useQuizStore.getState().reset();
+  quizDraftStorage.setOwner(userId);
+  if (userId !== null) await useQuizStore.persist.rehydrate();
+});

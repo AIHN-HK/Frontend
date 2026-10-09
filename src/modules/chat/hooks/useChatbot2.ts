@@ -1,3 +1,5 @@
+import { authSession } from '@/helpers/authSession';
+import { updateSocketAuth } from '@/helpers/socketAuth';
 import {
   AsyncStorageKey,
   asyncStorageService,
@@ -19,6 +21,7 @@ export type Message = {
 export const useChatbot2 = () => {
   const flatListRef = useRef<FlatList>(null);
   const socketRef = useRef<Socket | null>(null);
+  const authReady = useRef(false);
 
   const currentAIMessageIdRef = useRef<string | null>(null);
   const sessionIdRef = useRef<number | null>(null);
@@ -48,12 +51,14 @@ export const useChatbot2 = () => {
 
   useEffect(() => {
     let mounted = true;
+    let generation = 0;
     const initSocket = async () => {
+      const current = ++generation;
       try {
         const token = await asyncStorageService.getSyncedFromDevice(
           AsyncStorageKey.ACCESS_TOKEN,
         );
-        if (!mounted) return;
+        if (!mounted || current !== generation || !token) return;
         const socket = io(SOCKET_URL, {
           auth: { token },
           transports: ["websocket"],
@@ -62,10 +67,12 @@ export const useChatbot2 = () => {
         });
         socketRef.current = socket;
         socket.on("connect", () => {
+          authReady.current = true;
           setIsConnected(true);
           setConnectionError(null);
         });
 
+        socket.on('auth_refreshed', () => { authReady.current = true; setIsConnected(true); });
         socket.on("connected", (data: { sessionId: number }) => {
           console.log(" CONNECTED:", data.sessionId);
           sessionIdRef.current = data.sessionId;
@@ -142,6 +149,7 @@ export const useChatbot2 = () => {
           currentAIMessageIdRef.current = null;
         });
         socket.on("disconnect", () => {
+          authReady.current = false;
           setIsConnected(false);
           setConnectionError("Mất kết nối tới máy chủ.");
         });
@@ -150,7 +158,28 @@ export const useChatbot2 = () => {
       }
     };
     initSocket();
+    const unsubscribe = authSession.subscribe(async (userId, reason) => {
+      if (reason === 'token') {
+        const current = await authSession.read();
+        if (socketRef.current && current.accessToken) {
+          authReady.current = false; setIsConnected(false);
+          updateSocketAuth(socketRef.current, current.accessToken);
+        }
+        return;
+      }
+      ++generation;
+      authReady.current = false;
+      socketRef.current?.removeAllListeners();
+      socketRef.current?.disconnect();
+      socketRef.current = null;
+      sessionIdRef.current = null;
+      currentAIMessageIdRef.current = null;
+      setMessages([]); setInputText(''); setIsSending(false); setCanStop(false);
+      setIsConnected(false); setSessionId(null); setConnectionError(null);
+      if (userId !== null) void initSocket();
+    });
     return () => {
+      unsubscribe();
       mounted = false;
       socketRef.current?.disconnect();
       socketRef.current = null;
@@ -161,6 +190,7 @@ export const useChatbot2 = () => {
     if (
       !text.trim() ||
       !socketRef.current?.connected ||
+      !authReady.current ||
       !sessionIdRef.current ||
       isSending
     )
@@ -197,7 +227,7 @@ export const useChatbot2 = () => {
   };
 
   const stopGeneration = () => {
-    if (!socketRef.current || !sessionIdRef.current) return;
+    if (!socketRef.current || !sessionIdRef.current || !authReady.current) return;
     socketRef.current.emit("stop_generation", {
       sessionId: sessionIdRef.current,
     });

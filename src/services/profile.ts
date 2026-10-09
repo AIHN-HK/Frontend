@@ -1,3 +1,5 @@
+import { authSession } from '@/helpers/authSession';
+import { installSessionInterceptors } from '@/helpers/sessionInterceptors';
 import axios from "axios";
 import { AppConfig } from "@/utilities/appInfo";
 import { UpdatePersonalProfile, UserProfile } from "@/modules/profile/schemas/profileSchema";
@@ -6,6 +8,7 @@ import { UserAPI } from "./api";
 // Capture the screen's account for each request; shared interceptors re-read storage
 // and can attach a different account's token to an old draft.
 const client = axios.create({ baseURL: AppConfig.environmentDev, timeout: 10000 });
+installSessionInterceptors(client, authSession, { captureToken: true, refresh: async () => { throw new Error('Explicit login required'); }, onSignedOut: () => {} });
 const config = (token: string) => ({ headers: { Authorization: `Bearer ${token}` } });
 export const profileService = {
   async get(token: string): Promise<UserProfile> {

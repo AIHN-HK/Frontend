@@ -1,3 +1,4 @@
+import { authSession } from '@/helpers/authSession';
 import axiosIns from "@/helpers/axiosInterceptors";
 
 import {
@@ -7,35 +8,41 @@ import {
 import { AuthAPI } from "./api";
 
 export default {
+  async logout() {
+    const current = await authSession.read();
+    try {
+      if (current.accessToken) await axiosIns.post('/api/v1/auth/logout', undefined, { timeout: 10000, headers: { Authorization: `Bearer ${current.accessToken}` } });
+    } finally { await authSession.clear(current.accessToken); }
+  },
   async registerSendOTP(userEmail: string) {
     try {
       const response = await axiosIns.post(AuthAPI.REGISTER_SENDOTP, {
         email: userEmail,
       });
-      console.log("Đăng ký OTP:", response.data);
+
       return response.data;
     } catch (error) {
-      console.error("Lỗi kết nối backend", error);
+
       throw error;
     }
   },
 
   async register(registerForm: RegisterPayload) {
     try {
-      console.log("Payload gửi đi:", registerForm);
+
       const response = await axiosIns.post(AuthAPI.REGISTER, registerForm);
       return response.data;
     } catch (error: any) {
-      console.error("Register error:", error?.response?.data);
+
       throw error;
     }
   },
 
   async login(loginForm: any) {
     try {
-      console.log(loginForm);
+
       const response = await axiosIns.post(AuthAPI.LOGIN, loginForm);
-      console.log("LOGIN: ", response);
+
       return {
         success: true,
         data: response.data,
@@ -64,27 +71,31 @@ export default {
   },
   async forgotPasswordOTP(email: string) {
     try {
-      console.log("Email", email);
-      console.log("URL:", AuthAPI.FORGOT_PASSWORD_OTP);
+
+
       const resposnse = await axiosIns.post(AuthAPI.FORGOT_PASSWORD_OTP, {
         email: email,
       });
       const result = await resposnse.data;
-      console.log("Result", result);
+
       return result;
     } catch (error) {
-      console.log(error);
+      throw error;
     }
+  },
+  async verifyPasswordOtp(email: string, otp: string) {
+    const response = await axiosIns.post('/api/v1/auth/verify-forget-password-otp', {email, otp});
+    return response.data;
   },
   async resetPassword(resetForm: FormRequestNewPassword) {
     try {
-      console.log("ResetForm", resetForm);
+
       const response = await axiosIns.post(AuthAPI.RESET_PASSWORD, resetForm);
       const result = response.data;
-      console.log("Login result:", result);
+
       return result;
     } catch (error) {
-      console.log(error);
+      throw error;
     }
   },
 };

@@ -34,9 +34,9 @@ const ResetPasswordScreen = () => {
     reset,
     formState: { errors },
   } = useResetPasswordForm();
-  const { handleVerifyOtp, onSubmitEmail } = useResetPassword(reset);
-  const handleContinue = (data: { email: string }) => {
-    onSubmitEmail(data);
+  const { onSubmitEmail } = useResetPassword(reset);
+  const handleContinue = async (data: { email: string }) => {
+    if (!await onSubmitEmail(data)) return;
     router.push({
       pathname: "/(authen)/otp-verify",
       params: {

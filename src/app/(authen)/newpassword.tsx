@@ -1,3 +1,4 @@
+import { passwordRecovery } from '@/helpers/passwordRecovery';
 import IconHide from "@/assets/icon/ic_hide";
 import IconPtit from "@/assets/icon/ic_logoPtit";
 import ButtonType2 from "@/components/ButtonType2";
@@ -10,7 +11,7 @@ import { NewpasswordFormData } from "@/modules/authentication/schemas/newPasswor
 import { useIsDesktopWeb } from "@/hooks/useIsDesktopWeb";
 import { COLORS } from "@/utilities/colors";
 import { Padding, TYPOGRAPHY } from "@/utilities/typography";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { Redirect, useRouter } from "expo-router";
 import { useState } from "react";
 import { Controller } from "react-hook-form";
 import {
@@ -37,20 +38,14 @@ const NewpasswordScreen = () => {
     handleSubmit,
     formState: { errors },
   } = useNewPasswordForm();
-  const { email, otp } = useLocalSearchParams<{
-    email?: string;
-    otp?: string;
-  }>();
-
-  if (!email || !otp) {
-    return router.back();
-  }
+  const recovery = passwordRecovery.get();
+  const isWeb = useIsDesktopWeb();
+  if (!recovery) return <Redirect href="/(authen)/resetpassword" />;
+  const { email, otp } = recovery;
 
   const onFormSubmit = (data: NewpasswordFormData) => {
-    console.log("Email", email, otp);
     onSubmit(data, email, otp);
   };
-  const isWeb = useIsDesktopWeb();
   const spacing = {
     logoToTitle: isWeb ? 64 : 40,
     titleToForm: isWeb ? 48 : 32,

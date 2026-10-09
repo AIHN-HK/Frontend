@@ -28,7 +28,8 @@ const OnboardScreen = () => {
 
   const handleStartQuiz = useCallback(async () => {
     try {
-      const stored = await AsyncStorage.getItem("huong-nghiep-quiz");
+      const ownerId = await asyncStorageService.getSyncedFromDevice(AsyncStorageKey.USER_ID);
+      const stored = ownerId ? await AsyncStorage.getItem(`huong-nghiep-quiz:${ownerId}`) : null;
       if (stored) {
         try {
           const state = JSON.parse(stored).state;
