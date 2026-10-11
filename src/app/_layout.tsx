@@ -55,6 +55,7 @@ export default function RootLayout() {
           <Stack>
             <Stack.Screen name="(authen)" options={{ headerShown: false }} />
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="admin" options={{ headerShown: false }} />
           </Stack>
           <Toast />
           <StatusBar style="auto" />

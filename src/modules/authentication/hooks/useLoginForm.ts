@@ -34,6 +34,10 @@ export const useLogin = () => {
 
       if (result.success && (result.status === 200 || result.status === 201)) {
         await authSession.establish(result.data.data);
+        if (result.data.data.user.role === 'ADMIN') {
+          router.replace('/admin');
+          return;
+        }
         const res = await quizz.getHistoryQuiz(1);
         const firstPage = res.formattedHistory;
         const mapped = firstPage.map((item: any) => {
