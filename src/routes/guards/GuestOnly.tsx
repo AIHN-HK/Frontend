@@ -1,8 +1,11 @@
-import { Navigate, Outlet } from 'react-router';
+import { Navigate, Outlet, useSearchParams } from 'react-router';
 import { useSession } from '@/shared/session/session';
-import { paths } from '../paths';
+import { postLoginPath } from '@/modules/auth';
+import { AsyncState } from '@/shared/ui/AsyncState';
 
 export function GuestOnly() {
   const current = useSession();
-  return current.status === 'anonymous' ? <Outlet /> : <Navigate to={paths.dashboard} replace />;
+  const [params] = useSearchParams();
+  if (current.status === 'loading') return <AsyncState state="loading" title="Đang khôi phục phiên…" />;
+  return current.status === 'anonymous' ? <Outlet /> : <Navigate to={postLoginPath(current.user!, params.get('returnTo'))} replace />;
 }

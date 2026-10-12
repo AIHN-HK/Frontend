@@ -1,0 +1,4 @@
+.account-controls { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 12px; padding: 8px 16px; background: var(--bg-surface); border-bottom: 1px solid var(--border-default); font-size: 13px; }
+.account-controls > span { min-width: 0; overflow-wrap: anywhere; }
+.account-controls > p { flex-basis: 100%; }
+.account-notice { padding: 12px 16px; background: var(--warning-subtle); color: var(--warning-text); font-size: 13px; overflow-wrap: anywhere; }

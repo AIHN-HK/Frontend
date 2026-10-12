@@ -84,7 +84,7 @@ test('drawer closes on navigation and when switching to desktop', async ({ page 
   await page.setViewportSize({ width: 390, height: 844 });
   await page.getByRole('button', { name: 'Mở menu phụ' }).click();
   await page.getByRole('dialog').getByRole('link', { name: 'Trang của tôi' }).click();
-  await expect(page).toHaveURL(/\/login$/);
+  await expect(page).toHaveURL(/\/login(?:\?|$)/);
   await expect(page.getByRole('dialog')).toBeHidden();
   await expect(page.locator('body')).not.toHaveCSS('overflow', 'hidden');
 });
@@ -108,8 +108,8 @@ test('modal remains keyboard accessible and restores focus', async ({ page }) =>
 for (const route of ['/dashboard', '/admin', '/admin/questions']) {
   test(`anonymous access to ${route} requires a session without exposing a private shell`, async ({ page }) => {
     await page.goto(route);
-    await expect(page).toHaveURL(/\/login$/);
-    await expect(page.getByRole('heading', { name: 'Trang đang được chuẩn bị' })).toBeVisible();
+    await expect(page).toHaveURL(/\/login(?:\?|$)/);
+    await expect(page.getByRole('heading', { name: 'Đăng nhập AIHN' })).toBeVisible();
     await expect(page.getByTestId('workspace-shell')).toHaveCount(0);
   });
 }
@@ -121,7 +121,7 @@ test('public entry does not eagerly request workspace layouts or legacy runtime 
   page.on('pageerror', error => errors.push(error.message));
   await page.goto('/');
   await expect(page.getByRole('heading', { level: 1 })).toContainText('phù hợp nhất của bạn');
-  expect(scripts.join('\n')).not.toMatch(/AdminLayout|StudentLayout|WorkspaceShell|socket|expo|react-native/i);
+  expect(scripts.join('\n')).not.toMatch(/AdminLayout|StudentLayout|WorkspaceShell|LoginPage|socket|expo|react-native/i);
   expect(errors).toEqual([]);
   await page.goto('/preview/admin');
   await expect(page.getByTestId('workspace-shell')).toBeVisible();

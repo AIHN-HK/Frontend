@@ -19,8 +19,8 @@ test('guest sees public Home and explicitly labeled example data without persona
 test('Home CTAs register the real URLs and enforce guest guards/unavailable catalog', async ({ page }) => {
   await page.goto('/');
   await page.getByRole('link', { name: 'Làm trắc nghiệm Holland →', exact: true }).click();
-  await expect(page).toHaveURL(/\/login$/);
-  await expect(page.getByRole('heading', { name: 'Trang đang được chuẩn bị' })).toBeVisible();
+  await expect(page).toHaveURL(/\/login(?:\?|$)/);
+  await expect(page.getByRole('heading', { name: 'Đăng nhập AIHN' })).toBeVisible();
   await page.goto('/');
   await page.getByRole('link', { name: 'Khám phá nghề nghiệp →', exact: true }).click();
   await expect(page).toHaveURL(/\/careers$/);
@@ -39,7 +39,7 @@ test('every product example action uses a registered guarded destination', async
     const link = page.getByRole('region', { name: 'Ví dụ bàn làm việc · Dữ liệu mẫu' }).getByRole('link', { name: label, exact: true });
     await expect(link).toHaveAttribute('href', href);
     await link.click();
-    await expect(page).toHaveURL(/\/login$/);
+    await expect(page).toHaveURL(/\/login(?:\?|$)/);
   }
 });
 

@@ -8,6 +8,18 @@ export function createSessionStore(): SessionStore {
   return {
     read: () => current,
     subscribe: listener => { listeners.add(listener); return () => { listeners.delete(listener); }; },
+    loading: () => {
+      current = { revision: current.revision + 1, status: 'loading', user: null, tokens: null };
+      publish();
+    },
+    rotate: (tokens, expectedRevision, user) => {
+      if (current.revision !== expectedRevision || current.status !== 'authenticated') return false;
+      if (!tokens.accessToken || !tokens.refreshToken) throw new Error('Invalid session tokens');
+      if (user && user.id !== current.user?.id) return false;
+      current = { ...current, user: user ? { ...user } : current.user, tokens: { ...tokens } };
+      publish();
+      return true;
+    },
     establish: (user, tokens) => {
       if (!Number.isSafeInteger(user.id) || user.id <= 0 || !tokens.accessToken || !tokens.refreshToken) {
         throw new Error('Invalid session identity');

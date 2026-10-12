@@ -25,7 +25,7 @@ Do not introduce a global services/types/store folder, Nx, Module Federation, Re
 
 Session is a single source of truth. Query keys for personal data must include owner ID; pass query AbortSignal to HTTP. Discard responses from an obsolete session. Cancel/clear personal server state on account switch/logout; keep owner/version-scoped drafts. HTTP never navigates. Mutation retries/replays are disabled; unknown outcomes preserve the draft for explicit review/retry.
 
-T00 has anonymous in-memory session infrastructure only. Auth hydration/login/refresh/logout policy belongs to T02, server-verified admin identity to T18. A preview shell must never manufacture an authenticated user or grant access to protected routes.
+T02 implements auth hydration/login/refresh/logout: checked remember-me uses localStorage, unchecked uses sessionStorage; persist tokens/owner metadata only and verify current server identity on restore. Refresh is single-flight and only GET/HEAD may replay once. Same-account token rotation keeps its session revision/cache; account changes invalidate it. Admin workspace access remains closed until T18. A preview shell must never manufacture an authenticated user or grant access to protected routes.
 
 `VITE_*` values are public client configuration, never secrets. Use `.env.example`; do not track real environment files.
 

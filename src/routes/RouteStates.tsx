@@ -2,6 +2,7 @@ import { Link, Outlet, useNavigation, useRouteError } from 'react-router';
 import { AsyncState } from '@/shared/ui/AsyncState';
 import { Button } from '@/shared/ui/Button';
 import { paths } from './paths';
+import { AccountControls } from '@/modules/auth';
 
 export function UnavailableRoute() {
   return <AsyncState state="unavailable" description="Nội dung này chưa sẵn sàng. Vui lòng quay lại sau."
@@ -26,5 +27,5 @@ export function RoutePending() {
 
 export function RootRoute() {
   const navigation = useNavigation();
-  return <>{navigation.state === 'loading' && <div className="route-progress" role="status">Đang tải…</div>}<Outlet /></>;
+  return <><AccountControls />{navigation.state === 'loading' && <div className="route-progress" role="status">Đang tải…</div>}<Outlet /></>;
 }
