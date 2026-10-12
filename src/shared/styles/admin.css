@@ -1,0 +1,31 @@
+/* Scoped admin palette/layout from design-reference/styles/admin.css. */
+.admin-theme {
+  --bg-app: #F8FAFC;
+  --bg-surface: #FFFFFF;
+  --bg-surface-subtle: #F1F5F9;
+  --bg-surface-hover: #F1F5F9;
+  --border-default: #E2E8F0;
+  --border-subtle: #E2E8F0;
+  --border-strong: #CBD5E1;
+  --text-primary: #172033;
+  --text-secondary: #5B6475;
+  --text-muted: #8893A7;
+  --primary: #0D9488;
+  --primary-hover: #0F766E;
+  --primary-subtle: #E6F4F2;
+  --primary-border: #B7E4DD;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --sidebar-width: 240px;
+  --sidebar-compact-width: 64px;
+  --header-height: 56px;
+}
+.admin-theme .workspace-content { padding: 24px 32px; }
+.admin-theme .card { box-shadow: none; }
+.admin-theme .preview-welcome { background: var(--bg-surface); }
+.admin-theme .brand-badge { border-radius: 6px; }
+.admin-theme .workspace-sidebar .nav-item { border-radius: 8px; }
+@media (max-width: 768px) {
+  .admin-theme .workspace-content { padding: 24px 16px; }
+}

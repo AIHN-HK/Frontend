@@ -1,70 +1,38 @@
-# Welcome to your Expo app 👋
+# AIHN Career — frontend ReactJS
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+React DOM, TypeScript, Vite, React Router, TanStack Query, Axios và CSS/SVG. Cấu trúc ứng dụng: `app/`, `routes/`, `layouts/`, `modules/`, `shared/`, `assets/` khi có màn sử dụng.
 
-## Get started
-To start the web, in your terminal run:
-
-```bash
-npx serve dist
-```
-
-To start the app, in your terminal run:
+## Chạy local
 
 ```bash
-npm run start
+nvm use
+npm ci
+cp .env.example .env.local
+npm run dev
 ```
 
-In the output, you'll find options to open the app in:
+Mở `http://127.0.0.1:5173`. API/socket origin mặc định là `http://localhost:3000`; URL endpoint nghiệp vụ được khai báo tại module sở hữu. `VITE_*` là cấu hình công khai của trình duyệt.
 
-- [a development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [an Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [an iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Phạm vi T00
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+Nền ứng dụng và bản xem trước shell tại `/preview/student`, `/preview/admin`, `/preview/auth`. Các URL preview chỉ trình bày layout/UI, không có phiên hay dữ liệu cá nhân. `/` và `/login` hiển thị trạng thái chưa sẵn sàng; Home/auth nghiệp vụ sẽ được triển khai ở T01/T02. Các route được bảo vệ yêu cầu đăng nhập; xác minh admin thuộc T18.
 
-## Workflows
+Mẫu gốc ở `design-reference/`. Mã Expo trước chuyển đổi ở `legacy/expo/`, ngoài cây build. Đọc [AGENTS.md](AGENTS.md) để biết quy tắc module và phiên/cache.
 
-This project is configured to use [EAS Workflows](https://docs.expo.dev/eas/workflows/get-started/) to automate some development and release processes. These commands are set up in [`package.json`](./package.json) and can be run using NPM scripts in your terminal.
-
-### Previews
-
-Run `npm run draft` to [publish a preview update](https://docs.expo.dev/eas/workflows/examples/publish-preview-update/) of your project, which can be viewed in Expo Go or in a development build.
-
-### Development Builds
-
-Run `npm run development-builds` to [create a development build](https://docs.expo.dev/eas/workflows/examples/create-development-builds/). Note - you'll need to follow the [Prerequisites](https://docs.expo.dev/eas/workflows/examples/create-development-builds/#prerequisites) to ensure you have the correct emulator setup on your machine.
-
-### Production Deployments
-
-Run `npm run deploy` to [deploy to production](https://docs.expo.dev/eas/workflows/examples/deploy-to-production/). Note - you'll need to follow the [Prerequisites](https://docs.expo.dev/eas/workflows/examples/deploy-to-production/#prerequisites) to ensure you're set up to submit to the Apple and Google stores.
-
-## Hosting
-
-Expo offers hosting for websites and API functions via EAS Hosting. See the [Getting Started](https://docs.expo.dev/eas/hosting/get-started/) guide to learn more.
-
-
-## Get a fresh project
-
-When you're ready, run:
+## Kiểm chứng
 
 ```bash
-npm run reset-project
+npm run typecheck
+npm run lint
+npm run test:unit
+npx playwright install chromium
+npm run test:e2e
+npm run build
+npm run preview
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+`npm test` chạy toàn bộ unit/E2E của nền mới. Playwright tự build và chạy production preview tại `127.0.0.1:4173`, có thể đổi cổng bằng `E2E_PORT`. Kết quả browser test ở `playwright-report/`, trace/lỗi ở `test-results/`; chúng không được commit.
 
-## Learn more
+Production host cần fallback các URL SPA về `index.html` và phục vụ `/assets/*` như file tĩnh. T00 chỉ kiểm tra local preview; chưa chuyển traffic hoặc deploy.
 
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Plan/đặc tả và hồ sơ T00 nằm trong workspace `../docs/superpowers/`. Hoàn tất từng plan → người dùng review/commit → sang plan tiếp theo; agent không tự commit/push/deploy.

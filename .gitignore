@@ -58,3 +58,13 @@ _vscode/
 # Project documentation and local tooling
 /docs/
 /.serena/
+
+# Local migration/reference material (kept outside the application source)
+/legacy/
+/design-reference/
+/open-design/
+
+# ReactJS verification artifacts
+playwright-report/
+test-results/
+.superpowers/
