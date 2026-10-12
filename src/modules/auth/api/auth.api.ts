@@ -3,6 +3,20 @@ import { ApiError } from '@/shared/api/api-error';
 import type { AuthApi } from '../model/auth.types';
 import { object, parseTokens, parseUser, unwrap } from '../model/auth-response';
 
+export async function sendRegistrationOtp(http: AxiosInstance, email: string, signal: AbortSignal): Promise<void> {
+  try {
+    const response = await http.post('/api/v1/auth/register/send-otp', { email: email.trim() }, { signal });
+    const envelope = response.data as { status?: unknown; data?: { sent?: unknown } } | null;
+    if (!envelope || envelope.status !== response.status || envelope.data?.sent !== true) {
+      throw new ApiError('configuration', 'Chưa xác nhận được yêu cầu gửi OTP. Vui lòng kiểm tra email trước khi thử lại.', undefined, true);
+    }
+  } catch (error) {
+    if (error instanceof ApiError && error.status === 409) throw new ApiError('http', 'Email này đã được sử dụng. Bạn có thể đăng nhập hoặc dùng email khác.', 409);
+    if (error instanceof ApiError && error.status === 429) throw new ApiError('http', 'Bạn đã yêu cầu OTP quá nhiều lần. Vui lòng chờ rồi thử lại.', 429);
+    throw error;
+  }
+}
+
 export function createAuthApi(http: AxiosInstance): AuthApi {
   const bearer = (token: string) => ({ headers: { Authorization: `Bearer ${token}` } });
   return {

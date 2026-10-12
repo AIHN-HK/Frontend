@@ -9,7 +9,9 @@ export const authRoutes: RouteObject[] = [{
     lazy: async () => ({ Component: (await import('@/layouts/AuthLayout')).AuthLayout }),
     children: [
       { path: paths.login, lazy: async () => ({ Component: (await import('@/modules/auth/login/pages/LoginPage')).LoginPage }) },
-      ...[paths.signup, paths.verifyOtp, paths.forgotPassword, paths.resetPassword].map(path => ({ path, Component: UnavailableRoute })),
+      { path: paths.signup, lazy: async () => ({ Component: (await import('@/modules/auth/registration/pages/SignupPage')).SignupPage }) },
+      { path: paths.verifyOtp, lazy: async () => ({ Component: (await import('@/modules/auth/registration/pages/RegistrationHandoff')).RegistrationHandoff }) },
+      ...[paths.forgotPassword, paths.resetPassword].map(path => ({ path, Component: UnavailableRoute })),
     ],
   }],
 }];
