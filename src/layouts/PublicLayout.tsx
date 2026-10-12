@@ -1,14 +1,20 @@
-import { Link, Outlet } from 'react-router';
-import { Brand } from '@/shared/ui/Brand';
+import { Link, Outlet, useLocation } from 'react-router';
 import { paths } from '@/routes/paths';
+import { PublicNavigation } from './components/PublicNavigation';
+import './public.css';
 
 export function PublicLayout() {
+  const location = useLocation();
   return <div className="public-shell">
     <a className="skip-link" href="#main-content">Bỏ qua điều hướng</a>
-    <header className="public-header"><Link to={paths.home}><Brand /></Link><Link className="btn btn-secondary" to={paths.login}>Đăng nhập</Link></header>
+    <PublicNavigation key={location.key} />
     <main id="main-content" className="public-content" tabIndex={-1}><Outlet /></main>
-    <footer className="public-footer"><span>AIHN Career · Định hướng tương lai</span>
-      <nav aria-label="Bản xem trước giao diện"><Link to={paths.previewStudent}>Giao diện sinh viên</Link><Link to={paths.previewAdmin}>Giao diện quản trị</Link><Link to={paths.previewAuth}>Giao diện tài khoản</Link></nav>
+    <footer className="home-footer">
+      <div className="home-footer-inner">
+        <div className="home-footer-brand"><span className="brand-logo-icon" aria-hidden="true">AI</span><strong>AIHN Career Guidance Platform</strong></div>
+        <p>© 2026 AIHN. Nền tảng định hướng nghề nghiệp thông minh cho học sinh &amp; sinh viên Việt Nam.</p>
+        <Link to={paths.dashboard}>Vào Bàn làm việc →</Link>
+      </div>
     </footer>
   </div>;
 }

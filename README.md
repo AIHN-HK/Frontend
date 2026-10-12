@@ -13,11 +13,13 @@ npm run dev
 
 Mở `http://127.0.0.1:5173`. API/socket origin mặc định là `http://localhost:3000`; URL endpoint nghiệp vụ được khai báo tại module sở hữu. `VITE_*` là cấu hình công khai của trình duyệt.
 
-## Phạm vi T00
+## Phạm vi đã triển khai
 
-Nền ứng dụng và bản xem trước shell tại `/preview/student`, `/preview/admin`, `/preview/auth`. Các URL preview chỉ trình bày layout/UI, không có phiên hay dữ liệu cá nhân. `/` và `/login` hiển thị trạng thái chưa sẵn sàng; Home/auth nghiệp vụ sẽ được triển khai ở T01/T02. Các route được bảo vệ yêu cầu đăng nhập; xác minh admin thuộc T18.
+T00: nền ứng dụng và bản xem trước shell tại `/preview/student`, `/preview/admin`, `/preview/auth`. Các URL preview chỉ trình bày layout/UI, không có phiên hay dữ liệu cá nhân. Các route được bảo vệ yêu cầu đăng nhập; xác minh admin thuộc T18.
 
-Mẫu gốc ở `design-reference/`. Mã Expo trước chuyển đổi ở `legacy/expo/`, ngoài cây build. Đọc [AGENTS.md](AGENTS.md) để biết quy tắc module và phiên/cache.
+T01: Public Home tại `/`, header/menu mobile, hero và hành trình THPT, bàn làm việc minh họa có nhãn dữ liệu mẫu, footer và CTA. Home không fetch dữ liệu cá nhân. CTA tới assessment/dashboard/advisor/roadmap/recommendations chuyển khách tới login; `/login`, `/signup` và catalog `/careers` còn unavailable cho đến plan sở hữu. Search pill dẫn tới catalog; tìm kiếm thật thuộc T12.
+
+Mẫu gốc ở `design-reference/`. Mã Expo trước chuyển đổi ở `legacy/expo/`, ngoài cây build. Hai thư mục chỉ lưu local và được ignore; asset dùng khi chạy nằm tại `src/assets/`. Đọc [AGENTS.md](AGENTS.md) để biết quy tắc module và phiên/cache.
 
 ## Kiểm chứng
 
@@ -35,4 +37,4 @@ npm run preview
 
 Production host cần fallback các URL SPA về `index.html` và phục vụ `/assets/*` như file tĩnh. T00 chỉ kiểm tra local preview; chưa chuyển traffic hoặc deploy.
 
-Plan/đặc tả và hồ sơ T00 nằm trong workspace `../docs/superpowers/`. Hoàn tất từng plan → người dùng review/commit → sang plan tiếp theo; agent không tự commit/push/deploy.
+Plan/đặc tả và hồ sơ T00/T01 nằm trong workspace `../docs/superpowers/`. Hoàn tất từng plan → người dùng review/commit → sang plan tiếp theo; agent không tự commit/push/deploy.

@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 
-test('public fallback and direct unknown URLs give an honest unavailable/404 state', async ({ page }) => {
-  await page.goto('/');
+test('unfinished catalog and direct unknown URLs give an honest unavailable/404 state', async ({ page }) => {
+  await page.goto('/careers');
   await expect(page.getByRole('heading', { name: 'Trang đang được chuẩn bị' })).toBeVisible();
   await page.goto('/khong-ton-tai/deep-link');
   await page.reload();
@@ -120,7 +120,7 @@ test('public entry does not eagerly request workspace layouts or legacy runtime 
   page.on('request', request => { if (request.resourceType() === 'script') scripts.push(request.url()); });
   page.on('pageerror', error => errors.push(error.message));
   await page.goto('/');
-  await expect(page.getByRole('heading', { name: 'Trang đang được chuẩn bị' })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('phù hợp nhất của bạn');
   expect(scripts.join('\n')).not.toMatch(/AdminLayout|StudentLayout|WorkspaceShell|socket|expo|react-native/i);
   expect(errors).toEqual([]);
   await page.goto('/preview/admin');
@@ -132,8 +132,8 @@ test('lazy navigation shows pending state until the route chunk arrives', async 
   let release!: () => void;
   const ready = new Promise<void>(resolve => { release = resolve; });
   await page.route('**/assets/AdminLayout-*.js', async route => { await ready; await route.continue(); });
-  await page.goto('/');
-  await page.getByRole('link', { name: 'Giao diện quản trị', exact: true }).click();
+  await page.goto('/preview/student');
+  await page.getByRole('link', { name: 'Xem giao diện quản trị', exact: true }).click();
   await expect(page.getByRole('status')).toHaveText('Đang tải…');
   release();
   await expect(page.getByTestId('workspace-shell')).toBeVisible();
@@ -142,8 +142,8 @@ test('lazy navigation shows pending state until the route chunk arrives', async 
 
 test('a failed lazy route chunk offers an explicit recovery action', async ({ page }) => {
   await page.route('**/assets/AdminLayout-*.js', route => route.abort());
-  await page.goto('/');
-  await page.getByRole('link', { name: 'Giao diện quản trị', exact: true }).click();
+  await page.goto('/preview/student');
+  await page.getByRole('link', { name: 'Xem giao diện quản trị', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Không thể tải trang' })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Tải lại trang' })).toBeVisible();
 });

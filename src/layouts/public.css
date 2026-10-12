@@ -1,0 +1,196 @@
+/* Public shell styles ported from screens/home.html. */
+.public-shell { display: flex; flex-direction: column; min-height: 100dvh; }
+.public-shell .public-content { max-width: none; padding: 0; margin: 0; }
+.public-shell .skip-link { z-index: 110; }
+
+.public-shell {
+  background-color: #F3FAFC;
+  background-image: 
+    radial-gradient(circle at 10% 15%, #E5F4F8 0%, transparent 48%),
+    radial-gradient(circle at 90% 22%, #E0EFF6 0%, transparent 45%),
+    radial-gradient(circle at 50% 70%, #ECF6F9 0%, transparent 55%);
+  background-attachment: fixed;
+  color: #162736;
+  font-family: var(--font-family);
+}
+.public-shell .home-header-wrap {
+  background-color: rgba(243, 250, 252, 0.94);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(223, 239, 245, 0.8);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.public-shell .home-navbar {
+  max-width: 1320px;
+  margin: 0 auto;
+  height: 72px;
+  padding: 0 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.public-shell .brand-logo-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.public-shell .brand-logo-icon {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #028F94 0%, #0D9488 100%);
+  border-radius: 10px;
+  color: #FFFFFF;
+  display: grid;
+  place-items: center;
+  font-size: 15px;
+  font-weight: 800;
+  box-shadow: 0 4px 12px rgba(2, 143, 148, 0.25);
+}
+
+.public-shell .brand-logo-text {
+  font-size: 19px;
+  font-weight: 800;
+  color: #162736;
+  letter-spacing: -0.4px;
+}
+
+.public-shell .home-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  list-style: none;
+}
+
+.public-shell .home-nav-item {
+  padding: 8px 18px;
+  border-radius: var(--radius-full);
+  font-size: 14px;
+  font-weight: 500;
+  color: #5A6E7C;
+  text-decoration: none;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.public-shell .home-nav-item:hover {
+  color: #162736;
+  background-color: rgba(255, 255, 255, 0.7);
+}
+
+.public-shell .home-nav-item.active {
+  background-color: #E6F7F5;
+  color: #028F94;
+  font-weight: 600;
+}
+
+.public-shell .home-header-tools {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.public-shell .home-search-pill {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.public-shell .home-search-pill .icon {
+  position: absolute;
+  left: 12px;
+  color: #869BA8;
+  font-size: 14px;
+  pointer-events: none;
+}
+.public-shell .btn-pill-login {
+  height: 40px;
+  padding: 0 20px;
+  border-radius: var(--radius-full);
+  background-color: #FFFFFF;
+  border: 1px solid #DFEFF5;
+  color: #162736;
+  font-size: 13.5px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.public-shell .btn-pill-login:hover {
+  background-color: #F7FCFD;
+  border-color: #C8E3ED;
+  box-shadow: 0 2px 8px rgba(30, 70, 90, 0.05);
+}
+
+.public-shell .btn-pill-cta {
+  height: 40px;
+  padding: 0 22px;
+  border-radius: var(--radius-full);
+  background-color: #028F94;
+  border: none;
+  color: #FFFFFF;
+  font-size: 13.5px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(2, 143, 148, 0.28);
+  transition: all var(--transition-fast);
+}
+
+.public-shell .btn-pill-cta:hover {
+  background-color: #027B7F;
+  box-shadow: 0 6px 18px rgba(2, 143, 148, 0.35);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 768px) {
+  .public-shell .home-nav-links, .public-shell .home-search-pill {
+    display: none;
+  }
+}
+
+/* Use the disclosure on narrow desktops and a catalog link until T12 search. */
+.public-shell .home-nav-links { margin: 0; padding: 0; gap: 2px; flex-shrink: 0; }
+.public-shell .home-nav-item { min-height: 44px; display: inline-flex; align-items: center; padding-inline: 8px; font-size: 13px; }
+.public-shell .brand-logo-group { min-height: 44px; flex-shrink: 0; }
+.public-shell .home-navbar > * { min-width: 0; }
+.public-shell .home-header-tools { margin-left: auto; flex-shrink: 0; white-space: nowrap; }
+.public-shell .home-search-pill { min-height: 44px; min-width: 160px; gap: 8px; border: 1px solid #DFEFF5; background: white; border-radius: var(--radius-full); padding: 0 14px; color: #869BA8; font-size: 12px; }
+.public-shell .home-search-pill .icon { position: static; }
+.public-shell .btn-pill-login, .public-shell .btn-pill-cta { min-height: 44px; }
+.public-shell .home-menu-trigger { display: none; min-width: 44px; min-height: 44px; align-items: center; justify-content: center; border: 1px solid #DFEFF5; border-radius: 12px; background: white; color: #028F94; }
+.public-shell .home-mobile-navigation { padding: 8px 20px 16px; border-top: 1px solid #DFEFF5; }
+.public-shell .home-mobile-navigation:not([hidden]) { display: flex; flex-direction: column; }
+.public-shell .home-mobile-navigation .home-nav-item { border-radius: 12px; }
+.public-shell .home-footer { border-top: 1px solid #DFEFF5; background: white; padding: 36px 28px; }
+.public-shell .home-footer-inner { max-width: 1320px; margin: auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+.public-shell .home-footer-brand { display: flex; gap: 10px; align-items: center; font-size: 14.5px; }
+.public-shell .home-footer-brand .brand-logo-icon { width: 28px; height: 28px; font-size: 12px; border-radius: 8px; flex-shrink: 0; }
+.public-shell .home-footer p { font-size: 12.5px; color: #869BA8; }
+.public-shell .home-footer a { min-height: 44px; min-width: 44px; display: inline-flex; align-items: center; color: #028F94; font-weight: 600; font-size: 13px; }
+@media (max-width: 1280px) {
+  .public-shell .home-nav-links, .public-shell .home-search-pill { display: none; }
+  .public-shell .home-menu-trigger { display: inline-flex; }
+}
+@media (min-width: 1281px) { .public-shell .home-mobile-navigation:not([hidden]) { display: none; } }
+@media (max-width: 540px) {
+  .public-shell .home-navbar { padding-inline: 16px; gap: 8px; }
+  .public-shell .home-header-tools { gap: 8px; }
+  .public-shell .home-header-tools .btn-pill-cta { display: none; }
+  .public-shell .btn-pill-login { padding-inline: 14px; }
+  .public-shell .home-footer { padding: 28px 20px; }
+}
