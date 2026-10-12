@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { Link } from 'react-router';
+import { Link, useLocation } from 'react-router';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ApiError } from '@/shared/api/api-error';
@@ -11,6 +11,7 @@ import './login.css';
 
 export function LoginPage() {
   const { login } = useAuth();
+  const location = useLocation();
   const pending = useRef(false);
   const [visible, setVisible] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -23,6 +24,7 @@ export function LoginPage() {
     } finally { pending.current = false; }
   };
   return <>
+    {(location.state as { registrationComplete?: unknown } | null)?.registrationComplete === true && <p role="status">Đăng ký thành công. Vui lòng đăng nhập để tiếp tục.</p>}
     <div className="login-intro">
       <span className="brand-badge" aria-hidden="true">AI</span>
       <h1>Đăng nhập AIHN</h1>

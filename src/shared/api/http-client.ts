@@ -56,7 +56,7 @@ export function createHttpClient(options: {
         }
       }
       // A delayed 401 from an old access token must not clear a rotated session.
-      if (config.sessionToken === options.session.read().tokens?.accessToken) {
+      if (current.tokens && config.sessionToken === options.session.read().tokens?.accessToken) {
         options.onUnauthorized(config.sessionRevision);
       }
     }

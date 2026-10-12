@@ -4,7 +4,11 @@ import './auth.css';
 
 export function AuthLayout() {
   const { pathname } = useLocation();
-  const registration = pathname === paths.signup || pathname === paths.verifyOtp;
+  if (pathname === paths.verifyOtp) return <div className="auth-wrapper">
+    <a className="skip-link" href="#main-content">Bỏ qua giới thiệu</a>
+    <main id="main-content" className="auth-otp-card" tabIndex={-1}><Outlet /></main>
+  </div>;
+  const registration = pathname === paths.signup;
   return <div className="auth-wrapper">
     <a className="skip-link" href="#main-content">Bỏ qua giới thiệu</a>
     <div className="auth-split-box">

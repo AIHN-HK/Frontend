@@ -9,6 +9,7 @@ import { session } from '@/shared/session/session';
 import { Field } from '@/shared/ui/Field';
 import { sendRegistrationOtp } from '../../api/auth.api';
 import { registrationDraft } from '../../model/registration-draft';
+import { recoveryState } from '../../model/recovery-state';
 import { signupSchema } from '../model/signup.schema';
 import type { SignupForm } from '../model/signup.schema';
 import './signup.css';
@@ -34,7 +35,9 @@ export function SignupPage(): React.JSX.Element {
   const sendOtp = async (fields: SignupForm) => {
     setError(null);
     const revision = session.read().revision;
+    recoveryState.clear();
     if (!registrationDraft.save(fields, revision)) { pending.current = false; return; }
+    registrationDraft.deferResend(Date.now() + 60_000, revision);
     const controller = new AbortController();
     request.current = controller;
     try {

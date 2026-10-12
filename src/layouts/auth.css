@@ -16,9 +16,15 @@
 .auth-registration-note strong { font-size: 13px; font-weight: 700; }
 .auth-registration-note p { font-size: 11.5px; }
 .auth-form-side { padding: 40px 36px; display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.auth-otp-card { width: 100%; max-width: 440px; min-width: 0; padding: 32px; display: flex; flex-direction: column; gap: 20px; background: white; border: 1px solid var(--border-default); border-radius: var(--radius-xl); box-shadow: 0 14px 36px rgb(35 85 110 / 8%); }
 @media (max-width: 768px) {
   .auth-split-box { grid-template-columns: minmax(0, 1fr); max-width: 440px; }
   .auth-visual-side { display: none; }
   .auth-form-side { padding: 32px 24px; }
 }
 @media (max-width: 360px) { .auth-form-side { padding: 28px 16px; } }
+@media (max-width: 480px) { .auth-otp-card { padding: 24px 16px; } }
+@media (max-width: 360px) {
+  .auth-wrapper:has(.auth-otp-card) { padding-inline: 8px; }
+  .auth-otp-card { padding-inline: 12px; }
+}

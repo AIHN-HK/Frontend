@@ -70,7 +70,7 @@ test('sends only trimmed email, hands off without creating an account and keeps 
   await page.getByRole('button', { name: submitName }).click();
   await expect(page).toHaveURL(/\/verify-otp$/);
   await expect(page.getByText('Tài khoản chưa được tạo.', { exact: false })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Xác thực OTP chưa sẵn sàng' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Xác thực tài khoản' })).toBeVisible();
   expect(calls).toEqual([{ path: '/api/v1/auth/register/send-otp', body: { email: 'student@example.test' } }]);
   await noSecrets(page);
   await page.getByRole('link', { name: 'Trở lại đăng ký' }).click();

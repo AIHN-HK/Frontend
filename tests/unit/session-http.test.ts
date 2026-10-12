@@ -3,6 +3,7 @@ import { createServer } from 'node:http';
 import type { IncomingMessage, ServerResponse } from 'node:http';
 import { createSessionStore } from '@/shared/session/session';
 import { createHttpClient } from '@/shared/api/http-client';
+import { createRegistrationDraftStore } from '@/modules/auth/model/registration-draft';
 
 const cleanup: Array<() => Promise<void>> = [];
 afterEach(async () => { await Promise.all(cleanup.splice(0).map(close => close())); });
@@ -19,6 +20,18 @@ async function serve(handler: (req: IncomingMessage, res: ServerResponse) => voi
 const alice = { id: 1, fullname: 'Alice', role: 'USER' as const };
 const bob = { id: 2, fullname: 'Bob', role: 'USER' as const };
 const tokens = { accessToken: 'test-access', refreshToken: 'test-refresh' };
+
+it('anonymous invalid OTP 401 retains the registration draft without inventing an expired session', async () => {
+  let requests = 0;
+  const origin = await serve((_req, res) => { requests++; res.writeHead(401); res.end(); });
+  const session = createSessionStore(), draft = createRegistrationDraftStore(session);
+  draft.save({ email: 'student@example.test', fullname: 'Student', password: 'secret password', yob: '2008-02-29', phone: '0901234567' }, 0, true);
+  const http = createHttpClient({ origin, session, onUnauthorized: revision => { session.clear(revision); } });
+  await expect(http.post('/api/v1/auth/register', { otpCode: '123456' })).rejects.toMatchObject({ status: 401 });
+  expect(draft.read()?.password).toBe('secret password');
+  expect(session.read().revision).toBe(0);
+  expect(requests).toBe(1);
+});
 
 function deferred<T>() {
   let resolve!: (value: T) => void;
