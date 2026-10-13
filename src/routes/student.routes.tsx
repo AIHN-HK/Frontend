@@ -12,7 +12,9 @@ export const studentRoutes: RouteObject[] = [{
       children: [
         { path: paths.dashboard, lazy: async () => ({ Component: (await import('@/modules/dashboard/pages/DashboardPage')).DashboardPage }) },
         { path: paths.careerProfile, lazy: async () => ({ Component: (await import('@/modules/profile/pages/CareerProfilePage')).CareerProfilePage }) },
-        ...['/assessment/results/:attemptId', paths.history, paths.advisor,
+        { path: `${paths.assessmentResults}/:attemptId`, lazy: async () => ({ Component: (await import('@/modules/assessment/results/pages/AssessmentResultPage')).AssessmentResultPage }) },
+        { path: paths.assessmentResults, lazy: async () => ({ Component: (await import('@/modules/assessment/results/pages/AssessmentResultPage')).AssessmentResultPage }) },
+        ...[paths.history, paths.advisor,
           paths.recommendations, '/recommendations/:recommendationId', paths.roadmap, paths.settings].map(path => ({ path, Component: UnavailableRoute })),
       ],
     },

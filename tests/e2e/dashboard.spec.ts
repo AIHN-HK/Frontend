@@ -40,7 +40,8 @@ test('latest result and snapshot use only history provenance and attempt ID', as
   await expect(page.getByRole('link', { name: 'Xem kết quả gần nhất', exact: true })).toHaveAttribute('href', '/assessment/results/812');
   await page.getByRole('link', { name: 'Xem kết quả gần nhất', exact: true }).click();
   await expect(page).toHaveURL(/\/assessment\/results\/812$/);
-  await expect(page.getByText('Nội dung này chưa sẵn sàng.')).toBeVisible();
+  // This fixture supplies history only; the destination must reject its missing result DTO.
+  await expect(page.getByRole('heading', { name: 'Không tải được kết quả' })).toBeVisible();
 });
 
 test('null analysis still exposes the result without inventing a code', async ({ page }) => {

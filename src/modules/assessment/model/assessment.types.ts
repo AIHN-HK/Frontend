@@ -23,3 +23,22 @@ export type AssessmentDraft = {
   index: number;
   needsReview: boolean;
 };
+
+export type AssessmentResult = {
+  attemptId: number;
+  scores: AssessmentScores;
+  topCode: string;
+  ranked: { type: RiasecCode; score: number; rank: number }[];
+};
+export type AssessmentPercentages = Record<RiasecCode, number | null>;
+export type AssessmentNormalization = { counts: AssessmentScores; percentages: AssessmentPercentages; totalQuestions: number };
+export type AssessmentAnalysisItem = {
+  code: string;
+  title: string;
+  description: string | null;
+  personality: string[];
+  strengths: string[];
+  weaknesses: string[];
+  careers: string[];
+};
+export type AssessmentAnalysis = { finishAt: string; items: AssessmentAnalysisItem[] };

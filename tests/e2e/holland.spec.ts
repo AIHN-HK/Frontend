@@ -63,7 +63,9 @@ for (const failure of ['network', 'malformed', 'wrong-id', '400', '503', 'timeou
 test('unknown result is reviewed with GET and can be confirmed without another submit', async ({ page }) => {
   const options: Options = { failure: 'network', result: true }, calls = await fixture(page, options); await page.goto('/assessment'); await fill(page); await page.getByRole('button', { name: 'Nộp bài', exact: true }).click();
   await expect(page.getByRole('alert')).toBeVisible(); await page.getByRole('button', { name: 'Kiểm tra kết quả đã nộp' }).click();
-  await expect(page).toHaveURL(/\/assessment\/results\/501$/); expect(calls.filter(c => c.path.endsWith('/submit-v2'))).toHaveLength(1); expect(calls.filter(c => c.path.endsWith('/result/501'))).toHaveLength(1);
+  await expect(page).toHaveURL(/\/assessment\/results\/501$/); expect(calls.filter(c => c.path.endsWith('/submit-v2'))).toHaveLength(1);
+  // The explicit confirmation read is followed by T09's independent deep-link read.
+  await expect.poll(() => calls.filter(c => c.path.endsWith('/result/501')).length).toBe(2);
 });
 test('all-No validation follows backend rule and does not submit', async ({ page }) => {
   const calls = await fixture(page); await page.goto('/assessment'); await fill(page, true); await page.getByRole('button', { name: 'Nộp bài', exact: true }).click(); await expect(page.getByRole('alert')).toContainText('ít nhất một'); expect(calls.filter(c => c.path.endsWith('/submit-v2'))).toHaveLength(0);

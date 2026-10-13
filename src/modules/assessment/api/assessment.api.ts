@@ -1,8 +1,9 @@
 import type { AxiosInstance } from 'axios';
 import { ApiError } from '@/shared/api/api-error';
 import { isAssessmentQuestion } from '../model/assessment.validation';
+import { normalizeAssessmentSnapshot } from '../results/model/result.model';
 import { riasecCodes } from '../model/assessment.types';
-import type { AssessmentAttempt, AssessmentConfirmation, AssessmentDraft, AssessmentQuestion, AssessmentScores, HistoryResult } from '../model/assessment.types';
+import type { AssessmentAnalysis, AssessmentAnalysisItem, AssessmentNormalization, AssessmentResult, RiasecCode, AssessmentAttempt, AssessmentConfirmation, AssessmentDraft, AssessmentQuestion, AssessmentScores, HistoryResult } from '../model/assessment.types';
 
 function record(value: unknown): Record<string, unknown> {
   if (!value || typeof value !== 'object' || Array.isArray(value)) throw new ApiError('configuration', 'Dữ liệu kết quả không hợp lệ.');
@@ -86,4 +87,51 @@ export async function readAssessmentConfirmation(http: AxiosInstance, attemptId:
   const body = record(response.data), data = record(body.data);
   if (response.status !== 200 || body.status !== 200 || data.attemptId !== attemptId) throw new ApiError('configuration', 'Kết quả lần làm không hợp lệ.');
   return { attemptId, scores: scores(data.scores), topCode: topCode(data.top_code) };
+}
+
+export async function readAssessmentResult(http: AxiosInstance, attemptId: number, signal: AbortSignal): Promise<AssessmentResult> {
+  const response = await http.get<unknown>(`/api/v1/result/${attemptId}`, { signal });
+  const body = record(response.data), data = record(body.data);
+  if (response.status !== 200 || body.status !== 200 || data.attemptId !== attemptId || !Array.isArray(data.ranked) || data.ranked.length !== 6 || !Array.isArray(data.top3)) throw new ApiError('configuration', 'Kết quả lần làm không hợp lệ.');
+  const parsedScores = scores(data.scores), seen = new Set<RiasecCode>();
+  let lastScore: number | null = null, rank = 0;
+  const ranked = data.ranked.map((value: unknown, index: number) => {
+    const item = record(value), code = item.type;
+    if (!riasecCodes.some(value => value === code) || seen.has(code as RiasecCode) || item.score !== parsedScores[code as RiasecCode] || (lastScore !== null && (item.score as number) > lastScore)) throw new ApiError('configuration', 'Thứ hạng Holland không hợp lệ.');
+    if (item.score !== lastScore) rank = index + 1;
+    lastScore = item.score as number; seen.add(code as RiasecCode);
+    if (item.rank !== rank) throw new ApiError('configuration', 'Thứ hạng Holland không hợp lệ.');
+    return { type: code as RiasecCode, score: lastScore, rank };
+  });
+  if (data.top3.length !== 3 || data.top3.some((code: unknown, index: number) => code !== ranked[index]?.type)) throw new ApiError('configuration', 'Thứ hạng Holland không hợp lệ.');
+  return { attemptId, scores: parsedScores, topCode: topCode(data.top_code), ranked };
+}
+
+export async function readAssessmentSnapshot(http: AxiosInstance, result: AssessmentResult, signal: AbortSignal): Promise<AssessmentNormalization> {
+  const response = await http.get<unknown>(`/api/v1/result/attempt/snapshots/${result.attemptId}`, { signal });
+  try {
+    const body = record(response.data), data = record(body.data), snapshot = record(data.snapshot), saved = record(snapshot.result);
+    if (response.status !== 200 || body.status !== 200 || data.attemptId !== result.attemptId || topCode(saved.topCode) !== result.topCode) throw new Error('Wrong snapshot');
+    return normalizeAssessmentSnapshot(result.scores, snapshot);
+  } catch { throw new ApiError('configuration', 'Không có snapshot Có/Không hợp lệ để chuẩn hóa điểm.'); }
+}
+
+export async function readAssessmentAnalysis(http: AxiosInstance, attemptId: number, signal: AbortSignal): Promise<AssessmentAnalysis> {
+  const response = await http.get<unknown>(`/api/v1/result/analyze-result/${attemptId}`, { signal });
+  const body = record(response.data), data = record(body.data);
+  if (response.status !== 200 || body.status !== 200 || typeof data.finishAt !== 'string' || !data.finishAt.trim() || !Array.isArray(data.analyzeResult)) throw new ApiError('configuration', 'Phân tích Holland không hợp lệ.');
+  const codes = new Set<string>();
+  const items = data.analyzeResult.map((value: unknown): AssessmentAnalysisItem => {
+    const item = record(value);
+    if (typeof item.code !== 'string' || ![...riasecCodes, 'ALL_HIGH', 'ALL_LOW', 'OPPOSITE_RS', 'OPPOSITE_IE', 'OPPOSITE_AC'].includes(item.code) ||
+      codes.has(item.code) || typeof item.title !== 'string' || !item.title.trim() ||
+      (item.description !== null && item.description !== undefined && typeof item.description !== 'string')) throw new ApiError('configuration', 'Nội dung phân tích Holland không hợp lệ.');
+    codes.add(item.code);
+    const list = (value: unknown): string[] => {
+      if (!Array.isArray(value) || !value.every(item => typeof item === 'string' && Boolean(item.trim()))) throw new ApiError('configuration', 'Nội dung phân tích Holland không hợp lệ.');
+      return value as string[];
+    };
+    return { code: item.code, title: item.title, description: typeof item.description === 'string' ? item.description : null, personality: list(item.personality), strengths: list(item.strengths), weaknesses: list(item.weaknesses), careers: list(item.careers) };
+  });
+  return { finishAt: data.finishAt, items };
 }

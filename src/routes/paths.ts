@@ -8,6 +8,7 @@ export const paths = {
   dashboard: '/dashboard',
   careerProfile: '/career-profile',
   assessment: '/assessment',
+  assessmentResults: '/assessment/results',
   assessmentResult: (id: string | number) => `/assessment/results/${encodeURIComponent(id)}`,
   history: '/history',
   advisor: '/advisor',

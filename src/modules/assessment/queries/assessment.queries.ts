@@ -2,8 +2,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useHttpClient } from '@/shared/api/api-context';
 import { session, useSession } from '@/shared/session/session';
 import { ApiError } from '@/shared/api/api-error';
-import type { AssessmentDraft, AssessmentScope } from '../model/assessment.types';
-import { readAssessmentQuestions, startAssessment, submitAssessment, readAssessmentConfirmation, readAssessmentHistory } from '../api/assessment.api';
+import type { AssessmentDraft, AssessmentResult, AssessmentScope } from '../model/assessment.types';
+import { readAssessmentResult, readAssessmentSnapshot, readAssessmentAnalysis, readAssessmentQuestions, startAssessment, submitAssessment, readAssessmentConfirmation, readAssessmentHistory } from '../api/assessment.api';
 
 export function useAssessmentHistoryQuery() {
   const http = useHttpClient(), current = useSession();
@@ -49,5 +49,31 @@ export function useAssessmentCommand() {
         void queryClient.invalidateQueries({ queryKey: ['assessment', 'history', command.scope.ownerId, command.scope.revision] });
       }
     },
+  });
+}
+
+
+export function useAssessmentResultQuery(attemptId: number | null) {
+  const http = useHttpClient(), current = useSession();
+  return useQuery({
+    queryKey: ['assessment', 'result', current.user?.id, current.revision, attemptId],
+    queryFn: ({ signal }) => { if (attemptId === null) throw new Error('Invalid attempt'); return readAssessmentResult(http, attemptId, signal); },
+    enabled: current.status === 'authenticated' && attemptId !== null, retry: false, refetchOnWindowFocus: false,
+  });
+}
+export function useAssessmentNormalizationQuery(result: AssessmentResult | undefined) {
+  const http = useHttpClient(), current = useSession();
+  return useQuery({
+    queryKey: ['assessment', 'snapshot', current.user?.id, current.revision, result?.attemptId, result?.scores, result?.topCode],
+    queryFn: ({ signal }) => { if (!result) throw new Error('Result not ready'); return readAssessmentSnapshot(http, result, signal); },
+    enabled: current.status === 'authenticated' && result !== undefined, retry: false, refetchOnWindowFocus: false,
+  });
+}
+export function useAssessmentAnalysisQuery(attemptId: number | null) {
+  const http = useHttpClient(), current = useSession();
+  return useQuery({
+    queryKey: ['assessment', 'analysis', current.user?.id, current.revision, attemptId],
+    queryFn: ({ signal }) => { if (attemptId === null) throw new Error('Invalid attempt'); return readAssessmentAnalysis(http, attemptId, signal); },
+    enabled: current.status === 'authenticated' && attemptId !== null, retry: false, refetchOnWindowFocus: false,
   });
 }
