@@ -40,3 +40,21 @@ it('session changes clear OTP secrets and reject stale writes; new runtimes star
   session.clear(); expect(recovery.verify('123456', 0)).toBe(false);
   expect(createRecoveryState(createSessionStore()).read()).toBeNull();
 });
+
+it('reset drafts remain defensive and only exist for the current recovery revision and TTL', () => {
+  vi.useFakeTimers();
+  const session = createSessionStore(), recovery = createRecoveryState(session);
+  recovery.begin('student@example.test', 0, false);
+  expect(recovery.read()?.otpRequested).toBe(false);
+  recovery.resent(0); expect(recovery.read()?.otpRequested).toBe(true);
+  const draft = { newPassword: ' exact password ', confirmPassword: ' exact password ' };
+  expect(recovery.saveResetDraft(draft, 0)).toBe(true);
+  draft.newPassword = 'changed';
+  const snapshot = recovery.read()!; snapshot.resetDraft!.newPassword = 'other';
+  expect(recovery.read()?.resetDraft?.newPassword).toBe(' exact password ');
+  vi.advanceTimersByTime(600_000);
+  expect(recovery.read()).toBeNull();
+  expect(recovery.saveResetDraft(draft, 0)).toBe(false);
+  recovery.begin('student@example.test', 0); recovery.saveResetDraft(draft, 0);
+  session.clear(); expect(recovery.read()).toBeNull();
+});

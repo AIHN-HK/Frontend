@@ -3,7 +3,7 @@ import { createServer } from 'node:http';
 import type { Server } from 'node:http';
 import { createSessionStore } from '@/shared/session/session';
 import { createHttpClient } from '@/shared/api/http-client';
-import { resendOtp, verifyOtp } from '@/modules/auth/api/auth.api';
+import { resendOtp, verifyOtp, sendRecoveryOtp, resetPassword } from '@/modules/auth/api/auth.api';
 
 const servers: Server[] = [];
 afterEach(async () => { await Promise.all(servers.splice(0).map(server => new Promise<void>(resolve => { server.closeAllConnections(); server.close(() => resolve()); }))); });
@@ -53,5 +53,34 @@ it('malformed resend success stays unknown', async () => {
 it('invalid OTP is rejected locally before any command', async () => {
   const { calls, http, signal } = await api(true);
   await expect(verifyOtp(http, recovery, '12345', signal)).rejects.toMatchObject({ kind: 'configuration' });
+  expect(calls).toEqual([]);
+});
+
+it('recovery send trims email and accepts only the real sent contract', async () => {
+  const { calls, http, signal } = await api({ sent: true });
+  await sendRecoveryOtp(http, ' student@example.test ', signal);
+  expect(calls).toEqual([{ path: '/api/v1/auth/forgot-password/send-otp', body: { email: recovery.email } }]);
+});
+it('reset sends email/otp/newPassword only, preserving password whitespace', async () => {
+  const { calls, http, signal } = await api({ reset: true });
+  await resetPassword(http, { email: recovery.email, otp: '123456', newPassword: ' exact password ' }, signal);
+  expect(calls).toEqual([{ path: '/api/v1/auth/reset-password', body: { email: recovery.email, otp: '123456', newPassword: ' exact password ' } }]);
+});
+for (const data of [null, { reset: false }, true]) it(`malformed reset ${JSON.stringify(data)} never claims success or retries`, async () => {
+  const { calls, http, signal } = await api(data);
+  await expect(resetPassword(http, { email: recovery.email, otp: '123456', newPassword: 'exact password' }, signal)).rejects.toMatchObject({ outcomeUnknown: true });
+  expect(calls).toHaveLength(1);
+});
+it('malformed recovery send never claims success', async () => {
+  const { calls, http, signal } = await api({ sent: false });
+  await expect(sendRecoveryOtp(http, recovery.email, signal)).rejects.toMatchObject({ outcomeUnknown: true });
+  expect(calls).toHaveLength(1);
+});
+it('invalid recovery email, OTP and password never reach HTTP', async () => {
+  const { calls, http, signal } = await api({ reset: true });
+  await expect(sendRecoveryOtp(http, 'invalid', signal)).rejects.toMatchObject({ kind: 'configuration' });
+  for (const patch of [{ otp: '12345' }, { newPassword: 'short' }, { newPassword: 'x'.repeat(73) }]) {
+    await expect(resetPassword(http, { email: recovery.email, otp: '123456', newPassword: 'good password', ...patch }, signal)).rejects.toMatchObject({ kind: 'configuration' });
+  }
   expect(calls).toEqual([]);
 });

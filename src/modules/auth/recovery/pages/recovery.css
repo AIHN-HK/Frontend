@@ -1,0 +1,19 @@
+.recovery-intro { text-align: center; }
+.recovery-intro .brand-badge, .recovery-missing .brand-badge { width: 38px; height: 38px; font-size: 16px; margin: 0 auto 12px; }
+.recovery-intro h1, .recovery-missing h1 { font-size: 20px; font-weight: 700; }
+.recovery-intro p { font-size: 13.5px; color: var(--text-secondary); margin-top: 4px; overflow-wrap: anywhere; }
+.recovery-form, .recovery-form fieldset { display: flex; flex-direction: column; gap: 16px; }
+.recovery-form fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
+.recovery-legend { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); }
+.recovery-form input { min-height: 44px; }
+.recovery-hint { padding: 12px 16px; font-size: 12.5px; line-height: 1.5; background: var(--primary-subtle); border: 1px solid var(--primary-border); border-radius: var(--radius-sm); color: var(--text-secondary); }
+.recovery-submit { width: 100%; min-height: 48px; justify-content: center; margin-top: 8px; padding: 14px 24px; border-radius: var(--radius-pill); font-size: 15px; line-height: 1; box-shadow: 0 4px 12px rgb(2 143 148 / 12%); }
+.recovery-error { color: var(--error); font-size: 13px; overflow-wrap: anywhere; }
+.recovery-wait { color: var(--text-secondary); font-size: 12.5px; text-align: center; }
+.recovery-footer { border-top: 1px solid var(--border-subtle); padding-top: 16px; display: flex; justify-content: center; align-items: center; gap: 4px 8px; flex-wrap: wrap; color: var(--text-secondary); font-size: 13px; }
+.recovery-footer a, .recovery-link { display: inline-flex; min-height: 44px; min-width: 44px; align-items: center; justify-content: center; text-align: center; color: var(--primary); font-size: 13px; font-weight: 600; }
+.recovery-password { position: relative; }
+.recovery-password input { padding-right: 64px; }
+.recovery-toggle { position: absolute; top: 26px; right: 4px; min-width: 52px; min-height: 44px; color: var(--primary); background: transparent; border: 0; font-weight: 600; font-size: 12px; cursor: pointer; }
+.recovery-missing { display: flex; flex-direction: column; gap: 16px; text-align: center; }
+.recovery-missing p { color: var(--text-secondary); font-size: 13.5px; }

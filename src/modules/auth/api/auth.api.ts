@@ -6,6 +6,41 @@ import type { RegistrationFields } from '../model/registration-draft';
 
 export type OtpFlow = (RegistrationFields & { purpose: 'registration' }) | { purpose: 'password-recovery'; email: string };
 
+export async function sendRecoveryOtp(http: AxiosInstance, email: string, signal: AbortSignal): Promise<void> {
+  const input = { email: email.trim() };
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.email)) throw new ApiError('configuration', 'Vui lòng nhập email hợp lệ.');
+  try {
+    const response = await http.post('/api/v1/auth/forgot-password/send-otp', input, { signal });
+    const envelope = response.data as { status?: unknown; data?: { sent?: unknown } } | null;
+    if (response.status !== 201 || envelope?.status !== 201 || envelope.data?.sent !== true) {
+      throw new ApiError('configuration', 'Chưa xác nhận được yêu cầu gửi OTP.', undefined, true);
+    }
+  } catch (error) {
+    if (error instanceof ApiError && error.status === 409) throw new ApiError('http', 'Không thể gửi mã cho email này. Vui lòng kiểm tra email tài khoản.', 409);
+    if (error instanceof ApiError && error.status === 429) throw new ApiError('http', 'Bạn đang yêu cầu mã quá nhanh. Vui lòng chờ rồi thử lại.', 429);
+    throw error;
+  }
+}
+
+export async function resetPassword(http: AxiosInstance, input: { email: string; otp: string; newPassword: string }, signal: AbortSignal): Promise<void> {
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.email) || !/^\d{6}$/.test(input.otp)
+    || input.newPassword.length < 8 || input.newPassword.length > 72) {
+    throw new ApiError('configuration', 'Thông tin đặt lại mật khẩu không hợp lệ.');
+  }
+  try {
+    const response = await http.post('/api/v1/auth/reset-password', { email: input.email, otp: input.otp, newPassword: input.newPassword }, { signal });
+    const envelope = response.data as { status?: unknown; data?: { reset?: unknown } } | null;
+    if (response.status !== 201 || envelope?.status !== 201 || envelope.data?.reset !== true) {
+      throw new ApiError('configuration', 'Chưa xác nhận được kết quả đặt lại mật khẩu.', undefined, true);
+    }
+  } catch (error) {
+    if (error instanceof ApiError && error.status === 401) throw new ApiError('http', 'Mã xác thực không đúng hoặc đã hết hạn. Vui lòng xác thực lại.', 401);
+    if (error instanceof ApiError && error.status === 409) throw new ApiError('http', 'Không thể đặt lại mật khẩu cho tài khoản này. Vui lòng bắt đầu khôi phục lại.', 409);
+    if (error instanceof ApiError && error.status === 429) throw new ApiError('http', 'Bạn đã thử quá nhiều lần. Vui lòng chờ trước khi thử lại.', 429);
+    throw error;
+  }
+}
+
 export async function verifyOtp(http: AxiosInstance, flow: OtpFlow, otp: string, signal: AbortSignal): Promise<void> {
   if (!/^\d{6}$/.test(otp)) throw new ApiError('configuration', 'Vui lòng nhập đủ 6 chữ số.');
   const registration = flow.purpose === 'registration';

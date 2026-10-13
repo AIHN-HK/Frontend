@@ -107,6 +107,7 @@ export function OtpVerifyPage(): React.JSX.Element {
       <p>Nhập mã xác thực 6 chữ số từ email <strong>{maskedEmail}</strong></p>
     </div>
     {!recovery && <p className="otp-flow-status" role="status">{flow.otpRequested ? 'Máy chủ đã xác nhận yêu cầu gửi OTP. Tài khoản chưa được tạo.' : 'Chưa xác nhận yêu cầu gửi OTP. Thông tin đăng ký vẫn được giữ trong tab này; tài khoản chưa được tạo.'}</p>}
+    {recovery && <p className="otp-flow-status" role="status">{flow.otpRequested ? 'Máy chủ đã xác nhận yêu cầu gửi mã khôi phục. Mật khẩu chưa được thay đổi.' : 'Chưa xác nhận mã đã được gửi. Hãy kiểm tra email; mật khẩu chưa được thay đổi.'}</p>}
     <form className="otp-form" noValidate aria-busy={busy !== null} onSubmit={event => { event.preventDefault(); void command('verify'); }}>
       <fieldset className="otp-digits" disabled={locked} aria-describedby={error ? 'otp-error' : 'otp-hint'}>
         <legend className="otp-legend">Mã xác thực 6 chữ số</legend>

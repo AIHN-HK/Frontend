@@ -4,7 +4,8 @@ import './auth.css';
 
 export function AuthLayout() {
   const { pathname } = useLocation();
-  if (pathname === paths.verifyOtp) return <div className="auth-wrapper">
+  const compact = pathname === paths.verifyOtp || pathname === paths.forgotPassword || pathname === paths.resetPassword;
+  if (compact) return <div className="auth-wrapper">
     <a className="skip-link" href="#main-content">Bỏ qua giới thiệu</a>
     <main id="main-content" className="auth-otp-card" tabIndex={-1}><Outlet /></main>
   </div>;

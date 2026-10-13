@@ -25,6 +25,7 @@ export function LoginPage() {
   };
   return <>
     {(location.state as { registrationComplete?: unknown } | null)?.registrationComplete === true && <p role="status">Đăng ký thành công. Vui lòng đăng nhập để tiếp tục.</p>}
+    {(location.state as { passwordResetComplete?: unknown } | null)?.passwordResetComplete === true && <p role="status">Đặt lại mật khẩu thành công. Vui lòng đăng nhập bằng mật khẩu mới.</p>}
     <div className="login-intro">
       <span className="brand-badge" aria-hidden="true">AI</span>
       <h1>Đăng nhập AIHN</h1>
