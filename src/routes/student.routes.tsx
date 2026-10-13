@@ -7,7 +7,10 @@ export const studentRoutes: RouteObject[] = [{
   Component: RequireSession,
   children: [{
     lazy: async () => ({ Component: (await import('@/layouts/StudentLayout')).StudentLayout }),
-    children: [paths.dashboard, paths.careerProfile, paths.assessment, '/assessment/results/:attemptId', paths.history, paths.advisor,
-      paths.recommendations, '/recommendations/:recommendationId', paths.roadmap, paths.settings].map(path => ({ path, Component: UnavailableRoute })),
+    children: [
+      { path: paths.dashboard, lazy: async () => ({ Component: (await import('@/modules/dashboard/pages/DashboardPage')).DashboardPage }) },
+      ...[paths.careerProfile, paths.assessment, '/assessment/results/:attemptId', paths.history, paths.advisor,
+        paths.recommendations, '/recommendations/:recommendationId', paths.roadmap, paths.settings].map(path => ({ path, Component: UnavailableRoute })),
+    ],
   }],
 }];

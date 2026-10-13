@@ -78,7 +78,7 @@ p { color: var(--text-secondary); line-height: var(--line-height-relaxed); }
 @media (max-width: 768px) {
   .workspace-sidebar, .header-title { display: none; }
   .workspace-header { padding: 0 16px; }
-  .mobile-brand { display: flex; }
+  .mobile-brand { display: flex; min-height: 44px; }
   .mobile-brand .brand-info small { display: none; }
   .btn.menu-trigger { display: inline-flex; padding: 8px; }
   .header-actions .badge { display: none; }
