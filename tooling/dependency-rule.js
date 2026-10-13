@@ -1,53 +1,130 @@
 import path from 'node:path';
 
-// Ownership is path based, so it applies equally to aliases, relative imports and re-exports.
+const FILE_EXTENSION = /\.(?:[cm]?[jt]sx?)$/;
+const APPLICATION_LAYERS = new Set(['app', 'layouts', 'routes']);
+const LAYOUT_FORBIDDEN_LAYERS = new Set(['app', 'modules', 'routes']);
+
+function toPosixPath(value) {
+  return value.replaceAll(path.sep, '/');
+}
+
+function removeFileExtension(value) {
+  return value.replace(FILE_EXTENSION, '');
+}
+
+function getSourcePath(sourceRoot, filename) {
+  return toPosixPath(path.relative(sourceRoot, filename));
+}
+
+function resolveInternalImport(sourceRoot, importer, specifier) {
+  if (specifier.startsWith('@/')) {
+    return path.join(sourceRoot, specifier.slice(2));
+  }
+
+  if (specifier.startsWith('.')) {
+    return path.resolve(path.dirname(importer), specifier);
+  }
+
+  // Packages such as react and axios are outside the application's ownership rules.
+  return null;
+}
+
+function getTargetPath(sourceRoot, importer, specifier) {
+  const absoluteTarget = resolveInternalImport(sourceRoot, importer, specifier);
+  if (!absoluteTarget) return null;
+
+  return removeFileExtension(toPosixPath(path.relative(sourceRoot, absoluteTarget)));
+}
+
+function isPublicModuleEntry(targetPath, moduleName) {
+  return targetPath === `modules/${moduleName}` || targetPath === `modules/${moduleName}/index`;
+}
+
+function getViolationReason(sourcePath, targetPath) {
+  if (!targetPath) return null;
+
+  const sourceParts = sourcePath.split('/');
+  const targetParts = targetPath.split('/');
+  const sourceLayer = sourceParts[0];
+  const targetLayer = targetParts[0];
+  const targetIsOutsideSource = targetPath.startsWith('../');
+  const importingPaths = targetPath === 'routes/paths';
+
+  if (sourcePath === 'routes/paths.ts' && !targetIsOutsideSource) {
+    return 'URL constants must not import the application.';
+  }
+
+  if (sourceLayer === 'shared' && targetLayer !== 'shared') {
+    return 'Shared may only depend on shared or external libraries.';
+  }
+
+  if (sourceLayer === 'modules') {
+    if (APPLICATION_LAYERS.has(targetLayer) && !importingPaths) {
+      return 'A module cannot depend on app, layouts or the route tree.';
+    }
+
+    const importingAnotherModule = targetLayer === 'modules' && sourceParts[1] !== targetParts[1];
+    if (importingAnotherModule && !isPublicModuleEntry(targetPath, targetParts[1])) {
+      return 'Use the other root module public index.';
+    }
+
+    if (targetIsOutsideSource) {
+      return 'Application code cannot import repository tooling or legacy.';
+    }
+  }
+
+  if (sourceLayer === 'layouts' && LAYOUT_FORBIDDEN_LAYERS.has(targetLayer) && !importingPaths) {
+    return 'Layouts depend on shared UI and pure URL paths.';
+  }
+
+  if (sourceLayer === 'routes' && targetLayer === 'app') {
+    return 'Routes cannot import app bootstrap.';
+  }
+
+  if (targetIsOutsideSource) {
+    return 'Application imports must stay inside src.';
+  }
+
+  return null;
+}
+
 export const dependencyRule = {
   meta: {
     type: 'problem',
     schema: [],
-    messages: { forbidden: 'Dependency violates ownership: {{from}} → {{to}}. {{reason}}' },
+    messages: {
+      forbidden: 'Dependency violates ownership: {{from}} → {{to}}. {{reason}}',
+    },
   },
+
   create(context) {
     const sourceRoot = path.join(context.cwd, 'src');
-    const source = path.relative(sourceRoot, context.filename).replaceAll(path.sep, '/');
-    const from = source.split('/');
-    function check(node) {
+    const sourcePath = getSourcePath(sourceRoot, context.filename);
+
+    function checkImport(node) {
       if (typeof node.value !== 'string') return;
-      const specifier = node.value;
-      const absolute = specifier.startsWith('@/')
-        ? path.join(sourceRoot, specifier.slice(2))
-        : specifier.startsWith('.') ? path.resolve(path.dirname(context.filename), specifier) : null;
-      if (!absolute) return;
-      const target = path.relative(sourceRoot, absolute).replaceAll(path.sep, '/').replace(/\.(?:[cm]?[jt]sx?)$/, '');
-      const to = target.split('/');
-      const paths = target === 'routes/paths';
-      let reason;
-      if (source === 'routes/paths.ts' && !target.startsWith('../')) {
-        reason = 'URL constants must not import the application.';
-      } else if (from[0] === 'shared' && to[0] !== 'shared') {
-        reason = 'Shared may only depend on shared or external libraries.';
-      } else if (from[0] === 'modules') {
-        if (['app', 'layouts', 'routes'].includes(to[0]) && !paths) {
-          reason = 'A module cannot depend on app, layouts or the route tree.';
-        } else if (to[0] === 'modules' && from[1] !== to[1] && ![ `modules/${to[1]}`, `modules/${to[1]}/index` ].includes(target)) {
-          reason = 'Use the other root module public index.';
-        } else if (target.startsWith('../')) {
-          reason = 'Application code cannot import repository tooling or legacy.';
-        }
-      } else if (from[0] === 'layouts' && ['app', 'modules', 'routes'].includes(to[0]) && !paths) {
-        reason = 'Layouts depend on shared UI and pure URL paths.';
-      } else if (from[0] === 'routes' && to[0] === 'app') {
-        reason = 'Routes cannot import app bootstrap.';
-      }
-      if (target.startsWith('../') && !reason) reason = 'Application imports must stay inside src.';
-      if (reason) context.report({ node, messageId: 'forbidden', data: { from: source, to: target, reason } });
+
+      const targetPath = getTargetPath(sourceRoot, context.filename, node.value);
+      const reason = getViolationReason(sourcePath, targetPath);
+      if (!reason) return;
+
+      context.report({
+        node,
+        messageId: 'forbidden',
+        data: { from: sourcePath, to: targetPath, reason },
+      });
     }
+
     return {
-      ImportDeclaration: node => check(node.source),
-      ExportNamedDeclaration: node => { if (node.source) check(node.source); },
-      ExportAllDeclaration: node => check(node.source),
-      ImportExpression: node => check(node.source),
-      TSImportType: node => { if (node.argument?.value !== undefined) check(node.argument); },
+      ImportDeclaration: node => checkImport(node.source),
+      ExportNamedDeclaration: node => {
+        if (node.source) checkImport(node.source);
+      },
+      ExportAllDeclaration: node => checkImport(node.source),
+      ImportExpression: node => checkImport(node.source),
+      TSImportType: node => {
+        if (node.argument?.value !== undefined) checkImport(node.argument);
+      },
     };
   },
 };
