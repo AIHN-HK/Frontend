@@ -1,7 +1,9 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useHttpClient } from '@/shared/api/api-context';
-import { useSession } from '@/shared/session/session';
-import { readAssessmentHistory } from '../api/assessment.api';
+import { session, useSession } from '@/shared/session/session';
+import { ApiError } from '@/shared/api/api-error';
+import type { AssessmentDraft, AssessmentScope } from '../model/assessment.types';
+import { readAssessmentQuestions, startAssessment, submitAssessment, readAssessmentConfirmation, readAssessmentHistory } from '../api/assessment.api';
 
 export function useAssessmentHistoryQuery() {
   const http = useHttpClient(), current = useSession();
@@ -10,5 +12,42 @@ export function useAssessmentHistoryQuery() {
     queryFn: ({ signal }) => readAssessmentHistory(http, signal),
     enabled: current.status === 'authenticated',
     retry: false,
+  });
+}
+
+
+export function useAssessmentQuestionsQuery() {
+  const http = useHttpClient(), current = useSession();
+  return useQuery({
+    queryKey: ['assessment', 'questions', current.user?.id, current.revision],
+    queryFn: ({ signal }) => readAssessmentQuestions(http, signal),
+    enabled: current.status === 'authenticated', retry: false, refetchOnWindowFocus: false,
+  });
+}
+
+type Command = { scope: AssessmentScope; signal: AbortSignal } & (
+  { action: 'start' } | { action: 'submit'; draft: AssessmentDraft } | { action: 'check'; attemptId: number }
+);
+export function isAssessmentScopeCurrent(scope: AssessmentScope, signal: AbortSignal): boolean {
+  const current = session.read();
+  return !signal.aborted && current.status === 'authenticated' && current.user?.id === scope.ownerId && current.revision === scope.revision;
+}
+export function useAssessmentCommand() {
+  const http = useHttpClient(), queryClient = useQueryClient(), current = useSession();
+  return useMutation({
+    mutationKey: ['assessment', 'command', current.user?.id, current.revision], retry: false,
+    mutationFn: async (command: Command) => {
+      const valid = () => { if (!isAssessmentScopeCurrent(command.scope, command.signal)) throw new ApiError('session-changed', 'Phiên đã thay đổi.'); };
+      valid();
+      const result = command.action === 'start' ? await startAssessment(http, command.scope.ownerId, command.signal)
+        : command.action === 'submit' ? await submitAssessment(http, command.draft, command.signal)
+        : await readAssessmentConfirmation(http, command.attemptId, command.signal);
+      valid(); return result;
+    },
+    onSuccess: (_result, command) => {
+      if (command.action !== 'start' && isAssessmentScopeCurrent(command.scope, command.signal)) {
+        void queryClient.invalidateQueries({ queryKey: ['assessment', 'history', command.scope.ownerId, command.scope.revision] });
+      }
+    },
   });
 }

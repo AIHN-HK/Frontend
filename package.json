@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "license": "0BSD",
-  "packageManager": "npm@11.16.0",
+  "packageManager": "pnpm@10.33.2",
   "engines": {
     "node": "^24.0.0"
   },
@@ -12,8 +12,8 @@
     "dev": "vite",
     "typecheck": "tsc -b",
     "lint": "eslint . --max-warnings 0",
-    "build": "npm run typecheck && vite build",
-    "test": "npm run test:unit && npm run test:e2e",
+    "build": "pnpm run typecheck && vite build",
+    "test": "pnpm run test:unit && pnpm run test:e2e",
     "test:unit": "vitest run",
     "test:e2e": "playwright test",
     "preview": "vite preview"
