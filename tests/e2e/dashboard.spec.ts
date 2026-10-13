@@ -14,7 +14,7 @@ async function fixture(page: Page, options: Options = {}) {
     const user = { id: options.ownerId ?? 71, fullname: options.fullname ?? 'Tài khoản A', role: 'USER' };
     let status = 200, data: unknown = user;
     if (path.endsWith('/login')) data = { user, accessToken: 'B-access', refreshToken: 'B-refresh' };
-    if (path.endsWith('/me')) { await options.delay; status = options.profileError ? 503 : 200; data = { fullname: options.fullname ?? 'Học sinh kiểm thử', class: 12 }; }
+    if (path.endsWith('/me')) { await options.delay; status = options.profileError ? 503 : 200; data = { fullname: options.fullname ?? 'Học sinh kiểm thử', class: 12, phone: null, address: null, gender: null, email: 'fixture@example.test', age: 18 }; }
     if (path.endsWith('/history-by-user')) { await options.delay; status = options.historyError ? 503 : 200; data = options.history ?? { formattedHistory: [], pageInfo: { hasNext: false, nextCursor: null } }; }
     await route.fulfill({ status, headers, contentType: 'application/json', body: JSON.stringify({ status, data, errors: null }) });
   });
