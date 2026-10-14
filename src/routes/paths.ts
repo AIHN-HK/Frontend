@@ -29,4 +29,5 @@ export const paths = {
   previewStudent: '/preview/student',
   previewAdmin: '/preview/admin',
   previewAuth: '/preview/auth',
+  previewCareers: '/preview/careers',
 } as const;

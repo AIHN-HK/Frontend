@@ -6,6 +6,10 @@ const preview = async () => ({ Component: (await import('@/layouts/components/Sh
 
 export const previewRoutes: RouteObject[] = [
   {
+    lazy: async () => ({ Component: (await import('@/layouts/PublicLayout')).PublicLayout }),
+    children: [{ path: paths.previewCareers, lazy: async () => ({ Component: (await import('@/modules/careers/explorer/pages/CareerExplorerPage')).CareerExplorerPage }) }],
+  },
+  {
     path: paths.previewStudent,
     lazy: async () => ({ Component: (await import('@/layouts/StudentLayout')).StudentLayout }),
     children: [{ index: true, lazy: preview }],

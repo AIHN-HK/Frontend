@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgPsych" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E6F7F5"/>
+      <stop offset="100%" stop-color="#CEF2ED"/>
+    </linearGradient>
+  </defs>
+  <rect width="120" height="120" rx="24" fill="url(#bgPsych)"/>
+  <!-- Card background -->
+  <rect x="22" y="24" width="76" height="72" rx="14" fill="#FFFFFF" filter="drop-shadow(0 4px 10px rgba(13,148,136,0.08))"/>
+  <!-- Empathy Heart & Chat Bubble -->
+  <path d="M42 42c0-5 4-9 9-9 3.5 0 6.5 2 8 5 1.5-3 4.5-5 8-5 5 0 9 4 9 9 0 9-17 18-17 18s-17-9-17-18z" fill="#0D9488"/>
+  <path d="M46 68h28c4 0 7 3 7 7s-3 7-7 7h-6l-8 6v-6h-7c-4 0-7-3-7-7s3-7 7-7z" fill="#E6F7F5" stroke="#0D9488" stroke-width="2"/>
+  <circle cx="53" cy="75" r="2" fill="#0D9488"/>
+  <circle cx="60" cy="75" r="2" fill="#0D9488"/>
+  <circle cx="67" cy="75" r="2" fill="#0D9488"/>
+</svg>
