@@ -78,7 +78,7 @@ test('ADMIN defaults to admin and re-verifies its role after reload', async ({ p
   await page.goto('/login?returnTo=https%3A%2F%2Fevil.test'); await fill(page);
   await page.getByRole('button', { name: 'Đăng nhập vào Trang của tôi →' }).click();
   await expect(page).toHaveURL(/\/admin$/);
-  await expect(page.getByRole('heading', { name: 'Quyền quản trị chưa được xác minh' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Tổng quan hệ thống' })).toBeVisible();
   await page.reload(); await expect(page.getByText('Người dùng thử', { exact: true })).toBeVisible();
   expect(calls.some(call => call.path.endsWith('/admin/me'))).toBe(true);
 });

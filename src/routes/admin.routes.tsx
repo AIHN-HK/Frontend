@@ -4,10 +4,10 @@ import { UnavailableRoute } from './RouteStates';
 import { paths } from './paths';
 
 export const adminRoutes: RouteObject[] = [{
-  path: `${paths.admin}/*`,
+  path: paths.admin,
   Component: RequireAdmin,
   children: [{
     lazy: async () => ({ Component: (await import('@/layouts/AdminLayout')).AdminLayout }),
-    children: [{ path: '*', Component: UnavailableRoute }],
+    children: [{ index: true, lazy: async () => ({ Component: (await import('@/modules/admin/overview/pages/OverviewPage')).OverviewPage }) }, { path: '*', Component: UnavailableRoute }],
   }],
 }];
