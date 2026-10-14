@@ -29,6 +29,7 @@ export const paths = {
   adminStudent: (id: string | number) => `/admin/students/${encodeURIComponent(id)}`,
   previewStudent: '/preview/student',
   previewAdmin: '/preview/admin',
+  previewAdminCareers: '/preview/admin/careers',
   previewAuth: '/preview/auth',
   previewCareers: '/preview/careers',
   previewCareer: (id: string) => `/preview/careers/${encodeURIComponent(id)}`,

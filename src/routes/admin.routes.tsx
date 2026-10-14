@@ -8,6 +8,6 @@ export const adminRoutes: RouteObject[] = [{
   Component: RequireAdmin,
   children: [{
     lazy: async () => ({ Component: (await import('@/layouts/AdminLayout')).AdminLayout }),
-    children: [{ path: 'scoring', lazy: async () => ({ Component: (await import('@/modules/admin/scoring/pages/ScoringConfigPage')).ScoringConfigPage }) }, { path: 'holland-content', lazy: async () => ({ Component: (await import('@/modules/admin/scoring/pages/HollandContentPage')).HollandContentPage }) }, { path: 'questions', lazy: async () => ({ Component: (await import('@/modules/admin/questions/pages/QuestionsPage')).QuestionsPage }) }, { index: true, lazy: async () => ({ Component: (await import('@/modules/admin/overview/pages/OverviewPage')).OverviewPage }) }, { path: '*', Component: UnavailableRoute }],
+    children: [{ path: 'careers', lazy: async () => ({ Component: (await import('@/modules/admin/careers/pages/CareersPage')).CareersPage }) }, { path: 'scoring', lazy: async () => ({ Component: (await import('@/modules/admin/scoring/pages/ScoringConfigPage')).ScoringConfigPage }) }, { path: 'holland-content', lazy: async () => ({ Component: (await import('@/modules/admin/scoring/pages/HollandContentPage')).HollandContentPage }) }, { path: 'questions', lazy: async () => ({ Component: (await import('@/modules/admin/questions/pages/QuestionsPage')).QuestionsPage }) }, { index: true, lazy: async () => ({ Component: (await import('@/modules/admin/overview/pages/OverviewPage')).OverviewPage }) }, { path: '*', Component: UnavailableRoute }],
   }],
 }];

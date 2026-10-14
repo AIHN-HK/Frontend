@@ -23,7 +23,7 @@ export const previewRoutes: RouteObject[] = [
   {
     path: paths.previewAdmin,
     lazy: async () => ({ Component: (await import('@/layouts/AdminLayout')).AdminLayout }),
-    children: [{ index: true, lazy: preview }],
+    children: [{ index: true, lazy: preview }, { path: 'careers', lazy: async () => ({ Component: (await import('@/modules/admin/careers/pages/CareersPreviewPage')).CareersPreviewPage }) }],
   },
   {
     path: paths.previewAuth,
