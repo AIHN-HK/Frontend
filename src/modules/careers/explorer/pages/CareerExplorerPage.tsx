@@ -3,16 +3,11 @@ import { Link, useLocation, useSearchParams } from 'react-router';
 import { paths } from '@/routes/paths';
 import { Button } from '@/shared/ui/Button';
 import { Drawer } from '@/shared/ui/Drawer';
-import developerIllustration from '@/assets/careers/career-dev.svg';
-import dataIllustration from '@/assets/careers/career-data.svg';
-import designIllustration from '@/assets/careers/career-design.svg';
-import healthIllustration from '@/assets/careers/career-health.svg';
+import { CareerIllustration } from '../../components/CareerIllustration';
 import { categories, previewPageSize, readExplorerCriteria, riasecLabels, writeExplorerCriteria } from '../../model/career.types';
 import type { CategoryId, ExplorerCriteria, Riasec } from '../../model/career.types';
 import { usePreviewCareers } from '../../queries/careers.queries';
 import './career-explorer.css';
-
-const illustrations: Partial<Record<CategoryId, string>> = { technology: developerIllustration, data: dataIllustration, creative: designIllustration, health: healthIllustration };
 
 function Filters({ criteria, counts, onChange }: { criteria: ExplorerCriteria; counts?: Record<string, number>; onChange(criteria: ExplorerCriteria): void }) {
   function toggleCategory(id: CategoryId) {
@@ -77,13 +72,13 @@ export function CareerExplorerPage() {
         {result.isError && <div className="explorer-state"><h2>Không thể tải dữ liệu mẫu</h2><p>Vui lòng thử tải lại bản xem trước.</p><Button onClick={() => void result.refetch()} disabled={result.isFetching}>Thử lại</Button></div>}
         {!result.isError && data && (data.total === 0 ? <div className="explorer-state"><h2>Không có nghề mẫu phù hợp</h2><p>Thử từ khóa khác hoặc mở rộng bộ lọc.</p><Button variant="secondary" onClick={() => change({ q: '', categories: [], riasec: [], page: 1 })}>Xóa tìm kiếm và bộ lọc</Button></div> : criteria.page > data.pages ? <div className="explorer-state"><h2>Trang này vượt quá kết quả</h2><p>Có {data.total} nghề mẫu, tương ứng {data.pages} trang.</p><Button onClick={() => change({ ...criteria, page: 1 })}>Về trang đầu</Button></div> : <>
           {data.items.map(career => <article className="explorer-career-card" key={career.id}>
-            <div className="explorer-card-top"><div className="explorer-card-title"><span className="explorer-career-icon" aria-hidden="true">{illustrations[career.category] ? <img src={illustrations[career.category]} alt="" width="58" height="58" /> : categories.find(c => c.id === career.category)?.icon}</span><div><h2>{career.name}</h2><p>{categories.find(c => c.id === career.category)?.name}</p></div></div>
+            <div className="explorer-card-top"><div className="explorer-card-title"><span className="explorer-career-icon"><CareerIllustration category={career.category} /></span><div><h2>{career.name}</h2><p>{categories.find(c => c.id === career.category)?.name}</p></div></div>
               <div className="explorer-tags">{career.riasec.map(code => <span className={`explorer-tag explorer-tag-${code.toLowerCase()}`} key={code}>{code} · {riasecLabels[code]}</span>)}</div>
             </div><p className="explorer-summary">{career.summary}</p>
-            <footer><span>Thông tin minh họa</span><Link className="btn btn-secondary" to={paths.career(career.id)}>Xem hồ sơ nghề →</Link></footer>
+            <footer><span>Thông tin minh họa</span><Link className="btn btn-secondary" to={paths.previewCareer(career.id) + location.search}>Xem hồ sơ nghề →</Link></footer>
           </article>)}
           <nav className="explorer-pagination" aria-label="Phân trang nghề mẫu"><Button variant="secondary" disabled={criteria.page === 1} onClick={() => change({ ...criteria, page: criteria.page - 1 })}>Trang trước</Button><span>Trang {criteria.page} / {data.pages}</span><Button variant="secondary" disabled={criteria.page === data.pages} onClick={() => change({ ...criteria, page: criteria.page + 1 })}>Trang sau</Button></nav>
-          <p className="explorer-hint">Hồ sơ nghề chi tiết chưa sẵn sàng. Liên kết trong preview dẫn tới trang thông báo.</p>
+          <p className="explorer-hint">Hồ sơ nghề trong preview dùng dữ liệu mẫu; thông tin chưa có nguồn xác nhận được ghi rõ trong từng mục.</p>
         </>)}
       </section>
     </div>

@@ -11,11 +11,32 @@ export const categories = [
 ] as const;
 export type CategoryId = typeof categories[number]['id'];
 
+export function isPreviewCareerId(id: string | undefined): id is string {
+  return typeof id === 'string' && id.length <= 80 && /^preview-[a-z0-9]+(?:-[a-z0-9]+)*$/.test(id);
+}
+
+export function isSafeCareerReference(url: string): boolean {
+  try {
+    const parsed = new URL(url);
+    return parsed.protocol === 'https:' && Boolean(parsed.hostname) && !parsed.username && !parsed.password;
+  } catch { return false; }
+}
+
+const textList = z.array(z.string().trim().min(1));
+const detailSchema = z.object({
+  kind: z.literal('T13 UI fixtures'), updatedAt: z.iso.date(),
+  tasks: textList.optional(), hardSkills: textList.optional(), softSkills: textList.optional(),
+  references: z.array(z.object({
+    label: z.string().trim().min(1), url: z.string().refine(isSafeCareerReference, 'Unsafe reference URL'), checkedAt: z.iso.date(),
+  })).refine(items => new Set(items.map(item => item.url)).size === items.length, 'Duplicate reference URL').optional(),
+});
+
 // Preview-only schema. This does not define or imply a backend catalog contract.
 const careerSchema = z.object({
-  id: z.string().regex(/^preview-[a-z0-9-]+$/),
+  id: z.string().refine(isPreviewCareerId, 'Invalid fixture ID'),
   name: z.string().min(1), category: z.enum(['technology', 'data', 'creative', 'health', 'business']),
   riasec: z.array(z.enum(['R', 'I', 'A', 'S', 'E', 'C'])).min(1), summary: z.string().min(1),
+  detail: detailSchema.optional(),
 });
 export const previewCatalogSchema = z.object({
   kind: z.literal('T12 UI fixtures'), version: z.literal(1), careers: z.array(careerSchema),

@@ -20,9 +20,9 @@ test('preview labels the source, derives totals and links the exact fixture ID',
   await expect(page.getByRole('article')).toHaveCount(4);
   const first = page.getByRole('article').first();
   await expect(first).toContainText('Kỹ sư Phần mềm');
-  await expect(first.getByRole('link')).toHaveAttribute('href', '/careers/preview-software');
+  await expect(first.getByRole('link')).toHaveAttribute('href', '/preview/careers/preview-software');
   await first.getByRole('link').click();
-  await expect(page.getByRole('heading', { name: 'Trang đang được chuẩn bị' })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 1, name: 'Kỹ sư Phần mềm' })).toBeVisible();
 });
 
 test('accent-free search, OR within filters and AND across groups sync URL and reset page', async ({ page }) => {

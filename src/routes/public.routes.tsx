@@ -1,5 +1,5 @@
 import type { RouteObject } from 'react-router';
-import { NotFoundRoute, UnavailableRoute } from './RouteStates';
+import { NotFoundRoute } from './RouteStates';
 import { paths } from './paths';
 
 export const publicRoutes: RouteObject[] = [{
@@ -7,7 +7,7 @@ export const publicRoutes: RouteObject[] = [{
   children: [
     { path: paths.home, lazy: async () => ({ Component: (await import('@/modules/public/pages/HomePage')).HomePage }) },
     { path: paths.careers, lazy: async () => ({ Component: (await import('@/modules/careers/explorer/pages/CareerCatalogUnavailablePage')).CareerCatalogUnavailablePage }) },
-    { path: '/careers/:careerId', Component: UnavailableRoute },
+    { path: '/careers/:careerId', lazy: async () => ({ Component: (await import('@/modules/careers/detail/pages/CareerDetailUnavailablePage')).CareerDetailUnavailablePage }) },
     { path: '*', Component: NotFoundRoute },
   ],
 }];
