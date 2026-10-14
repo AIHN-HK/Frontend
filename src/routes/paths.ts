@@ -18,6 +18,7 @@ export const paths = {
   recommendations: '/recommendations',
   recommendation: (id: string | number) => `/recommendations/${encodeURIComponent(id)}`,
   roadmap: '/roadmap',
+  previewRoadmap: '/preview/roadmap',
   settings: '/settings',
   admin: '/admin',
   adminQuestions: '/admin/questions',

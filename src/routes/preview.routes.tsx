@@ -8,6 +8,7 @@ export const previewRoutes: RouteObject[] = [
   {
     lazy: async () => ({ Component: (await import('@/layouts/PublicLayout')).PublicLayout }),
     children: [
+      { path: paths.previewRoadmap, lazy: async () => ({ Component: (await import('@/modules/roadmap/pages/RoadmapPage')).RoadmapPage }) },
       { path: paths.previewCareers, lazy: async () => ({ Component: (await import('@/modules/careers/explorer/pages/CareerExplorerPage')).CareerExplorerPage }) },
       { path: '/preview/careers/:careerId', lazy: async () => ({ Component: (await import('@/modules/careers/detail/pages/CareerDetailPage')).CareerDetailPage }) },
       { path: paths.previewRecommendations, lazy: async () => ({ Component: (await import('@/modules/recommendations/list/pages/RecommendationsPreviewPage')).RecommendationsPreviewPage }) },
