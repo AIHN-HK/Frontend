@@ -8,6 +8,6 @@ export const adminRoutes: RouteObject[] = [{
   Component: RequireAdmin,
   children: [{
     lazy: async () => ({ Component: (await import('@/layouts/AdminLayout')).AdminLayout }),
-    children: [{ index: true, lazy: async () => ({ Component: (await import('@/modules/admin/overview/pages/OverviewPage')).OverviewPage }) }, { path: '*', Component: UnavailableRoute }],
+    children: [{ path: 'questions', lazy: async () => ({ Component: (await import('@/modules/admin/questions/pages/QuestionsPage')).QuestionsPage }) }, { index: true, lazy: async () => ({ Component: (await import('@/modules/admin/overview/pages/OverviewPage')).OverviewPage }) }, { path: '*', Component: UnavailableRoute }],
   }],
 }];
