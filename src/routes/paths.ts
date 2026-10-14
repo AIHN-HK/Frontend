@@ -31,4 +31,6 @@ export const paths = {
   previewAuth: '/preview/auth',
   previewCareers: '/preview/careers',
   previewCareer: (id: string) => `/preview/careers/${encodeURIComponent(id)}`,
+  previewRecommendations: '/preview/recommendations',
+  previewRecommendation: (id: string) => `/preview/recommendations/${encodeURIComponent(id)}`,
 } as const;

@@ -16,8 +16,9 @@ export const studentRoutes: RouteObject[] = [{
         { path: paths.assessmentResults, lazy: async () => ({ Component: (await import('@/modules/assessment/results/pages/AssessmentResultPage')).AssessmentResultPage }) },
         { path: paths.history, lazy: async () => ({ Component: (await import('@/modules/history/pages/HistoryPage')).HistoryPage }) },
         { path: paths.advisor, lazy: async () => ({ Component: (await import('@/modules/advisor/pages/AdvisorPage')).AdvisorPage }) },
+        { path: paths.recommendations, lazy: async () => ({ Component: (await import('@/modules/recommendations/list/pages/RecommendationsPage')).RecommendationsPage }) },
         ...[
-          paths.recommendations, '/recommendations/:recommendationId', paths.roadmap, paths.settings].map(path => ({ path, Component: UnavailableRoute })),
+          '/recommendations/:recommendationId', paths.roadmap, paths.settings].map(path => ({ path, Component: UnavailableRoute })),
       ],
     },
   ],

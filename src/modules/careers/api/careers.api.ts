@@ -3,7 +3,7 @@ import { isPreviewCareerId, previewCatalogSchema, selectPreviewCareers } from '.
 import type { ExplorerCriteria } from '../model/career.types';
 
 // Local fixture asset, fetched only by career preview routes. No career API exists yet.
-async function readPreviewCatalog(signal: AbortSignal) {
+export async function readPreviewCatalog(signal: AbortSignal) {
   const response = await fetch(previewCatalogUrl, { signal, credentials: 'omit' });
   if (!response.ok) throw new Error('Preview source unavailable');
   const source = previewCatalogSchema.parse(await response.json());
