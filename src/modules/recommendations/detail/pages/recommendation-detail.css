@@ -1,0 +1,10 @@
+.recommendation-detail > .btn { margin-bottom: 16px; }
+.recommendation-detail-grid { display: grid; grid-template-columns: minmax(0,1fr) 340px; gap: 32px; align-items: start; }
+.recommendation-detail h2 { font-size: 18px; margin: 0; }
+.recommendation-detail h3 { font-size: 14px; }
+.recommendation-detail p, .recommendation-detail li { color: var(--text-secondary); font-size: 14px; }
+.recommendation-evidence { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(180px,100%),1fr)); gap: 16px; }
+.recommendation-evidence section { background: var(--bg-surface-subtle); padding: 16px; border-radius: 12px; min-width: 0; }
+.recommendation-evidence ul { padding-left: 18px; }
+.recommendation-detail-sidebar { position: sticky; top: 96px; }
+@media(max-width:1024px) { .recommendation-detail-grid { grid-template-columns: minmax(0,1fr); } .recommendation-detail-sidebar { position: static; } }

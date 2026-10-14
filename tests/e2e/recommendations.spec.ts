@@ -118,7 +118,7 @@ test('analysis uses recommendationId; general career information uses careerId',
   await expect(first.getByRole('link', { name: 'Xem phân tích mẫu →' })).toHaveAttribute('href', '/preview/recommendations/preview-rec-security?sort=name');
   await expect(first.getByRole('link', { name: 'Xem hồ sơ nghề mẫu' })).toHaveAttribute('href', '/preview/careers/preview-security');
   await first.getByRole('link', { name: 'Xem phân tích mẫu →' }).click();
-  await expect(page.getByRole('heading', { name: 'Phân tích gợi ý mẫu chưa sẵn sàng' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Phân tích mẫu: Chuyên viên An toàn Thông tin' })).toBeVisible();
   await page.getByRole('link', { name: 'Quay lại gợi ý mẫu' }).click();
   await expect(page.getByLabel('Sắp xếp gợi ý mẫu')).toHaveValue('name');
 });

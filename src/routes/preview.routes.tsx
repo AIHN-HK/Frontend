@@ -11,7 +11,7 @@ export const previewRoutes: RouteObject[] = [
       { path: paths.previewCareers, lazy: async () => ({ Component: (await import('@/modules/careers/explorer/pages/CareerExplorerPage')).CareerExplorerPage }) },
       { path: '/preview/careers/:careerId', lazy: async () => ({ Component: (await import('@/modules/careers/detail/pages/CareerDetailPage')).CareerDetailPage }) },
       { path: paths.previewRecommendations, lazy: async () => ({ Component: (await import('@/modules/recommendations/list/pages/RecommendationsPreviewPage')).RecommendationsPreviewPage }) },
-      { path: '/preview/recommendations/:recommendationId', lazy: async () => ({ Component: (await import('@/modules/recommendations/list/pages/RecommendationPreviewUnavailablePage')).RecommendationPreviewUnavailablePage }) },
+      { path: '/preview/recommendations/:recommendationId', lazy: async () => ({ Component: (await import('@/modules/recommendations/detail/pages/RecommendationDetailPage')).RecommendationDetailPage }) },
     ],
   },
   {

@@ -9,6 +9,9 @@ export const previewScenarios = {
 export type PreviewScenario = keyof typeof previewScenarios;
 export const previewSorts = { rank: 'Thứ tự nguồn mẫu', score: 'Điểm minh họa cao nhất', name: 'Tên nghề A–Z' } as const;
 export type PreviewSort = keyof typeof previewSorts;
+export function isPreviewRecommendationId(id: string | undefined): id is string {
+  return typeof id === 'string' && id.length <= 80 && /^preview-rec-[a-z0-9]+(?:-[a-z0-9]+)*$/.test(id);
+}
 
 export function readRecommendationView(params: URLSearchParams): { scenario: PreviewScenario; sort: PreviewSort } {
   const scenario = params.get('scenario'), sort = params.get('sort');

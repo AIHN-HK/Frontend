@@ -1,6 +1,6 @@
 import { readPreviewCatalog } from '@/modules/careers';
 import fixtureUrl from '../preview/recommendations-preview.json?url&no-inline';
-import { joinPreviewRecommendations, previewRecommendationsSchema } from '../model/recommendation.types';
+import { isPreviewRecommendationId, joinPreviewRecommendations, previewRecommendationsSchema } from '../model/recommendation.types';
 
 export async function readPreviewRecommendations(signal: AbortSignal) {
   // Static local fixtures only. No recommendation endpoint, generation or mutation.
@@ -11,4 +11,10 @@ export async function readPreviewRecommendations(signal: AbortSignal) {
   const source = previewRecommendationsSchema.parse(await response.json());
   signal.throwIfAborted();
   return joinPreviewRecommendations(source, careers);
+}
+
+export async function readPreviewRecommendation(id: string, signal: AbortSignal) {
+  if (!isPreviewRecommendationId(id)) throw new Error('Invalid preview recommendation');
+  const source = await readPreviewRecommendations(signal);
+  return { context: source.context, createdAt: source.createdAt, item: source.items.find(item => item.recommendationId === id) ?? null };
 }
