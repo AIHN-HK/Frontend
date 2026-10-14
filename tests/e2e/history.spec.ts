@@ -25,10 +25,10 @@ test('analysis filtering distinguishes empty loaded slice and preserves filters/
   await page.getByLabel('Loại phân tích').selectOption('NORMAL'); await next(page).click(); await page.getByRole('article', { name: 'Lần làm #810' }).getByRole('link', { name: 'Xem kết quả', exact: true }).click(); await expect(page.getByText('TopCode: ISC', { exact: true })).toBeVisible(); await page.goBack();
   await expect(page.getByLabel('Loại phân tích')).toHaveValue('NORMAL'); await expect(page.getByRole('article', { name: 'Lần làm #810' })).toBeVisible(); await expect(page.getByRole('article', { name: 'Lần làm #811' })).toHaveCount(0); await page.reload(); await expect(page.getByLabel('Loại phân tích')).toHaveValue('NORMAL');
 });
-test('chat metadata uses its own source/filter, actual time and no unsupported reopen action', async ({ page }) => {
+test('chat metadata uses its own source/filter, actual time and links to read-only conversations', async ({ page }) => {
   const calls = await historyFixture(page); await page.goto('/history?kind=chats'); await expect(page.getByRole('article', { name: 'Phiên tư vấn #31' })).toContainText('Phiên tư vấn do máy chủ lưu'); await expect(page.getByRole('article', { name: 'Phiên tư vấn #31' })).toContainText('14/10/2026');
   await expect(page.getByRole('article', { name: 'Phiên tư vấn #30' })).toContainText('Phiên tư vấn #30'); await page.getByLabel('Trạng thái phiên').selectOption('CLOSED'); await expect(page.getByRole('article', { name: 'Phiên tư vấn #31' })).toHaveCount(0); await expect(page.getByRole('article', { name: 'Phiên tư vấn #30' })).toBeVisible();
-  await expect(page.getByText('Mở lại hội thoại sẽ có ở màn Cố vấn AI.', { exact: true })).toBeVisible(); expect(calls.filter(c => c.path.includes('/messages'))).toHaveLength(0); expect(calls.filter(c => c.path.endsWith('/history-by-user'))).toHaveLength(0); await expect(next(page)).toHaveCount(0);
+  await expect(page.getByText('Chọn phiên để đọc lại ở màn Cố vấn AI.', { exact: true })).toBeVisible(); expect(calls.filter(c => c.path.includes('/messages'))).toHaveLength(0); expect(calls.filter(c => c.path.endsWith('/history-by-user'))).toHaveLength(0); await expect(next(page)).toHaveCount(0);
 });
 test('source errors and retries are separate from the other history', async ({ page }) => {
   const options: HistoryOptions = { firstStatus: 503 }, calls = await historyFixture(page, options); await page.goto('/history'); await expect(page.getByText('Không tải được lịch sử trắc nghiệm.', { exact: true })).toBeVisible();

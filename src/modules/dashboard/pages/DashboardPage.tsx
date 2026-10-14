@@ -35,7 +35,7 @@ export function DashboardPage() {
         <Link className="dashboard-pill" to={resultPath}>{latest ? 'Mở kết quả Holland' : 'Mở trắc nghiệm'}</Link></section>
       <section className="dashboard-quick"><div className="dashboard-quick-heading"><span className="dashboard-quick-icon purple"><Icon name="check" /></span><div><h2>Nghề nghiệp gợi ý</h2><p>Chưa có dữ liệu gợi ý</p></div></div><span className="dashboard-pill unavailable">Chưa sẵn sàng</span></section>
       <section className="dashboard-quick"><div className="dashboard-quick-heading"><span className="dashboard-quick-icon amber"><Icon name="roadmap" /></span><div><h2>Lộ trình phát triển</h2><p>Chưa có lộ trình cá nhân</p></div></div><span className="dashboard-pill unavailable">Chưa sẵn sàng</span></section>
-      <section className="dashboard-quick"><div className="dashboard-quick-heading"><span className="dashboard-quick-icon rose"><Icon name="chat" /></span><div><h2>Cố vấn AI</h2><p>Trang Cố vấn chưa sẵn sàng</p></div></div><Link className="dashboard-pill" to={paths.advisor}>Đi tới Cố vấn</Link></section>
+      <section className="dashboard-quick"><div className="dashboard-quick-heading"><span className="dashboard-quick-icon rose"><Icon name="chat" /></span><div><h2>Cố vấn AI</h2><p>Mở hội thoại tại trang Cố vấn</p></div></div><Link className="dashboard-pill" to={paths.advisor}>Đi tới Cố vấn</Link></section>
     </div>
     <div className="dashboard-grid">
       <div className="dashboard-main-col">
@@ -71,7 +71,7 @@ export function DashboardPage() {
         </section>
       </div>
       <div className="dashboard-side-col">
-        <section className="dashboard-advisor"><div className="dashboard-advisor-heading"><img src={advisorMascot} width="68" height="68" alt="" /><div><h2>Cố vấn AIHN</h2><p>Cùng bạn tìm hướng đi</p></div></div><span className="dashboard-context">Cố vấn chưa sẵn sàng</span><p className="dashboard-advisor-note">Mini chat chưa sẵn sàng. Bạn có thể mở trang Cố vấn khi chức năng được cung cấp.</p><Link className="btn btn-secondary" to={paths.advisor}>Mở trang Cố vấn</Link></section>
+        <section className="dashboard-advisor"><div className="dashboard-advisor-heading"><img src={advisorMascot} width="68" height="68" alt="" /><div><h2>Cố vấn AIHN</h2><p>Cùng bạn tìm hướng đi</p></div></div><span className="dashboard-context">Tư vấn tại trang Cố vấn</span><p className="dashboard-advisor-note">Đọc lại các phiên đã lưu hoặc bắt đầu hội thoại mới tại trang Cố vấn AIHN.</p><Link className="btn btn-secondary" to={paths.advisor}>Mở trang Cố vấn</Link></section>
         <section className="dashboard-activity"><h2>Hoạt động gần đây</h2><p className="dashboard-source">Nguồn: lịch sử trắc nghiệm</p>
           {history.isPending ? <p>Đang tải hoạt động…</p> : history.isError ? <p>Chưa tải được hoạt động trắc nghiệm.</p> : latest ? <div className="dashboard-activity-item"><Icon name="check" /><div><p>Hoàn thành trắc nghiệm Holland</p><p className="dashboard-source">{latest.finishAt}</p><Link className="btn btn-ghost" to={resultPath}>Mở kết quả hoạt động</Link></div></div> : <p>Chưa có hoạt động trắc nghiệm hoàn thành.</p>}
         </section>

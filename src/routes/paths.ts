@@ -12,6 +12,7 @@ export const paths = {
   assessmentResult: (id: string | number) => `/assessment/results/${encodeURIComponent(id)}`,
   history: '/history',
   advisor: '/advisor',
+  advisorSession: (id: string | number) => `/advisor?sessionId=${encodeURIComponent(id)}`,
   careers: '/careers',
   career: (id: string | number) => `/careers/${encodeURIComponent(id)}`,
   recommendations: '/recommendations',

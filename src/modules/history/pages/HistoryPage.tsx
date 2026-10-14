@@ -48,12 +48,12 @@ export function HistoryPage() {
           <p className="history-count" role="status">Đã tải {chatItems.length} phiên · Hiển thị {filteredChats.length} mục</p>
           {!chatItems.length ? <p className="history-state">Chưa có phiên tư vấn đã lưu.</p> : !filteredChats.length ? <p className="history-state">Không có phiên tư vấn phù hợp với bộ lọc.</p> : filteredChats.map(item => <article className="history-card" key={item.id} aria-label={`Phiên tư vấn #${item.id}`}>
             <div className="history-card-main"><span className="history-icon chat"><Icon name="chat" /></span><div><h2>{item.title?.trim() || `Phiên tư vấn #${item.id}`}</h2><p className="history-meta">Phiên #{item.id} · {item.status === 'ACTIVE' ? 'Đang mở' : 'Đã đóng'}</p></div></div>
-            <div className="history-card-side"><p className="history-meta">Tạo lúc: <time dateTime={item.createdAt}>{formatChatTime(item.createdAt)}</time></p></div>
+            <div className="history-card-side"><p className="history-meta">Tạo lúc: <time dateTime={item.createdAt}>{formatChatTime(item.createdAt)}</time></p><Link className="history-result" to={paths.advisorSession(item.id)}>Đọc lại hội thoại<span aria-hidden="true">→</span></Link></div>
           </article>)}
           {chats.isError && <div className="history-state" role="alert"><p>Không cập nhật được danh sách phiên tư vấn. Các phiên đã tải vẫn được giữ.</p><Button variant="secondary" disabled={chats.isFetching} onClick={() => { void chats.refetch(); }}>Thử lại phiên tư vấn</Button></div>}
           {chats.isFetching && <p role="status">Đang cập nhật phiên tư vấn…</p>}
         </>}
-        <p className="history-note">Mở lại hội thoại sẽ có ở màn Cố vấn AI.</p>
+        <p className="history-note">Chọn phiên để đọc lại ở màn Cố vấn AI.</p>
       </>}
     </section>
     <p className="history-note">Lịch sử cập nhật hồ sơ, lộ trình và gợi ý nghề nghiệp chưa sẵn sàng.</p>
