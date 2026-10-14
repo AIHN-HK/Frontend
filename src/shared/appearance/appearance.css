@@ -1,0 +1,166 @@
+/* 1. Theme Preset: Teal Fresh */
+.student-theme.theme-teal {
+  --bg-app: #F0FDF9;
+  --bg-app-deep: #E6FBF5;
+  --bg-surface: #FFFFFF;
+  --bg-surface-secondary: #F6FEFB;
+  --bg-surface-subtle: #EDFAF6;
+  --bg-surface-hover: #E1F8F1;
+  --bg-surface-blue: #E2F9F5;
+  --bg-surface-blue-border: #BCEFE5;
+  --bg-surface-teal: #E6FBF7;
+  --bg-surface-teal-border: #A7E4DD;
+  --border-default: #C8EBE4;
+  --border-subtle: #E2F6F1;
+  --border-strong: #A8DDD4;
+  --text-primary: #112826;
+  --text-secondary: #4A6360;
+  --text-muted: #7E9996;
+}
+
+/* 2. Theme Preset: Warm Linen */
+.student-theme.theme-warm {
+  --bg-app: #FAF9F6;
+  --bg-app-deep: #F3F0EA;
+  --bg-surface: #FFFFFF;
+  --bg-surface-secondary: #F7F6F2;
+  --bg-surface-subtle: #EFECE5;
+  --bg-surface-hover: #E8E5DD;
+  --bg-surface-blue: #F0F4F6;
+  --bg-surface-blue-border: #D8E2E5;
+  --bg-surface-teal: #EDF6F3;
+  --bg-surface-teal-border: #C8E3DC;
+  --border-default: #E5E1D8;
+  --border-subtle: #EFECE5;
+  --border-strong: #CEC7BA;
+  --text-primary: #1C1917;
+  --text-secondary: #57534E;
+  --text-muted: #8C8780;
+}
+
+/* 3. Theme Preset: Dark Slate */
+.student-theme.theme-dark {
+  --bg-app: #0B0F19;
+  --bg-app-deep: #070A11;
+  --bg-surface: #111827;
+  --bg-surface-secondary: #172033;
+  --bg-surface-subtle: #1F293D;
+  --bg-surface-hover: #26334D;
+  --bg-surface-active: #2F3E5C;
+  --bg-surface-blue: #1A2744;
+  --bg-surface-blue-border: #2C3E68;
+  --bg-surface-teal: #123030;
+  --bg-surface-teal-border: #1C5050;
+  --bg-surface-warm: #2E2415;
+  --bg-surface-warm-border: #4D391A;
+  --border-default: #243044;
+  --border-subtle: #192233;
+  --border-strong: #334460;
+  --text-primary: #F3F4F6;
+  --text-secondary: #9CA3AF;
+  --text-muted: #6B7280;
+  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
+  --shadow-sm: 0 2px 6px 0 rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 14px -2px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 10px 25px -3px rgba(0, 0, 0, 0.6);
+}
+
+/* 4. Theme Preset: AIHN Ocean (Atmospheric Ocean Direction) */
+.student-theme.theme-ocean {
+  --bg-app: #F4FAFC;
+  --bg-app-deep: #EAF4F8;
+  --bg-surface: #FFFFFF;
+  --bg-surface-secondary: #F6FAFC;
+  --bg-surface-subtle: #ECF5F9;
+  --bg-surface-hover: #E2F0F6;
+  --bg-surface-active: #D6EAF3;
+  --bg-surface-blue: #E5F6FA;
+  --bg-surface-blue-border: #B6E5EE;
+  --bg-surface-teal: #E8F7FA;
+  --bg-surface-teal-border: #88E8F2;
+  --bg-surface-warm: #FFF9ED;
+  --bg-surface-warm-border: #FDE8C7;
+  --border-default: #CCE5ED;
+  --border-subtle: #E1EFF5;
+  --border-strong: #A8D4E2;
+  --primary: #55B3D9;              /* Primary blue */
+  --primary-hover: #2D5F73;        /* Deep anchor on hover */
+  --primary-active: #1E4656;
+  --primary-subtle: #E8F7FA;
+  --primary-border: #88E8F2;
+  --primary-content: #172033;       /* Dark text on light primary for high contrast */
+  --support-blue: #73C6D9;         /* Supporting blue */
+  --support-blue-deep: #2D5F73;    /* Deep anchor */
+  --text-primary: #172033;
+  --text-secondary: #485E68;
+  --text-muted: #7E97A3;
+}
+
+/* Accent Color Customizations (Primary brand token override) */
+.student-theme.accent-teal {
+  --primary: #0D9488;
+  --primary-hover: #0F766E;
+  --primary-active: #115E59;
+}
+
+.student-theme.accent-blue {
+  --primary: #2563EB;
+  --primary-hover: #1D4ED8;
+  --primary-active: #1E40AF;
+}
+
+.student-theme.accent-indigo {
+  --primary: #4F46E5;
+  --primary-hover: #4338CA;
+  --primary-active: #3730A3;
+}
+
+.student-theme.accent-violet {
+  --primary: #7C3AED;
+  --primary-hover: #6D28D9;
+  --primary-active: #5B21B6;
+}
+
+.student-theme.accent-rose {
+  --primary: #E11D48;
+  --primary-hover: #BE123C;
+  --primary-active: #9F1239;
+}
+
+/* Background Style Customizations */
+.student-theme.background-flat {
+  background-image: none ;
+}
+
+.student-theme.background-gradient {
+  background-image: radial-gradient(at 15% 15%, rgba(59, 130, 246, 0.08) 0%, transparent 60%),
+                    radial-gradient(at 85% 85%, rgba(13, 148, 136, 0.08) 0%, transparent 60%) ;
+}
+
+/* Sidebar Appearance */
+.student-theme.sidebar-tinted .workspace-sidebar {
+  background-color: var(--bg-surface-secondary);
+}
+
+.student-theme.sidebar-contrast .workspace-sidebar {
+  background-color: #0F172A;
+  border-right-color: #1E293B;
+  color: #F8FAFC;
+}
+.student-theme.sidebar-contrast .workspace-sidebar .brand-title,
+.student-theme.sidebar-contrast .workspace-sidebar .nav-item,
+.student-theme.sidebar-contrast .workspace-sidebar .user-name {
+  color: #F8FAFC;
+}
+.student-theme.sidebar-contrast .workspace-sidebar .nav-item:hover {
+  background-color: #1E293B;
+}
+.student-theme.sidebar-contrast .workspace-sidebar .nav-item.active {
+  background-color: rgba(13, 148, 136, 0.25);
+  color: #5EEAD4;
+}
+
+.student-theme{color:var(--text-primary);background-color:var(--bg-app)}
+.student-theme .workspace-header,.student-theme .workspace-sidebar,.student-theme .mobile-bottom-nav{color:var(--text-primary)}
+.student-theme.theme-dark{color-scheme:dark;--primary-subtle:#123030;--primary-content:#fff}
+.student-theme.accent-teal,.student-theme.accent-blue,.student-theme.accent-indigo,.student-theme.accent-violet,.student-theme.accent-rose{--primary-content:#fff}

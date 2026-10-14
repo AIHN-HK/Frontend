@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import { useAppearance, appearanceClass } from '@/shared/appearance/appearance';
+import '@/shared/appearance/appearance.css';
 import type { ReactNode } from 'react';
 import { Link, NavLink, useLocation } from 'react-router';
 import { Brand } from '@/shared/ui/Brand';
@@ -23,6 +25,8 @@ function Navigation({ items, onNavigate }: { items: NavigationItem[]; onNavigate
 }
 
 export function WorkspaceShell({ admin = false, items, children }: { admin?: boolean; items: NavigationItem[]; children: ReactNode }) {
+  const appearance = useAppearance();
+  const theme = admin ? 'admin-theme' : appearanceClass(appearance.value);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const location = useLocation();
   const preview = location.pathname.startsWith('/preview/');
@@ -32,7 +36,7 @@ export function WorkspaceShell({ admin = false, items, children }: { admin?: boo
     media.addEventListener('change', close);
     return () => media.removeEventListener('change', close);
   }, []);
-  return <div className={`workspace-shell${admin ? ' admin-theme' : ''}`} data-testid="workspace-shell">
+  return <div className={`workspace-shell ${theme}`} data-testid="workspace-shell">
     <a className="skip-link" href="#main-content">Bỏ qua điều hướng</a>
     <aside className="workspace-sidebar" data-testid="workspace-sidebar">
       <Link className="sidebar-brand" to={paths.home}><Brand admin={admin} /></Link>
@@ -55,7 +59,7 @@ export function WorkspaceShell({ admin = false, items, children }: { admin?: boo
         <Icon name={item.icon} /><span>{item.mobileLabel ?? item.label}</span>
       </NavLink>)}
     </nav>}
-    <Drawer key={location.pathname} open={drawerOpen} onOpenChange={setDrawerOpen} title="Điều hướng" className={admin ? 'admin-theme' : ''}>
+    <Drawer key={location.pathname} open={drawerOpen} onOpenChange={setDrawerOpen} title="Điều hướng" className={theme}>
       <Brand admin={admin} />
       <Navigation items={items} onNavigate={() => setDrawerOpen(false)} />
     </Drawer>

@@ -1,6 +1,5 @@
 import type { RouteObject } from 'react-router';
 import { RequireSession } from './guards/RequireSession';
-import { UnavailableRoute } from './RouteStates';
 import { paths } from './paths';
 
 export const studentRoutes: RouteObject[] = [{
@@ -19,7 +18,7 @@ export const studentRoutes: RouteObject[] = [{
         { path: paths.recommendations, lazy: async () => ({ Component: (await import('@/modules/recommendations/list/pages/RecommendationsPage')).RecommendationsPage }) },
         { path: '/recommendations/:recommendationId', lazy: async () => ({ Component: (await import('@/modules/recommendations/detail/pages/RecommendationDetailUnavailablePage')).RecommendationDetailUnavailablePage }) },
         { path: paths.roadmap, lazy: async () => ({ Component: (await import('@/modules/roadmap/pages/RoadmapUnavailablePage')).RoadmapUnavailablePage }) },
-        { path: paths.settings, Component: UnavailableRoute },
+        { path: paths.settings, lazy: async () => ({ Component: (await import('@/modules/settings/pages/SettingsPage')).SettingsPage }) },
       ],
     },
   ],
