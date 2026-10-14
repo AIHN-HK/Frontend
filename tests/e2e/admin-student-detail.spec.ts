@@ -1,6 +1,42 @@
-import {expect,test} from '@playwright/test';
-import {studentDetailFixture} from './admin-student-detail.fixture';
-test('student exact ID reload, completed attempts pagination and back retain list query',async({page})=>{await studentDetailFixture(page);await page.goto('/admin/students/123?list=q%3D123%26page%3D2%26limit%3D20');await expect(page.getByRole('heading',{name:'Học sinh 123',exact:true})).toBeVisible();await expect(page.getByText('21 lần làm · Trang 1/2',{exact:true})).toBeVisible();await page.getByRole('button',{name:'Trang sau'}).click();await expect(page.getByText('21 lần làm · Trang 2/2',{exact:true})).toBeVisible();await page.reload();await expect(page.getByText('21 lần làm · Trang 2/2',{exact:true})).toBeVisible();await page.getByRole('link',{name:'Quay lại danh sách học sinh'}).click();await expect(page).toHaveURL(/students\?q=123&page=2&limit=20$/);});
-test('invalid and missing IDs do not show a different student',async({page})=>{await studentDetailFixture(page);await page.goto('/admin/students/nope');await expect(page.getByRole('heading',{name:'Mã học sinh không hợp lệ'})).toBeVisible();await page.goto('/admin/students/999');await expect(page.getByRole('heading',{name:'Không tìm thấy học sinh'})).toBeVisible();});
-test('empty completed history and unavailable AI layers do not invent enrichment or actions',async({page})=>{await studentDetailFixture(page,{empty:true});await page.goto('/admin/students/100');await expect(page.getByText('Chưa có lần trắc nghiệm hoàn thành.')).toBeVisible();await expect(page.getByText('Chưa có dữ liệu gợi ý nghề, hội thoại AI hoặc lộ trình được cung cấp cho quản trị.')).toBeVisible();await expect(page.getByRole('button',{name:/PDF|Làm lại|Hỗ trợ/})).toHaveCount(0);});
-for(const width of [320,390,768,769,1024,1025,1440])test(`student detail fits ${width}`,async({page})=>{await studentDetailFixture(page);await page.setViewportSize({width,height:900});await page.goto('/admin/students/100');await expect(page.getByRole('heading',{name:'Học sinh 100',exact:true})).toBeVisible();expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);});
+import { expect, test } from '@playwright/test';
+import { studentDetailFixture } from './admin-student-detail.fixture';
+test('student exact ID reload, completed attempts pagination and back retain list query', async ({
+  page,
+}) => {
+  await studentDetailFixture(page);
+  await page.goto('/admin/students/123?list=q%3D123%26page%3D2%26limit%3D20');
+  await expect(page.getByRole('heading', { name: 'Học sinh 123', exact: true })).toBeVisible();
+  await expect(page.getByText('21 lần làm · Trang 1/2', { exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Trang sau' }).click();
+  await expect(page.getByText('21 lần làm · Trang 2/2', { exact: true })).toBeVisible();
+  await page.reload();
+  await expect(page.getByText('21 lần làm · Trang 2/2', { exact: true })).toBeVisible();
+  await page.getByRole('link', { name: 'Quay lại danh sách học sinh' }).click();
+  await expect(page).toHaveURL(/students\?q=123&page=2&limit=20$/);
+});
+test('invalid and missing IDs do not show a different student', async ({ page }) => {
+  await studentDetailFixture(page);
+  await page.goto('/admin/students/nope');
+  await expect(page.getByRole('heading', { name: 'Mã học sinh không hợp lệ' })).toBeVisible();
+  await page.goto('/admin/students/999');
+  await expect(page.getByRole('heading', { name: 'Không tìm thấy học sinh' })).toBeVisible();
+});
+test('empty completed history and unavailable AI layers do not invent enrichment or actions', async ({
+  page,
+}) => {
+  await studentDetailFixture(page, { empty: true });
+  await page.goto('/admin/students/100');
+  await expect(page.getByText('Chưa có lần trắc nghiệm hoàn thành.')).toBeVisible();
+  await expect(
+    page.getByText('Chưa có dữ liệu gợi ý nghề, hội thoại AI hoặc lộ trình được cung cấp cho quản trị.'),
+  ).toBeVisible();
+  await expect(page.getByRole('button', { name: /PDF|Làm lại|Hỗ trợ/ })).toHaveCount(0);
+});
+for (const width of [320, 390, 768, 769, 1024, 1025, 1440])
+  test(`student detail fits ${width}`, async ({ page }) => {
+    await studentDetailFixture(page);
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto('/admin/students/100');
+    await expect(page.getByRole('heading', { name: 'Học sinh 100', exact: true })).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  });

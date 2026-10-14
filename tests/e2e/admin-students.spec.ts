@@ -1,5 +1,36 @@
-import {expect,test} from '@playwright/test';
-import {studentsFixture} from './admin-students.fixture';
-test('server search resets pagination, reload and detail preserve list query',async({page})=>{const {calls}=await studentsFixture(page);await page.goto('/admin/students');await expect(page.getByRole('heading',{name:'Quản lý học sinh'})).toBeVisible();await expect(page.getByText('25 học sinh · Trang 1/2',{exact:true})).toBeVisible();await page.getByRole('button',{name:'Trang sau'}).click();await expect(page.getByText('25 học sinh · Trang 2/2',{exact:true})).toBeVisible();await page.getByLabel('Tìm học sinh').fill('Học sinh 123');await page.getByRole('button',{name:'Tìm kiếm',exact:true}).click();await expect(page).toHaveURL(/q=H%E1%BB%8Dc\+sinh\+123/);await expect(page.getByText('1 học sinh · Trang 1/1',{exact:true})).toBeVisible();await page.reload();await expect(page.getByRole('link',{name:'Học sinh 123',exact:true})).toHaveAttribute('href',/\/admin\/students\/123\?list=/);expect(calls.some(s=>s.includes('page=2'))).toBe(true);});
-test('old search response cannot replace new results',async({page})=>{let release!:()=>void;await studentsFixture(page,{gate:new Promise<void>(r=>release=r)});await page.goto('/admin/students?q=slow');await page.getByLabel('Tìm học sinh').fill('Học sinh 124');await page.getByRole('button',{name:'Tìm kiếm',exact:true}).click();await expect(page.getByRole('link',{name:'Học sinh 124',exact:true})).toBeVisible();release();await expect(page.getByRole('link',{name:'Học sinh 124',exact:true})).toBeVisible();});
-test('empty list does not invent totals or unsupported filters',async({page})=>{await studentsFixture(page,{empty:true});await page.goto('/admin/students');await expect(page.getByText('Không có học sinh phù hợp.')).toBeVisible();await expect(page.getByRole('button',{name:/Xuất|Khảo sát/})).toHaveCount(0);});
+import { expect, test } from '@playwright/test';
+import { studentsFixture } from './admin-students.fixture';
+test('server search resets pagination, reload and detail preserve list query', async ({ page }) => {
+  const { calls } = await studentsFixture(page);
+  await page.goto('/admin/students');
+  await expect(page.getByRole('heading', { name: 'Quản lý học sinh' })).toBeVisible();
+  await expect(page.getByText('25 học sinh · Trang 1/2', { exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Trang sau' }).click();
+  await expect(page.getByText('25 học sinh · Trang 2/2', { exact: true })).toBeVisible();
+  await page.getByLabel('Tìm học sinh').fill('Học sinh 123');
+  await page.getByRole('button', { name: 'Tìm kiếm', exact: true }).click();
+  await expect(page).toHaveURL(/q=H%E1%BB%8Dc\+sinh\+123/);
+  await expect(page.getByText('1 học sinh · Trang 1/1', { exact: true })).toBeVisible();
+  await page.reload();
+  await expect(page.getByRole('link', { name: 'Học sinh 123', exact: true })).toHaveAttribute(
+    'href',
+    /\/admin\/students\/123\?list=/,
+  );
+  expect(calls.some((s) => s.includes('page=2'))).toBe(true);
+});
+test('old search response cannot replace new results', async ({ page }) => {
+  let release!: () => void;
+  await studentsFixture(page, { gate: new Promise<void>((r) => (release = r)) });
+  await page.goto('/admin/students?q=slow');
+  await page.getByLabel('Tìm học sinh').fill('Học sinh 124');
+  await page.getByRole('button', { name: 'Tìm kiếm', exact: true }).click();
+  await expect(page.getByRole('link', { name: 'Học sinh 124', exact: true })).toBeVisible();
+  release();
+  await expect(page.getByRole('link', { name: 'Học sinh 124', exact: true })).toBeVisible();
+});
+test('empty list does not invent totals or unsupported filters', async ({ page }) => {
+  await studentsFixture(page, { empty: true });
+  await page.goto('/admin/students');
+  await expect(page.getByText('Không có học sinh phù hợp.')).toBeVisible();
+  await expect(page.getByRole('button', { name: /Xuất|Khảo sát/ })).toHaveCount(0);
+});

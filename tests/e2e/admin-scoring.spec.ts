@@ -1,5 +1,51 @@
-import {expect,test} from '@playwright/test';
-import {scoringFixture} from './admin-scoring.fixture';
-test('priorities reject duplicate ranks and save one atomic set of six groups',async({page})=>{const writes=await scoringFixture(page);await page.goto('/admin/scoring');await expect(page.getByRole('heading',{name:'Thứ tự ưu tiên Holland'})).toBeVisible();await page.getByLabel('Ưu tiên R', {exact:true}).selectOption('2');await page.getByRole('button',{name:'Lưu thứ tự ưu tiên'}).click();await expect(page.getByRole('alert')).toContainText('duy nhất');expect(writes).toHaveLength(0);await page.getByLabel('Ưu tiên I',{exact:true}).selectOption('1');await page.getByRole('button',{name:'Lưu thứ tự ưu tiên'}).click();await expect(page.getByRole('status')).toContainText('Đã lưu');expect(writes).toHaveLength(1);expect(writes[0]).toEqual({priorities:[{type:'R',priority:2},{type:'I',priority:1},{type:'A',priority:3},{type:'S',priority:4},{type:'E',priority:5},{type:'C',priority:6}]});await page.reload();await expect(page.getByLabel('Ưu tiên R',{exact:true})).toHaveValue('2');});
-test('priority timeout retains draft through reload and blocks replay',async({page})=>{const writes=await scoringFixture(page,{status:503});await page.goto('/admin/scoring');await page.getByRole('button',{name:'Lưu thứ tự ưu tiên'}).click();await expect(page.getByRole('alert')).toContainText('Chưa xác nhận');await page.reload();await expect(page.getByRole('button',{name:'Lưu thứ tự ưu tiên'})).toBeDisabled();expect(writes).toHaveLength(1);});
-test('Holland content saves arrays and reads them after reload',async({page})=>{const writes=await scoringFixture(page);await page.goto('/admin/holland-content');await page.getByLabel('Tiêu đề nhóm').fill('Nhóm thực tế cập nhật');await page.getByLabel('Điểm mạnh').fill('Một dòng\nDòng hai');await page.getByRole('button',{name:'Lưu nội dung Holland'}).click();await expect(page.getByRole('status')).toContainText('Đã lưu');expect(writes[0]).toMatchObject({code:'R',title:'Nhóm thực tế cập nhật',strengths:['Một dòng','Dòng hai']});await page.reload();await expect(page.getByLabel('Tiêu đề nhóm')).toHaveValue('Nhóm thực tế cập nhật');});
+import { expect, test } from '@playwright/test';
+import { scoringFixture } from './admin-scoring.fixture';
+test('priorities reject duplicate ranks and save one atomic set of six groups', async ({ page }) => {
+  const writes = await scoringFixture(page);
+  await page.goto('/admin/scoring');
+  await expect(page.getByRole('heading', { name: 'Thứ tự ưu tiên Holland' })).toBeVisible();
+  await page.getByLabel('Ưu tiên R', { exact: true }).selectOption('2');
+  await page.getByRole('button', { name: 'Lưu thứ tự ưu tiên' }).click();
+  await expect(page.getByRole('alert')).toContainText('duy nhất');
+  expect(writes).toHaveLength(0);
+  await page.getByLabel('Ưu tiên I', { exact: true }).selectOption('1');
+  await page.getByRole('button', { name: 'Lưu thứ tự ưu tiên' }).click();
+  await expect(page.getByRole('status')).toContainText('Đã lưu');
+  expect(writes).toHaveLength(1);
+  expect(writes[0]).toEqual({
+    priorities: [
+      { type: 'R', priority: 2 },
+      { type: 'I', priority: 1 },
+      { type: 'A', priority: 3 },
+      { type: 'S', priority: 4 },
+      { type: 'E', priority: 5 },
+      { type: 'C', priority: 6 },
+    ],
+  });
+  await page.reload();
+  await expect(page.getByLabel('Ưu tiên R', { exact: true })).toHaveValue('2');
+});
+test('priority timeout retains draft through reload and blocks replay', async ({ page }) => {
+  const writes = await scoringFixture(page, { status: 503 });
+  await page.goto('/admin/scoring');
+  await page.getByRole('button', { name: 'Lưu thứ tự ưu tiên' }).click();
+  await expect(page.getByRole('alert')).toContainText('Chưa xác nhận');
+  await page.reload();
+  await expect(page.getByRole('button', { name: 'Lưu thứ tự ưu tiên' })).toBeDisabled();
+  expect(writes).toHaveLength(1);
+});
+test('Holland content saves arrays and reads them after reload', async ({ page }) => {
+  const writes = await scoringFixture(page);
+  await page.goto('/admin/holland-content');
+  await page.getByLabel('Tiêu đề nhóm').fill('Nhóm thực tế cập nhật');
+  await page.getByLabel('Điểm mạnh').fill('Một dòng\nDòng hai');
+  await page.getByRole('button', { name: 'Lưu nội dung Holland' }).click();
+  await expect(page.getByRole('status')).toContainText('Đã lưu');
+  expect(writes[0]).toMatchObject({
+    code: 'R',
+    title: 'Nhóm thực tế cập nhật',
+    strengths: ['Một dòng', 'Dòng hai'],
+  });
+  await page.reload();
+  await expect(page.getByLabel('Tiêu đề nhóm')).toHaveValue('Nhóm thực tế cập nhật');
+});

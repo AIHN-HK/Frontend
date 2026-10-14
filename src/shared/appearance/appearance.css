@@ -1,64 +1,64 @@
 /* 1. Theme Preset: Teal Fresh */
 .student-theme.theme-teal {
-  --bg-app: #F0FDF9;
-  --bg-app-deep: #E6FBF5;
-  --bg-surface: #FFFFFF;
-  --bg-surface-secondary: #F6FEFB;
-  --bg-surface-subtle: #EDFAF6;
-  --bg-surface-hover: #E1F8F1;
-  --bg-surface-blue: #E2F9F5;
-  --bg-surface-blue-border: #BCEFE5;
-  --bg-surface-teal: #E6FBF7;
-  --bg-surface-teal-border: #A7E4DD;
-  --border-default: #C8EBE4;
-  --border-subtle: #E2F6F1;
-  --border-strong: #A8DDD4;
+  --bg-app: #f0fdf9;
+  --bg-app-deep: #e6fbf5;
+  --bg-surface: #ffffff;
+  --bg-surface-secondary: #f6fefb;
+  --bg-surface-subtle: #edfaf6;
+  --bg-surface-hover: #e1f8f1;
+  --bg-surface-blue: #e2f9f5;
+  --bg-surface-blue-border: #bcefe5;
+  --bg-surface-teal: #e6fbf7;
+  --bg-surface-teal-border: #a7e4dd;
+  --border-default: #c8ebe4;
+  --border-subtle: #e2f6f1;
+  --border-strong: #a8ddd4;
   --text-primary: #112826;
-  --text-secondary: #4A6360;
-  --text-muted: #7E9996;
+  --text-secondary: #4a6360;
+  --text-muted: #7e9996;
 }
 
 /* 2. Theme Preset: Warm Linen */
 .student-theme.theme-warm {
-  --bg-app: #FAF9F6;
-  --bg-app-deep: #F3F0EA;
-  --bg-surface: #FFFFFF;
-  --bg-surface-secondary: #F7F6F2;
-  --bg-surface-subtle: #EFECE5;
-  --bg-surface-hover: #E8E5DD;
-  --bg-surface-blue: #F0F4F6;
-  --bg-surface-blue-border: #D8E2E5;
-  --bg-surface-teal: #EDF6F3;
-  --bg-surface-teal-border: #C8E3DC;
-  --border-default: #E5E1D8;
-  --border-subtle: #EFECE5;
-  --border-strong: #CEC7BA;
-  --text-primary: #1C1917;
-  --text-secondary: #57534E;
-  --text-muted: #8C8780;
+  --bg-app: #faf9f6;
+  --bg-app-deep: #f3f0ea;
+  --bg-surface: #ffffff;
+  --bg-surface-secondary: #f7f6f2;
+  --bg-surface-subtle: #efece5;
+  --bg-surface-hover: #e8e5dd;
+  --bg-surface-blue: #f0f4f6;
+  --bg-surface-blue-border: #d8e2e5;
+  --bg-surface-teal: #edf6f3;
+  --bg-surface-teal-border: #c8e3dc;
+  --border-default: #e5e1d8;
+  --border-subtle: #efece5;
+  --border-strong: #cec7ba;
+  --text-primary: #1c1917;
+  --text-secondary: #57534e;
+  --text-muted: #8c8780;
 }
 
 /* 3. Theme Preset: Dark Slate */
 .student-theme.theme-dark {
-  --bg-app: #0B0F19;
-  --bg-app-deep: #070A11;
+  --bg-app: #0b0f19;
+  --bg-app-deep: #070a11;
   --bg-surface: #111827;
   --bg-surface-secondary: #172033;
-  --bg-surface-subtle: #1F293D;
-  --bg-surface-hover: #26334D;
-  --bg-surface-active: #2F3E5C;
-  --bg-surface-blue: #1A2744;
-  --bg-surface-blue-border: #2C3E68;
+  --bg-surface-subtle: #1f293d;
+  --bg-surface-hover: #26334d;
+  --bg-surface-active: #2f3e5c;
+  --bg-surface-blue: #1a2744;
+  --bg-surface-blue-border: #2c3e68;
   --bg-surface-teal: #123030;
-  --bg-surface-teal-border: #1C5050;
-  --bg-surface-warm: #2E2415;
-  --bg-surface-warm-border: #4D391A;
+  --bg-surface-teal-border: #1c5050;
+  --bg-surface-warm: #2e2415;
+  --bg-surface-warm-border: #4d391a;
   --border-default: #243044;
   --border-subtle: #192233;
   --border-strong: #334460;
-  --text-primary: #F3F4F6;
-  --text-secondary: #9CA3AF;
-  --text-muted: #6B7280;
+  --text-primary: #f3f4f6;
+  --text-secondary: #9ca3af;
+  --text-muted: #6b7280;
   --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
   --shadow-sm: 0 2px 6px 0 rgba(0, 0, 0, 0.4);
   --shadow-md: 0 4px 14px -2px rgba(0, 0, 0, 0.5);
@@ -67,74 +67,75 @@
 
 /* 4. Theme Preset: AIHN Ocean (Atmospheric Ocean Direction) */
 .student-theme.theme-ocean {
-  --bg-app: #F4FAFC;
-  --bg-app-deep: #EAF4F8;
-  --bg-surface: #FFFFFF;
-  --bg-surface-secondary: #F6FAFC;
-  --bg-surface-subtle: #ECF5F9;
-  --bg-surface-hover: #E2F0F6;
-  --bg-surface-active: #D6EAF3;
-  --bg-surface-blue: #E5F6FA;
-  --bg-surface-blue-border: #B6E5EE;
-  --bg-surface-teal: #E8F7FA;
-  --bg-surface-teal-border: #88E8F2;
-  --bg-surface-warm: #FFF9ED;
-  --bg-surface-warm-border: #FDE8C7;
-  --border-default: #CCE5ED;
-  --border-subtle: #E1EFF5;
-  --border-strong: #A8D4E2;
-  --primary: #55B3D9;              /* Primary blue */
-  --primary-hover: #2D5F73;        /* Deep anchor on hover */
-  --primary-active: #1E4656;
-  --primary-subtle: #E8F7FA;
-  --primary-border: #88E8F2;
-  --primary-content: #172033;       /* Dark text on light primary for high contrast */
-  --support-blue: #73C6D9;         /* Supporting blue */
-  --support-blue-deep: #2D5F73;    /* Deep anchor */
+  --bg-app: #f4fafc;
+  --bg-app-deep: #eaf4f8;
+  --bg-surface: #ffffff;
+  --bg-surface-secondary: #f6fafc;
+  --bg-surface-subtle: #ecf5f9;
+  --bg-surface-hover: #e2f0f6;
+  --bg-surface-active: #d6eaf3;
+  --bg-surface-blue: #e5f6fa;
+  --bg-surface-blue-border: #b6e5ee;
+  --bg-surface-teal: #e8f7fa;
+  --bg-surface-teal-border: #88e8f2;
+  --bg-surface-warm: #fff9ed;
+  --bg-surface-warm-border: #fde8c7;
+  --border-default: #cce5ed;
+  --border-subtle: #e1eff5;
+  --border-strong: #a8d4e2;
+  --primary: #55b3d9; /* Primary blue */
+  --primary-hover: #2d5f73; /* Deep anchor on hover */
+  --primary-active: #1e4656;
+  --primary-subtle: #e8f7fa;
+  --primary-border: #88e8f2;
+  --primary-content: #172033; /* Dark text on light primary for high contrast */
+  --support-blue: #73c6d9; /* Supporting blue */
+  --support-blue-deep: #2d5f73; /* Deep anchor */
   --text-primary: #172033;
-  --text-secondary: #485E68;
-  --text-muted: #7E97A3;
+  --text-secondary: #485e68;
+  --text-muted: #7e97a3;
 }
 
 /* Accent Color Customizations (Primary brand token override) */
 .student-theme.accent-teal {
-  --primary: #0D9488;
-  --primary-hover: #0F766E;
-  --primary-active: #115E59;
+  --primary: #0d9488;
+  --primary-hover: #0f766e;
+  --primary-active: #115e59;
 }
 
 .student-theme.accent-blue {
-  --primary: #2563EB;
-  --primary-hover: #1D4ED8;
-  --primary-active: #1E40AF;
+  --primary: #2563eb;
+  --primary-hover: #1d4ed8;
+  --primary-active: #1e40af;
 }
 
 .student-theme.accent-indigo {
-  --primary: #4F46E5;
-  --primary-hover: #4338CA;
-  --primary-active: #3730A3;
+  --primary: #4f46e5;
+  --primary-hover: #4338ca;
+  --primary-active: #3730a3;
 }
 
 .student-theme.accent-violet {
-  --primary: #7C3AED;
-  --primary-hover: #6D28D9;
-  --primary-active: #5B21B6;
+  --primary: #7c3aed;
+  --primary-hover: #6d28d9;
+  --primary-active: #5b21b6;
 }
 
 .student-theme.accent-rose {
-  --primary: #E11D48;
-  --primary-hover: #BE123C;
-  --primary-active: #9F1239;
+  --primary: #e11d48;
+  --primary-hover: #be123c;
+  --primary-active: #9f1239;
 }
 
 /* Background Style Customizations */
 .student-theme.background-flat {
-  background-image: none ;
+  background-image: none;
 }
 
 .student-theme.background-gradient {
-  background-image: radial-gradient(at 15% 15%, rgba(59, 130, 246, 0.08) 0%, transparent 60%),
-                    radial-gradient(at 85% 85%, rgba(13, 148, 136, 0.08) 0%, transparent 60%) ;
+  background-image:
+    radial-gradient(at 15% 15%, rgba(59, 130, 246, 0.08) 0%, transparent 60%),
+    radial-gradient(at 85% 85%, rgba(13, 148, 136, 0.08) 0%, transparent 60%);
 }
 
 /* Sidebar Appearance */
@@ -143,24 +144,58 @@
 }
 
 .student-theme.sidebar-contrast .workspace-sidebar {
-  background-color: #0F172A;
-  border-right-color: #1E293B;
-  color: #F8FAFC;
+  background-color: #0f172a;
+  border-right-color: #1e293b;
+  color: #f8fafc;
 }
 .student-theme.sidebar-contrast .workspace-sidebar .brand-title,
 .student-theme.sidebar-contrast .workspace-sidebar .nav-item,
 .student-theme.sidebar-contrast .workspace-sidebar .user-name {
-  color: #F8FAFC;
+  color: #f8fafc;
 }
 .student-theme.sidebar-contrast .workspace-sidebar .nav-item:hover {
-  background-color: #1E293B;
+  background-color: #1e293b;
 }
 .student-theme.sidebar-contrast .workspace-sidebar .nav-item.active {
   background-color: rgba(13, 148, 136, 0.25);
-  color: #5EEAD4;
+  color: #5eead4;
 }
 
-.student-theme{color:var(--text-primary);background-color:var(--bg-app)}
-.student-theme .workspace-header,.student-theme .workspace-sidebar,.student-theme .mobile-bottom-nav{color:var(--text-primary)}
-.student-theme.theme-dark{color-scheme:dark;--primary-subtle:#123030;--primary-content:#fff}
-.student-theme.accent-teal,.student-theme.accent-blue,.student-theme.accent-indigo,.student-theme.accent-violet,.student-theme.accent-rose{--primary-content:#fff}
+.student-theme {
+  color: var(--text-primary);
+  background-color: var(--bg-app);
+}
+.student-theme .workspace-header,
+.student-theme .workspace-sidebar,
+.student-theme .mobile-bottom-nav {
+  color: var(--text-primary);
+}
+.student-theme.theme-dark {
+  color-scheme: dark;
+  --primary-subtle: #123030;
+  --primary-content: #fff;
+}
+.student-theme.accent-teal,
+.student-theme.accent-blue,
+.student-theme.accent-indigo,
+.student-theme.accent-violet,
+.student-theme.accent-rose {
+  --primary-content: #fff;
+}
+
+/* Keep feedback readable against the dark preset's surfaces. */
+.student-theme.theme-dark {
+  --text-muted: #94a3b8;
+  --success-text: #6ee7b7;
+  --success-subtle: #123030;
+  --success-border: #1c5050;
+  --warning-text: #fcd34d;
+  --warning-subtle: #2e2415;
+  --warning-border: #4d391a;
+  --error-text: #fca5a5;
+  --error-subtle: #3b1d26;
+  --error-border: #7f3542;
+  --info-text: #93c5fd;
+  --info-subtle: #1a2744;
+  --info-border: #2c3e68;
+}

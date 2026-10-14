@@ -1,10 +1,139 @@
-import {useState} from 'react';
-import {useQuery} from '@tanstack/react-query';
-import {Link} from 'react-router';
-import {readPreviewCatalog,type PreviewCareer} from '@/modules/careers';
-import {paths} from '@/routes/paths';
-import {Drawer} from '@/shared/ui/Drawer';
-import {AdminDataState} from '../../components/AdminDataState';
+import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { Link } from 'react-router';
+import { readPreviewCatalog, type PreviewCareer } from '@/modules/careers';
+import { paths } from '@/routes/paths';
+import { Drawer } from '@/shared/ui/Drawer';
+import { AdminDataState } from '../../components/AdminDataState';
 import '../../components/admin-pages.css';
-export function CareersPreviewPage(){const query=useQuery({queryKey:['admin-careers-preview',1],queryFn:({signal})=>readPreviewCatalog(signal),retry:false}),[q,setQ]=useState(''),[group,setGroup]=useState(''),[selected,setSelected]=useState<PreviewCareer|null>(null);
-return <div className="admin-page"><header><h1>Dữ liệu nghề · Bản mẫu</h1><p role="note">Chỉ đọc · Các bản ghi minh họa T12/T13, chưa xuất bản vào hệ thống. Không phải dataset O*NET đã chuẩn hóa.</p></header><AdminDataState query={query}>{data=>{const visible=data.filter(c=>(!group||c.riasec.includes(group as typeof c.riasec[number]))&&`${c.id} ${c.name}`.toLocaleLowerCase('vi').includes(q.toLocaleLowerCase('vi').trim()));return <><div className="admin-toolbar"><label>Tìm nghề mẫu<input value={q} onChange={e=>setQ(e.target.value)}/></label><label>Nhóm RIASEC<select value={group} onChange={e=>setGroup(e.target.value)}><option value="">Tất cả</option>{['R','I','A','S','E','C'].map(code=><option key={code}>{code}</option>)}</select></label></div><p>{visible.length}/{data.length} bản ghi mẫu</p>{visible.length?<div className="admin-table-scroll" tabIndex={0} role="region" aria-label="Danh mục nghề mẫu"><table><thead><tr><th>ID mẫu</th><th>Tên nghề</th><th>RIASEC mẫu</th><th>Nguồn</th></tr></thead><tbody>{visible.map(c=><tr key={c.id}><td>{c.id}</td><td><Link to={paths.previewCareer(c.id)}>{c.name}</Link></td><td>{c.riasec.join(' · ')}</td><td><button className="btn btn-secondary" aria-label={`Xem nguồn ${c.id}`} onClick={()=>setSelected(c)}>Xem nguồn</button></td></tr>)}</tbody></table></div>:<p>Không có nghề mẫu phù hợp.</p>}</>;}}</AdminDataState><section className="admin-panel"><h2>Quản lý &amp; Xuất bản</h2><p>Thêm/sửa nghề, biên tập nguồn, xuất dataset và đồng bộ chưa sẵn sàng.</p></section><Drawer open={selected!==null} onOpenChange={open=>{if(!open)setSelected(null);}} title="Nguồn nghề mẫu · Chỉ đọc" className="admin-theme"><div className="admin-page">{selected&&<><h3>{selected.name}</h3><p>{selected.summary}</p><p>Thông tin do bản mẫu nội bộ cung cấp. Tài liệu dưới đây là nguồn học tập chung, không xác nhận dữ liệu nghề hay mức độ phù hợp cá nhân.</p>{selected.detail?.references?.length?selected.detail.references.map(ref=><a className="btn btn-secondary" target="_blank" rel="noopener noreferrer" key={ref.url} href={ref.url}>{ref.label} ↗</a>):<p>Chưa có nguồn tham khảo.</p>}<Link className="btn btn-secondary" to={paths.previewCareer(selected.id)}>Mở chi tiết nghề mẫu</Link></>}</div></Drawer></div>;}
+export function CareersPreviewPage() {
+  const query = useQuery({
+      queryKey: ['admin-careers-preview', 1],
+      queryFn: ({ signal }) => readPreviewCatalog(signal),
+      retry: false,
+    }),
+    [q, setQ] = useState(''),
+    [group, setGroup] = useState(''),
+    [selected, setSelected] = useState<PreviewCareer | null>(null);
+  return (
+    <div className="admin-page">
+      <header>
+        <h1>Dữ liệu nghề · Bản mẫu</h1>
+        <p role="note">
+          Chỉ đọc · Các bản ghi minh họa T12/T13, chưa xuất bản vào hệ thống. Không phải dataset O*NET đã
+          chuẩn hóa.
+        </p>
+      </header>
+      <AdminDataState query={query}>
+        {(data) => {
+          const visible = data.filter(
+            (c) =>
+              (!group || c.riasec.includes(group as (typeof c.riasec)[number])) &&
+              `${c.id} ${c.name}`.toLocaleLowerCase('vi').includes(q.toLocaleLowerCase('vi').trim()),
+          );
+          return (
+            <>
+              <div className="admin-toolbar">
+                <label>
+                  Tìm nghề mẫu
+                  <input value={q} onChange={(e) => setQ(e.target.value)} />
+                </label>
+                <label>
+                  Nhóm RIASEC
+                  <select value={group} onChange={(e) => setGroup(e.target.value)}>
+                    <option value="">Tất cả</option>
+                    {['R', 'I', 'A', 'S', 'E', 'C'].map((code) => (
+                      <option key={code}>{code}</option>
+                    ))}
+                  </select>
+                </label>
+              </div>
+              <p>
+                {visible.length}/{data.length} bản ghi mẫu
+              </p>
+              {visible.length ? (
+                <div className="admin-table-scroll" tabIndex={0} role="region" aria-label="Danh mục nghề mẫu">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>ID mẫu</th>
+                        <th>Tên nghề</th>
+                        <th>RIASEC mẫu</th>
+                        <th>Nguồn</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {visible.map((c) => (
+                        <tr key={c.id}>
+                          <td>{c.id}</td>
+                          <td>
+                            <Link to={paths.previewCareer(c.id)}>{c.name}</Link>
+                          </td>
+                          <td>{c.riasec.join(' · ')}</td>
+                          <td>
+                            <button
+                              className="btn btn-secondary"
+                              aria-label={`Xem nguồn ${c.id}`}
+                              onClick={() => setSelected(c)}
+                            >
+                              Xem nguồn
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ) : (
+                <p>Không có nghề mẫu phù hợp.</p>
+              )}
+            </>
+          );
+        }}
+      </AdminDataState>
+      <section className="admin-panel">
+        <h2>Quản lý &amp; Xuất bản</h2>
+        <p>Thêm/sửa nghề, biên tập nguồn, xuất dataset và đồng bộ chưa sẵn sàng.</p>
+      </section>
+      <Drawer
+        open={selected !== null}
+        onOpenChange={(open) => {
+          if (!open) setSelected(null);
+        }}
+        title="Nguồn nghề mẫu · Chỉ đọc"
+        className="admin-theme"
+      >
+        <div className="admin-page">
+          {selected && (
+            <>
+              <h3>{selected.name}</h3>
+              <p>{selected.summary}</p>
+              <p>
+                Thông tin do bản mẫu nội bộ cung cấp. Tài liệu dưới đây là nguồn học tập chung, không xác nhận
+                dữ liệu nghề hay mức độ phù hợp cá nhân.
+              </p>
+              {selected.detail?.references?.length ? (
+                selected.detail.references.map((ref) => (
+                  <a
+                    className="btn btn-secondary"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    key={ref.url}
+                    href={ref.url}
+                  >
+                    {ref.label} ↗
+                  </a>
+                ))
+              ) : (
+                <p>Chưa có nguồn tham khảo.</p>
+              )}
+              <Link className="btn btn-secondary" to={paths.previewCareer(selected.id)}>
+                Mở chi tiết nghề mẫu
+              </Link>
+            </>
+          )}
+        </div>
+      </Drawer>
+    </div>
+  );
+}

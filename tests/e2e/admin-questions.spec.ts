@@ -1,7 +1,71 @@
-import {expect,test} from '@playwright/test';
-import {questionsFixture} from './admin-questions.fixture';
-test('question form validates, submits exact dimension once and reload reads server',async({page})=>{const writes=await questionsFixture(page);await page.goto('/admin/questions');await page.getByRole('button',{name:'Thêm câu hỏi'}).click();await page.getByLabel('Nội dung câu hỏi').fill(' Câu hỏi mới ');await page.getByLabel('Khía cạnh').selectOption('ABILITY');await page.getByRole('button',{name:'Lưu câu hỏi',exact:true}).click();await expect(page.getByRole('status')).toContainText('Đã lưu');expect(writes).toEqual([{content:'Câu hỏi mới',type:'R',dimension:'ABILITY'}]);await page.reload();await expect(page.getByRole('cell',{name:'Câu hỏi mới',exact:true})).toBeVisible();});
-test('unknown save retains draft across reload and requires reading current data before retry',async({page})=>{const writes=await questionsFixture(page,{status:503});await page.goto('/admin/questions');await page.getByRole('button',{name:'Thêm câu hỏi'}).click();await page.getByLabel('Nội dung câu hỏi').fill('Bản nháp không mất');await page.getByRole('button',{name:'Lưu câu hỏi',exact:true}).click();await expect(page.getByRole('alert')).toContainText('Chưa xác nhận');await expect(page.getByRole('button',{name:'Lưu câu hỏi',exact:true})).toBeDisabled();await page.reload();await page.getByRole('button',{name:'Thêm câu hỏi'}).click();await expect(page.getByLabel('Nội dung câu hỏi')).toHaveValue('Bản nháp không mất');await expect(page.getByRole('button',{name:'Lưu câu hỏi',exact:true})).toBeDisabled();expect(writes).toHaveLength(1);await page.getByRole('button',{name:'Đọc dữ liệu hiện tại để đối chiếu'}).click();await expect(page.getByRole('button',{name:'Lưu câu hỏi',exact:true})).toBeEnabled();});
-test('used questions and active attempts remain locked with no editable weights or delete',async({page})=>{await questionsFixture(page,{active:1});await page.goto('/admin/questions');await expect(page.getByRole('button',{name:'Thêm câu hỏi'})).toBeDisabled();await expect(page.getByRole('button',{name:'Sửa câu hỏi 1'})).toBeDisabled();await expect(page.getByRole('button',{name:/Xóa|Trọng số/})).toHaveCount(0);});
-test('search and group filters are composed and empty is explicit',async({page})=>{await questionsFixture(page);await page.goto('/admin/questions');await page.getByLabel('Tìm câu hỏi').fill('không có');await expect(page.getByText('Không có câu hỏi phù hợp.')).toBeVisible();await page.getByLabel('Tìm câu hỏi').fill('máy móc');await page.getByLabel('Nhóm Holland').selectOption('I');await expect(page.getByText('Không có câu hỏi phù hợp.')).toBeVisible();});
-test('409 keeps the edit draft and blocks blind resubmission',async({page})=>{const writes=await questionsFixture(page,{status:409});await page.goto('/admin/questions');await page.getByRole('button',{name:'Sửa câu hỏi 1'}).click();await page.getByLabel('Nội dung câu hỏi').fill('Nội dung đang sửa');await page.getByRole('button',{name:'Lưu câu hỏi',exact:true}).click();await expect(page.getByRole('alert')).toContainText('Dữ liệu bị khóa');await expect(page.getByLabel('Nội dung câu hỏi')).toHaveValue('Nội dung đang sửa');expect(writes).toHaveLength(1);});
+import { expect, test } from '@playwright/test';
+import { questionsFixture } from './admin-questions.fixture';
+test('question form validates, submits exact dimension once and reload reads server', async ({ page }) => {
+  const writes = await questionsFixture(page);
+  await page.goto('/admin/questions');
+  await page.getByRole('button', { name: 'Thêm câu hỏi' }).click();
+  await page.getByLabel('Nội dung câu hỏi').fill(' Câu hỏi mới ');
+  await page.getByLabel('Khía cạnh').selectOption('ABILITY');
+  await page.getByRole('button', { name: 'Lưu câu hỏi', exact: true }).click();
+  await expect(page.getByRole('status')).toContainText('Đã lưu');
+  expect(writes).toEqual([{ content: 'Câu hỏi mới', type: 'R', dimension: 'ABILITY' }]);
+  await page.reload();
+  await expect(page.getByRole('cell', { name: 'Câu hỏi mới', exact: true })).toBeVisible();
+});
+test('unknown save retains draft across reload and requires reading current data before retry', async ({
+  page,
+}) => {
+  const writes = await questionsFixture(page, { status: 503 });
+  await page.goto('/admin/questions');
+  await page.getByRole('button', { name: 'Thêm câu hỏi' }).click();
+  await page.getByLabel('Nội dung câu hỏi').fill('Bản nháp không mất');
+  await page.getByRole('button', { name: 'Lưu câu hỏi', exact: true }).click();
+  await expect(page.getByRole('alert')).toContainText('Chưa xác nhận');
+  await expect(page.getByRole('button', { name: 'Lưu câu hỏi', exact: true })).toBeDisabled();
+  await page.reload();
+  await page.getByRole('button', { name: 'Thêm câu hỏi' }).click();
+  await expect(page.getByLabel('Nội dung câu hỏi')).toHaveValue('Bản nháp không mất');
+  await expect(page.getByRole('button', { name: 'Lưu câu hỏi', exact: true })).toBeDisabled();
+  expect(writes).toHaveLength(1);
+  await page.getByRole('button', { name: 'Đọc dữ liệu hiện tại để đối chiếu' }).click();
+  await expect(page.getByRole('button', { name: 'Lưu câu hỏi', exact: true })).toBeEnabled();
+});
+test('used questions and active attempts remain locked with no editable weights or delete', async ({
+  page,
+}) => {
+  await questionsFixture(page, { active: 1 });
+  await page.goto('/admin/questions');
+  await expect(page.getByRole('button', { name: 'Thêm câu hỏi' })).toBeDisabled();
+  await expect(page.getByRole('button', { name: 'Sửa câu hỏi 1' })).toBeDisabled();
+  await expect(page.getByRole('button', { name: /Xóa|Trọng số/ })).toHaveCount(0);
+});
+test('search and group filters are composed and empty is explicit', async ({ page }) => {
+  await questionsFixture(page);
+  await page.goto('/admin/questions');
+  await page.getByLabel('Tìm câu hỏi').fill('không có');
+  await expect(page.getByText('Không có câu hỏi phù hợp.')).toBeVisible();
+  await page.getByLabel('Tìm câu hỏi').fill('máy móc');
+  await page.getByLabel('Nhóm Holland').selectOption('I');
+  await expect(page.getByText('Không có câu hỏi phù hợp.')).toBeVisible();
+});
+test('409 keeps the edit draft and blocks blind resubmission', async ({ page }) => {
+  const writes = await questionsFixture(page, { status: 409 });
+  await page.goto('/admin/questions');
+  await page.getByRole('button', { name: 'Sửa câu hỏi 1' }).click();
+  await page.getByLabel('Nội dung câu hỏi').fill('Nội dung đang sửa');
+  await page.getByRole('button', { name: 'Lưu câu hỏi', exact: true }).click();
+  await expect(page.getByRole('alert')).toContainText('Dữ liệu bị khóa');
+  await expect(page.getByLabel('Nội dung câu hỏi')).toHaveValue('Nội dung đang sửa');
+  expect(writes).toHaveLength(1);
+});
+
+test('a PATCH acknowledgement for a different record never clears the current draft', async ({ page }) => {
+  await questionsFixture(page, { wrongId: true });
+  await page.goto('/admin/questions');
+  await page.getByRole('button', { name: 'Sửa câu hỏi 1' }).click();
+  await page.getByLabel('Nội dung câu hỏi').fill('Nháp đúng câu hỏi 1');
+  await page.getByRole('button', { name: 'Lưu câu hỏi', exact: true }).click();
+  await expect(page.getByRole('alert')).toContainText('Chưa xác nhận');
+  await expect(page.getByLabel('Nội dung câu hỏi')).toHaveValue('Nháp đúng câu hỏi 1');
+  await expect(page.getByRole('button', { name: 'Lưu câu hỏi', exact: true })).toBeDisabled();
+});

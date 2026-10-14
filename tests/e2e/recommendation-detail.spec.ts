@@ -16,12 +16,18 @@ test('invalid and unknown IDs never fall back to a different recommendation', as
   await page.goto('/preview/recommendations/preview-rec-unknown');
   await expect(page.getByRole('heading', { name: 'Không tìm thấy gợi ý mẫu' })).toBeVisible();
 });
-test('stale preview is labeled, general sources are not personal evidence and no target is saved', async ({ page }) => {
+test('stale preview is labeled, general sources are not personal evidence and no target is saved', async ({
+  page,
+}) => {
   const calls: string[] = [];
-  page.on('request', r => { if (/\/api\/|socket.io/.test(r.url())) calls.push(r.url()); });
+  page.on('request', (r) => {
+    if (/\/api\/|socket.io/.test(r.url())) calls.push(r.url());
+  });
   await page.goto(`${url}?scenario=stale`);
   await expect(page.getByRole('alert')).toContainText('Hồ sơ mẫu đã thay đổi');
-  await expect(page.getByText('Tài liệu nghề chung, không phải bằng chứng độ phù hợp cá nhân.')).toBeVisible();
+  await expect(
+    page.getByText('Tài liệu nghề chung, không phải bằng chứng độ phù hợp cá nhân.'),
+  ).toBeVisible();
   await expect(page.getByRole('button', { name: /Lưu|Đặt mục tiêu/ })).toHaveCount(0);
   expect(calls).toEqual([]);
 });
@@ -29,11 +35,16 @@ test('runtime is owned/guarded unavailable and does not fetch preview data', asy
   const fixture = await advisorFixture(page);
   await page.goto('/recommendations/71');
   await expect(page.getByRole('heading', { name: 'Phân tích gợi ý chưa sẵn sàng' })).toBeVisible();
-  expect(fixture.requests.filter(r => /recommendation/.test(r.path))).toEqual([]);
+  expect(fixture.requests.filter((r) => /recommendation/.test(r.path))).toEqual([]);
 });
-for (const width of [320,390,768,769,1024,1025,1440]) test(`recommendation detail fits ${width}px`, async ({ page }) => {
-  await page.setViewportSize({ width, height: 900 }); await page.goto(url);
-  await expect(page.getByRole('heading', { level: 1, name: 'Phân tích mẫu: Kỹ sư Phần mềm' })).toBeVisible();
-  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-  for (const a of await page.locator('.recommendation-detail a').all()) expect((await a.boundingBox())!.height).toBeGreaterThanOrEqual(44);
-});
+for (const width of [320, 390, 768, 769, 1024, 1025, 1440])
+  test(`recommendation detail fits ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto(url);
+    await expect(
+      page.getByRole('heading', { level: 1, name: 'Phân tích mẫu: Kỹ sư Phần mềm' }),
+    ).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    for (const a of await page.locator('.recommendation-detail a').all())
+      expect((await a.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+  });

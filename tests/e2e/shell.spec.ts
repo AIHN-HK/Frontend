@@ -10,7 +10,15 @@ test('unfinished catalog and direct unknown URLs give an honest unavailable/404 
   await expect(page).toHaveURL(/\/$/);
 });
 
-for (const [width, sidebarWidth] of [[320, 0], [390, 0], [768, 0], [769, 72], [1024, 72], [1025, 256], [1440, 256]]) {
+for (const [width, sidebarWidth] of [
+  [320, 0],
+  [390, 0],
+  [768, 0],
+  [769, 72],
+  [1024, 72],
+  [1025, 256],
+  [1440, 256],
+]) {
   test(`student shell fits ${width}px and uses the correct navigation mode`, async ({ page }) => {
     await page.setViewportSize({ width: width!, height: 900 });
     await page.goto('/preview/student');
@@ -45,14 +53,37 @@ for (const [width, sidebarWidth] of [[320, 0], [390, 0], [768, 0], [769, 72], [1
 }
 
 test('admin/student palettes stay scoped across client navigation', async ({ page }) => {
+  // Explicit student accent distinguishes its T17 preference from the fixed admin teal.
+  await page.addInitScript(() =>
+    localStorage.setItem(
+      'aihn.appearance.v1',
+      JSON.stringify({
+        version: 1,
+        preset: 'blue',
+        accent: 'rose',
+        background: 'gradient',
+        sidebar: 'light',
+      }),
+    ),
+  );
   await page.goto('/preview/student');
   await expect(page.getByTestId('workspace-shell')).toHaveCSS('background-color', 'rgb(243, 250, 252)');
-  await expect(page.getByRole('button', { name: 'Mở hộp thoại' })).toHaveCSS('background-color', 'rgb(2, 143, 148)');
+  await expect(page.getByRole('button', { name: 'Mở hộp thoại' })).toHaveCSS(
+    'background-color',
+    'rgb(225, 29, 72)',
+  );
   await page.getByRole('link', { name: 'Xem giao diện quản trị' }).click();
   await expect(page.getByTestId('workspace-shell')).toHaveCSS('background-color', 'rgb(248, 250, 252)');
-  await expect(page.getByRole('button', { name: 'Mở hộp thoại' })).toHaveCSS('background-color', 'rgb(13, 148, 136)');
+  await expect(page.getByRole('button', { name: 'Mở hộp thoại' })).toHaveCSS(
+    'background-color',
+    'rgb(13, 148, 136)',
+  );
   await page.getByRole('link', { name: 'Xem giao diện sinh viên' }).click();
   await expect(page.getByTestId('workspace-shell')).toHaveCSS('background-color', 'rgb(243, 250, 252)');
+  await expect(page.getByRole('button', { name: 'Mở hộp thoại' })).toHaveCSS(
+    'background-color',
+    'rgb(225, 29, 72)',
+  );
 });
 
 test('mobile drawer locks scrolling, contains keyboard focus and restores the opener', async ({ page }) => {
@@ -65,7 +96,7 @@ test('mobile drawer locks scrolling, contains keyboard focus and restores the op
   await expect(page.locator('body')).toHaveCSS('overflow', 'hidden');
   await expect(drawer.getByRole('button', { name: 'Đóng' })).toBeFocused();
   await page.keyboard.press('Shift+Tab');
-  expect(await drawer.evaluate(node => node.contains(document.activeElement))).toBe(true);
+  expect(await drawer.evaluate((node) => node.contains(document.activeElement))).toBe(true);
   await page.keyboard.press('Tab');
   await expect(drawer.getByRole('button', { name: 'Đóng' })).toBeFocused();
   await page.keyboard.press('Escape');
@@ -106,7 +137,9 @@ test('modal remains keyboard accessible and restores focus', async ({ page }) =>
 });
 
 for (const route of ['/dashboard', '/admin', '/admin/questions']) {
-  test(`anonymous access to ${route} requires a session without exposing a private shell`, async ({ page }) => {
+  test(`anonymous access to ${route} requires a session without exposing a private shell`, async ({
+    page,
+  }) => {
     await page.goto(route);
     await expect(page).toHaveURL(/\/login(?:\?|$)/);
     await expect(page.getByRole('heading', { name: 'Đăng nhập AIHN' })).toBeVisible();
@@ -117,21 +150,30 @@ for (const route of ['/dashboard', '/admin', '/admin/questions']) {
 test('public entry does not eagerly request workspace layouts or legacy runtime chunks', async ({ page }) => {
   const scripts: string[] = [];
   const errors: string[] = [];
-  page.on('request', request => { if (request.resourceType() === 'script') scripts.push(request.url()); });
-  page.on('pageerror', error => errors.push(error.message));
+  page.on('request', (request) => {
+    if (request.resourceType() === 'script') scripts.push(request.url());
+  });
+  page.on('pageerror', (error) => errors.push(error.message));
   await page.goto('/');
   await expect(page.getByRole('heading', { level: 1 })).toContainText('phù hợp nhất của bạn');
-  expect(scripts.join('\n')).not.toMatch(/AdminLayout|StudentLayout|WorkspaceShell|LoginPage|socket|expo|react-native/i);
+  expect(scripts.join('\n')).not.toMatch(
+    /AdminLayout|StudentLayout|WorkspaceShell|LoginPage|socket|expo|react-native/i,
+  );
   expect(errors).toEqual([]);
   await page.goto('/preview/admin');
   await expect(page.getByTestId('workspace-shell')).toBeVisible();
-  expect(scripts.some(url => url.includes('AdminLayout'))).toBe(true);
+  expect(scripts.some((url) => url.includes('AdminLayout'))).toBe(true);
 });
 
 test('lazy navigation shows pending state until the route chunk arrives', async ({ page }) => {
   let release!: () => void;
-  const ready = new Promise<void>(resolve => { release = resolve; });
-  await page.route('**/assets/AdminLayout-*.js', async route => { await ready; await route.continue(); });
+  const ready = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  await page.route('**/assets/AdminLayout-*.js', async (route) => {
+    await ready;
+    await route.continue();
+  });
   await page.goto('/preview/student');
   await page.getByRole('link', { name: 'Xem giao diện quản trị', exact: true }).click();
   await expect(page.getByRole('status')).toHaveText('Đang tải…');
@@ -141,7 +183,7 @@ test('lazy navigation shows pending state until the route chunk arrives', async 
 });
 
 test('a failed lazy route chunk offers an explicit recovery action', async ({ page }) => {
-  await page.route('**/assets/AdminLayout-*.js', route => route.abort());
+  await page.route('**/assets/AdminLayout-*.js', (route) => route.abort());
   await page.goto('/preview/student');
   await page.getByRole('link', { name: 'Xem giao diện quản trị', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Không thể tải trang' })).toBeVisible();
@@ -149,11 +191,20 @@ test('a failed lazy route chunk offers an explicit recovery action', async ({ pa
 });
 
 test('shell review screenshots at the three reference viewports', async ({ page }, info) => {
-  for (const [width, height] of [[390, 844], [768, 1024], [1440, 900]]) {
+  for (const [width, height] of [
+    [390, 844],
+    [768, 1024],
+    [1440, 900],
+  ]) {
     await page.setViewportSize({ width: width!, height: height! });
     for (const kind of ['student', 'admin', 'auth']) {
       await page.goto(`/preview/${kind}`);
-      await expect(page.getByRole('heading', { name: kind === 'admin' ? 'Không gian quản trị' : 'Chào mừng đến với AIHN Career', exact: true })).toBeVisible();
+      await expect(
+        page.getByRole('heading', {
+          name: kind === 'admin' ? 'Không gian quản trị' : 'Chào mừng đến với AIHN Career',
+          exact: true,
+        }),
+      ).toBeVisible();
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
       const screenshot = info.outputPath(`${kind}-${width}.png`);
       await page.screenshot({ path: screenshot });
