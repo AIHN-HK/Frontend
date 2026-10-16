@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgDev" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#EAF5FA"/>
+      <stop offset="100%" stop-color="#D2EDF5"/>
+    </linearGradient>
+    <linearGradient id="screenDev" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#162736"/>
+      <stop offset="100%" stop-color="#1E384D"/>
+    </linearGradient>
+  </defs>
+  <rect width="120" height="120" rx="24" fill="url(#bgDev)"/>
+  <!-- Monitor frame -->
+  <rect x="22" y="24" width="76" height="52" rx="8" fill="url(#screenDev)"/>
+  <!-- Screen window dots -->
+  <circle cx="32" cy="32" r="2.5" fill="#EF4444"/>
+  <circle cx="39" cy="32" r="2.5" fill="#F59E0B"/>
+  <circle cx="46" cy="32" r="2.5" fill="#10B981"/>
+  <!-- Code lines -->
+  <rect x="32" y="42" width="22" height="3.5" rx="1.5" fill="#028F94"/>
+  <rect x="58" y="42" width="28" height="3.5" rx="1.5" fill="#55B3D9"/>
+  <rect x="36" y="50" width="34" height="3.5" rx="1.5" fill="#FBBF24"/>
+  <rect x="36" y="58" width="46" height="3.5" rx="1.5" fill="#93C5FD"/>
+  <rect x="32" y="66" width="18" height="3.5" rx="1.5" fill="#34D399"/>
+  <!-- Monitor Stand -->
+  <path d="M52 76h16v12h-16z" fill="#9FBEC9"/>
+  <rect x="42" y="86" width="36" height="6" rx="3" fill="#81A8B6"/>
+  <!-- Floating Sparkles -->
+  <path d="M88 20l2 4 4 2-4 2-2 4-2-4-4-2 4-2z" fill="#028F94" opacity="0.8"/>
+</svg>

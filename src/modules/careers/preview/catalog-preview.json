@@ -1,0 +1,179 @@
+{
+  "kind": "T12 UI fixtures",
+  "version": 1,
+  "careers": [
+    {
+      "id": "preview-software",
+      "name": "Kỹ sư Phần mềm",
+      "category": "technology",
+      "riasec": [
+        "I",
+        "C"
+      ],
+      "summary": "Ví dụ giao diện: thiết kế, xây dựng và kiểm tra phần mềm. Mô tả và nhóm RIASEC trong bản này là dữ liệu mẫu.",
+      "detail": {
+        "kind": "T13 UI fixtures",
+        "updatedAt": "2026-10-14",
+        "tasks": [
+          "Phân tích yêu cầu và thiết kế giải pháp phần mềm.",
+          "Xây dựng và kiểm tra các chức năng của ứng dụng.",
+          "Phối hợp với nhóm thiết kế và kiểm thử để cải thiện sản phẩm.",
+          "Theo dõi, sửa lỗi và bảo trì hệ thống."
+        ],
+        "hardSkills": [
+          "Tư duy thuật toán và cấu trúc dữ liệu",
+          "Ngôn ngữ lập trình và cơ sở dữ liệu",
+          "Quản lý phiên bản và kiểm thử phần mềm"
+        ],
+        "softSkills": [
+          "Giải quyết vấn đề",
+          "Làm việc nhóm và giao tiếp",
+          "Tự học và quản lý thời gian"
+        ],
+        "references": [
+          {
+            "label": "MDN · Học phát triển web",
+            "url": "https://developer.mozilla.org/en-US/docs/Learn_web_development",
+            "checkedAt": "2026-10-14"
+          }
+        ]
+      }
+    },
+    {
+      "id": "preview-data-engineer",
+      "name": "Kỹ sư Dữ liệu",
+      "category": "data",
+      "riasec": [
+        "I",
+        "R"
+      ],
+      "summary": "Ví dụ giao diện: tổ chức dữ liệu và xây dựng quy trình xử lý thông tin. Nội dung này phục vụ thử tìm kiếm và bộ lọc.",
+      "detail": {
+        "kind": "T13 UI fixtures",
+        "updatedAt": "2026-10-14",
+        "tasks": [
+          "Thiết kế luồng thu thập và tổ chức dữ liệu.",
+          "Xây dựng quy trình chuyển đổi dữ liệu phục vụ phân tích.",
+          "Kiểm tra chất lượng và tính nhất quán của dữ liệu."
+        ],
+        "hardSkills": [
+          "Truy vấn SQL và mô hình dữ liệu",
+          "Lập trình xử lý dữ liệu",
+          "Kiểm tra chất lượng dữ liệu"
+        ],
+        "softSkills": [
+          "Tư duy hệ thống",
+          "Phối hợp giữa các nhóm",
+          "Trình bày vấn đề rõ ràng"
+        ],
+        "references": [
+          {
+            "label": "PostgreSQL · Hướng dẫn SQL",
+            "url": "https://www.postgresql.org/docs/current/tutorial.html",
+            "checkedAt": "2026-10-14"
+          }
+        ]
+      }
+    },
+    {
+      "id": "preview-devops",
+      "name": "Kỹ sư DevOps / Hạ tầng Điện toán đám mây",
+      "category": "technology",
+      "riasec": [
+        "C",
+        "I"
+      ],
+      "summary": "Ví dụ giao diện với tên dài: kết nối phát triển phần mềm và vận hành hệ thống, kiểm tra xuống dòng trên màn hình nhỏ."
+    },
+    {
+      "id": "preview-designer",
+      "name": "Nhà thiết kế Đồ họa",
+      "category": "creative",
+      "riasec": [
+        "A",
+        "C"
+      ],
+      "summary": "Ví dụ giao diện: xây dựng hình ảnh và sản phẩm truyền thông. Phân loại mẫu chỉ dùng thử các lựa chọn ngành nghề."
+    },
+    {
+      "id": "preview-analyst",
+      "name": "Chuyên viên Phân tích Dữ liệu",
+      "category": "data",
+      "riasec": [
+        "I",
+        "C"
+      ],
+      "summary": "Ví dụ giao diện: tìm hiểu thông tin và trình bày các kết quả phân tích. Không phải nội dung tư vấn nghề nghiệp đã xác minh."
+    },
+    {
+      "id": "preview-nurse",
+      "name": "Điều dưỡng",
+      "category": "health",
+      "riasec": [
+        "S",
+        "R"
+      ],
+      "summary": "Ví dụ giao diện: hỗ trợ chăm sóc sức khỏe và phối hợp với người bệnh. Mô tả cùng RIASEC là fixture kiểm tra hiển thị."
+    },
+    {
+      "id": "preview-psychology",
+      "name": "Chuyên viên Tâm lý học",
+      "category": "health",
+      "riasec": [
+        "S",
+        "I"
+      ],
+      "summary": "Ví dụ giao diện: tìm hiểu hành vi và lắng nghe nhu cầu của con người. Đây là nội dung mẫu, không phải hướng dẫn hành nghề."
+    },
+    {
+      "id": "preview-marketing",
+      "name": "Chuyên viên Marketing",
+      "category": "business",
+      "riasec": [
+        "E",
+        "A"
+      ],
+      "summary": "Ví dụ giao diện: lên ý tưởng truyền thông và phối hợp thực hiện chiến dịch. Không có mức lương hoặc tỷ lệ phù hợp trong fixture."
+    },
+    {
+      "id": "preview-accountant",
+      "name": "Kế toán",
+      "category": "business",
+      "riasec": [
+        "C",
+        "E"
+      ],
+      "summary": "Ví dụ giao diện: tổ chức chứng từ và theo dõi thông tin tài chính. Phân loại dùng thử giao diện, chưa được xác nhận từ catalog."
+    },
+    {
+      "id": "preview-animator",
+      "name": "Họa sĩ Hoạt hình",
+      "category": "creative",
+      "riasec": [
+        "A",
+        "R"
+      ],
+      "summary": "Ví dụ giao diện: tạo chuyển động và kể chuyện bằng hình ảnh. Tên nghề và nội dung chỉ minh họa trạng thái kết quả."
+    },
+    {
+      "id": "preview-security",
+      "name": "Chuyên viên An toàn Thông tin",
+      "category": "technology",
+      "riasec": [
+        "I",
+        "R"
+      ],
+      "summary": "Ví dụ giao diện: kiểm tra hệ thống và tìm hiểu các vấn đề bảo vệ thông tin. Dùng thử tìm kiếm không dấu và phân trang."
+    },
+    {
+      "id": "preview-manager",
+      "name": "Chuyên viên Quản trị Kinh doanh",
+      "category": "business",
+      "riasec": [
+        "E",
+        "S"
+      ],
+      "summary": "Ví dụ giao diện: phối hợp hoạt động nhóm và tổ chức công việc. Mã preview không phải mã nghề thật và không được lưu vào hồ sơ."
+    }
+  ]
+}

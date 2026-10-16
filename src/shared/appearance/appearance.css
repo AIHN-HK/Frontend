@@ -1,0 +1,201 @@
+/* 1. Theme Preset: Teal Fresh */
+.student-theme.theme-teal {
+  --bg-app: #f0fdf9;
+  --bg-app-deep: #e6fbf5;
+  --bg-surface: #ffffff;
+  --bg-surface-secondary: #f6fefb;
+  --bg-surface-subtle: #edfaf6;
+  --bg-surface-hover: #e1f8f1;
+  --bg-surface-blue: #e2f9f5;
+  --bg-surface-blue-border: #bcefe5;
+  --bg-surface-teal: #e6fbf7;
+  --bg-surface-teal-border: #a7e4dd;
+  --border-default: #c8ebe4;
+  --border-subtle: #e2f6f1;
+  --border-strong: #a8ddd4;
+  --text-primary: #112826;
+  --text-secondary: #4a6360;
+  --text-muted: #7e9996;
+}
+
+/* 2. Theme Preset: Warm Linen */
+.student-theme.theme-warm {
+  --bg-app: #faf9f6;
+  --bg-app-deep: #f3f0ea;
+  --bg-surface: #ffffff;
+  --bg-surface-secondary: #f7f6f2;
+  --bg-surface-subtle: #efece5;
+  --bg-surface-hover: #e8e5dd;
+  --bg-surface-blue: #f0f4f6;
+  --bg-surface-blue-border: #d8e2e5;
+  --bg-surface-teal: #edf6f3;
+  --bg-surface-teal-border: #c8e3dc;
+  --border-default: #e5e1d8;
+  --border-subtle: #efece5;
+  --border-strong: #cec7ba;
+  --text-primary: #1c1917;
+  --text-secondary: #57534e;
+  --text-muted: #8c8780;
+}
+
+/* 3. Theme Preset: Dark Slate */
+.student-theme.theme-dark {
+  --bg-app: #0b0f19;
+  --bg-app-deep: #070a11;
+  --bg-surface: #111827;
+  --bg-surface-secondary: #172033;
+  --bg-surface-subtle: #1f293d;
+  --bg-surface-hover: #26334d;
+  --bg-surface-active: #2f3e5c;
+  --bg-surface-blue: #1a2744;
+  --bg-surface-blue-border: #2c3e68;
+  --bg-surface-teal: #123030;
+  --bg-surface-teal-border: #1c5050;
+  --bg-surface-warm: #2e2415;
+  --bg-surface-warm-border: #4d391a;
+  --border-default: #243044;
+  --border-subtle: #192233;
+  --border-strong: #334460;
+  --text-primary: #f3f4f6;
+  --text-secondary: #9ca3af;
+  --text-muted: #6b7280;
+  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
+  --shadow-sm: 0 2px 6px 0 rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 14px -2px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 10px 25px -3px rgba(0, 0, 0, 0.6);
+}
+
+/* 4. Theme Preset: AIHN Ocean (Atmospheric Ocean Direction) */
+.student-theme.theme-ocean {
+  --bg-app: #f4fafc;
+  --bg-app-deep: #eaf4f8;
+  --bg-surface: #ffffff;
+  --bg-surface-secondary: #f6fafc;
+  --bg-surface-subtle: #ecf5f9;
+  --bg-surface-hover: #e2f0f6;
+  --bg-surface-active: #d6eaf3;
+  --bg-surface-blue: #e5f6fa;
+  --bg-surface-blue-border: #b6e5ee;
+  --bg-surface-teal: #e8f7fa;
+  --bg-surface-teal-border: #88e8f2;
+  --bg-surface-warm: #fff9ed;
+  --bg-surface-warm-border: #fde8c7;
+  --border-default: #cce5ed;
+  --border-subtle: #e1eff5;
+  --border-strong: #a8d4e2;
+  --primary: #55b3d9; /* Primary blue */
+  --primary-hover: #2d5f73; /* Deep anchor on hover */
+  --primary-active: #1e4656;
+  --primary-subtle: #e8f7fa;
+  --primary-border: #88e8f2;
+  --primary-content: #172033; /* Dark text on light primary for high contrast */
+  --support-blue: #73c6d9; /* Supporting blue */
+  --support-blue-deep: #2d5f73; /* Deep anchor */
+  --text-primary: #172033;
+  --text-secondary: #485e68;
+  --text-muted: #7e97a3;
+}
+
+/* Accent Color Customizations (Primary brand token override) */
+.student-theme.accent-teal {
+  --primary: #0d9488;
+  --primary-hover: #0f766e;
+  --primary-active: #115e59;
+}
+
+.student-theme.accent-blue {
+  --primary: #2563eb;
+  --primary-hover: #1d4ed8;
+  --primary-active: #1e40af;
+}
+
+.student-theme.accent-indigo {
+  --primary: #4f46e5;
+  --primary-hover: #4338ca;
+  --primary-active: #3730a3;
+}
+
+.student-theme.accent-violet {
+  --primary: #7c3aed;
+  --primary-hover: #6d28d9;
+  --primary-active: #5b21b6;
+}
+
+.student-theme.accent-rose {
+  --primary: #e11d48;
+  --primary-hover: #be123c;
+  --primary-active: #9f1239;
+}
+
+/* Background Style Customizations */
+.student-theme.background-flat {
+  background-image: none;
+}
+
+.student-theme.background-gradient {
+  background-image:
+    radial-gradient(at 15% 15%, rgba(59, 130, 246, 0.08) 0%, transparent 60%),
+    radial-gradient(at 85% 85%, rgba(13, 148, 136, 0.08) 0%, transparent 60%);
+}
+
+/* Sidebar Appearance */
+.student-theme.sidebar-tinted .workspace-sidebar {
+  background-color: var(--bg-surface-secondary);
+}
+
+.student-theme.sidebar-contrast .workspace-sidebar {
+  background-color: #0f172a;
+  border-right-color: #1e293b;
+  color: #f8fafc;
+}
+.student-theme.sidebar-contrast .workspace-sidebar .brand-title,
+.student-theme.sidebar-contrast .workspace-sidebar .nav-item,
+.student-theme.sidebar-contrast .workspace-sidebar .user-name {
+  color: #f8fafc;
+}
+.student-theme.sidebar-contrast .workspace-sidebar .nav-item:hover {
+  background-color: #1e293b;
+}
+.student-theme.sidebar-contrast .workspace-sidebar .nav-item.active {
+  background-color: rgba(13, 148, 136, 0.25);
+  color: #5eead4;
+}
+
+.student-theme {
+  color: var(--text-primary);
+  background-color: var(--bg-app);
+}
+.student-theme .workspace-header,
+.student-theme .workspace-sidebar,
+.student-theme .mobile-bottom-nav {
+  color: var(--text-primary);
+}
+.student-theme.theme-dark {
+  color-scheme: dark;
+  --primary-subtle: #123030;
+  --primary-content: #fff;
+}
+.student-theme.accent-teal,
+.student-theme.accent-blue,
+.student-theme.accent-indigo,
+.student-theme.accent-violet,
+.student-theme.accent-rose {
+  --primary-content: #fff;
+}
+
+/* Keep feedback readable against the dark preset's surfaces. */
+.student-theme.theme-dark {
+  --text-muted: #94a3b8;
+  --success-text: #6ee7b7;
+  --success-subtle: #123030;
+  --success-border: #1c5050;
+  --warning-text: #fcd34d;
+  --warning-subtle: #2e2415;
+  --warning-border: #4d391a;
+  --error-text: #fca5a5;
+  --error-subtle: #3b1d26;
+  --error-border: #7f3542;
+  --info-text: #93c5fd;
+  --info-subtle: #1a2744;
+  --info-border: #2c3e68;
+}

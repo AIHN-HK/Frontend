@@ -1,0 +1,119 @@
+import { useState } from 'react';
+import { useAdminQuery } from '../../api/admin.api';
+import { AdminDataState } from '../../components/AdminDataState';
+import { questionBankSchema } from '../model/question.schema';
+import { QuestionForm } from '../components/QuestionForm';
+import '../../components/admin-pages.css';
+export function QuestionsPage() {
+  const query = useAdminQuery(['questions'], '/api/v1/admin/questions', questionBankSchema),
+    [q, setQ] = useState(''),
+    [group, setGroup] = useState(''),
+    [selected, setSelected] = useState<number | null | undefined>();
+  const reload = async () => {
+    const result = await query.refetch();
+    return !result.isError;
+  };
+  return (
+    <div className="admin-page">
+      <header className="admin-page-heading">
+        <div>
+          <h1>Ngân hàng câu hỏi Holland</h1>
+          <p>Nội dung, nhóm RIASEC và khía cạnh theo bộ đề hiện tại.</p>
+        </div>
+        <button
+          className="btn btn-primary"
+          disabled={!query.data || query.data.activeAttempts > 0}
+          onClick={() => setSelected(null)}
+        >
+          Thêm câu hỏi
+        </button>
+      </header>
+      <AdminDataState query={query}>
+        {(data) => {
+          const visible = data.items.filter(
+              (item) =>
+                (!group || item.type === group) &&
+                `${item.id} ${item.content}`
+                  .toLocaleLowerCase('vi')
+                  .includes(q.trim().toLocaleLowerCase('vi')),
+            ),
+            item = data.items.find((row) => row.id === selected) ?? null;
+          return (
+            <>
+              <p>
+                {data.items.length} câu hỏi · {data.activeAttempts} bài đang làm. Câu hỏi đã dùng và bộ đề có
+                bài đang làm được khóa bởi máy chủ.
+              </p>
+              <div className="admin-toolbar">
+                <label>
+                  Tìm câu hỏi
+                  <input value={q} onChange={(e) => setQ(e.target.value)} />
+                </label>
+                <label>
+                  Nhóm Holland
+                  <select value={group} onChange={(e) => setGroup(e.target.value)}>
+                    <option value="">Tất cả</option>
+                    {['R', 'I', 'A', 'S', 'E', 'C'].map((code) => (
+                      <option key={code}>{code}</option>
+                    ))}
+                  </select>
+                </label>
+              </div>
+              {visible.length ? (
+                <div className="admin-table-scroll" role="region" aria-label="Câu hỏi" tabIndex={0}>
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>Nội dung</th>
+                        <th>Nhóm</th>
+                        <th>Khía cạnh</th>
+                        <th>Trạng thái</th>
+                        <th>Thao tác</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {visible.map((row) => (
+                        <tr key={row.id}>
+                          <td>#{row.id}</td>
+                          <td>{row.content}</td>
+                          <td>{row.type}</td>
+                          <td>{row.dimension ?? 'Chưa xác định'}</td>
+                          <td>{row.used ? 'Đã sử dụng' : row.editable ? 'Có thể sửa' : 'Đang khóa'}</td>
+                          <td>
+                            <button
+                              className="btn btn-secondary"
+                              aria-label={`Sửa câu hỏi ${row.id}`}
+                              disabled={!row.editable || data.activeAttempts > 0}
+                              onClick={() => setSelected(row.id)}
+                            >
+                              Sửa
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ) : (
+                <p>Không có câu hỏi phù hợp.</p>
+              )}
+              {selected !== undefined && (
+                <QuestionForm
+                  key={selected ?? 'new'}
+                  item={item}
+                  locked={data.activeAttempts > 0 || (selected !== null && !item?.editable)}
+                  reload={reload}
+                />
+              )}
+              <section className="admin-panel">
+                <h2>Chức năng mở rộng</h2>
+                <p>Chưa hỗ trợ trọng số, kích hoạt/ẩn, thao tác hàng loạt, xuất hay xóa tại giao diện này.</p>
+              </section>
+            </>
+          );
+        }}
+      </AdminDataState>
+    </div>
+  );
+}

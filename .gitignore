@@ -55,3 +55,28 @@ _vscode/
 .eslintcache
 *.tsbuildinfo
 
+# Project documentation and local tooling
+/docs/
+/.serena/
+
+# Local migration/reference material (kept outside the application source)
+# Keep the legacy archive out of the index, except its repository guidance.
+/legacy/*
+!/legacy/expo/
+/legacy/expo/*
+!/legacy/expo/AGENTS.md
+/design-reference/
+/open-design/
+
+# ReactJS verification artifacts
+playwright-report/
+test-results/
+.superpowers/
+
+# Keep repository and coding-agent guidance files versioned
+!**/AGENTS.md
+!**/CLAUDE.md
+!**/CODEX.md
+!**/GEMINI.md
+!**/COPILOT.md
+!**/AIDER.md

@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgDesign" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFF1F2"/>
+      <stop offset="100%" stop-color="#FFE4E6"/>
+    </linearGradient>
+    <linearGradient id="penGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E11D48"/>
+      <stop offset="100%" stop-color="#BE123C"/>
+    </linearGradient>
+  </defs>
+  <rect width="120" height="120" rx="24" fill="url(#bgDesign)"/>
+  <!-- Design Artboard / Canvas -->
+  <rect x="22" y="24" width="76" height="72" rx="14" fill="#FFFFFF" filter="drop-shadow(0 4px 10px rgba(225,29,72,0.08))"/>
+  <!-- UI Wireframe components on canvas -->
+  <rect x="32" y="34" width="24" height="20" rx="6" fill="#FEE2E2"/>
+  <circle cx="44" cy="44" r="5" fill="#E11D48"/>
+  <rect x="60" y="36" width="26" height="5" rx="2.5" fill="#CBD5E1"/>
+  <rect x="60" y="45" width="18" height="4" rx="2" fill="#E2E8F0"/>
+  <!-- Color palette dots -->
+  <circle cx="36" cy="68" r="6" fill="#028F94"/>
+  <circle cx="52" cy="68" r="6" fill="#8B5CF6"/>
+  <circle cx="68" cy="68" r="6" fill="#F59E0B"/>
+  <circle cx="84" cy="68" r="6" fill="#E11D48"/>
+  <circle cx="36" cy="82" r="2" fill="#E2E8F0"/>
+  <circle cx="52" cy="82" r="2" fill="#E2E8F0"/>
+  <circle cx="68" cy="82" r="2" fill="#E2E8F0"/>
+  <circle cx="84" cy="82" r="2" fill="#E2E8F0"/>
+  <!-- Floating Pen Tool / Cursor -->
+  <path d="M88 20l4 8-12 12-4-4 12-12z" fill="url(#penGrad)"/>
+</svg>
