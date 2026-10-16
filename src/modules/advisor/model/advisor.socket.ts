@@ -37,6 +37,7 @@ export function createAdvisorController(options: AdvisorControllerOptions) {
   let socket: AdvisorTransport | null = null, generation = 0, mounted = false, accessToken = '', unsubscribe: (() => void) | undefined;
   let connectedDeadline: ReturnType<typeof setTimeout> | undefined;
   let deadline: ReturnType<typeof setTimeout> | undefined, total: ReturnType<typeof setTimeout> | undefined, authDeadline: ReturnType<typeof setTimeout> | undefined;
+  let pendingAsk: { question: string; savedIds: readonly number[] } | null = null;
   const early = new Map<string, { event: string; value: unknown }[]>(); let earlySize = 0;
   const owned = () => { const state = options.session.read(); return mounted && state.status === 'authenticated' && state.user?.id === options.ownerId && state.revision === options.revision; };
   const publish = (value: Partial<AdvisorSnapshot>) => { current = { ...current, ...value }; for (const listener of listeners) listener(); };
@@ -72,6 +73,16 @@ export function createAdvisorController(options: AdvisorControllerOptions) {
     if (value.status === 'failed') { finish('failed', `AI chưa hoàn tất lượt trả lời. ${retainedQuestion}`); return; }
     finish('unknown', `Chưa xác nhận trạng thái trả lời. ${retainedQuestion}`);
   }
+  function doAsk(question: string, savedIds: readonly number[]): boolean {
+    if (!owned() || !socket?.connected || current.connection !== 'ready' || current.authPending || !current.connected || isBusy(current.phase) || !validQuestion(question)) return false;
+    clearTurnTimers(); publish({ phase: 'awaiting', turn: { sessionId: current.connected.sessionId, turnId: null, question, answer: '', savedIds: [...savedIds] }, notice: null });
+    if (!owned() || !socket || !current.connected) return false;
+    options.onOutcome('awaiting', current.connected.sessionId, question);
+    if (!owned() || !socket || !current.connected) return false;
+    turnTimeout('Chưa xác nhận hệ thống nhận câu hỏi.', 15_000);
+    total = setTimeout(() => { if (owned()) finish('unknown', `Lượt trả lời đã quá thời gian chờ. ${retainedQuestion}`); }, 150_000);
+    socket.emit('ask', { sessionId: current.connected.sessionId, content: question }); return true;
+  }
   function begin() {
     if (!owned() || socket || current.connection === 'connecting') return false;
     const tokens = options.session.read().tokens; if (!tokens) return false;
@@ -88,6 +99,11 @@ export function createAdvisorController(options: AdvisorControllerOptions) {
       if (current.connection !== 'connecting') return;
       clearTimeout(connectedDeadline); const connected = { sessionId: value.sessionId, attemptId: value.attemptId, userID: options.ownerId, title: value.title };
       publish({ connection: 'ready', connected }); if (owned()) options.onConnected(connected);
+      if (pendingAsk) {
+        const { question, savedIds } = pendingAsk; pendingAsk = null;
+        // ponytail: microtask so onConnected navigation settles first
+        queueMicrotask(() => { doAsk(question, savedIds); });
+      }
     });
     socket.on('queue_joined', value => {
       if (!active() || current.phase !== 'awaiting' || !isTurnIdentity(value) || value.sessionId !== current.turn?.sessionId || retired.has(value.turnId)) return;
@@ -128,15 +144,13 @@ export function createAdvisorController(options: AdvisorControllerOptions) {
     },
     begin,
     authenticationRenewed: () => { if (owned() && !socket) publish({ connection: 'idle', authPending: false, notice: 'Đã làm mới xác thực. Bạn có thể bắt đầu hội thoại mới khi sẵn sàng.' }); },
-    ask: (question: string, savedIds: readonly number[] = []) => {
-      if (!owned() || !socket?.connected || current.connection !== 'ready' || current.authPending || !current.connected || isBusy(current.phase) || !validQuestion(question)) return false;
-      clearTurnTimers(); publish({ phase: 'awaiting', turn: { sessionId: current.connected.sessionId, turnId: null, question, answer: '', savedIds: [...savedIds] }, notice: null });
-      if (!owned() || !socket || !current.connected) return false;
-      options.onOutcome('awaiting', current.connected.sessionId, question);
-      if (!owned() || !socket || !current.connected) return false;
-      turnTimeout('Chưa xác nhận hệ thống nhận câu hỏi.', 15_000);
-      total = setTimeout(() => { if (owned()) finish('unknown', `Lượt trả lời đã quá thời gian chờ. ${retainedQuestion}`); }, 150_000);
-      socket.emit('ask', { sessionId: current.connected.sessionId, content: question }); return true;
+    ask: doAsk,
+    askOrConnect: (question: string, savedIds: readonly number[] = []) => {
+      if (!validQuestion(question)) return false;
+      if (current.connection === 'ready' && !current.authPending && current.connected && !isBusy(current.phase)) return doAsk(question, savedIds);
+      if (current.connection !== 'idle' && current.connection !== 'disconnected') return false;
+      pendingAsk = { question, savedIds };
+      return begin();
     },
     stop: () => {
       if (!owned() || !socket?.connected || current.authPending || !current.turn?.turnId || !['queued', 'streaming'].includes(current.phase)) return;

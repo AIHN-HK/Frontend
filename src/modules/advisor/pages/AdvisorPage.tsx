@@ -75,7 +75,7 @@ function AdvisorWorkspace({ ownerId, revision }: { ownerId: number; revision: nu
     <section className="advisor-chat" aria-label="Hội thoại với Cố vấn AIHN">
       <header className="advisor-chat-header"><div><h2>{selectedId === null ? 'Hội thoại mới' : selected?.title?.trim() || `Phiên tư vấn #${selectedId}`}</h2><p className="advisor-caption" role="status">{status}</p></div>
         {selectedId === null && !invalidId && <>
-          {history.isPending ? <p role="status">Đang kiểm tra kết quả Holland…</p> : history.isError ? <div role="alert"><p>Chưa kiểm tra được điều kiện mở hội thoại.</p><Button variant="secondary" disabled={history.isFetching} onClick={() => { void history.refetch(); }}>Kiểm tra lại kết quả Holland</Button></div> : !history.data.length ? <div><p>Hoàn thành trắc nghiệm Holland để bắt đầu hội thoại mới.</p><Link className="btn btn-secondary" to={paths.assessment}>Làm bài trắc nghiệm</Link></div> : <Button variant="secondary" disabled={view.connection === 'connecting'} onClick={() => { controller.begin(); }}>Kết nối hội thoại mới</Button>}
+          {history.isPending ? <p role="status">Đang kiểm tra kết quả Holland…</p> : history.isError ? <div role="alert"><p>Chưa kiểm tra được điều kiện mở hội thoại.</p><Button variant="secondary" disabled={history.isFetching} onClick={() => { void history.refetch(); }}>Kiểm tra lại kết quả Holland</Button></div> : !history.data.length ? <div><p>Hoàn thành trắc nghiệm Holland để bắt đầu hội thoại mới.</p><Link className="btn btn-secondary" to={paths.assessment}>Làm bài trắc nghiệm</Link></div> : view.connection === 'connecting' ? <p role="status">Đang kết nối hội thoại…</p> : null}
         </>}
         {live && ['queued', 'streaming', 'stopping'].includes(view.phase) && <Button variant="secondary" disabled={view.phase === 'stopping' || view.authPending} onClick={controller.stop}>Dừng trả lời</Button>}
       </header>
@@ -90,7 +90,7 @@ function AdvisorWorkspace({ ownerId, revision }: { ownerId: number; revision: nu
           {waitingForReply && <AdvisorReplySkeleton />}
         </>}
       </div>
-      <AdvisorComposer key={`${selectedId ?? 'new'}:${invalidId}`} ownerId={ownerId} sessionId={selectedId} live={live && !invalidId} view={view} controller={controller} messages={messages} />
+      <AdvisorComposer key={`${selectedId ?? 'new'}:${invalidId}`} ownerId={ownerId} sessionId={selectedId} live={live && !invalidId} hollandReady={history.isSuccess && history.data.length > 0} view={view} controller={controller} messages={messages} />
     </section>
   </div>;
 }
