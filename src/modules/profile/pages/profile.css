@@ -1,4 +1,12 @@
 .career-profile-page { display: grid; gap: 24px; min-width: 0; }
+.profile-avatar-previews { display: flex; flex-wrap: wrap; gap: 24px; }
+.profile-avatar-previews > div { display: grid; gap: 8px; justify-items: center; }
+.profile-avatar-image, .profile-avatar-empty { width: 96px; height: 96px; border-radius: 50%; border: 2px solid var(--primary-border); object-fit: cover; }
+.profile-avatar-empty { display: grid; place-items: center; background: var(--bg-surface-teal); color: var(--primary); font-size: 24px; font-weight: 700; }
+.profile-avatar-card input[type="file"] { max-width: 100%; min-width: 0; min-height: 44px; color: var(--text-secondary); font: inherit; }
+.profile-avatar-card input::file-selector-button { min-height: 44px; border: 1px solid var(--border-default); border-radius: var(--radius-sm); background: var(--bg-surface); color: var(--primary); padding: 8px 12px; margin-right: 12px; cursor: pointer; }
+.profile-avatar-card .field { min-width: 0; }
+.profile-avatar-card .field > p { color: var(--text-secondary); }
 .career-profile-page p { font-size: 13.5px; overflow-wrap: anywhere; }
 .career-profile-header { position: relative; padding: 20px 24px; border: 1px solid var(--border-default); border-radius: var(--radius-lg); box-shadow: 0 4px 18px rgb(35 85 110 / 4%); background: linear-gradient(135deg, rgb(255 255 255 / 95%), rgb(246 251 252 / 90%)); display: flex; align-items: start; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
 .career-profile-header > div:first-child { flex: 1; min-width: min(280px, 100%); }

@@ -34,6 +34,9 @@ test('fixture journey: signup OTP login profile boolean test result history and 
     if (route.request().method() === 'PATCH') profile = { ...profile, ...route.request().postDataJSON() };
     await route.fulfill({ json: { status: 200, data: profile } });
   });
+  await page.route('**/api/v1/users/me/avatar', async route => {
+    await route.fulfill({ status: 404, json: { status: 404 } });
+  });
   await page.route('**/api/v1/answer/submit-v2', async (route) => {
     completed = true;
     await route.fallback();
@@ -82,10 +85,12 @@ test('fixture journey: signup OTP login profile boolean test result history and 
   await expect(page.getByText('TopCode: ISC', { exact: true })).toBeVisible();
   await page.goto('/history');
   await expect(page.getByRole('article', { name: 'Lần làm #812', exact: true })).toBeVisible();
-  await advisorFixture(page);
+  const advisor = await advisorFixture(page);
   await page.goto('/advisor');
-  await page.getByRole('button', { name: 'Kết nối hội thoại mới', exact: true }).click();
-  await expect(page.getByText('Đã kết nối hội thoại.', { exact: true })).toBeVisible();
+  await page.getByLabel('Câu hỏi của bạn', { exact: true }).fill('Tôi nên bắt đầu khám phá nghề như thế nào?');
+  await page.getByRole('button', { name: 'Gửi', exact: true }).click();
+  await expect(page.getByText('Lượt trả lời đã hoàn tất.', { exact: true })).toBeVisible();
+  expect(advisor.commands.filter(command => command.event === 'ask')).toHaveLength(1);
 });
 
 test('fixture admin journey: overview questions priorities students and logout', async ({ page }) => {

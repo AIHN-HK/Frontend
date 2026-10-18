@@ -73,7 +73,7 @@ export function createAdvisorController(options: AdvisorControllerOptions) {
     if (value.status === 'failed') { finish('failed', `AI chưa hoàn tất lượt trả lời. ${retainedQuestion}`); return; }
     finish('unknown', `Chưa xác nhận trạng thái trả lời. ${retainedQuestion}`);
   }
-  function doAsk(question: string, savedIds: readonly number[]): boolean {
+  function doAsk(question: string, savedIds: readonly number[] = []): boolean {
     if (!owned() || !socket?.connected || current.connection !== 'ready' || current.authPending || !current.connected || isBusy(current.phase) || !validQuestion(question)) return false;
     clearTurnTimers(); publish({ phase: 'awaiting', turn: { sessionId: current.connected.sessionId, turnId: null, question, answer: '', savedIds: [...savedIds] }, notice: null });
     if (!owned() || !socket || !current.connected) return false;

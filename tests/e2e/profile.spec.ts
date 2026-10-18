@@ -10,6 +10,7 @@ async function fixture(page: Page, options: Options = {}) {
     const request = route.request(), method = request.method(), path = new URL(request.url()).pathname;
     const headers = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': '*', 'Access-Control-Allow-Methods': '*' };
     if (method === 'OPTIONS') { await route.fulfill({ status: 204, headers }); return; }
+    if (path.endsWith('/users/me/avatar')) { await route.fulfill({ status: 404, headers, json: { status: 404 } }); return; }
     const call = { method, path, body: request.postDataJSON() as unknown, authorization: request.headers().authorization, finished: false }; calls.push(call);
     const user = { id: options.ownerId ?? 71, fullname: (options.profile ?? baseProfile).fullname, role: 'USER' };
     let status = 200, data: unknown = user;
