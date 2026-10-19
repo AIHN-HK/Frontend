@@ -9,6 +9,8 @@ test('guest sees public Home and explicitly labeled example data without persona
   await expect(page.getByRole('heading', { level: 1 })).toContainText('phù hợp nhất của bạn');
   await expect(page.getByRole('region', { name: 'Ví dụ bàn làm việc · Dữ liệu mẫu' })).toBeVisible();
   await expect(page.getByRole('banner').getByText('Minh Hải')).toHaveCount(0);
+  await expect(page.getByText(/25\.000\+|94\.2%|Hoàng Phương Thảo|Nguyễn Tuấn Kiệt|Lê Thu Hà|Dữ liệu tuyển sinh liên kết/)).toHaveCount(0);
+  await expect(page.getByRole('heading', { name: 'Chuẩn bị cho cuộc trao đổi hướng nghiệp' })).toBeVisible();
   await expect(page.getByRole('contentinfo').getByText('AIHN Career Guidance Platform')).toBeVisible();
   await page.reload();
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
