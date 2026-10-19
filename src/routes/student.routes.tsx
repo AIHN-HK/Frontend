@@ -56,16 +56,16 @@ export const studentRoutes: RouteObject[] = [
           {
             path: paths.recommendations,
             lazy: async () => ({
-              Component: (await import('@/modules/recommendations/list/pages/RecommendationsPage'))
-                .RecommendationsPage,
+              Component: (await import('@/modules/career-platform/pages/CareerRecommendationsPage'))
+                .CareerRecommendationsPage,
             }),
           },
           {
             path: '/recommendations/:recommendationId',
             lazy: async () => ({
               Component: (
-                await import('@/modules/recommendations/detail/pages/RecommendationDetailUnavailablePage')
-              ).RecommendationDetailUnavailablePage,
+                await import('@/modules/career-platform/pages/CareerRecommendationsPage')
+              ).CareerRecommendationsPage,
             }),
           },
           {

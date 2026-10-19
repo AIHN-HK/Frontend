@@ -1,3 +1,4 @@
+import { CareerProfilePanel } from '@/modules/career-platform';
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { Link } from 'react-router';
@@ -36,5 +37,5 @@ export function CareerProfilePage(): React.JSX.Element {
     <section className="career-profile-card"><header className="career-profile-card-header"><h2>2. Kỹ năng cá nhân</h2><span>Chưa sẵn sàng</span></header><div className="career-profile-card-body"><p>Kỹ năng đã có và mục tiêu rèn luyện chưa sẵn sàng để cập nhật.</p></div></section>
     <section className="career-profile-card"><header className="career-profile-card-header"><h2>3. Sở thích công việc &amp; Mục tiêu tương lai</h2><span>Chưa sẵn sàng</span></header><div className="career-profile-card-body"><p>Sở thích công việc và mục tiêu nghề nghiệp chưa sẵn sàng để cập nhật.</p></div></section>
     <aside className="career-profile-advice"><img src={advisor} alt="" width="58" height="58" /><div><h2>Dữ liệu này giúp ích gì cho bạn?</h2><p>Thông tin cá nhân giúp bạn giữ hồ sơ rõ ràng, nhất quán khi sử dụng AIHN. Các phần định hướng mở rộng sẽ được bổ sung khi sẵn sàng.</p></div></aside>
-  </div>;
+  <CareerProfilePanel /></div>;
 }
