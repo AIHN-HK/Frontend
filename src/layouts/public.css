@@ -192,3 +192,6 @@
   .public-shell .btn-pill-login { padding-inline: 14px; }
   .public-shell .home-footer { padding: 28px 20px; }
 }
+
+.public-shell .home-header-wrap a, .public-shell .home-footer a { min-height: 45px; min-width: 45px; }
+@media (min-width: 1281px) and (max-width: 1440px) { .public-shell .home-search-pill { display: none; } }

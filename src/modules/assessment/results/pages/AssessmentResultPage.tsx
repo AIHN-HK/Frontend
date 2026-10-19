@@ -81,61 +81,6 @@ export function AssessmentResultPage() {
     </section>
     <section className="result-section" aria-labelledby="result-secondary-title"><h2 id="result-secondary-title">Các nhóm còn lại</h2><div className="result-secondary-grid">{secondary.map(item => <article className="result-secondary-card" key={item.type} style={color(item.type)}><div className="result-trait-heading"><span className="result-tag">{item.type} — {riasecGroups[item.type].name}</span><strong className="result-bar-score"><Score code={item.type} scores={ready.scores} normalization={normalization} /></strong></div><p>Điểm số phản ánh các lựa chọn trong lần làm này.</p></article>)}</div></section>
     
-    {/* Pipeline explanation card from updated reference */}
-    <section className="match-pipeline-card" aria-labelledby="pipeline-heading">
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "8px" }}>
-        <div>
-          <h2 id="pipeline-heading" style={{ fontSize: "18px", fontWeight: 700, color: "var(--color-text-main, #0F172A)" }}>
-            Cơ chế Giải trình Điểm tương thích Tuyển sinh
-          </h2>
-          <p style={{ fontSize: "13px", color: "var(--color-text-muted, #64748B)", marginTop: "2px" }}>
-            AIHN tính toán độ phù hợp dựa trên ma trận 3 lớp dữ liệu thực tế, không dùng số liệu giả định.
-          </p>
-        </div>
-        <span style={{ fontSize: "12px", fontWeight: 700, color: "#15803D", background: "#DCFCE7", padding: "4px 10px", borderRadius: "var(--radius-sm, 8px)" }}>
-          Thuật toán minh bạch 100%
-        </span>
-      </div>
-
-      <div className="pipeline-grid">
-        <div className="pipeline-box">
-          <span className="pipeline-pct">40%</span>
-          <span className="pipeline-label">Trắc nghiệm RIASEC</span>
-          <span className="pipeline-sub">Độ tương thích TopCode {ready.topCode} với từ điển nghề O*NET</span>
-        </div>
-
-        <span className="pipeline-math-op">+</span>
-
-        <div className="pipeline-box">
-          <span className="pipeline-pct" style={{ color: "#0284C7" }}>30%</span>
-          <span className="pipeline-label">Tổ hợp môn THPT</span>
-          <span className="pipeline-sub">Điểm học bạ các tổ hợp xét tuyển trọng tâm đạt chuẩn</span>
-        </div>
-
-        <span className="pipeline-math-op">+</span>
-
-        <div className="pipeline-box">
-          <span className="pipeline-pct" style={{ color: "#D97706" }}>30%</span>
-          <span className="pipeline-label">Xu hướng Tuyển sinh</span>
-          <span className="pipeline-sub">Chỉ tiêu đào tạo ĐH &amp; Nhu cầu nhân lực thị trường 2026</span>
-        </div>
-
-        <span className="pipeline-math-op">=</span>
-
-        <div className="pipeline-result-box">
-          <div style={{ fontSize: "11px", fontWeight: 700, color: "#15803D", textTransform: "uppercase", letterSpacing: "0.5px" }}>
-            Điểm tương thích gợi ý
-          </div>
-          <div style={{ fontSize: "26px", fontWeight: 800, color: "#15803D", margin: "4px 0" }}>
-            Cá nhân hóa
-          </div>
-          <div style={{ fontSize: "11.5px", color: "#166534", lineHeight: 1.35 }}>
-            Khớp nối ngành đào tạo chính xác
-          </div>
-        </div>
-      </div>
-    </section>
-
     <section className="result-bridge"><div><span className="result-header-tag">Bước tiếp theo</span><h2>Từ kết quả Holland đến định hướng nghề nghiệp</h2><p>Gợi ý nghề và tư vấn AI từ kết quả chưa sẵn sàng.</p><p>Bạn có thể cập nhật hồ sơ cá nhân và xem lại kết quả đã lưu.</p></div><Link className="btn btn-secondary" to={paths.careerProfile}>Cập nhật hồ sơ cá nhân</Link></section>
   </div>;
 }

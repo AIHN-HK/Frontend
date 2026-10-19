@@ -509,4 +509,5 @@
         gap: 16px;
       }
     }
-  
+
+.dashboard-page a, .dashboard-page button { min-height: 45px; }

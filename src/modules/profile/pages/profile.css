@@ -56,3 +56,5 @@
 .career-profile-advice p { font-size: 12px; }
 @media (max-width: 768px) { .career-profile-page { gap: 20px; } .career-profile-header, .career-profile-card-body { padding: 20px; } .career-profile-card-header, .career-profile-card-footer { padding: 16px 20px; } .career-profile-fields { grid-template-columns: minmax(0, 1fr); } .career-profile-actions { width: 100%; } .career-profile-actions .btn { flex: 1 1 180px; } }
 @media (max-width: 360px) { .career-profile-header, .career-profile-card-body { padding: 16px; } .career-profile-card-header, .career-profile-card-footer { padding: 16px; } .career-profile-milestone { padding: 10px 12px; } }
+
+.profile-avatar-card .btn { min-height: 45px; }

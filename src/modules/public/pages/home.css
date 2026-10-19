@@ -1197,4 +1197,10 @@
         align-items: flex-start;
       }
     }
-  
+
+.home-page a { min-height: 45px; min-width: 45px; display: inline-flex; align-items: center; }
+
+/* Allow grid children to shrink after web fonts load, including mobile hero CTAs. */
+.hero-section-wrapper > div, .preview-layout-grid > div { min-width: 0; }
+.hero-badge { max-width: 100%; white-space: normal; }
+.hero-btn-row { min-width: 0; flex-wrap: wrap; }

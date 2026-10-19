@@ -18,11 +18,11 @@ test('guest sees public Home and explicitly labeled example data without persona
 
 test('Home CTAs register the real URLs and enforce guest guards/unavailable catalog', async ({ page }) => {
   await page.goto('/');
-  await page.getByRole('link', { name: 'Làm trắc nghiệm Holland →', exact: true }).click();
+  await page.getByRole('link', { name: /^Làm trắc nghiệm Holland/ }).click();
   await expect(page).toHaveURL(/\/login(?:\?|$)/);
   await expect(page.getByRole('heading', { name: 'Đăng nhập AIHN' })).toBeVisible();
   await page.goto('/');
-  await page.getByRole('link', { name: 'Khám phá nghề nghiệp →', exact: true }).click();
+  await page.getByRole('link', { name: /^Khám phá nghề nghiệp/ }).click();
   await expect(page).toHaveURL(/\/careers$/);
   await expect(page.getByRole('heading', { name: 'Trang đang được chuẩn bị' })).toBeVisible();
   await page.reload();
@@ -33,7 +33,7 @@ test('Home CTAs register the real URLs and enforce guest guards/unavailable cata
 });
 
 test('every product example action uses a registered guarded destination', async ({ page }) => {
-  const actions = [['Xem kết quả', '/assessment'], ['Khám phá ngay', '/recommendations'], ['Xem lộ trình', '/roadmap'], ['Đặt câu hỏi', '/advisor'], ['Xem tất cả →', '/recommendations']] as const;
+  const actions = [['Xem kết quả', '/assessment/results'], ['Khám phá ngay', '/recommendations'], ['Xem lộ trình', '/roadmap'], ['Đặt câu hỏi', '/advisor'], ['Xem tất cả →', '/recommendations']] as const;
   for (const [label, href] of actions) {
     await page.goto('/');
     const link = page.getByRole('region', { name: 'Ví dụ bàn làm việc · Dữ liệu mẫu' }).getByRole('link', { name: label, exact: true });
@@ -135,7 +135,7 @@ test('Home review screenshots include loaded illustrations at standard viewports
     await page.setViewportSize({ width: width!, height: height! });
     await page.goto('/');
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
-    const image = page.getByRole('img', { name: 'Nữ sinh viên ôm laptop học tập tự tin và rạng rỡ' });
+    const image = page.getByRole('img', { name: 'Học sinh THPT ôm laptop học tập tự tin và rạng rỡ' });
     await expect.poll(() => image.evaluate(node => (node as HTMLImageElement).complete && (node as HTMLImageElement).naturalWidth > 0)).toBe(true);
     await page.evaluate(() => document.fonts.ready);
     const screenshot = info.outputPath(`home-${width}.png`);

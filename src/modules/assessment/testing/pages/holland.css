@@ -408,3 +408,5 @@
     padding: 24px 20px;
   }
 }
+
+.holland-page a, .holland-page button { min-height: 45px; display: inline-flex; align-items: center; }

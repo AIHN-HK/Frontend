@@ -31,21 +31,21 @@ T02 implements auth hydration/login/refresh/logout: checked remember-me uses loc
 
 ## Commands
 
-Use Node 24 (`.nvmrc`) and npm; `package-lock.json` is the only active lockfile.
+Use Node 24 (`.nvmrc`) and pnpm 10.33.2 as pinned in package.json; `pnpm-lock.yaml` is the active lockfile.
 
 ```bash
-npm ci
-npm run dev
-npm run typecheck
-npm run lint
-npm run test:unit
-npx playwright install chromium
-npm run test:e2e
-npm run build
-npm run preview
+pnpm install --frozen-lockfile
+pnpm run dev
+pnpm run typecheck
+pnpm run lint
+pnpm run test:unit
+pnpm exec playwright install chromium
+pnpm run test:e2e
+pnpm run build
+pnpm run preview
 ```
 
-`npm test` runs all active unit/browser tests. E2E builds and runs production preview itself, with an isolated browser context per test. Check 390×844, 768×1024, 1440×900, 320px and breakpoint boundaries 768/769, 1024/1025. Check keyboard/focus/scroll, deep links, honest loading/error/empty/unavailable states and palette isolation.
+`pnpm test` runs all active unit/browser tests. E2E builds and runs production preview itself, with an isolated browser context per test. Check 390×844, 768×1024, 1440×900, 320px and breakpoint boundaries 768/769, 1024/1025. Check keyboard/focus/scroll, deep links, honest loading/error/empty/unavailable states and palette isolation.
 
 ## Reference and legacy
 

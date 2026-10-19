@@ -272,7 +272,7 @@ function HollandTest({ scope }: { scope: AssessmentScope }) {
         </Link>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: storageOk ? '#047857' : '#D97706', fontWeight: 600 }}>
           <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: storageOk ? '#10B981' : '#F59E0B', display: 'inline-block' }}></span>
-          <span>{draft ? (storageOk ? 'Đang tự động lưu tiến độ' : 'Chưa lưu trên thiết bị') : 'Tiến độ lưu trên thiết bị này'}</span>
+          <span role="status">{draft ? (storageOk ? 'Đang tự động lưu tiến độ' : 'Chưa lưu trên thiết bị') : 'Tiến độ lưu trên thiết bị này'}</span>
         </div>
       </header>
 
@@ -348,7 +348,7 @@ function HollandTest({ scope }: { scope: AssessmentScope }) {
             </span>
             <h1 style={{ fontSize: '26px', fontWeight: 800, color: '#0F172A', margin: '8px 0' }}>Trắc nghiệm Sở thích Nghề nghiệp Holland (RIASEC)</h1>
             <p style={{ fontSize: '14.5px', color: '#475569', lineHeight: 1.6 }}>
-              {questions.data.length} câu hỏi chuẩn hóa giúp bạn khám phá 6 nhóm sở thích nghề nghiệp RIASEC. Chọn Có hoặc Không theo cảm nhận thực tế của bạn.
+              {questions.data.length} câu hỏi giúp bạn khám phá 6 nhóm sở thích nghề nghiệp RIASEC. Chọn Có hoặc Không theo cảm nhận thực tế của bạn.
             </p>
             <p style={{ fontSize: '14px', color: '#64748B' }}>
               Hãy trả lời đủ các câu và chọn Có cho ít nhất một hoạt động phù hợp. Bạn có thể tạm dừng và tiếp tục trên cùng thiết bị bất kỳ lúc nào.
@@ -374,7 +374,7 @@ function HollandTest({ scope }: { scope: AssessmentScope }) {
                   ? 'Đang bắt đầu…'
                   : startCheckpoint.kind === 'ready'
                     ? `Tiếp tục lần làm #${startCheckpoint.attempt?.id}`
-                    : 'Bắt đầu bài trắc nghiệm →'}
+                    : 'Bắt đầu bài trắc nghiệm'}
               </Button>
             )}
           </section>
@@ -401,7 +401,7 @@ function HollandTest({ scope }: { scope: AssessmentScope }) {
               <div className="test-header-card">
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '13.5px' }}>
                   <span style={{ fontWeight: 700, color: 'var(--color-text-main, #0F172A)' }}>
-                    Nhóm {question.type}: Hoạt động {groups[question.type]} {question.dimension && `· ${dimensions[question.dimension]}`} · Câu {draft.index + 1}/{draft.totalQuestions}
+                    Nhóm {question.type}: Hoạt động {groups[question.type]} {question.dimension && `· ${dimensions[question.dimension]}`} · <span>Câu {draft.index + 1}/{draft.totalQuestions}</span>
                   </span>
                   <span style={{ color: 'var(--color-brand-primary, #0D9488)', fontWeight: 800 }}>
                     {Math.round((completed / draft.totalQuestions) * 100)}% Hoàn thành
@@ -439,8 +439,8 @@ function HollandTest({ scope }: { scope: AssessmentScope }) {
                   </legend>
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '14px' }}>
                     {[
-                      { value: true, text: 'Có — Tôi thích hoạt động này', icon: '✓', sub: 'Phù hợp với sở thích và mong muốn của bạn' },
-                      { value: false, text: 'Không — Tôi không hứng thú', icon: '−', sub: 'Không muốn làm hoặc không cảm thấy phù hợp' },
+                      { value: true, text: 'Có — Tôi thích', icon: '✓', sub: 'Phù hợp với sở thích và mong muốn của bạn' },
+                      { value: false, text: 'Không — Tôi không thích', icon: '−', sub: 'Không muốn làm hoặc không cảm thấy phù hợp' },
                     ].map((option) => (
                       <label
                         key={String(option.value)}
@@ -462,6 +462,7 @@ function HollandTest({ scope }: { scope: AssessmentScope }) {
                         <input
                           type="radio"
                           name="holland-answer"
+                          aria-label={option.text}
                           checked={selected === option.value}
                           onChange={() => {
                             persist({
@@ -529,7 +530,7 @@ function HollandTest({ scope }: { scope: AssessmentScope }) {
                       ? 'Đang nộp…'
                       : draft.needsReview
                         ? 'Nộp lại sau khi kiểm tra'
-                        : 'Nộp bài trắc nghiệm →'}
+                        : 'Nộp bài'}
                   </Button>
                 )}
               </nav>

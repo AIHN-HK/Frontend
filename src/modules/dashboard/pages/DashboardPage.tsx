@@ -59,7 +59,7 @@ export function DashboardPage() {
       mm.add({ noPreference: "(prefers-reduced-motion: no-preference)" }, () => {
         const tl = gsap.timeline({ defaults: { ease: "power2.out", duration: 0.5 } });
         tl.from(".dashboard-greeting", { y: 12, autoAlpha: 0 })
-          .from(".exam-tracker-card", { y: 16, autoAlpha: 0, scale: 0.99 }, "-=0.25")
+          .from(".exam-tracker-card", { y: 16, autoAlpha: 0 }, "-=0.25")
           .from(".dashboard-quick", { y: 12, autoAlpha: 0, stagger: 0.08 }, "-=0.2")
           .from(".dashboard-next", { y: 14, autoAlpha: 0 }, "-=0.2")
           .from(".dashboard-card", { y: 16, autoAlpha: 0, stagger: 0.1 }, "-=0.2");
@@ -94,43 +94,9 @@ export function DashboardPage() {
           <p>Khám phá ngành học và nghề nghiệp tương lai phù hợp với bạn.</p>
         </div>
       </section>
-      {/* Exam Countdown & Admission Target Tracker from updated reference */}
-      <section className="exam-tracker-card" aria-label="Mục tiêu tuyển sinh và đếm ngược kỳ thi">
-        <div className="exam-countdown-group">
-          <div className="countdown-timer-box">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0D9488" strokeWidth="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 14"/></svg>
-            <div>
-              <div className="countdown-num">142</div>
-              <div className="countdown-label">Ngày đến ĐGNL 2026</div>
-              <div className="countdown-sub">Đợt 1 ĐHQG HN (HSA)</div>
-            </div>
-          </div>
-
-          <div className="countdown-timer-box box-secondary">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0284C7" strokeWidth="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-            <div>
-              <div className="countdown-num num-blue">235</div>
-              <div className="countdown-label">Ngày đến Tốt nghiệp THPT</div>
-              <div className="countdown-sub">Kỳ thi Quốc gia 2026</div>
-            </div>
-          </div>
-        </div>
-
-        <div className="admission-target-box">
-          <span className="target-uni-badge">MỤC TIÊU ƯU TIÊN #1</span>
-          <div className="target-major-name">ĐH Bách Khoa Hà Nội · Kỹ thuật Phần mềm (IT1)</div>
-          <div className="score-sim-row">
-            <span style={{ color: "var(--text-sub)" }}>Điểm ước lượng Khối A00 (Toán, Lý, Hóa):</span>
-            <strong style={{ color: "var(--primary)", fontSize: "13.5px" }}>27.5 / 30.0</strong>
-          </div>
-          <div className="score-bar-track">
-            <div className="score-bar-fill" style={{ width: "91.5%" }}></div>
-          </div>
-          <div style={{ display: "flex", justifyContent: "space-between", fontSize: "11px", color: "var(--text-muted)", marginTop: "4px" }}>
-            <span>Điểm sàn 2024: 28.29</span>
-            <span style={{ color: "#D97706", fontWeight: 600 }}>Cần cải thiện: +0.79 điểm</span>
-          </div>
-        </div>
+      <section className="exam-tracker-card" aria-label="Mục tiêu học tập">
+        <p>Bạn chưa thiết lập mục tiêu học tập. Cập nhật hồ sơ và khám phá nghề trước khi chọn lộ trình.</p>
+        <Link className="btn btn-secondary" to={paths.careerProfile}>Cập nhật hồ sơ</Link>
       </section>
 
       <div className="dashboard-quick-strip">

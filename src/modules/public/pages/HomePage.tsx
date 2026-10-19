@@ -9,53 +9,18 @@ export function HomePage() {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const media = gsap.matchMedia();
     const ctx = gsap.context(() => {
-      const mm = gsap.matchMedia();
-
-      mm.add(
-        {
-          reduceMotion: '(prefers-reduced-motion: reduce)',
-          noPreference: '(prefers-reduced-motion: no-preference)',
-        },
-        (context) => {
-          const conditions = context.conditions as { reduceMotion?: boolean } | undefined;
-          const reduceMotion = conditions?.reduceMotion;
-          if (reduceMotion) return;
-
-          const tl = gsap.timeline({ defaults: { ease: 'power2.out', duration: 0.6 } });
-
-          tl.from('.hero-badge', { y: 14, autoAlpha: 0 })
-            .from('.hero-main-title', { y: 18, autoAlpha: 0 }, '-=0.3')
-            .from('.hero-description-lead', { y: 14, autoAlpha: 0 }, '-=0.4')
-            .from('.hero-btn-row > *', { y: 14, autoAlpha: 0, stagger: 0.1 }, '-=0.35')
-            .from('.stat-badge-unit', { y: 14, autoAlpha: 0, stagger: 0.08 }, '-=0.3')
-            .from('.hero-student-frame', { scale: 0.95, y: 18, autoAlpha: 0, duration: 0.8 }, '-=0.55')
-            .from('.hero-floating-pill', { scale: 0.9, y: 10, autoAlpha: 0, stagger: 0.15 }, '-=0.4');
-
-          gsap.from('.mini-bar', {
-            height: 0,
-            duration: 0.8,
-            stagger: 0.12,
-            ease: 'power3.out',
-            delay: 0.4,
-          });
-
-          const interactiveCards = document.querySelectorAll(
-            '.home-pillar-card, .journey-step-box, .home-advisor-card, .mock-action-card'
-          );
-          interactiveCards.forEach((card) => {
-            card.addEventListener('mouseenter', () => {
-              gsap.to(card, { y: -4, duration: 0.2, ease: 'power1.out', overwrite: 'auto' });
-            });
-            card.addEventListener('mouseleave', () => {
-              gsap.to(card, { y: 0, duration: 0.2, ease: 'power1.out', overwrite: 'auto' });
-            });
-          });
-        }
-      );
+      media.add('(prefers-reduced-motion: no-preference)', () => {
+        // Explicit destinations remain correct if media setup runs again.
+        const timeline = gsap.timeline({ defaults: { ease: 'power2.out', duration: 0.5 } });
+        timeline.fromTo('.hero-badge', { y: 14, opacity: 0 }, { y: 0, opacity: 1, clearProps: 'transform,opacity' })
+          .fromTo('.hero-main-title', { y: 18, opacity: 0 }, { y: 0, opacity: 1, clearProps: 'transform,opacity' }, '-=0.25')
+          .fromTo('.hero-description-lead', { y: 14, opacity: 0 }, { y: 0, opacity: 1, clearProps: 'transform,opacity' }, '-=0.3')
+          .fromTo('.hero-student-frame', { scale: 0.95, opacity: 0 }, { scale: 1, opacity: 1, clearProps: 'transform,opacity' }, '-=0.3');
+      });
     }, containerRef);
-
-    return () => ctx.revert();
+    return () => { media.revert(); ctx.revert(); };
   }, []);
 
   return (
@@ -85,7 +50,7 @@ export function HomePage() {
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </Link>
           <Link to={paths.careers} className="btn-hero-secondary">
-            <span>Tra cứu 50+ Ngành nghề</span>
+            <span>Khám phá nghề nghiệp</span>
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
           </Link>
         </div>
@@ -97,8 +62,8 @@ export function HomePage() {
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
             </div>
             <div>
-              <div className="stat-badge-num">60 Câu hỏi</div>
-              <div className="stat-badge-desc">Chuẩn hóa tâm lý Holland</div>
+              <div className="stat-badge-num">6 nhóm RIASEC</div>
+              <div className="stat-badge-desc">Khám phá sở thích nghề</div>
             </div>
           </div>
 
@@ -107,8 +72,8 @@ export function HomePage() {
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
             </div>
             <div>
-              <div className="stat-badge-num">50+ Nghề nghiệp</div>
-              <div className="stat-badge-desc">Dữ liệu chuẩn O*NET</div>
+              <div className="stat-badge-num">Danh mục nghề</div>
+              <div className="stat-badge-desc">Xem trạng thái dữ liệu</div>
             </div>
           </div>
 
@@ -117,7 +82,7 @@ export function HomePage() {
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
             </div>
             <div>
-              <div className="stat-badge-num">100% Minh bạch</div>
+              <div className="stat-badge-num">Có giải thích</div>
               <div className="stat-badge-desc">Giải trình chi tiết theo RIASEC</div>
             </div>
           </div>
@@ -128,7 +93,7 @@ export function HomePage() {
       <div className="hero-student-stage">
         {/*  Floating Pill 1: TopCode Badge  */}
         <div className="hero-floating-pill pill-top-left">
-          <div className="pill-header-sub">Hồ sơ RIASEC của bạn</div>
+          <div className="pill-header-sub">Ví dụ minh họa RIASEC</div>
           <div className="pill-topcode-val">I • S • C</div>
           <div className="mini-topcode-bars">
             <div className="mini-bar" style={{ height: "18px", background: "#0D9488" }}></div>
@@ -150,7 +115,7 @@ export function HomePage() {
             </div>
             <div>
               <div className="pill-career-title">Kỹ sư Phần mềm &amp; AI</div>
-              <div className="pill-career-match">92% phù hợp · ĐH Bách Khoa</div>
+              <div className="pill-career-match">Minh họa một hướng khám phá</div>
             </div>
           </div>
         </div>
@@ -178,7 +143,7 @@ export function HomePage() {
             </div>
             <div className="journey-step-idx">BƯỚC 01</div>
             <div className="journey-step-header">Hiểu bản thân</div>
-            <p className="journey-step-copy">Trắc nghiệm Holland RIASEC 60 câu chuẩn hóa, định vị thiên hướng và thế mạnh tư duy bẩm sinh.</p>
+            <p className="journey-step-copy">Trắc nghiệm Holland RIASEC giúp bạn khám phá sở thích nghề nghiệp qua những lựa chọn Có/Không.</p>
           </div>
 
           {/*  Step 2  */}
@@ -188,7 +153,7 @@ export function HomePage() {
             </div>
             <div className="journey-step-idx">BƯỚC 02</div>
             <div className="journey-step-header">Chọn ngành học</div>
-            <p className="journey-step-copy">Gợi ý danh mục ngành đào tạo đại học và cơ hội nghề nghiệp tương thích với tổ hợp môn của bạn.</p>
+            <p className="journey-step-copy">Khám phá mô tả công việc và những kỹ năng cần tìm hiểu thêm.</p>
           </div>
 
           {/*  Step 3  */}
@@ -219,7 +184,7 @@ export function HomePage() {
       <div className="preview-layout-grid">
         {/*  Left: Copy & CTA  */}
         <div>
-          <div className="preview-lead-badge">Không gian làm việc</div>
+          <div className="preview-lead-badge">Không gian làm việc · Minh họa</div>
           <h2 className="preview-lead-title">
             Đồng hành cùng học sinh THPT trên từng bước chọn ngành
           </h2>
@@ -233,7 +198,8 @@ export function HomePage() {
         </div>
 
         {/*  Right: Modern macOS Style App Window  */}
-        <div className="product-mockup-window">
+        <div className="product-mockup-window" role="region" aria-label="Ví dụ bàn làm việc · Dữ liệu mẫu">
+          <p role="note">Dữ liệu mẫu minh họa giao diện, không phải kết quả của bạn.</p>
           {/*  Window Chrome Dots  */}
           <div className="mockup-window-controls">
             <span className="window-dot" style={{ background: "#EF4444" }}></span>
@@ -250,7 +216,7 @@ export function HomePage() {
             </div>
             <div className="mockup-motivator-pill">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#0D9488" strokeWidth="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 14"/></svg>
-              <span>Còn 142 ngày đến kỳ thi ĐGNL 2026</span>
+              <span>Minh họa giao diện · không phải dữ liệu cá nhân</span>
             </div>
           </div>
 
@@ -263,7 +229,7 @@ export function HomePage() {
                 </div>
                 <div>
                   <div className="mock-action-label">Trắc nghiệm Holland</div>
-                  <div className="mock-action-sub">Đã hoàn thành 60/60</div>
+                  <div className="mock-action-sub">Ví dụ bài trắc nghiệm</div>
                 </div>
               </div>
               <Link to={paths.assessmentResults} className="mock-pill-btn">Xem kết quả</Link>
@@ -276,7 +242,7 @@ export function HomePage() {
                 </div>
                 <div>
                   <div className="mock-action-label">Nghề nghiệp gợi ý</div>
-                  <div className="mock-action-sub">12 gợi ý phù hợp</div>
+                  <div className="mock-action-sub">Ví dụ danh sách nghề</div>
                 </div>
               </div>
               <Link to={paths.recommendations} className="mock-pill-btn">Khám phá ngay</Link>
@@ -372,7 +338,7 @@ export function HomePage() {
           </div>
           <h3 className="home-pillar-title">Phương pháp khoa học chuẩn hóa</h3>
           <p className="home-pillar-text">
-            Sử dụng lý thuyết mật mã Holland RIASEC 6 nhóm tính cách được chuẩn hóa riêng cho tâm sinh lý học sinh Việt Nam. Kết quả phản ánh chân thực thiên hướng và điểm mạnh bẩm sinh.
+            Sử dụng mô hình Holland RIASEC để tham khảo sở thích nghề nghiệp. Bộ câu hỏi của đồ án chưa được thẩm định tâm lý trên một mẫu đại diện học sinh Việt Nam.
           </p>
           <div className="home-pillar-footer">
             <span>Chuẩn hóa 6 nhóm tính cách</span>
@@ -387,7 +353,7 @@ export function HomePage() {
           </div>
           <h3 className="home-pillar-title">Trí tuệ nhân tạo cá nhân hóa</h3>
           <p className="home-pillar-text">
-            Mô hình AI đối chiếu đa chiều giữa sở thích, năng lực học tập và xu hướng thị trường việc làm 2026–2030, tạo bản đồ ngành học may đo cho riêng từng cá nhân thay vì áp đặt khuôn mẫu.
+            AI hỗ trợ trao đổi về hồ sơ và kết quả Holland. Xem dữ liệu có nguồn và giải thích trước khi cân nhắc một hướng nghề nghiệp.
           </p>
           <div className="home-pillar-footer">
             <span>Phân tích dữ liệu đa chiều</span>
