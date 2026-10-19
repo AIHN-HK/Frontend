@@ -1,0 +1,10 @@
+{
+  "kind": "T14 UI fixtures", "version": 1, "createdAt": "2026-10-14",
+  "context": { "attemptRef": "preview-attempt-01", "profileRevision": "preview-profile-v1", "hollandCode": "ISC" },
+  "items": [
+    { "recommendationId": "preview-rec-software", "careerId": "preview-software", "rank": 1, "mockMatchPercent": 92, "reason": "Hồ sơ mẫu ưu tiên tư duy nghiên cứu và cách làm việc có cấu trúc. Đây là lý do minh họa, không phải phân tích từ tài khoản đang đăng nhập.", "skills": [{ "label": "Tư duy logic", "state": "have" }, { "label": "Lập trình", "state": "have" }, { "label": "Kiến trúc hệ thống", "state": "develop" }] },
+    { "recommendationId": "preview-rec-analyst", "careerId": "preview-analyst", "rank": 2, "mockMatchPercent": 89, "reason": "Tình huống mẫu nhấn mạnh việc tìm hiểu quy luật và tổ chức thông tin. Điểm và kỹ năng dưới đây chỉ phục vụ bản xem trước.", "skills": [{ "label": "Tư duy số liệu", "state": "have" }, { "label": "SQL / BI Tools", "state": "develop" }] },
+    { "recommendationId": "preview-rec-security", "careerId": "preview-security", "rank": 3, "mockMatchPercent": 86, "reason": "Trong ví dụ này, tính kỷ luật và thói quen truy tìm nguyên nhân được dùng để minh họa phần giải thích gợi ý.", "skills": [{ "label": "Nguyên lý hệ thống", "state": "have" }, { "label": "Mạng máy tính", "state": "develop" }] },
+    { "recommendationId": "preview-rec-designer", "careerId": "preview-designer", "rank": 4, "mockMatchPercent": 84, "reason": "Ví dụ minh họa cách trình bày một hướng khám phá sáng tạo. Không có dữ liệu sở thích hay kỹ năng thật được sử dụng để chọn nghề này.", "skills": [{ "label": "Trình bày ý tưởng", "state": "have" }, { "label": "Thiết kế trực quan", "state": "develop" }] }
+  ]
+}

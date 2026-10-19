@@ -1,0 +1,194 @@
+/* Public shell styles ported from screens/home.html. */
+.public-shell { display: flex; flex-direction: column; min-height: 100dvh; }
+.public-shell .public-content { max-width: none; padding: 0; margin: 0; }
+.public-shell .skip-link { z-index: 110; }
+
+.public-shell {
+  background-color: #F8FAFC;
+  background-image: radial-gradient(#CBD5E1 0.75px, transparent 0.75px);
+  background-size: 24px 24px;
+  background-attachment: fixed;
+  color: #0F172A;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+.public-shell .home-header-wrap {
+  background-color: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid #E2E8F0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.public-shell .home-navbar {
+  max-width: 1280px;
+  margin: 0 auto;
+  height: 68px;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.public-shell .brand-logo-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.public-shell .brand-logo-icon {
+  width: 34px;
+  height: 34px;
+  background: #0D9488;
+  border-radius: 8px;
+  color: #FFFFFF;
+  display: grid;
+  place-items: center;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  box-shadow: 0 2px 6px rgba(13, 148, 136, 0.2);
+}
+
+.public-shell .brand-logo-text {
+  font-size: 18px;
+  font-weight: 800;
+  color: #0F172A;
+  letter-spacing: -0.4px;
+}
+
+.public-shell .home-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  list-style: none;
+}
+
+.public-shell .home-nav-item {
+  padding: 7px 14px;
+  border-radius: 8px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #475569;
+  text-decoration: none;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.public-shell .home-nav-item:hover {
+  color: #0F172A;
+  background-color: #F1F5F9;
+}
+
+.public-shell .home-nav-item.active {
+  background-color: #F0FDFA;
+  color: #0D9488;
+}
+
+.public-shell .home-header-tools {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.public-shell .home-search-pill {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.public-shell .home-search-pill .icon {
+  position: absolute;
+  left: 12px;
+  color: #64748B;
+  font-size: 14px;
+  pointer-events: none;
+}
+.public-shell .btn-pill-login {
+  height: 38px;
+  padding: 0 16px;
+  border-radius: 8px;
+  background-color: transparent;
+  border: 1px solid #E2E8F0;
+  color: #0F172A;
+  font-size: 13.5px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.public-shell .btn-pill-login:hover {
+  background-color: #FFFFFF;
+  border-color: #CBD5E1;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.public-shell .btn-pill-cta {
+  height: 38px;
+  padding: 0 18px;
+  border-radius: 8px;
+  background-color: #0D9488;
+  border: 1px solid #0D9488;
+  color: #FFFFFF;
+  font-size: 13.5px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 0 1px 2px 0 rgba(13, 148, 136, 0.2);
+  transition: all 0.15s ease;
+}
+
+.public-shell .btn-pill-cta:hover {
+  background-color: #0F766E;
+  border-color: #0F766E;
+  box-shadow: 0 4px 12px rgba(13, 148, 136, 0.25);
+}
+
+@media (max-width: 768px) {
+  .public-shell .home-nav-links, .public-shell .home-search-pill {
+    display: none;
+  }
+}
+
+/* Use the disclosure on narrow desktops and a catalog link until T12 search. */
+.public-shell .home-nav-links { margin: 0; padding: 0; gap: 2px; flex-shrink: 0; }
+.public-shell .home-nav-item { min-height: 44px; display: inline-flex; align-items: center; padding-inline: 8px; font-size: 13px; }
+.public-shell .brand-logo-group { min-height: 44px; flex-shrink: 0; }
+.public-shell .home-navbar > * { min-width: 0; }
+.public-shell .home-header-tools { margin-left: auto; flex-shrink: 0; white-space: nowrap; }
+.public-shell .home-search-pill { min-height: 44px; min-width: 160px; gap: 8px; border: 1px solid #DFEFF5; background: white; border-radius: var(--radius-full); padding: 0 14px; color: #869BA8; font-size: 12px; }
+.public-shell .home-search-pill .icon { position: static; }
+.public-shell .btn-pill-login, .public-shell .btn-pill-cta { min-height: 44px; }
+.public-shell .home-menu-trigger { display: none; min-width: 44px; min-height: 44px; align-items: center; justify-content: center; border: 1px solid #DFEFF5; border-radius: 12px; background: white; color: #028F94; }
+.public-shell .home-mobile-navigation { padding: 8px 20px 16px; border-top: 1px solid #DFEFF5; }
+.public-shell .home-mobile-navigation:not([hidden]) { display: flex; flex-direction: column; }
+.public-shell .home-mobile-navigation .home-nav-item { border-radius: 12px; }
+.public-shell .home-footer { border-top: 1px solid #DFEFF5; background: white; padding: 36px 28px; }
+.public-shell .home-footer-inner { max-width: 1320px; margin: auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+.public-shell .home-footer-brand { display: flex; gap: 10px; align-items: center; font-size: 14.5px; }
+.public-shell .home-footer-brand .brand-logo-icon { width: 28px; height: 28px; font-size: 12px; border-radius: 8px; flex-shrink: 0; }
+.public-shell .home-footer p { font-size: 12.5px; color: #869BA8; }
+.public-shell .home-footer a { min-height: 44px; min-width: 44px; display: inline-flex; align-items: center; color: #028F94; font-weight: 600; font-size: 13px; }
+@media (max-width: 1280px) {
+  .public-shell .home-nav-links, .public-shell .home-search-pill { display: none; }
+  .public-shell .home-menu-trigger { display: inline-flex; }
+}
+@media (min-width: 1281px) { .public-shell .home-mobile-navigation:not([hidden]) { display: none; } }
+@media (max-width: 540px) {
+  .public-shell .home-navbar { padding-inline: 16px; gap: 8px; }
+  .public-shell .home-header-tools { gap: 8px; }
+  .public-shell .home-header-tools .btn-pill-cta { display: none; }
+  .public-shell .btn-pill-login { padding-inline: 14px; }
+  .public-shell .home-footer { padding: 28px 20px; }
+}

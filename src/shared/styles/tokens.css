@@ -1,0 +1,167 @@
+/* Base tokens preserved from the supplied AIHN design. Theme choices belong to T17. */
+:root {
+  /* Surfaces & Backgrounds (Exact Match to Reference Sample: Soft Airy Sky-Teal) */
+  --bg-app: #F3FAFC;              /* Main Background: Soft sky-tinted friendly wash */
+  --bg-app-deep: #EAF4F8;         /* Background Deep: Layered contrast */
+  --bg-surface: #FFFFFF;          /* Primary Surface: Pure white soft cards */
+  --bg-surface-secondary: #F7FCFD;/* Secondary Surface: Tinted card backgrounds */
+  --bg-surface-subtle: #EFF8FA;   /* Subtle inner utility fills */
+  --bg-surface-hover: #E3F2F6;    /* Hover state */
+  --bg-surface-active: #D8ECF3;   /* Active pressed state */
+  
+  /* Semantic Atmospheric Surfaces */
+  --bg-surface-blue: #EBF5FA;     /* Soft Blue Surface: Logic & analytical insights */
+  --bg-surface-blue-border: #CCE5EF;
+  --bg-surface-teal: #E6F7F5;     /* Soft Teal Surface: AI guidance & fit reasoning */
+  --bg-surface-teal-border: #BFEBE4;
+  --bg-surface-warm: #FFF6EC;     /* Warm Accent Surface: Journey milestones */
+  --bg-surface-warm-border: #FDE7CC;
+  --bg-surface-indigo: #EFF1FF;   /* Soft Indigo: Research & deep thinking */
+
+  /* Pastel Accent Tokens (Matching Reference Journey Icons & Friendly Cards) */
+  --pastel-mint: #E6F7F5;
+  --pastel-mint-text: #028F94;
+  --pastel-mint-border: #C8EFEA;
+  --pastel-purple: #EEF0FF;
+  --pastel-purple-text: #4F46E5;
+  --pastel-purple-border: #D8DCFE;
+  --pastel-amber: #FFF4E6;
+  --pastel-amber-text: #D97706;
+  --pastel-amber-border: #FEE4C3;
+  --pastel-rose: #FFE8ED;
+  --pastel-rose-text: #E11D48;
+  --pastel-rose-border: #FED0DA;
+
+  /* Borders (Soft, Gentle Tones) */
+  --border-default: #DFEFF5;
+  --border-subtle: #ECF6F9;
+  --border-strong: #C8E3ED;
+  --border-focus: #028F94;
+
+  /* Typography / Text Colors (High Contrast Friendly Slate-Navy) */
+  --text-primary: #162736;        /* Friendly Deep Navy: Crisp, readable */
+  --text-secondary: #5A6E7C;      /* Soft Slate Neutral: Comfortable reading */
+  --text-muted: #869BA8;          /* Soft Slate: Secondary metadata & captions */
+  --text-inverse: #FFFFFF;
+
+  /* Brand / Primary (Vibrant Ocean Teal from Reference Image) */
+  --primary: #028F94;             /* Signature Ocean Teal */
+  --primary-hover: #027B7F;
+  --primary-active: #01696D;
+  --primary-subtle: #E6F7F8;
+  --primary-border: #9DD6DE;
+  --primary-content: #FFFFFF;
+
+  /* Supporting Colors */
+  --support-blue: #3B82F6;
+  --support-blue-deep: #2563EB;
+  --support-indigo: #4F46E5;
+  --support-indigo-subtle: #EEF2FF;
+
+  /* Semantic Feedback Roles */
+  --success: #059669;
+  --success-subtle: #ECFDF5;
+  --success-border: #A7F3D0;
+  --success-text: #065F46;
+
+  --warning: #D97706;
+  --warning-subtle: #FFFBEB;
+  --warning-border: #FDE68A;
+  --warning-text: #92400E;
+
+  --error: #DC2626;
+  --error-subtle: #FEF2F2;
+  --error-border: #FECACA;
+  --error-text: #991B1B;
+
+  --info: #2563EB;
+  --info-subtle: #EAF1FF;
+  --info-border: #BFDBFE;
+  --info-text: #1E40AF;
+
+  /* Holland RIASEC 6 Dimensions (Consistent Trait Identity) */
+  --riasec-r: #D97706;        /* Realistic - Thực tế (Amber) */
+  --riasec-r-subtle: #FEF3C7;
+  --riasec-r-border: #FDE68A;
+
+  --riasec-i: #4F46E5;        /* Investigative - Nghiên cứu (Indigo) */
+  --riasec-i-subtle: #EEF2FF;
+  --riasec-i-border: #C7D2FE;
+
+  --riasec-a: #E11D48;        /* Artistic - Nghệ thuật (Rose) */
+  --riasec-a-subtle: #FFE4E6;
+  --riasec-a-border: #FECDD3;
+
+  --riasec-s: #0D9488;        /* Social - Xã hội (Teal) */
+  --riasec-s-subtle: #EAF8F7;
+  --riasec-s-border: #A7E4DD;
+
+  --riasec-e: #7C3AED;        /* Enterprising - Quản lý (Violet) */
+  --riasec-e-subtle: #F5F3FF;
+  --riasec-e-border: #DDD6FE;
+
+  --riasec-c: #0284C7;        /* Conventional - Nghiệp vụ (Sky) */
+  --riasec-c-subtle: #E0F2FE;
+  --riasec-c-border: #BAE6FD;
+
+  /* Typography Scale */
+  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-family-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  --font-size-display: clamp(26px, 4vw, 32px);
+  --font-size-h1: clamp(20px, 3vw, 24px);
+  --font-size-h2: clamp(17px, 2.5vw, 20px);
+  --font-size-h3: 16px;
+  --font-size-body: 15px;
+  --font-size-body-sm: 13.5px;
+  --font-size-caption: 12px;
+
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.625;
+
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Spacing Scale */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+
+  /* Radius - Soft, Friendly, Modern Rounded Corners */
+  --radius-xs: 6px;
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 22px;
+  --radius-xl: 28px;
+  --radius-full: 9999px;
+  --radius-pill: 9999px;
+
+  /* Shadows (Soft floating, welcoming lift) */
+  --shadow-none: none;
+  --shadow-xs: 0 1px 3px 0 rgba(22, 39, 54, 0.03);
+  --shadow-sm: 0 4px 12px 0 rgba(22, 39, 54, 0.05);
+  --shadow-md: 0 8px 24px -2px rgba(22, 39, 54, 0.07);
+  --shadow-lg: 0 16px 36px -4px rgba(22, 39, 54, 0.09);
+  --shadow-soft: 0 12px 32px rgba(35, 85, 110, 0.06);
+
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Multi-Device Layout Constants */
+  --sidebar-width: 256px;
+  --sidebar-compact-width: 72px;
+  --header-height: 60px;
+  --bottom-nav-height: 64px;
+  --content-max-width: 1240px;
+  --touch-target-min: 44px;
+}

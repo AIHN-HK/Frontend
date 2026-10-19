@@ -1,0 +1,21 @@
+.signup-intro .brand-badge { margin-bottom: 12px; border-radius: 9px; }
+.signup-intro h1 { font-size: 22px; font-weight: 800; letter-spacing: -.4px; }
+.signup-intro p { font-size: 13.5px; margin-top: 4px; }
+.signup-form { display: flex; flex-direction: column; gap: 12px; }
+.signup-form fieldset { display: flex; flex-direction: column; gap: 12px; padding: 0; margin: 0; border: 0; min-width: 0; }
+.signup-fieldset-label { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.signup-form .field { gap: 6px; min-width: 0; }
+.signup-form .field > label { font-size: 13.5px; font-weight: 500; }
+.signup-form .field input { font-size: 14px; min-height: 44px; padding: 10px 14px; border-color: var(--border-default); min-width: 0; max-width: 100%; }
+.signup-form .field input[aria-invalid="true"] { border-color: var(--error); }
+.signup-form input[type="date"] { display: block; width: 100%; }
+.signup-password-input { position: relative; }
+.signup-form .field .signup-password-input input { padding-right: 60px; }
+.signup-password-input button { position: absolute; top: 0; right: 0; bottom: 0; min-width: 52px; min-height: 44px; padding: 0 8px; border: 0; border-radius: 0 10px 10px 0; background: transparent; color: var(--primary); font-size: 12px; }
+.signup-submit { width: 100%; min-height: 48px; border-radius: var(--radius-full); font-size: 15px; padding: 12px 24px; margin-top: 8px; box-shadow: 0 4px 12px rgb(2 143 148 / 12%); }
+.signup-error { padding: 12px; border: 1px solid var(--error-border); border-radius: var(--radius-sm); background: var(--error-subtle); color: var(--error-text); font-size: 13px; overflow-wrap: anywhere; }
+.signup-login { border-top: 1px solid var(--border-subtle); padding-top: 12px; text-align: center; font-size: 13px; }
+.signup-login a { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; color: var(--primary); font-weight: 600; }
+.signup-home { text-align: center; }
+.signup-home a { display: inline-flex; align-items: center; min-height: 44px; min-width: 44px; font-size: 12px; color: var(--text-secondary); }
+@media (max-width: 440px) { .signup-submit { padding: 12px; font-size: 14px; } }

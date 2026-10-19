@@ -1,0 +1,313 @@
+
+    /* ==========================================================================
+       AIHN Career Explorer - Modern Minimalist EdTech Design
+       Adhering to UI/UX Pro Max + Frontend Design: Clean SVGs, No Emojis, GSAP
+       ========================================================================== */
+
+    :root {
+      --color-brand-primary: #0D9488;
+      --color-brand-dark: #0F766E;
+      --color-brand-light: #F0FDFA;
+      --color-text-main: #0F172A;
+      --color-text-sub: #475569;
+      --color-text-muted: #64748B;
+      --color-border-clean: #E2E8F0;
+      --color-border-subtle: #F1F5F9;
+      --color-card-bg: #FFFFFF;
+      --color-page-bg: #F8FAFC;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-card: 0 1px 3px 0 rgba(15, 23, 42, 0.04), 0 8px 24px -4px rgba(15, 23, 42, 0.04);
+      --shadow-hover: 0 4px 6px -1px rgba(15, 23, 42, 0.06), 0 16px 32px -4px rgba(13, 148, 136, 0.08);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+    }
+
+    body {
+      background-color: var(--color-page-bg) !important;
+      color: var(--color-text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.5;
+    }
+
+    .explorer-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .filter-panel {
+      background-color: #FFFFFF;
+      border: 1px solid var(--color-border-clean);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      position: sticky;
+      top: calc(var(--header-height) + 20px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .filter-title {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--color-text-main);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .filter-checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--color-text-sub);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .filter-checkbox-label:hover {
+      color: var(--color-text-main);
+    }
+
+    .search-input-wrap {
+      position: relative;
+      width: 100%;
+    }
+
+    .search-input-wrap .search-svg {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--color-text-muted);
+      pointer-events: none;
+    }
+
+    .search-input-wrap input {
+      padding-left: 42px;
+      height: 44px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--color-border-clean);
+      background-color: #FFFFFF;
+      width: 100%;
+      font-size: 14px;
+      color: var(--color-text-main);
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .search-input-wrap input:focus {
+      border-color: var(--color-brand-primary);
+      box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.12);
+    }
+
+    /* Category Buttons Strip */
+    .cat-btn-strip {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      scrollbar-width: none;
+    }
+
+    .cat-btn {
+      padding: 7px 14px;
+      background: #FFFFFF;
+      border: 1px solid var(--color-border-clean);
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--color-text-sub);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+    }
+
+    .cat-btn:hover {
+      background: var(--color-border-subtle);
+      color: var(--color-text-main);
+    }
+
+    .cat-btn.active {
+      background: var(--color-brand-primary);
+      color: #FFFFFF;
+      border-color: var(--color-brand-primary);
+      box-shadow: 0 1px 3px rgba(13, 148, 136, 0.2);
+    }
+
+    /* Enhanced Career Cards */
+    .career-grid-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .career-card-refined {
+      background: #FFFFFF;
+      border: 1px solid var(--color-border-clean);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .career-card-refined:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hover);
+      border-color: #CBD5E1;
+    }
+
+    .career-header-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .career-title-group {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+
+    .career-icon-box {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-sm);
+      background: var(--color-brand-light);
+      color: var(--color-brand-primary);
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+    }
+
+    .career-name {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--color-text-main);
+    }
+
+    .career-meta-strip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12.5px;
+      color: var(--color-text-muted);
+      margin-top: 2px;
+      flex-wrap: wrap;
+    }
+
+    .career-code-badge {
+      font-family: ui-monospace, monospace;
+      font-weight: 600;
+      background: #F1F5F9;
+      color: #334155;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 11px;
+    }
+
+    .career-tags-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .tag-riasec {
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .tag-subject-combo {
+      font-size: 11.5px;
+      font-weight: 700;
+      background: #F0FDF4;
+      color: #15803D;
+      border: 1px solid #BBF7D0;
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+
+    .career-desc-body {
+      font-size: 14px;
+      color: var(--color-text-sub);
+      line-height: 1.6;
+    }
+
+    .career-admission-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      background: #F8FAFC;
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 12px 16px;
+      font-size: 12.5px;
+    }
+
+    .admission-item-label {
+      color: var(--color-text-muted);
+      font-weight: 500;
+    }
+
+    .admission-item-val {
+      color: var(--color-text-main);
+      font-weight: 700;
+      margin-top: 2px;
+    }
+
+    .career-footer-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding-top: 12px;
+      border-top: 1px solid var(--color-border-subtle);
+      flex-wrap: wrap;
+    }
+
+    .career-salary-tag {
+      font-size: 13px;
+      font-weight: 600;
+      color: #047857;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    @media (max-width: 900px) {
+      .explorer-layout {
+        grid-template-columns: 1fr;
+      }
+      .filter-panel {
+        display: none;
+      }
+      .filter-mobile-bar {
+        display: flex !important;
+      }
+      .career-admission-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+    }
+  
