@@ -31,11 +31,13 @@ test('stale preview is labeled, general sources are not personal evidence and no
   await expect(page.getByRole('button', { name: /Lưu|Đặt mục tiêu/ })).toHaveCount(0);
   expect(calls).toEqual([]);
 });
-test('runtime is owned/guarded unavailable and does not fetch preview data', async ({ page }) => {
+test('runtime uses an owned API read and never fetches preview data', async ({ page }) => {
   const fixture = await advisorFixture(page);
   await page.goto('/recommendations/71');
-  await expect(page.getByRole('heading', { name: 'Phân tích gợi ý chưa sẵn sàng' })).toBeVisible();
-  expect(fixture.requests.filter((r) => /recommendation/.test(r.path))).toEqual([]);
+  await expect(page.getByRole('heading', { name: 'Gợi ý nghề nghiệp có giải thích' })).toBeVisible();
+  await expect.poll(() => fixture.requests.filter(r => r.path === '/api/v1/career/recommendations/71').length).toBe(1);
+  expect(fixture.requests.filter(r => /recommendation/.test(r.path)).every(r => r.method === 'GET')).toBe(true);
+  expect(fixture.commands).toEqual([]);
 });
 for (const width of [320, 390, 768, 769, 1024, 1025, 1440])
   test(`recommendation detail fits ${width}px`, async ({ page }) => {

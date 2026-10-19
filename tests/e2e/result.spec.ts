@@ -49,7 +49,7 @@ test('special analysis case stays a case and does not masquerade as three person
 });
 test('real route links, unknown career/advisor features and no sample matching promises', async ({ page }) => {
   const calls = await resultFixture(page); await page.goto('/assessment/results/812'); await expect(page.getByText(topCode, { exact: true })).toBeVisible();
-  await expect(page.getByText('Gợi ý nghề và tư vấn AI từ kết quả chưa sẵn sàng.', { exact: true })).toBeVisible(); await expect(page.getByText(/92%|89%|85%|12 nghề|44\/50|60\/60|Hoàng Nam/)).toHaveCount(0);
+  await expect(page.getByText('Tạo gợi ý nghề có giải thích hoặc trao đổi với cố vấn từ kết quả đã lưu.', { exact: true })).toBeVisible(); await expect(page.getByText(/92%|89%|85%|12 nghề|44\/50|60\/60|Hoàng Nam/)).toHaveCount(0);
   await expect(page.getByRole('link', { name: 'Cập nhật hồ sơ cá nhân', exact: true })).toHaveAttribute('href', '/career-profile'); await expect(page.getByRole('link', { name: 'Làm bài trắc nghiệm', exact: true })).toHaveAttribute('href', '/assessment');
   expect(calls.filter(c => /chat|advisor|recommendation|career/.test(c.path))).toHaveLength(0);
   await page.getByRole('link', { name: 'Về Trang của tôi', exact: true }).click(); await page.getByRole('link', { name: 'Xem kết quả gần nhất', exact: true }).click(); await expect(page.getByText(topCode, { exact: true })).toBeVisible();

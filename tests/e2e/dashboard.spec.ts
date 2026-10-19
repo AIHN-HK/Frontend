@@ -63,7 +63,7 @@ for (const zone of ['profile', 'history'] as const) {
     options.profileError = false; options.historyError = false;
     await page.getByRole('button', { name: zone === 'profile' ? 'Thử lại hồ sơ' : 'Thử lại kết quả' }).click();
     await expect.poll(() => calls.filter(path => path.endsWith(endpoint)).length).toBeGreaterThan(before);
-    await expect(page.getByRole('alert')).toHaveCount(0);
+    await expect(page.locator('.dashboard-snapshot').getByRole('alert')).toHaveCount(0);
   });
 }
 
@@ -78,8 +78,8 @@ test('tabs support arrows/Home/End and Advisor never generates fake chat', async
   const tabs = page.getByRole('tab'); await expect(tabs).toHaveCount(3);
   await tabs.nth(0).focus(); await tabs.nth(0).press('ArrowRight');
   await expect(tabs.nth(1)).toBeFocused(); await expect(tabs.nth(1)).toHaveAttribute('aria-selected', 'true');
-  await expect(page.getByRole('tabpanel')).toContainText('Lộ trình mục tiêu chưa sẵn sàng');
-  await tabs.nth(1).press('End'); await expect(page.getByRole('tabpanel')).toContainText('Khoảng cách kỹ năng chưa sẵn sàng');
+  await expect(page.getByRole('tabpanel')).toContainText('Mở lộ trình để chọn mục tiêu');
+  await tabs.nth(1).press('End'); await expect(page.getByRole('tabpanel')).toContainText('Mở lộ trình để xem khoảng cách kỹ năng');
   await tabs.nth(2).press('Home'); await expect(tabs.nth(0)).toBeFocused();
   await expect(page.getByRole('textbox')).toHaveCount(0);
   await page.getByRole('link', { name: 'Mở trang Cố vấn' }).click(); await expect(page).toHaveURL(/\/advisor$/);

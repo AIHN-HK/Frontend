@@ -55,7 +55,7 @@ test('invalid type, empty or oversized file never uploads', async ({ page }) => 
   const calls = await fixture(page); await page.goto('/career-profile');
   for (const input of [{ name: 'script.svg', mimeType: 'image/svg+xml', buffer: Buffer.from('<svg/>') }, { ...file, buffer: Buffer.alloc(0) }, { ...file, buffer: Buffer.alloc(5 * 1024 * 1024 + 1) }]) {
     await choose(page).setInputFiles(input);
-    await expect(page.getByRole('alert')).toBeVisible(); await expect(upload(page)).toBeDisabled();
+    await expect(page.getByRole('region', { name: 'Ảnh đại diện', exact: true }).getByRole('alert')).toBeVisible(); await expect(upload(page)).toBeDisabled();
   }
   expect(calls.puts).toHaveLength(0);
 });
@@ -63,7 +63,7 @@ test('invalid type, empty or oversized file never uploads', async ({ page }) => 
 test('failed upload preserves selected preview and current saved image for explicit retry', async ({ page }) => {
   const options = { saved: true, putError: true }; const calls = await fixture(page, options); await page.goto('/career-profile');
   await choose(page).setInputFiles(file); await upload(page).click();
-  await expect(page.getByRole('alert')).toContainText('Không thể lưu ảnh');
+  await expect(page.getByRole('region', { name: 'Ảnh đại diện', exact: true }).getByRole('alert')).toContainText('Không thể lưu ảnh');
   await expect(preview(page)).toBeVisible(); await expect(page.getByRole('img', { name: 'Ảnh đại diện đã lưu', exact: true })).toBeVisible();
   expect(calls.puts).toHaveLength(1); options.putError = false;
   await upload(page).click(); await expect(page.getByText('Đã lưu ảnh đại diện.', { exact: true })).toBeVisible(); expect(calls.puts).toHaveLength(2);
@@ -72,7 +72,7 @@ test('failed upload preserves selected preview and current saved image for expli
 test('unknown save acknowledgement requires a server review before any explicit retry', async ({ page }) => {
   const options = { malformed: true }; const calls = await fixture(page, options); await page.goto('/career-profile');
   await choose(page).setInputFiles(file); await upload(page).click();
-  await expect(page.getByRole('alert')).toContainText('Chưa xác nhận ảnh');
+  await expect(page.getByRole('region', { name: 'Ảnh đại diện', exact: true }).getByRole('alert')).toContainText('Chưa xác nhận ảnh');
   await expect(preview(page)).toBeVisible(); await expect(upload(page)).toBeDisabled();
   await page.getByRole('button', { name: 'Kiểm tra ảnh đã lưu', exact: true }).click();
   await expect(page.getByRole('img', { name: 'Ảnh đại diện đã lưu', exact: true })).toBeVisible();
@@ -84,7 +84,7 @@ test('unknown save acknowledgement requires a server review before any explicit 
 
 test('initial image read failure is retried without losing the selected file or issuing a write', async ({ page }) => {
   const options = { readError: true }; const calls = await fixture(page, options); await page.goto('/career-profile');
-  await expect(page.getByRole('alert')).toContainText('Không tải được ảnh');
+  await expect(page.getByRole('region', { name: 'Ảnh đại diện', exact: true }).getByRole('alert')).toContainText('Không tải được ảnh');
   await choose(page).setInputFiles(file); await expect(upload(page)).toBeDisabled();
   options.readError = false; await page.getByRole('button', { name: 'Kiểm tra ảnh đã lưu', exact: true }).click();
   await expect(upload(page)).toBeEnabled(); await expect(preview(page)).toBeVisible(); expect(calls.puts).toHaveLength(0);

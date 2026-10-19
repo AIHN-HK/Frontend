@@ -16,12 +16,12 @@ test('guest runtime requires login; authenticated runtime has no fixture ranking
     if (/recommendations-preview|catalog-preview/.test(r.url())) fixtureReads.push(r.url());
   });
   await page.goto('/recommendations');
-  await expect(page.getByRole('heading', { name: 'Gợi ý nghề nghiệp cá nhân chưa sẵn sàng' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Gợi ý nghề nghiệp có giải thích' })).toBeVisible();
   await page.reload();
   await expect(page.getByRole('article')).toHaveCount(0);
   expect(fixtureReads).toEqual([]);
   expect(backend.commands).toEqual([]);
-  expect(backend.requests.filter((r) => /recommendation|target/.test(r.path))).toEqual([]);
+  expect(backend.requests.filter(r => /recommendation|target/.test(r.path)).every(r => r.method === 'GET')).toBe(true);
 });
 
 test('preview explicitly labels context, ranks, match scores and skills as mock data', async ({ page }) => {

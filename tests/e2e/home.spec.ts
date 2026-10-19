@@ -24,9 +24,9 @@ test('Home CTAs register the real URLs and enforce guest guards/unavailable cata
   await page.goto('/');
   await page.getByRole('link', { name: /^Khám phá nghề nghiệp/ }).click();
   await expect(page).toHaveURL(/\/careers$/);
-  await expect(page.getByRole('heading', { name: 'Trang đang được chuẩn bị' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Khám phá nghề nghiệp', exact: true })).toBeVisible();
   await page.reload();
-  await expect(page.getByRole('heading', { name: 'Trang đang được chuẩn bị' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Khám phá nghề nghiệp', exact: true })).toBeVisible();
   await page.goto('/');
   await page.getByRole('link', { name: 'Bắt đầu ngay →', exact: true }).click();
   await expect(page).toHaveURL(/\/signup$/);

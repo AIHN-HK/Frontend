@@ -12,10 +12,10 @@ test('roadmap template reloads selected sample without pretending to save progre
   await expect(page.getByRole('heading', { name: 'Lộ trình mẫu: Kỹ sư Dữ liệu' })).toBeVisible();
   await expect(page.getByText('Thử xây dựng báo cáo dữ liệu nhỏ.')).toBeVisible();
 });
-test('runtime roadmap is guarded and explicitly unavailable', async ({ page }) => {
+test('runtime roadmap is guarded and does not invent saved goals', async ({ page }) => {
   await advisorFixture(page);
   await page.goto('/roadmap');
-  await expect(page.getByRole('heading', { name: 'Lộ trình cá nhân chưa sẵn sàng' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Lộ trình và tiến độ cá nhân' })).toBeVisible();
 });
 for (const width of [320, 390, 768, 769, 1024, 1025, 1440])
   test(`roadmap fits ${width}`, async ({ page }) => {

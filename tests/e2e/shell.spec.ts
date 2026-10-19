@@ -1,8 +1,8 @@
 import { expect, test } from '@playwright/test';
 
-test('unfinished catalog and direct unknown URLs give an honest unavailable/404 state', async ({ page }) => {
+test('catalog route and direct unknown URLs keep distinct states', async ({ page }) => {
   await page.goto('/careers');
-  await expect(page.getByRole('heading', { name: 'Trang đang được chuẩn bị' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Khám phá nghề nghiệp', exact: true })).toBeVisible();
   await page.goto('/khong-ton-tai/deep-link');
   await page.reload();
   await expect(page.getByRole('heading', { name: 'Không tìm thấy trang' })).toBeVisible();

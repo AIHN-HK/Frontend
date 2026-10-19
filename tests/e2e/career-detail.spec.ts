@@ -12,7 +12,7 @@ test('real detail never fetches preview records or claims a verified career', as
     if (/catalog-preview|\/api\/.*career/.test(r.url())) requests.push(r.url());
   });
   await page.goto('/careers/preview-software');
-  await expect(page.getByText('Hồ sơ nghề chưa có nguồn dữ liệu được xác nhận.')).toBeVisible();
+  await expect(page.getByText('Mã nghề không hợp lệ.')).toBeVisible();
   await page.reload();
   await expect(page.getByRole('heading', { name: 'Nhiệm vụ & Trách nhiệm điển hình' })).toHaveCount(0);
   expect(requests).toEqual([]);

@@ -70,8 +70,8 @@ test('blank optional values are sent as null; career fields are unavailable and 
   await save(page).click(); await expect(page.getByText('Đã lưu cập nhật hồ sơ.', { exact: true })).toBeVisible();
   expect(calls.find(call => call.method === 'PATCH')?.body).toEqual({ fullname: 'Học sinh A', phone: '0901234567', address: null, gender: null, class: null });
   await expect(page.getByText('Trường THPT, tổ hợp môn và nguyện vọng đại học chưa sẵn sàng.')).toBeVisible();
-  await expect(page.getByRole('heading', { name: '2. Kỹ năng cá nhân' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: '3. Sở thích công việc & Mục tiêu tương lai' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Kỹ năng, sở thích và nghề mục tiêu' })).toBeVisible();
+  await expect(page.getByRole('region', { name: 'Hồ sơ kỹ năng và mục tiêu' })).toBeVisible();
   await expect(page.getByText(/85%|Đã tự động lưu|Python cơ bản|áp dụng ngay vào thuật toán/)).toHaveCount(0);
   expect(calls.filter(call => call.method === 'PATCH')).toHaveLength(1);
 });
@@ -90,7 +90,7 @@ for (const failure of ['503', '400', 'network', 'malformed'] as const) {
     const options: Options = { patchStatus: failure === '503' ? 503 : failure === '400' ? 400 : 200, patchNetwork: failure === 'network', malformed: failure === 'malformed' };
     const calls = await fixture(page, options); await page.goto('/career-profile');
     await page.getByLabel('Họ và tên', { exact: true }).fill('Draft chưa xác nhận'); await save(page).click();
-    await expect(page.getByRole('alert')).toBeVisible(); await expect(page.getByLabel('Họ và tên', { exact: true })).toHaveValue('Draft chưa xác nhận');
+    await expect(page.locator('form.career-profile-card').getByRole('alert')).toBeVisible(); await expect(page.getByLabel('Họ và tên', { exact: true })).toHaveValue('Draft chưa xác nhận');
     expect(calls.filter(call => call.method === 'PATCH')).toHaveLength(1);
     await page.getByRole('button', { name: 'Kiểm tra dữ liệu đã lưu' }).click();
     await expect(page.getByRole('region', { name: 'Dữ liệu đã lưu trên máy chủ' })).toContainText('Học sinh A');
@@ -106,7 +106,7 @@ test('real transport timeout preserves the draft and requires explicit review or
   const options = { patchDelay: new Promise<void>(resolve => { release = resolve; }) };
   const calls = await fixture(page, options); await page.goto('/career-profile');
   await page.getByLabel('Họ và tên', { exact: true }).fill('Draft timeout'); await save(page).click();
-  await expect(page.getByRole('alert')).toContainText('Chưa xác nhận', { timeout: 15_000 });
+  await expect(page.locator('form.career-profile-card').getByRole('alert')).toContainText('Chưa xác nhận', { timeout: 15_000 });
   await expect(page.getByLabel('Họ và tên', { exact: true })).toHaveValue('Draft timeout'); expect(calls.filter(call => call.method === 'PATCH')).toHaveLength(1);
   release();
 });
@@ -120,7 +120,7 @@ test('rapid submit is single-flight; navigation preserves uncertain draft and ig
   await page.getByRole('link', { name: 'Về Trang của tôi' }).click(); await expect(page).toHaveURL(/\/dashboard$/);
   release(); await page.getByRole('link', { name: 'Xem hồ sơ', exact: true }).click();
   await expect(page.getByLabel('Họ và tên', { exact: true })).toHaveValue('Draft sau navigation');
-  await expect(page.getByRole('alert')).toContainText('chưa được xác nhận');
+  await expect(page.locator('form.career-profile-card').getByRole('alert')).toContainText('chưa được xác nhận');
   await expect(page.getByText('Đã lưu cập nhật hồ sơ.', { exact: true })).toHaveCount(0);
 });
 
@@ -146,7 +146,7 @@ test('background read failure while reviewing keeps the form and draft available
   const options: Options = {}; await fixture(page, options); await page.goto('/career-profile');
   await page.getByLabel('Họ và tên', { exact: true }).fill('Draft trong lúc GET lỗi');
   options.getError = true; await page.getByRole('button', { name: 'Kiểm tra dữ liệu đã lưu' }).click();
-  await expect(page.getByRole('alert')).toContainText('Không tải được dữ liệu đã lưu');
+  await expect(page.locator('form.career-profile-card').getByRole('alert')).toContainText('Không tải được dữ liệu đã lưu');
   await expect(page.getByLabel('Họ và tên', { exact: true })).toHaveValue('Draft trong lúc GET lỗi'); await expect(save(page)).toBeEnabled();
   options.getError = false; await page.getByRole('button', { name: 'Kiểm tra dữ liệu đã lưu' }).click(); await expect(page.getByRole('region', { name: 'Dữ liệu đã lưu trên máy chủ' })).toBeVisible();
 });

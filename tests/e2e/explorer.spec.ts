@@ -3,14 +3,16 @@ import { expect, test } from '@playwright/test';
 const preview = '/preview/careers';
 const fixture = '**/assets/catalog-preview-*.json';
 
-test('runtime catalog stays unavailable and never loads preview data', async ({ page }) => {
+test('runtime catalog failure never falls back to preview data', async ({ page }) => {
   const requests: string[] = [];
   page.on('request', r => { if (/catalog-preview|\/api\/.*career/.test(r.url())) requests.push(r.url()); });
+  await page.route('**/api/v1/careers**', route => route.fulfill({ status: 503, json: { message: 'fixture unavailable' } }));
   await page.goto('/careers?q=phan+mem');
-  await expect(page.getByText('Danh mục nghề chưa có nguồn dữ liệu được xác nhận.')).toBeVisible();
+  await expect(page.getByText('Không tải được dữ liệu nghề. Hãy kiểm tra kết nối và thử lại.')).toBeVisible();
   await page.reload();
   await expect(page.getByRole('article')).toHaveCount(0);
-  expect(requests).toEqual([]);
+  expect(requests.some(url => url.includes('catalog-preview'))).toBe(false);
+  expect(requests.every(url => url.includes('/api/v1/careers'))).toBe(true);
 });
 
 test('preview labels the source, derives totals and links the exact fixture ID', async ({ page }) => {
