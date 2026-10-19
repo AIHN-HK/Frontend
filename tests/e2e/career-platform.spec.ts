@@ -53,6 +53,7 @@ test("profile saves explicit zero ratings and target with revision, then generat
       exact: true,
     }),
   ).toBeVisible();
+  await expect(page.getByRole('link',{name:'Nguồn nghề của bản gợi ý',exact:true})).toHaveAttribute('href','https://www.onetonline.org/link/summary/15-1252.00');
   expect(
     fixture.calls.filter(
       (c) => c.path === "/api/v1/career/recommendations" && c.method === "POST",

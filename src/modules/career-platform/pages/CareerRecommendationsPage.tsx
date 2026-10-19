@@ -163,6 +163,7 @@ function ExplainedRun({
             <Link to={`/careers/${item.careerId}`}>
               Xem công việc và nguồn nghề
             </Link>
+            <a href={item.sourceUrl} target="_blank" rel="noreferrer">Nguồn nghề của bản gợi ý</a>
             <Link to={`${paths.careerProfile}?target=${item.careerId}`}>
               Chọn mục tiêu này
             </Link>
