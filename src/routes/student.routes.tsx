@@ -71,8 +71,8 @@ export const studentRoutes: RouteObject[] = [
           {
             path: paths.roadmap,
             lazy: async () => ({
-              Component: (await import('@/modules/roadmap/pages/RoadmapUnavailablePage'))
-                .RoadmapUnavailablePage,
+              Component: (await import('@/modules/career-platform/pages/CareerRoadmapPage'))
+                .CareerRoadmapPage,
             }),
           },
           {

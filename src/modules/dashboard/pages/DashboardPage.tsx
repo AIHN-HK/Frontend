@@ -1,3 +1,4 @@
+import { CareerAnalyticsPanel } from '@/modules/career-platform';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router';
 import gsap from 'gsap';
@@ -99,6 +100,7 @@ export function DashboardPage() {
         <Link className="btn btn-secondary" to={paths.careerProfile}>Cập nhật hồ sơ</Link>
       </section>
 
+      <CareerAnalyticsPanel />
       <div className="dashboard-quick-strip">
         <section className="dashboard-quick">
           <div className="dashboard-quick-heading">
@@ -129,7 +131,7 @@ export function DashboardPage() {
             </span>
             <div>
               <h2>Nghề nghiệp gợi ý</h2>
-              <p>Chưa có dữ liệu gợi ý</p>
+              <p>Mở các bản gợi ý đã lưu</p>
             </div>
           </div>
           <Link className="dashboard-pill" to={paths.recommendations}>
@@ -143,7 +145,7 @@ export function DashboardPage() {
             </span>
             <div>
               <h2>Lộ trình phát triển</h2>
-              <p>Chưa có lộ trình cá nhân</p>
+              <p>Theo dõi các mục tiêu đã lưu</p>
             </div>
           </div>
           <Link className="dashboard-pill" to={paths.roadmap}>
@@ -281,13 +283,13 @@ export function DashboardPage() {
               tabIndex={0}
             >
               <Icon name={tab === 0 ? 'check' : tab === 1 ? 'roadmap' : 'user'} />
-              <h3>{tabs[tab]} chưa sẵn sàng</h3>
+              <h3>{tabs[tab]}</h3>
               <p>
                 {tab === 0
-                  ? 'Chưa có dữ liệu nghề nghiệp gợi ý cho tài khoản của bạn.'
+                  ? 'Xem bản gợi ý có giải thích từ kết quả Holland và hồ sơ.'
                   : tab === 1
-                    ? 'Chưa có dữ liệu lộ trình mục tiêu cho tài khoản của bạn.'
-                    : 'Chưa có dữ liệu kỹ năng để so sánh.'}
+                    ? 'Mở lộ trình để chọn mục tiêu và theo dõi nhiệm vụ.'
+                    : 'Mở lộ trình để xem khoảng cách kỹ năng của nghề mục tiêu.'}
               </p>
             </div>
           </section>

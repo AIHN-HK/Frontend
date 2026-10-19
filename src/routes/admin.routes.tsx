@@ -26,7 +26,7 @@ export const adminRoutes: RouteObject[] = [
           {
             path: 'careers',
             lazy: async () => ({
-              Component: (await import('@/modules/admin/careers/pages/CareersPage')).CareersPage,
+              Component: (await import('@/modules/career-platform/pages/AdminCareerDataPage')).AdminCareerDataPage,
             }),
           },
           {
