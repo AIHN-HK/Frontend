@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import gsap from 'gsap';
 import { useAppearance, appearanceClass } from '@/shared/appearance/appearance';
 import '@/shared/appearance/appearance.css';
 import { Link, useNavigate } from 'react-router';
@@ -30,6 +31,7 @@ const groups: Record<RiasecCode, string> = {
   C: 'Nghiệp vụ',
 };
 const dimensions = { PERSONA: 'Tính cách', ABILITY: 'Năng lực', INTEREST: 'Sở thích' };
+const riasecOrder: RiasecCode[] = ['R', 'I', 'A', 'S', 'E', 'C'];
 
 function Arrow({ back = false }: { back?: boolean }) {
   return (
@@ -88,7 +90,10 @@ function HollandTest({ scope }: { scope: AssessmentScope }) {
   }, []);
   const index = draft?.index;
   useEffect(() => {
-    if (index !== undefined) heading.current?.focus({ preventScroll: true });
+    if (index !== undefined) {
+      heading.current?.focus({ preventScroll: true });
+      gsap.fromTo('.question-card', { y: 10, opacity: 0.8 }, { y: 0, opacity: 1, duration: 0.25, ease: 'power2.out' });
+    }
   }, [index]);
   const signal = () => controller.current?.signal;
   const current = (active: AbortSignal) => isAssessmentScopeCurrent(scope, active);
@@ -244,32 +249,34 @@ function HollandTest({ scope }: { scope: AssessmentScope }) {
     startCheckpoint.kind === 'incompatible' ||
     (startCheckpoint.kind === 'ready' && startCheckpoint.attempt === null);
   const locked = busy !== null;
+  const currentTypeIdx = question ? riasecOrder.indexOf(question.type) : -1;
 
   return (
     <div className="holland-page">
       <a className="skip-link" href="#main-content">
         Đến câu hỏi
       </a>
-      <header className="holland-header">
+
+      {/* Minimal Top Header for Test Focus (OpenDesign sync) */}
+      <header className="test-top-header">
         <Link
           to={paths.dashboard}
           onClick={(event) => {
             if (locked) event.preventDefault();
           }}
           aria-disabled={locked}
+          style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#475569', textDecoration: 'none', fontSize: '13.5px', fontWeight: 600 }}
         >
           <Arrow back />
-          Tạm dừng &amp; Về Tổng quan
+          <span>Tạm dừng &amp; Về Bàn làm việc</span>
         </Link>
-        <span role="status">
-          {draft
-            ? storageOk
-              ? '● Đã lưu trên thiết bị'
-              : 'Chưa lưu trên thiết bị'
-            : 'Tiến độ lưu trên thiết bị này'}
-        </span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: storageOk ? '#047857' : '#D97706', fontWeight: 600 }}>
+          <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: storageOk ? '#10B981' : '#F59E0B', display: 'inline-block' }}></span>
+          <span>{draft ? (storageOk ? 'Đang tự động lưu tiến độ' : 'Chưa lưu trên thiết bị') : 'Tiến độ lưu trên thiết bị này'}</span>
+        </div>
       </header>
-      <main id="main-content" className="holland-container" tabIndex={-1}>
+
+      <main id="main-content" className="test-container" tabIndex={-1}>
         {!storageOk && (
           <p className="holland-notice" role="note">
             Không truy cập được bộ nhớ thiết bị. Lựa chọn chỉ được giữ trong màn này; tải lại hoặc rời trang
@@ -335,16 +342,16 @@ function HollandTest({ scope }: { scope: AssessmentScope }) {
             }
           />
         ) : !draft ? (
-          <section className="holland-question holland-intro">
-            <span className="holland-tag">Khám phá sở thích nghề nghiệp</span>
-            <h1>Trắc nghiệm Holland</h1>
-            <p>
-              {questions.data.length} câu hỏi giúp bạn khám phá sáu nhóm sở thích RIASEC. Chọn Có hoặc Không
-              theo cảm nhận của bạn.
+          <section className="holland-question holland-intro" style={{ background: '#FFFFFF', borderRadius: '16px', padding: '36px', boxShadow: '0 4px 20px rgba(0,0,0,0.04)' }}>
+            <span className="holland-tag" style={{ background: '#F0FDFA', color: '#0D9488', border: '1px solid #99F6E4' }}>
+              Khám phá sở thích nghề nghiệp
+            </span>
+            <h1 style={{ fontSize: '26px', fontWeight: 800, color: '#0F172A', margin: '8px 0' }}>Trắc nghiệm Sở thích Nghề nghiệp Holland (RIASEC)</h1>
+            <p style={{ fontSize: '14.5px', color: '#475569', lineHeight: 1.6 }}>
+              {questions.data.length} câu hỏi chuẩn hóa giúp bạn khám phá 6 nhóm sở thích nghề nghiệp RIASEC. Chọn Có hoặc Không theo cảm nhận thực tế của bạn.
             </p>
-            <p>
-              Hãy trả lời đủ các câu và chọn Có cho ít nhất một hoạt động phù hợp. Bạn có thể tạm dừng và tiếp
-              tục trên cùng thiết bị, với cùng tài khoản.
+            <p style={{ fontSize: '14px', color: '#64748B' }}>
+              Hãy trả lời đủ các câu và chọn Có cho ít nhất một hoạt động phù hợp. Bạn có thể tạm dừng và tiếp tục trên cùng thiết bị bất kỳ lúc nào.
             </p>
             {blockedStart ? (
               <>
@@ -361,65 +368,96 @@ function HollandTest({ scope }: { scope: AssessmentScope }) {
                 onClick={() => {
                   void begin();
                 }}
+                style={{ marginTop: '12px' }}
               >
                 {busy === 'start'
                   ? 'Đang bắt đầu…'
                   : startCheckpoint.kind === 'ready'
                     ? `Tiếp tục lần làm #${startCheckpoint.attempt?.id}`
-                    : 'Bắt đầu bài trắc nghiệm'}
+                    : 'Bắt đầu bài trắc nghiệm →'}
               </Button>
             )}
           </section>
         ) : (
           question && (
             <>
-              <section className="holland-progress">
-                <div className="holland-progress-label">
-                  <span>
-                    Nhóm {groups[question.type]} ·{' '}
-                    <strong>
-                      Câu {draft.index + 1}/{draft.totalQuestions}
-                    </strong>
+              {/* 6 RIASEC Stepped Indicator Rail */}
+              <div className="riasec-steps-rail">
+                {riasecOrder.map((code, idx) => {
+                  const isCompleted = idx < currentTypeIdx;
+                  const isActive = idx === currentTypeIdx;
+                  return (
+                    <div
+                      key={code}
+                      className={`riasec-step-item ${isCompleted ? 'completed' : isActive ? 'active' : ''}`}
+                    >
+                      {code} · {groups[code]} ({idx * 10 + 1}–{(idx + 1) * 10})
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Progress Info Card */}
+              <div className="test-header-card">
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '13.5px' }}>
+                  <span style={{ fontWeight: 700, color: 'var(--color-text-main, #0F172A)' }}>
+                    Nhóm {question.type}: Hoạt động {groups[question.type]} {question.dimension && `· ${dimensions[question.dimension]}`} · Câu {draft.index + 1}/{draft.totalQuestions}
                   </span>
-                  <strong>{Math.round((completed / draft.totalQuestions) * 100)}% hoàn thành</strong>
+                  <span style={{ color: 'var(--color-brand-primary, #0D9488)', fontWeight: 800 }}>
+                    {Math.round((completed / draft.totalQuestions) * 100)}% Hoàn thành
+                  </span>
                 </div>
                 <div
-                  className="holland-progress-track"
+                  className="progress-bar-wrap"
                   role="progressbar"
                   aria-label="Số câu đã trả lời"
                   aria-valuemin={0}
                   aria-valuemax={draft.totalQuestions}
                   aria-valuenow={completed}
                 >
-                  <span style={{ width: `${(completed / draft.totalQuestions) * 100}%` }} />
+                  <div className="progress-bar-fill" style={{ width: `${(completed / draft.totalQuestions) * 100}%` }}></div>
                 </div>
-                <p>Hãy chọn theo cảm giác tự nhiên nhất của bạn, không có câu trả lời đúng hay sai.</p>
-              </section>
-              <section className="holland-question" aria-busy={locked}>
-                <span
-                  className="holland-tag"
-                  style={{
-                    color: `var(--riasec-${question.type.toLowerCase()})`,
-                    background: `var(--riasec-${question.type.toLowerCase()}-subtle)`,
-                    borderColor: `var(--riasec-${question.type.toLowerCase()}-border)`,
-                  }}
-                >
-                  <span aria-hidden="true">●</span> Nhóm {question.type} — {groups[question.type]}
-                  {question.dimension && ` · ${dimensions[question.dimension]}`}
-                </span>
-                <h1 className="holland-question-text" tabIndex={-1} ref={heading}>
+                <p style={{ fontSize: '12.5px', color: 'var(--color-text-muted, #64748B)', margin: 0 }}>
+                  Hãy chọn theo cảm giác tự nhiên nhất của bạn, không có câu trả lời đúng hay sai.
+                </p>
+              </div>
+
+              {/* Distraction-Free Question Card */}
+              <section className="question-card" aria-busy={locked}>
+                <div className="question-category-tag">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/></svg>
+                  <span>NHÓM {question.type} · {groups[question.type].toUpperCase()}</span>
+                </div>
+
+                <h1 className="question-text" tabIndex={-1} ref={heading} style={{ margin: 0 }}>
                   {question.content}
                 </h1>
+
                 <fieldset className="holland-answers" disabled={locked}>
-                  <legend>Hoạt động này có phù hợp với sở thích của bạn không?</legend>
-                  <div className="holland-choice-grid">
+                  <legend style={{ fontSize: '13px', color: '#64748B', marginBottom: '12px', fontWeight: 600 }}>
+                    Hoạt động này có phù hợp với sở thích của bạn không?
+                  </legend>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '14px' }}>
                     {[
-                      { value: true, text: 'Có — Tôi thích', icon: '✓' },
-                      { value: false, text: 'Không — Tôi không thích', icon: '−' },
+                      { value: true, text: 'Có — Tôi thích hoạt động này', icon: '✓', sub: 'Phù hợp với sở thích và mong muốn của bạn' },
+                      { value: false, text: 'Không — Tôi không hứng thú', icon: '−', sub: 'Không muốn làm hoặc không cảm thấy phù hợp' },
                     ].map((option) => (
                       <label
                         key={String(option.value)}
                         className={`holland-choice${selected === option.value ? ' selected' : ''}`}
+                        style={{
+                          padding: '18px 20px',
+                          borderRadius: '12px',
+                          border: selected === option.value ? '2px solid #0D9488' : '1.5px solid #E2E8F0',
+                          background: selected === option.value ? '#F0FDFA' : '#FFFFFF',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'flex-start',
+                          gap: '6px',
+                          cursor: 'pointer',
+                          transition: 'all 0.15s ease',
+                          boxShadow: selected === option.value ? '0 0 0 3px rgba(13, 148, 136, 0.15)' : 'none'
+                        }}
                       >
                         <input
                           type="radio"
@@ -433,14 +471,29 @@ function HollandTest({ scope }: { scope: AssessmentScope }) {
                             setMessage('');
                           }}
                         />
-                        <strong aria-hidden="true">{option.icon}</strong>
-                        <span>{option.text}</span>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <span style={{
+                            width: '24px',
+                            height: '24px',
+                            borderRadius: '50%',
+                            background: selected === option.value ? '#0D9488' : '#F1F5F9',
+                            color: selected === option.value ? '#FFFFFF' : '#64748B',
+                            display: 'grid',
+                            placeItems: 'center',
+                            fontWeight: 800,
+                            fontSize: '12px'
+                          }}>{option.icon}</span>
+                          <strong style={{ fontSize: '14.5px', color: selected === option.value ? '#0F766E' : '#0F172A' }}>{option.text}</strong>
+                        </div>
+                        <span style={{ fontSize: '12px', color: selected === option.value ? '#0D9488' : '#64748B', paddingLeft: '32px' }}>{option.sub}</span>
                       </label>
                     ))}
                   </div>
                 </fieldset>
               </section>
-              <nav className="holland-nav" aria-label="Chuyển câu hỏi">
+
+              {/* Navigation Controls */}
+              <nav className="test-nav-row" aria-label="Chuyển câu hỏi">
                 <Button
                   aria-label="Câu trước đó"
                   variant="secondary"
@@ -476,10 +529,11 @@ function HollandTest({ scope }: { scope: AssessmentScope }) {
                       ? 'Đang nộp…'
                       : draft.needsReview
                         ? 'Nộp lại sau khi kiểm tra'
-                        : 'Nộp bài'}
+                        : 'Nộp bài trắc nghiệm →'}
                   </Button>
                 )}
               </nav>
+
               {draft.needsReview && (
                 <section className="holland-review">
                   <p>

@@ -1,3 +1,5 @@
+import { useEffect, useRef } from 'react';
+import gsap from 'gsap';
 import { Link } from 'react-router';
 import milestone from '@/assets/profile/profile-milestone.svg';
 import advisor from '@/assets/dashboard/aihn-advisor-mascot.svg';
@@ -12,8 +14,22 @@ import './profile.css';
 
 export function CareerProfilePage(): React.JSX.Element {
   const query = useProfileQuery(), current = useSession();
-  return <div className="career-profile-page">
-    <section className="career-profile-header"><div><span className="career-profile-header-pill">Thấu hiểu bản thân</span><h1>Hồ sơ của bạn</h1><p>Cập nhật thông tin cá nhân để AIHN hiểu bạn rõ hơn trên hành trình định hướng tương lai.</p></div><div className="career-profile-milestone"><img src={milestone} alt="" width="48" height="48" /><div><small>Hồ sơ cá nhân</small><strong>Lưu chủ động</strong></div></div></section>
+  const containerRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      const mm = gsap.matchMedia();
+      mm.add({ noPreference: "(prefers-reduced-motion: no-preference)" }, () => {
+        const tl = gsap.timeline({ defaults: { ease: "power2.out", duration: 0.5 } });
+        tl.from(".career-profile-header", { y: 12, autoAlpha: 0 })
+          .from(".career-profile-card", { y: 18, autoAlpha: 0, stagger: 0.1 }, "-=0.2")
+          .from(".career-profile-advice", { y: 14, autoAlpha: 0 }, "-=0.15");
+      });
+    }, containerRef);
+    return () => ctx.revert();
+  }, []);
+
+  return <div className="career-profile-page" ref={containerRef}>
+    <section className="career-profile-header"><div><span className="career-profile-header-pill" style={{ background: "#F0FDFA", color: "#0D9488", border: "1px solid #99F6E4", fontWeight: 700, display: "inline-flex", alignItems: "center", gap: "6px" }}><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>HỒ SƠ HỌC SINH THPT CHUẨN HÓA</span></span><h1 style={{ marginTop: "8px" }}>Hồ sơ Năng lực &amp; Mục tiêu Cá nhân</h1><p>Dữ liệu đối soát chuẩn O*NET &amp; Bộ GD&amp;ĐT, giúp AIHN kết nối kết quả bài trắc nghiệm Holland với năng lực học tập thực tế để đề xuất ngành học chính xác.</p></div><div className="career-profile-milestone"><img src={milestone} alt="" width="48" height="48" /><div><small>Hồ sơ cá nhân</small><strong>Lưu chủ động</strong></div></div></section>
     <Link className="career-profile-back" to={paths.dashboard}>← Về Trang của tôi</Link>
     {current.user && <AvatarEditor key={`avatar:${current.user.id}:${current.revision}`} scope={{ ownerId: current.user.id, revision: current.revision }} />}
     {query.data && current.user ? <ProfileEditor key={`${current.user.id}:${current.revision}`} profile={query.data} query={query} scope={{ ownerId: current.user.id, revision: current.revision }} /> : query.isError ? <AsyncState state="error" title="Không tải được hồ sơ." description="Vui lòng thử lại trước khi chỉnh sửa." action={<Button variant="secondary" onClick={() => { void query.refetch(); }}>Thử lại hồ sơ</Button>} /> : <AsyncState state="loading" title="Đang tải hồ sơ…" />}

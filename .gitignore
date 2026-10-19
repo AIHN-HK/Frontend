@@ -60,11 +60,7 @@ _vscode/
 /.serena/
 
 # Local migration/reference material (kept outside the application source)
-# Keep the legacy archive out of the index, except its repository guidance.
-/legacy/*
-!/legacy/expo/
-/legacy/expo/*
-!/legacy/expo/AGENTS.md
+/legacy/
 /design-reference/
 /open-design/
 

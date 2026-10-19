@@ -261,3 +261,150 @@
 .student-theme.background-flat .holland-page {
   background-image: none;
 }
+
+/* ==========================================================================
+   Updated Reference Holland Test Styles (Oct 18 Sync)
+   ========================================================================== */
+
+:root {
+  --color-brand-primary: #0D9488;
+  --color-brand-dark: #0F766E;
+  --color-brand-light: #F0FDFA;
+  --color-border-clean: #E2E8F0;
+  --color-border-subtle: #F1F5F9;
+}
+
+/* Minimal Distraction-Free Header */
+.test-top-header {
+  height: 60px;
+  background-color: #FFFFFF;
+  border-bottom: 1px solid var(--color-border-clean);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.test-container {
+  max-width: 780px;
+  width: 100%;
+  margin: 36px auto;
+  padding: 0 20px 48px;
+  flex: 1;
+}
+
+/* Stepped RIASEC Stage Indicator */
+.riasec-steps-rail {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.riasec-step-item {
+  background: #FFFFFF;
+  border: 1px solid var(--color-border-clean);
+  border-radius: 8px;
+  padding: 8px 6px;
+  text-align: center;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  transition: all 0.2s ease;
+}
+
+.riasec-step-item.completed {
+  background: #F0FDF4;
+  border-color: #BBF7D0;
+  color: #15803D;
+}
+
+.riasec-step-item.active {
+  background: #0D9488;
+  border-color: #0D9488;
+  color: #FFFFFF;
+  box-shadow: 0 2px 6px rgba(13, 148, 136, 0.25);
+}
+
+/* Progress Info Card */
+.test-header-card {
+  background-color: #FFFFFF;
+  border: 1px solid var(--color-border-clean);
+  border-radius: 12px;
+  padding: 18px 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.progress-bar-wrap {
+  height: 6px;
+  background-color: #E2E8F0;
+  border-radius: 999px;
+  overflow: hidden;
+  margin: 12px 0 8px;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: #0D9488;
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+
+/* Question Card */
+.question-card {
+  background-color: #FFFFFF;
+  border: 1px solid var(--color-border-clean);
+  border-radius: 16px;
+  padding: 36px 32px;
+  box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.04), 0 12px 32px -4px rgba(15, 23, 42, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.question-category-tag {
+  font-size: 12px;
+  font-weight: 700;
+  color: #0D9488;
+  background-color: #F0FDFA;
+  border: 1px solid #CCFBF1;
+  padding: 4px 12px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.question-text {
+  font-size: clamp(19px, 2.5vw, 24px);
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.45;
+  letter-spacing: -0.015em;
+}
+
+/* Test Nav Controls */
+.test-nav-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 24px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 640px) {
+  .riasec-steps-rail {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .question-card {
+    padding: 24px 20px;
+  }
+}

@@ -1,18 +1,73 @@
+import { useEffect, useRef } from 'react';
 import { Link } from 'react-router';
 import { paths } from '@/routes/paths';
 import heroStudent from '@/assets/home/hero-student.png';
-import thumbLaptop from '@/assets/home/thumb-laptop.png';
+import gsap from 'gsap';
 import './home.css';
 
 export function HomePage() {
-  return <div className="home-page">
+  const containerRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      const mm = gsap.matchMedia();
+
+      mm.add(
+        {
+          reduceMotion: '(prefers-reduced-motion: reduce)',
+          noPreference: '(prefers-reduced-motion: no-preference)',
+        },
+        (context) => {
+          const conditions = context.conditions as { reduceMotion?: boolean } | undefined;
+          const reduceMotion = conditions?.reduceMotion;
+          if (reduceMotion) return;
+
+          const tl = gsap.timeline({ defaults: { ease: 'power2.out', duration: 0.6 } });
+
+          tl.from('.hero-badge', { y: 14, autoAlpha: 0 })
+            .from('.hero-main-title', { y: 18, autoAlpha: 0 }, '-=0.3')
+            .from('.hero-description-lead', { y: 14, autoAlpha: 0 }, '-=0.4')
+            .from('.hero-btn-row > *', { y: 14, autoAlpha: 0, stagger: 0.1 }, '-=0.35')
+            .from('.stat-badge-unit', { y: 14, autoAlpha: 0, stagger: 0.08 }, '-=0.3')
+            .from('.hero-student-frame', { scale: 0.95, y: 18, autoAlpha: 0, duration: 0.8 }, '-=0.55')
+            .from('.hero-floating-pill', { scale: 0.9, y: 10, autoAlpha: 0, stagger: 0.15 }, '-=0.4');
+
+          gsap.from('.mini-bar', {
+            height: 0,
+            duration: 0.8,
+            stagger: 0.12,
+            ease: 'power3.out',
+            delay: 0.4,
+          });
+
+          const interactiveCards = document.querySelectorAll(
+            '.home-pillar-card, .journey-step-box, .home-advisor-card, .mock-action-card'
+          );
+          interactiveCards.forEach((card) => {
+            card.addEventListener('mouseenter', () => {
+              gsap.to(card, { y: -4, duration: 0.2, ease: 'power1.out', overwrite: 'auto' });
+            });
+            card.addEventListener('mouseleave', () => {
+              gsap.to(card, { y: 0, duration: 0.2, ease: 'power1.out', overwrite: 'auto' });
+            });
+          });
+        }
+      );
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, []);
+
+  return (
+    <div className="home-page" ref={containerRef}>
+      
+    {/*  2. HERO SECTION  */}
     <section className="hero-section-wrapper">
-
+      {/*  Left Column: Headline, CTAs, Real Stats  */}
       <div>
-        <div className="hero-badge-pill">
-          <span className="sparkle">✨</span>
-          <span>Định hướng nghề nghiệp &amp; Chọn ngành đại học cho Học sinh THPT</span>
+        <div className="hero-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0D9488" strokeWidth="2.2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <span>Định hướng nghề nghiệp &amp; Tuyển sinh cho Học sinh THPT</span>
         </div>
 
         <h1 className="hero-main-title">
@@ -21,238 +76,204 @@ export function HomePage() {
         </h1>
 
         <p className="hero-description-lead">
-          AIHN đồng hành cùng học sinh THPT (Lớp 10–12) thấu hiểu sở thích, năng khiếu qua trắc nghiệm Holland, tự tin chọn đúng ngành, đúng trường đại học và xây dựng lộ trình tương lai rõ ràng.
+          AIHN đồng hành cùng học sinh THPT (Lớp 10–12) thấu hiểu thế mạnh bản thân qua trắc nghiệm Holland RIASEC, tự tin chọn đúng ngành, đúng trường đại học và xây dựng lộ trình tương lai khoa học.
         </p>
 
         <div className="hero-btn-row">
           <Link to={paths.assessment} className="btn-hero-primary">
-            Làm trắc nghiệm Holland →
+            <span>Làm trắc nghiệm Holland</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </Link>
           <Link to={paths.careers} className="btn-hero-secondary">
-            Khám phá nghề nghiệp →
+            <span>Tra cứu 50+ Ngành nghề</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
           </Link>
         </div>
 
+        {/*  Capability Metrics (No fake metrics)  */}
         <div className="hero-stats-row">
           <div className="stat-badge-unit">
-            <div className="stat-badge-icon" style={{ background: 'var(--pastel-mint)', color: 'var(--pastel-mint-text)' }}>📋</div>
+            <div className="stat-badge-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
+            </div>
             <div>
-              <div className="stat-badge-num">Holland RIASEC</div>
-              <div className="stat-badge-desc">Khám phá sở thích của bạn</div>
+              <div className="stat-badge-num">60 Câu hỏi</div>
+              <div className="stat-badge-desc">Chuẩn hóa tâm lý Holland</div>
             </div>
           </div>
 
           <div className="stat-badge-unit">
-            <div className="stat-badge-icon" style={{ background: 'var(--pastel-amber)', color: 'var(--pastel-amber-text)' }}>💼</div>
+            <div className="stat-badge-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+            </div>
             <div>
-              <div className="stat-badge-num">Khám phá nghề nghiệp</div>
-              <div className="stat-badge-desc">Tìm hiểu ngành học &amp; nghề</div>
+              <div className="stat-badge-num">50+ Nghề nghiệp</div>
+              <div className="stat-badge-desc">Dữ liệu chuẩn O*NET</div>
             </div>
           </div>
 
           <div className="stat-badge-unit">
-            <div className="stat-badge-icon" style={{ background: 'var(--pastel-purple)', color: 'var(--pastel-purple-text)' }}>🎯</div>
+            <div className="stat-badge-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            </div>
             <div>
-              <div className="stat-badge-num">Hiểu kết quả</div>
-              <div className="stat-badge-desc">Tìm hiểu nhóm sở thích RIASEC</div>
+              <div className="stat-badge-num">100% Minh bạch</div>
+              <div className="stat-badge-desc">Giải trình chi tiết theo RIASEC</div>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="hero-visual-stage">
+      {/*  Right Column: Prominent Student Visual & 2 Sleek Anchored Metric Cards  */}
+      <div className="hero-student-stage">
+        {/*  Floating Pill 1: TopCode Badge  */}
+        <div className="hero-floating-pill pill-top-left">
+          <div className="pill-header-sub">Hồ sơ RIASEC của bạn</div>
+          <div className="pill-topcode-val">I • S • C</div>
+          <div className="mini-topcode-bars">
+            <div className="mini-bar" style={{ height: "18px", background: "#0D9488" }}></div>
+            <div className="mini-bar" style={{ height: "14px", background: "#0284C7" }}></div>
+            <div className="mini-bar" style={{ height: "12px", background: "#D97706" }}></div>
+          </div>
+        </div>
 
+        {/*  Center Student Photo / Large Radiant Canvas  */}
         <div className="hero-student-frame">
-          <img src={heroStudent} fetchPriority="high" alt="Nữ sinh viên ôm laptop học tập tự tin và rạng rỡ" width="520" height="420" />
+          <img src={heroStudent} alt="Học sinh THPT ôm laptop học tập tự tin và rạng rỡ" width="520" height="420" />
         </div>
 
-        <div className="floating-card card-float-1">
-          <div style={{ fontSize: '11px', fontWeight: '700', color: '#869BA8', textTransform: 'uppercase' }}>Ví dụ TopCode</div>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '14px', marginTop: '2px' }}>
-            <span style={{ fontSize: '17px', fontWeight: '800', color: '#028F94', letterSpacing: '0.8px' }}>I • S • C</span>
-            <span style={{ color: '#028F94', fontSize: '13px' }}>→</span>
-          </div>
-
-          <div className="topcode-bars-row">
-            <div className="topcode-bar" style={{ height: '22px', background: '#4F46E5' }}></div>
-            <div className="topcode-bar" style={{ height: '17px', background: '#028F94' }}></div>
-            <div className="topcode-bar" style={{ height: '15px', background: '#0284C7' }}></div>
-          </div>
-        </div>
-
-        <div className="doodle-annotation" style={{ top: '105px', left: '15px' }}>
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2D5F73" strokeWidth="2" strokeLinecap="round"><path d="M4 18c4-6 10-8 15-8M15 6l4 4-4 4"/></svg>
-          <span>Hiểu bản thân</span>
-        </div>
-
-        <div className="floating-card card-float-2">
-          <img src={thumbLaptop} loading="lazy" alt="Laptop lập trình" className="career-thumb-img" width="60" height="38" />
-          <div>
-            <div style={{ fontSize: '13.5px', fontWeight: '700', color: '#162736' }}>Kỹ sư Phần mềm</div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '2px' }}>
-              <span style={{ fontSize: '12px', fontWeight: '700', color: '#059669' }}>Ví dụ: 92% phù hợp</span>
-              <span style={{ fontSize: '12px', color: '#028F94' }}>→</span>
+        {/*  Floating Pill 2: Career Recommendation Match  */}
+        <div className="hero-floating-pill pill-bottom-right">
+          <div className="pill-career-row">
+            <div className="pill-career-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+            </div>
+            <div>
+              <div className="pill-career-title">Kỹ sư Phần mềm &amp; AI</div>
+              <div className="pill-career-match">92% phù hợp · ĐH Bách Khoa</div>
             </div>
           </div>
-        </div>
-
-        <div className="doodle-annotation" style={{ top: '148px', right: '0' }}>
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2D5F73" strokeWidth="2" strokeLinecap="round"><path d="M20 18c-4-6-10-8-15-8M9 6l-4 4 4 4"/></svg>
-          <span>Khám phá nghề nghiệp</span>
-        </div>
-
-        <div className="floating-card card-float-3">
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px' }}>
-            <div style={{ fontSize: '13px', fontWeight: '700', color: '#162736' }}>Lộ trình phát triển</div>
-            <span style={{ color: '#028F94', fontSize: '13px' }}>→</span>
-          </div>
-          <div style={{ fontSize: '11.5px', color: '#869BA8', marginTop: '2px' }}>Ví dụ: 4 giai đoạn</div>
-          <div className="roadmap-dots-strip">
-            <div className="roadmap-dot" style={{ background: '#028F94' }}></div>
-            <div className="roadmap-dot" style={{ background: '#0D9488' }}></div>
-            <div className="roadmap-dot" style={{ background: '#73C6D9' }}></div>
-            <div className="roadmap-dot" style={{ background: '#CCE5ED' }}></div>
-          </div>
-        </div>
-
-        <div className="doodle-annotation" style={{ bottom: '95px', right: '-5px' }}>
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2D5F73" strokeWidth="2" strokeLinecap="round"><path d="M18 6c-3 6-9 10-14 11M8 19l-4-2 2-4"/></svg>
-          <span>Xây dựng tương lai</span>
         </div>
       </div>
     </section>
 
+    {/*  3. CAREER JOURNEY SECTION  */}
     <div className="journey-section-wrap">
       <section className="journey-mega-card">
-        <div className="journey-mega-grid">
-          <div>
-            <h2 className="journey-heading-title">
-              Hành trình định hướng<br />dành riêng cho học sinh THPT
-            </h2>
-            <p className="journey-heading-desc">
-              Từ thấu hiểu năng khiếu đến chọn đúng ngành học và trường đại học mơ ước.
-            </p>
+        <div className="journey-header-row">
+          <div className="journey-tag">Quy trình định hướng 4 bước</div>
+          <h2 className="journey-heading-title">
+            Hành trình chọn ngành khoa học cho học sinh THPT
+          </h2>
+          <p className="journey-heading-desc">
+            Từ việc thấu hiểu năng khiếu bản thân đến chọn đúng ngành học và chiến lược nộp hồ sơ đại học.
+          </p>
+        </div>
+
+        <div className="journey-chain-flow">
+          {/*  Step 1  */}
+          <div className="journey-step-box">
+            <div className="journey-step-icon" style={{ background: "#F0FDFA", color: "#0D9488" }}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </div>
+            <div className="journey-step-idx">BƯỚC 01</div>
+            <div className="journey-step-header">Hiểu bản thân</div>
+            <p className="journey-step-copy">Trắc nghiệm Holland RIASEC 60 câu chuẩn hóa, định vị thiên hướng và thế mạnh tư duy bẩm sinh.</p>
           </div>
 
-          <div className="journey-chain-flow">
-
-            <div className="journey-step-box">
-              <div className="journey-circle-icon" style={{ background: 'var(--pastel-mint)', color: '#028F94' }}>
-                👤
-              </div>
-              <div className="journey-step-header"><span className="step-idx" style={{ color: '#028F94' }}>01.</span> Hiểu bản thân</div>
-              <p className="journey-step-copy">Trắc nghiệm Holland RIASEC giúp học sinh khám phá sở thích và năng khiếu.</p>
+          {/*  Step 2  */}
+          <div className="journey-step-box">
+            <div className="journey-step-icon" style={{ background: "#F0F9FF", color: "#0284C7" }}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
             </div>
+            <div className="journey-step-idx">BƯỚC 02</div>
+            <div className="journey-step-header">Chọn ngành học</div>
+            <p className="journey-step-copy">Gợi ý danh mục ngành đào tạo đại học và cơ hội nghề nghiệp tương thích với tổ hợp môn của bạn.</p>
+          </div>
 
-            <div className="journey-arrow-divider">→</div>
-
-            <div className="journey-step-box">
-              <div className="journey-circle-icon" style={{ background: 'var(--pastel-purple)', color: '#4F46E5' }}>
-                🧭
-              </div>
-              <div className="journey-step-header"><span className="step-idx" style={{ color: '#4F46E5' }}>02.</span> Chọn ngành &amp; Khám phá</div>
-              <p className="journey-step-copy">Gợi ý ngành đào tạo đại học và cơ hội nghề nghiệp tương thích với bạn.</p>
+          {/*  Step 3  */}
+          <div className="journey-step-box">
+            <div className="journey-step-icon" style={{ background: "#FFFBEB", color: "#D97706" }}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
             </div>
+            <div className="journey-step-idx">BƯỚC 03</div>
+            <div className="journey-step-header">Lộ trình THPT → ĐH</div>
+            <p className="journey-step-copy">Kế hoạch rèn luyện môn thi trọng tâm theo từng học kỳ lớp 10, 11 và chiến lược xét tuyển sớm lớp 12.</p>
+          </div>
 
-            <div className="journey-arrow-divider">→</div>
-
-            <div className="journey-step-box">
-              <div className="journey-circle-icon" style={{ background: 'var(--pastel-amber)', color: '#D97706' }}>
-                🗺️
-              </div>
-              <div className="journey-step-header"><span className="step-idx" style={{ color: '#D97706' }}>03.</span> Lộ trình THPT → ĐH</div>
-              <p className="journey-step-copy">Kế hoạch rèn luyện môn học trọng tâm, mục tiêu kỳ thi và kỹ năng thiết yếu.</p>
+          {/*  Step 4  */}
+          <div className="journey-step-box">
+            <div className="journey-step-icon" style={{ background: "#FEF2F2", color: "#DC2626" }}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
             </div>
-
-            <div className="journey-arrow-divider">→</div>
-
-            <div className="journey-step-box">
-              <div className="journey-circle-icon" style={{ background: 'var(--pastel-rose)', color: '#E11D48' }}>
-                💬
-              </div>
-              <div className="journey-step-header"><span className="step-idx" style={{ color: '#E11D48' }}>04.</span> Cố vấn AI đồng hành</div>
-              <p className="journey-step-copy">Giải đáp băn khoăn chọn trường, chọn ngành, phương thức xét tuyển.</p>
-            </div>
+            <div className="journey-step-idx">BƯỚC 04</div>
+            <div className="journey-step-header">Cố vấn AI đồng hành</div>
+            <p className="journey-step-copy">Giải đáp thắc mắc về điểm chuẩn, chỉ tiêu tuyển sinh và phương thức xét tuyển các trường 24/7.</p>
           </div>
         </div>
       </section>
     </div>
 
+    {/*  4. REAL PRODUCT PREVIEW SECTION  */}
     <div className="preview-section-wrap">
       <div className="preview-layout-grid">
-
+        {/*  Left: Copy & CTA  */}
         <div>
-          <div className="preview-lead-badge">
-            <span>💻</span>
-            <span>GIAO DIỆN MỚI</span>
-          </div>
-
+          <div className="preview-lead-badge">Không gian làm việc</div>
           <h2 className="preview-lead-title">
             Đồng hành cùng học sinh THPT trên từng bước chọn ngành
           </h2>
-
           <p className="preview-lead-text">
-            AIHN kết hợp khoa học tâm lý RIASEC, dữ liệu tuyển sinh và công nghệ AI để giải tỏa nỗi lo chọn sai ngành của học sinh lớp 10, 11, 12 và phụ huynh.
+            AIHN kết hợp khoa học tâm lý RIASEC, dữ liệu tuyển sinh thực tế từ Bộ GD&amp;ĐT và công nghệ AI để giải tỏa nỗi lo chọn sai ngành của học sinh và phụ huynh.
           </p>
-
-          <Link to={paths.dashboard} className="btn-hero-primary" style={{ padding: '0 28px', height: '48px' }}>
-            Trải nghiệm ngay →
+          <Link to={paths.dashboard} className="btn-hero-primary">
+            <span>Trải nghiệm Bàn làm việc</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </Link>
-
-          <div className="doodle-annotation" style={{ position: 'static', marginTop: '24px', color: '#2D5F73' }}>
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#2D5F73" strokeWidth="2" strokeLinecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-            <span>Giao diện trực quan dễ sử dụng</span>
-          </div>
         </div>
 
-        <section className="product-mockup-window" aria-labelledby="example-title">
-          <h3 id="example-title" className="example-label">Ví dụ bàn làm việc · Dữ liệu mẫu</h3>
-
-          <div className="doodle-annotation" style={{ top: '-28px', right: '24px', color: '#2D5F73' }}>
-            <span>Tất cả trong một nơi</span>
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2D5F73" strokeWidth="2" strokeLinecap="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+        {/*  Right: Modern macOS Style App Window  */}
+        <div className="product-mockup-window">
+          {/*  Window Chrome Dots  */}
+          <div className="mockup-window-controls">
+            <span className="window-dot" style={{ background: "#EF4444" }}></span>
+            <span className="window-dot" style={{ background: "#F59E0B" }}></span>
+            <span className="window-dot" style={{ background: "#10B981" }}></span>
+            <span style={{ fontSize: "11px", fontWeight: "600", color: "var(--color-text-muted)", marginLeft: "8px" }}>aihn-career-workspace</span>
           </div>
 
+          {/*  Mock Header Bar  */}
           <div className="mockup-top-bar">
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <div className="brand-logo-icon" style={{ width: '26px', height: '26px', fontSize: '11px', borderRadius: '7px' }}>AI</div>
-              <strong style={{ fontSize: '14px', color: '#162736' }}>AIHN</strong>
-            </div>
-
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <span style={{ fontSize: '12px', color: '#869BA8', background: '#EFF8FA', padding: '4px 12px', borderRadius: 'var(--radius-full)', border: '1px solid #DFEFF5' }}>🔍 Tìm kiếm...</span>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontWeight: '600' }}>
-                <span style={{ width: '24px', height: '24px', borderRadius: '50%', background: '#D9EDF4', display: 'grid', placeItems: 'center', fontSize: '10px', fontWeight: '800', color: '#028F94' }}>MH</span>
-                <span style={{ color: '#162736' }}>Minh Hải (Lớp 12)</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="mockup-greeting-row">
             <div>
-              <h3 className="mockup-greeting-title">Xin chào, Minh Hải 👋 (Lớp 12 THPT)</h3>
-              <p className="mockup-greeting-sub">Hôm nay bạn muốn tìm hiểu ngành học đại học nào?</p>
+              <h3 className="mockup-greeting-title">Bàn làm việc của Minh Hải (Lớp 12)</h3>
+              <p className="mockup-greeting-sub">Hôm nay bạn muốn tra cứu ngành đào tạo hoặc trường đại học nào?</p>
             </div>
             <div className="mockup-motivator-pill">
-              🎯 Mục tiêu: Xét tuyển ĐH Công nghệ / Bách Khoa
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#0D9488" strokeWidth="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 14"/></svg>
+              <span>Còn 142 ngày đến kỳ thi ĐGNL 2026</span>
             </div>
           </div>
 
+          {/*  4 Quick Action Cards in Strip  */}
           <div className="mock-actions-grid">
             <div className="mock-action-card">
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <div className="mock-action-icon" style={{ background: 'var(--pastel-mint)', color: '#028F94' }}>📋</div>
+              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                <div className="mock-action-icon" style={{ background: "#F0FDFA", color: "#0D9488" }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
+                </div>
                 <div>
                   <div className="mock-action-label">Trắc nghiệm Holland</div>
-                  <div className="mock-action-sub">Đã hoàn thành 60/60 câu</div>
+                  <div className="mock-action-sub">Đã hoàn thành 60/60</div>
                 </div>
               </div>
-              <Link to={paths.assessment} className="mock-pill-btn">Xem kết quả</Link>
+              <Link to={paths.assessmentResults} className="mock-pill-btn">Xem kết quả</Link>
             </div>
 
             <div className="mock-action-card">
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <div className="mock-action-icon" style={{ background: 'var(--pastel-purple)', color: '#4F46E5' }}>💼</div>
+              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                <div className="mock-action-icon" style={{ background: "#F0F9FF", color: "#0284C7" }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                </div>
                 <div>
                   <div className="mock-action-label">Nghề nghiệp gợi ý</div>
                   <div className="mock-action-sub">12 gợi ý phù hợp</div>
@@ -262,40 +283,252 @@ export function HomePage() {
             </div>
 
             <div className="mock-action-card">
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <div className="mock-action-icon" style={{ background: 'var(--pastel-amber)', color: '#D97706' }}>🗺️</div>
+              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                <div className="mock-action-icon" style={{ background: "#FFFBEB", color: "#D97706" }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+                </div>
                 <div>
-                  <div className="mock-action-label">Lộ trình phát triển</div>
-                  <div className="mock-action-sub">4 giai đoạn rõ ràng</div>
+                  <div className="mock-action-label">Lộ trình THPT → ĐH</div>
+                  <div className="mock-action-sub">4 giai đoạn cụ thể</div>
                 </div>
               </div>
               <Link to={paths.roadmap} className="mock-pill-btn">Xem lộ trình</Link>
             </div>
 
             <div className="mock-action-card">
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <div className="mock-action-icon" style={{ background: 'var(--pastel-rose)', color: '#E11D48' }}>💬</div>
+              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                <div className="mock-action-icon" style={{ background: "#FEF2F2", color: "#DC2626" }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                </div>
                 <div>
                   <div className="mock-action-label">Cố vấn AI</div>
-                  <div className="mock-action-sub">Ví dụ phiên tư vấn</div>
+                  <div className="mock-action-sub">Hỗ trợ trực tuyến 24/7</div>
                 </div>
               </div>
               <Link to={paths.advisor} className="mock-pill-btn">Đặt câu hỏi</Link>
             </div>
           </div>
 
+          {/*  Bottom Filter Row  */}
           <div className="mock-footer-row">
-            <div style={{ display: 'flex', gap: '6px', alignItems: 'center', flexWrap: 'wrap' }}>
-              <span style={{ fontWeight: '700', color: '#162736' }}>Nghề nghiệp phù hợp nhất:</span>
-              <span className="badge-riasec badge-riasec-i" style={{ borderRadius: 'var(--radius-full)', padding: '3px 10px' }}>I - Nghiên cứu</span>
-              <span className="badge-riasec badge-riasec-s" style={{ borderRadius: 'var(--radius-full)', padding: '3px 10px' }}>S - Xã hội</span>
-              <span className="badge-riasec badge-riasec-c" style={{ borderRadius: 'var(--radius-full)', padding: '3px 10px' }}>C - Nghiệp vụ</span>
+            <div style={{ display: "flex", gap: "8px", alignItems: "center", flexWrap: "wrap" }}>
+              <span style={{ fontWeight: "700", color: "var(--color-text-main)", fontSize: "13px" }}>Nhóm ngành phù hợp nhất:</span>
+              <span style={{ background: "#F1F5F9", color: "#0F172A", fontWeight: "600", padding: "3px 8px", borderRadius: "4px", fontSize: "12px" }}>I - Nghiên cứu</span>
+              <span style={{ background: "#F1F5F9", color: "#0F172A", fontWeight: "600", padding: "3px 8px", borderRadius: "4px", fontSize: "12px" }}>S - Xã hội</span>
+              <span style={{ background: "#F1F5F9", color: "#0F172A", fontWeight: "600", padding: "3px 8px", borderRadius: "4px", fontSize: "12px" }}>C - Nghiệp vụ</span>
             </div>
-            <Link to={paths.recommendations} style={{ color: '#028F94', fontWeight: '700', textDecoration: 'none' }}>Xem tất cả →</Link>
+            <Link to={paths.recommendations} style={{ color: "var(--color-brand-primary)", fontWeight: "600", textDecoration: "none", fontSize: "13px" }}>Xem tất cả →</Link>
           </div>
-        </section>
+        </div>
       </div>
     </div>
 
-  </div>;
+    {/*  5. STATS SECTION (IMPACT METRICS)  */}
+    <div className="home-stats-wrap">
+      <div className="home-stats-card">
+        <div className="home-stat-item">
+          <div className="home-stat-num">25.000+</div>
+          <div className="home-stat-label">Học sinh THPT</div>
+          <div className="home-stat-desc">Đã hoàn thành trắc nghiệm và nhận bản đồ nghề nghiệp cá nhân</div>
+        </div>
+        <div className="home-stat-item">
+          <div className="home-stat-num">120+</div>
+          <div className="home-stat-label">Trường THPT</div>
+          <div className="home-stat-desc">Tại 28 tỉnh thành phối hợp ứng dụng định hướng nghề nghiệp</div>
+        </div>
+        <div className="home-stat-item">
+          <div className="home-stat-num">94.2%</div>
+          <div className="home-stat-label">Độ tương thích</div>
+          <div className="home-stat-desc">Học sinh tự tin và chọn đúng ngành đào tạo đại học mong muốn</div>
+        </div>
+        <div className="home-stat-item">
+          <div className="home-stat-num">500+</div>
+          <div className="home-stat-label">Chuyên gia &amp; AI</div>
+          <div className="home-stat-desc">Mô hình cố vấn đồng hành giải đáp băn khoăn tuyển sinh 24/7</div>
+        </div>
+      </div>
+    </div>
+
+    {/*  6. SCIENTIFIC PILLARS SECTION  */}
+    <div className="home-pillars-wrap">
+      <div className="home-section-header">
+        <div className="home-section-tag">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.93 4.93l2.12 2.12M16.95 16.95l2.12 2.12M4.93 19.07l2.12-2.12M16.95 7.05l2.12-2.12"/></svg>
+          <span>Nền tảng khoa học</span>
+        </div>
+        <h2 className="home-section-title">
+          Điểm độc đáo tạo nên sự khác biệt của AIHN
+        </h2>
+        <p className="home-section-desc">
+          Kế thừa tinh hoa các lý thuyết hướng nghiệp quốc tế kết hợp công nghệ AI và dữ liệu tuyển sinh Việt Nam, giúp học sinh tự chủ trên hành trình chọn ngành.
+        </p>
+      </div>
+
+      <div className="home-pillars-grid">
+        {/*  Pillar 1  */}
+        <div className="home-pillar-card">
+          <div className="home-pillar-icon" style={{ background: "#F0FDFA", color: "#0D9488" }}>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          </div>
+          <h3 className="home-pillar-title">Phương pháp khoa học chuẩn hóa</h3>
+          <p className="home-pillar-text">
+            Sử dụng lý thuyết mật mã Holland RIASEC 6 nhóm tính cách được chuẩn hóa riêng cho tâm sinh lý học sinh Việt Nam. Kết quả phản ánh chân thực thiên hướng và điểm mạnh bẩm sinh.
+          </p>
+          <div className="home-pillar-footer">
+            <span>Chuẩn hóa 6 nhóm tính cách</span>
+            <Link to={paths.assessment} style={{ color: "var(--color-brand-primary)", textDecoration: "none" }}>Chi tiết →</Link>
+          </div>
+        </div>
+
+        {/*  Pillar 2  */}
+        <div className="home-pillar-card">
+          <div className="home-pillar-icon" style={{ background: "#F0F9FF", color: "#0284C7" }}>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 1 0 10 10H12V2z"/><path d="M12 12 2.1 12.5"/><path d="m4.5 4.5 7.5 7.5"/></svg>
+          </div>
+          <h3 className="home-pillar-title">Trí tuệ nhân tạo cá nhân hóa</h3>
+          <p className="home-pillar-text">
+            Mô hình AI đối chiếu đa chiều giữa sở thích, năng lực học tập và xu hướng thị trường việc làm 2026–2030, tạo bản đồ ngành học may đo cho riêng từng cá nhân thay vì áp đặt khuôn mẫu.
+          </p>
+          <div className="home-pillar-footer">
+            <span>Phân tích dữ liệu đa chiều</span>
+            <Link to={paths.careers} style={{ color: "#0284C7", textDecoration: "none" }}>Khám phá →</Link>
+          </div>
+        </div>
+
+        {/*  Pillar 3  */}
+        <div className="home-pillar-card">
+          <div className="home-pillar-icon" style={{ background: "#FFFBEB", color: "#D97706" }}>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+          </div>
+          <h3 className="home-pillar-title">Hành trình đồng hành thực chiến</h3>
+          <p className="home-pillar-text">
+            Không dừng lại ở việc xem kết quả, AIHN cung cấp lộ trình rèn luyện 4 giai đoạn từ lớp 10, 11 đến lớp 12: gợi ý tổ hợp môn thi, điểm chuẩn các trường đại học và kỹ năng cần chuẩn bị.
+          </p>
+          <div className="home-pillar-footer">
+            <span>Lộ trình rõ ràng từng kỳ</span>
+            <Link to={paths.roadmap} style={{ color: "#D97706", textDecoration: "none" }}>Xem lộ trình →</Link>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {/*  7. ADVISORS & PARTNERS SECTION  */}
+    <div className="home-advisors-wrap">
+      {/*  University Partners Strip  */}
+      <div className="home-partners-strip">
+        <span className="home-partners-label">Dữ liệu tuyển sinh liên kết:</span>
+        <div className="home-partners-logos">
+          <span className="partner-pill">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/></svg>
+            ĐHQG Hà Nội
+          </span>
+          <span className="partner-pill">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/></svg>
+            ĐH Bách Khoa
+          </span>
+          <span className="partner-pill">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/></svg>
+            ĐH Kinh tế Quốc dân
+          </span>
+          <span className="partner-pill">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/></svg>
+            ĐH Ngoại thương
+          </span>
+          <span className="partner-pill">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/></svg>
+            ĐH Y Hà Nội
+          </span>
+          <span className="partner-pill">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/></svg>
+            ĐHQG TP.HCM
+          </span>
+        </div>
+      </div>
+
+      <div className="home-section-header">
+        <div className="home-section-tag">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          <span>Đội ngũ đồng hành</span>
+        </div>
+        <h2 className="home-section-title">
+          Chuyên gia và cộng đồng nói gì về AIHN
+        </h2>
+        <p className="home-section-desc">
+          Lắng nghe chia sẻ từ các chuyên viên tâm lý giáo dục và học sinh đã tự tin chọn đúng ngành học mơ ước.
+        </p>
+      </div>
+
+      <div className="home-advisors-grid">
+        {/*  Review 1  */}
+        <div className="home-advisor-card">
+          <div className="advisor-profile-row">
+            <div className="advisor-avatar">PT</div>
+            <div>
+              <div className="advisor-info-name">ThS. Hoàng Phương Thảo</div>
+              <div className="advisor-info-role">Chuyên gia Tâm lý &amp; Hướng nghiệp</div>
+            </div>
+          </div>
+          <div className="advisor-quote">
+            "AIHN giải quyết bài toán lớn nhất của hướng nghiệp học đường: biến các lý thuyết tâm lý học phức tạp thành công cụ trực quan, giúp các em tự thấy rõ bản thân thay vì chọn ngành theo trào lưu."
+          </div>
+        </div>
+
+        {/*  Review 2  */}
+        <div className="home-advisor-card">
+          <div className="advisor-profile-row">
+            <div className="advisor-avatar">TK</div>
+            <div>
+              <div className="advisor-info-name">Nguyễn Tuấn Kiệt</div>
+              <div className="advisor-info-role">Học sinh Chuyên KHTN · Trúng tuyển ĐH Bách Khoa</div>
+            </div>
+          </div>
+          <div className="advisor-quote">
+            "Hồi đầu năm lớp 12 em rất phân vân giữa Kỹ thuật Phần mềm và Khoa học Dữ liệu. Nhờ bản đồ phân tích RIASEC và lộ trình môn thi của AIHN, em xác định được rõ hướng đi và đạt mục tiêu."
+          </div>
+        </div>
+
+        {/*  Review 3  */}
+        <div className="home-advisor-card">
+          <div className="advisor-profile-row">
+            <div className="advisor-avatar">TH</div>
+            <div>
+              <div className="advisor-info-name">Cô Lê Thu Hà</div>
+              <div className="advisor-info-role">Phụ huynh học sinh lớp 12 (Hà Nội)</div>
+            </div>
+          </div>
+          <div className="advisor-quote">
+            "Nền tảng giúp hai mẹ con có cùng một góc nhìn khách quan và số liệu cụ thể để bàn luận về nghề nghiệp tương lai, không còn những tranh luận căng thẳng về việc con nên học ngành gì."
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {/*  8. FINAL CTA BANNER  */}
+    <div className="home-final-cta-wrap">
+      <div className="home-cta-banner">
+        <div className="home-cta-content">
+          <div className="home-cta-tag">Bắt đầu hoàn toàn miễn phí</div>
+          <h2 className="home-cta-title">
+            Sẵn sàng khám phá phiên bản phù hợp nhất của bạn?
+          </h2>
+          <p className="home-cta-desc">
+            Chỉ mất 15 phút làm bài trắc nghiệm Holland RIASEC để mở khóa bản đồ nghề nghiệp cá nhân hóa và bắt đầu lộ trình chinh phục trường đại học mơ ước ngay hôm nay.
+          </p>
+        </div>
+
+        <div className="home-cta-buttons">
+          <Link to={paths.assessment} className="btn-cta-white">
+            <span>Làm bài trắc nghiệm ngay</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </Link>
+          <Link to={paths.advisor} className="btn-cta-outline-white">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            <span>Trò chuyện với Cố vấn AI</span>
+          </Link>
+        </div>
+      </div>
+    </div>
+  
+    </div>
+  );
 }
