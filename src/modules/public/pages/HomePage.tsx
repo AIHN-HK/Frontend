@@ -205,7 +205,7 @@ export function HomePage() {
             <span className="window-dot" style={{ background: "#EF4444" }}></span>
             <span className="window-dot" style={{ background: "#F59E0B" }}></span>
             <span className="window-dot" style={{ background: "#10B981" }}></span>
-            <span style={{ fontSize: "11px", fontWeight: "600", color: "var(--color-text-muted)", marginLeft: "8px" }}>aihn-career-workspace</span>
+            <span style={{ fontSize: "var(--font-size-caption)", fontWeight: "600", color: "var(--color-text-muted)", marginLeft: "8px" }}>aihn-career-workspace</span>
           </div>
 
           {/*  Mock Header Bar  */}
@@ -278,12 +278,12 @@ export function HomePage() {
           {/*  Bottom Filter Row  */}
           <div className="mock-footer-row">
             <div style={{ display: "flex", gap: "8px", alignItems: "center", flexWrap: "wrap" }}>
-              <span style={{ fontWeight: "700", color: "var(--color-text-main)", fontSize: "13px" }}>Nhóm ngành phù hợp nhất:</span>
-              <span style={{ background: "#F1F5F9", color: "#0F172A", fontWeight: "600", padding: "3px 8px", borderRadius: "4px", fontSize: "12px" }}>I - Nghiên cứu</span>
-              <span style={{ background: "#F1F5F9", color: "#0F172A", fontWeight: "600", padding: "3px 8px", borderRadius: "4px", fontSize: "12px" }}>S - Xã hội</span>
-              <span style={{ background: "#F1F5F9", color: "#0F172A", fontWeight: "600", padding: "3px 8px", borderRadius: "4px", fontSize: "12px" }}>C - Nghiệp vụ</span>
+              <span style={{ fontWeight: "700", color: "var(--color-text-main)", fontSize: "var(--font-size-body)" }}>Nhóm ngành phù hợp nhất:</span>
+              <span style={{ background: "#F1F5F9", color: "#0F172A", fontWeight: "600", padding: "3px 8px", borderRadius: "4px", fontSize: "var(--font-size-caption)" }}>I - Nghiên cứu</span>
+              <span style={{ background: "#F1F5F9", color: "#0F172A", fontWeight: "600", padding: "3px 8px", borderRadius: "4px", fontSize: "var(--font-size-caption)" }}>S - Xã hội</span>
+              <span style={{ background: "#F1F5F9", color: "#0F172A", fontWeight: "600", padding: "3px 8px", borderRadius: "4px", fontSize: "var(--font-size-caption)" }}>C - Nghiệp vụ</span>
             </div>
-            <Link to={paths.recommendations} style={{ color: "var(--color-brand-primary)", fontWeight: "600", textDecoration: "none", fontSize: "13px" }}>Xem tất cả →</Link>
+            <Link to={paths.recommendations} style={{ color: "var(--color-brand-primary)", fontWeight: "600", textDecoration: "none", fontSize: "var(--font-size-body)" }}>Xem tất cả →</Link>
           </div>
         </div>
       </div>

@@ -22,7 +22,12 @@ export function RouteError() {
 }
 
 export function RoutePending() {
-  return <main className="route-fallback"><AsyncState state="loading" /></main>;
+  return <main className="route-fallback" aria-busy="true">
+    <div className="async-state" role="status">
+      <span className="spinner" aria-hidden="true" />
+      <p>Đang tải…</p>
+    </div>
+  </main>;
 }
 
 export function RootRoute() {

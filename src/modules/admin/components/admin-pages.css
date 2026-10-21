@@ -48,7 +48,7 @@
   border-collapse: collapse;
   width: 100%;
   min-width: 600px;
-  font-size: 13px;
+  font-size: var(--font-size-body);
 }
 .admin-page th,
 .admin-page td {

@@ -265,12 +265,12 @@ function HollandTest({ scope }: { scope: AssessmentScope }) {
             if (locked) event.preventDefault();
           }}
           aria-disabled={locked}
-          style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#475569', textDecoration: 'none', fontSize: '13.5px', fontWeight: 600 }}
+          style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#475569', textDecoration: 'none', fontSize: 'var(--font-size-body)', fontWeight: 600 }}
         >
           <Arrow back />
           <span>Tạm dừng &amp; Về Bàn làm việc</span>
         </Link>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: storageOk ? '#047857' : '#D97706', fontWeight: 600 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: 'var(--font-size-body)', color: storageOk ? '#047857' : '#D97706', fontWeight: 600 }}>
           <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: storageOk ? '#10B981' : '#F59E0B', display: 'inline-block' }}></span>
           <span role="status">{draft ? (storageOk ? 'Đang tự động lưu tiến độ' : 'Chưa lưu trên thiết bị') : 'Tiến độ lưu trên thiết bị này'}</span>
         </div>
@@ -347,10 +347,10 @@ function HollandTest({ scope }: { scope: AssessmentScope }) {
               Khám phá sở thích nghề nghiệp
             </span>
             <h1 style={{ fontSize: '26px', fontWeight: 800, color: '#0F172A', margin: '8px 0' }}>Trắc nghiệm Sở thích Nghề nghiệp Holland (RIASEC)</h1>
-            <p style={{ fontSize: '14.5px', color: '#475569', lineHeight: 1.6 }}>
+            <p style={{ fontSize: 'var(--font-size-body)', color: '#475569', lineHeight: 1.6 }}>
               {questions.data.length} câu hỏi giúp bạn khám phá 6 nhóm sở thích nghề nghiệp RIASEC. Chọn Có hoặc Không theo cảm nhận thực tế của bạn.
             </p>
-            <p style={{ fontSize: '14px', color: '#64748B' }}>
+            <p style={{ fontSize: 'var(--font-size-body)', color: '#64748B' }}>
               Hãy trả lời đủ các câu và chọn Có cho ít nhất một hoạt động phù hợp. Bạn có thể tạm dừng và tiếp tục trên cùng thiết bị bất kỳ lúc nào.
             </p>
             {blockedStart ? (
@@ -399,7 +399,7 @@ function HollandTest({ scope }: { scope: AssessmentScope }) {
 
               {/* Progress Info Card */}
               <div className="test-header-card">
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '13.5px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 'var(--font-size-body)' }}>
                   <span style={{ fontWeight: 700, color: 'var(--color-text-main, #0F172A)' }}>
                     Nhóm {question.type}: Hoạt động {groups[question.type]} {question.dimension && `· ${dimensions[question.dimension]}`} · <span>Câu {draft.index + 1}/{draft.totalQuestions}</span>
                   </span>
@@ -417,7 +417,7 @@ function HollandTest({ scope }: { scope: AssessmentScope }) {
                 >
                   <div className="progress-bar-fill" style={{ width: `${(completed / draft.totalQuestions) * 100}%` }}></div>
                 </div>
-                <p style={{ fontSize: '12.5px', color: 'var(--color-text-muted, #64748B)', margin: 0 }}>
+                <p style={{ fontSize: 'var(--font-size-caption)', color: 'var(--color-text-muted, #64748B)', margin: 0 }}>
                   Hãy chọn theo cảm giác tự nhiên nhất của bạn, không có câu trả lời đúng hay sai.
                 </p>
               </div>
@@ -434,7 +434,7 @@ function HollandTest({ scope }: { scope: AssessmentScope }) {
                 </h1>
 
                 <fieldset className="holland-answers" disabled={locked}>
-                  <legend style={{ fontSize: '13px', color: '#64748B', marginBottom: '12px', fontWeight: 600 }}>
+                  <legend style={{ fontSize: 'var(--font-size-body)', color: '#64748B', marginBottom: '12px', fontWeight: 600 }}>
                     Hoạt động này có phù hợp với sở thích của bạn không?
                   </legend>
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '14px' }}>
@@ -482,11 +482,11 @@ function HollandTest({ scope }: { scope: AssessmentScope }) {
                             display: 'grid',
                             placeItems: 'center',
                             fontWeight: 800,
-                            fontSize: '12px'
+                            fontSize: 'var(--font-size-caption)'
                           }}>{option.icon}</span>
-                          <strong style={{ fontSize: '14.5px', color: selected === option.value ? '#0F766E' : '#0F172A' }}>{option.text}</strong>
+                          <strong style={{ fontSize: 'var(--font-size-body)', color: selected === option.value ? '#0F766E' : '#0F172A' }}>{option.text}</strong>
                         </div>
-                        <span style={{ fontSize: '12px', color: selected === option.value ? '#0D9488' : '#64748B', paddingLeft: '32px' }}>{option.sub}</span>
+                        <span style={{ fontSize: 'var(--font-size-caption)', color: selected === option.value ? '#0D9488' : '#64748B', paddingLeft: '32px' }}>{option.sub}</span>
                       </label>
                     ))}
                   </div>

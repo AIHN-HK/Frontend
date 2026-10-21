@@ -22,14 +22,14 @@
 }
 
 .public-shell .home-navbar {
-  max-width: 1280px;
+  max-width: 1536px;
   margin: 0 auto;
   height: 68px;
-  padding: 0 24px;
+  padding: 0 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: 8px;
 }
 
 .public-shell .brand-logo-group {
@@ -47,7 +47,7 @@
   color: #FFFFFF;
   display: grid;
   place-items: center;
-  font-size: 14px;
+  font-size: var(--font-size-body);
   font-weight: 800;
   letter-spacing: -0.5px;
   box-shadow: 0 2px 6px rgba(13, 148, 136, 0.2);
@@ -70,7 +70,7 @@
 .public-shell .home-nav-item {
   padding: 7px 14px;
   border-radius: 8px;
-  font-size: 13.5px;
+  font-size: var(--font-size-body);
   font-weight: 600;
   color: #475569;
   text-decoration: none;
@@ -104,7 +104,7 @@
   position: absolute;
   left: 12px;
   color: #64748B;
-  font-size: 14px;
+  font-size: var(--font-size-body);
   pointer-events: none;
 }
 .public-shell .btn-pill-login {
@@ -114,7 +114,7 @@
   background-color: transparent;
   border: 1px solid #E2E8F0;
   color: #0F172A;
-  font-size: 13.5px;
+  font-size: var(--font-size-body);
   font-weight: 600;
   display: inline-flex;
   align-items: center;
@@ -137,7 +137,7 @@
   background-color: #0D9488;
   border: 1px solid #0D9488;
   color: #FFFFFF;
-  font-size: 13.5px;
+  font-size: var(--font-size-body);
   font-weight: 600;
   display: inline-flex;
   align-items: center;
@@ -163,11 +163,11 @@
 
 /* Use the disclosure on narrow desktops and a catalog link until T12 search. */
 .public-shell .home-nav-links { margin: 0; padding: 0; gap: 2px; flex-shrink: 0; }
-.public-shell .home-nav-item { min-height: 44px; display: inline-flex; align-items: center; padding-inline: 8px; font-size: 13px; }
+.public-shell .home-nav-item { min-height: 44px; display: inline-flex; align-items: center; padding-inline: 6px; font-size: var(--font-size-body); }
 .public-shell .brand-logo-group { min-height: 44px; flex-shrink: 0; }
 .public-shell .home-navbar > * { min-width: 0; }
 .public-shell .home-header-tools { margin-left: auto; flex-shrink: 0; white-space: nowrap; }
-.public-shell .home-search-pill { min-height: 44px; min-width: 160px; gap: 8px; border: 1px solid #DFEFF5; background: white; border-radius: var(--radius-full); padding: 0 14px; color: #869BA8; font-size: 12px; }
+.public-shell .home-search-pill { min-height: 44px; min-width: 160px; gap: 8px; border: 1px solid #DFEFF5; background: white; border-radius: var(--radius-full); padding: 0 14px; color: #869BA8; font-size: var(--font-size-caption); }
 .public-shell .home-search-pill .icon { position: static; }
 .public-shell .btn-pill-login, .public-shell .btn-pill-cta { min-height: 44px; }
 .public-shell .home-menu-trigger { display: none; min-width: 44px; min-height: 44px; align-items: center; justify-content: center; border: 1px solid #DFEFF5; border-radius: 12px; background: white; color: #028F94; }
@@ -176,10 +176,10 @@
 .public-shell .home-mobile-navigation .home-nav-item { border-radius: 12px; }
 .public-shell .home-footer { border-top: 1px solid #DFEFF5; background: white; padding: 36px 28px; }
 .public-shell .home-footer-inner { max-width: 1320px; margin: auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
-.public-shell .home-footer-brand { display: flex; gap: 10px; align-items: center; font-size: 14.5px; }
-.public-shell .home-footer-brand .brand-logo-icon { width: 28px; height: 28px; font-size: 12px; border-radius: 8px; flex-shrink: 0; }
-.public-shell .home-footer p { font-size: 12.5px; color: #869BA8; }
-.public-shell .home-footer a { min-height: 44px; min-width: 44px; display: inline-flex; align-items: center; color: #028F94; font-weight: 600; font-size: 13px; }
+.public-shell .home-footer-brand { display: flex; gap: 10px; align-items: center; font-size: var(--font-size-body); }
+.public-shell .home-footer-brand .brand-logo-icon { width: 28px; height: 28px; font-size: var(--font-size-caption); border-radius: 8px; flex-shrink: 0; }
+.public-shell .home-footer p { font-size: var(--font-size-caption); color: #869BA8; }
+.public-shell .home-footer a { min-height: 44px; min-width: 44px; display: inline-flex; align-items: center; color: #028F94; font-weight: 600; font-size: var(--font-size-body); }
 @media (max-width: 1280px) {
   .public-shell .home-nav-links, .public-shell .home-search-pill { display: none; }
   .public-shell .home-menu-trigger { display: inline-flex; }
@@ -194,4 +194,4 @@
 }
 
 .public-shell .home-header-wrap a, .public-shell .home-footer a { min-height: 45px; min-width: 45px; }
-@media (min-width: 1281px) and (max-width: 1440px) { .public-shell .home-search-pill { display: none; } }
+@media (min-width: 1281px) and (max-width: 1536px) { .public-shell .home-search-pill { display: none; } }

@@ -12,12 +12,12 @@
   margin: 0;
 }
 .recommendation-detail h3 {
-  font-size: 14px;
+  font-size: var(--font-size-body);
 }
 .recommendation-detail p,
 .recommendation-detail li {
   color: var(--text-secondary);
-  font-size: 14px;
+  font-size: var(--font-size-body);
 }
 .recommendation-evidence {
   display: grid;

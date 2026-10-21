@@ -34,7 +34,7 @@ for (const [width, sidebarWidth] of [
       await expect(sidebar).toBeHidden();
       await expect(bottom).toBeVisible();
       await expect(opener).toBeVisible();
-      expect((await bottom.boundingBox())!.height).toBe(64);
+      expect((await bottom.boundingBox())!.height).toBeGreaterThanOrEqual(72);
     }
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     const main = (await page.getByRole('main').boundingBox())!;
@@ -47,6 +47,13 @@ for (const [width, sidebarWidth] of [
         const box = (await link.boundingBox())!;
         expect(box.width).toBeGreaterThanOrEqual(44);
         expect(box.height).toBeGreaterThanOrEqual(44);
+        const text = await link.evaluate(node => ({
+          size: parseFloat(getComputedStyle(node).fontSize),
+          height: node.clientHeight,
+          content: node.scrollHeight,
+        }));
+        expect(text.size).toBeGreaterThanOrEqual(14);
+        expect(text.content).toBeLessThanOrEqual(text.height + 1);
       }
     }
   });
