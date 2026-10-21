@@ -77,6 +77,26 @@ test("failed profile save retains owner draft across reload without replay", asy
   await expect(page.getByLabel("Mức Programming")).toHaveValue("2");
   expect(fixture.calls.filter((c) => c.method === "PUT")).toHaveLength(1);
 });
+test('choosing a career after viewing an unchanged profile fills the new target', async ({ page }) => {
+  await careerPlatformFixture(page);
+  await page.goto('/career-profile');
+  await expect(page.getByLabel('Mã nghề mục tiêu')).toHaveValue('');
+  await page.goto('/careers/15-1252.00');
+  await page.getByRole('link', { name: 'Chọn làm mục tiêu trong hồ sơ' }).click();
+  await expect(page.getByLabel('Mã nghề mục tiêu')).toHaveValue('15-1252.00');
+});
+test('choosing a career preserves edited skills and asks before replacing a draft target', async ({ page }) => {
+  await careerPlatformFixture(page);
+  await page.goto('/career-profile');
+  await page.getByLabel('Mức Programming').selectOption('2');
+  await page.goto('/careers/15-1252.00');
+  await page.getByRole('link', { name: 'Chọn làm mục tiêu trong hồ sơ' }).click();
+  await expect(page.getByLabel('Mức Programming')).toHaveValue('2');
+  await expect(page.getByLabel('Mã nghề mục tiêu')).toHaveValue('');
+  await page.getByRole('button', { name: 'Dùng nghề vừa chọn' }).click();
+  await expect(page.getByLabel('Mã nghề mục tiêu')).toHaveValue('15-1252.00');
+  await expect(page.getByLabel('Mức Programming')).toHaveValue('2');
+});
 for (const width of [320, 390, 768, 1440])
   test(`sourced career detail fits ${width}px with usable controls`, async ({
     page,

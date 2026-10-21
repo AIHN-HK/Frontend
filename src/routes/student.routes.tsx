@@ -37,8 +37,8 @@ export const studentRoutes: RouteObject[] = [
           {
             path: paths.assessmentResults,
             lazy: async () => ({
-              Component: (await import('@/modules/assessment/results/pages/AssessmentResultPage'))
-                .AssessmentResultPage,
+              Component: (await import('@/modules/assessment/results/pages/LatestAssessmentResultPage'))
+                .LatestAssessmentResultPage,
             }),
           },
           {

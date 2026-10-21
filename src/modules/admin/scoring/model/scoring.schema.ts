@@ -16,7 +16,16 @@ export const contentSchema = z.object({
   weaknesses: z.array(z.string().trim().min(1)).min(1),
   careers: z.array(z.string().trim().min(1)).min(1),
 });
-export const topcodesSchema = z.array(contentSchema.extend({ id: idSchema }));
+// Existing/partially configured content must remain readable so an admin can
+// complete it. Saving still uses the stricter contentSchema above.
+export const topcodesSchema = z.array(contentSchema.extend({
+  id: idSchema,
+  title: z.string(),
+  personality: z.array(z.string()),
+  strengths: z.array(z.string()),
+  weaknesses: z.array(z.string()),
+  careers: z.array(z.string()),
+}));
 export const contentDraftSchema = z.object({
   title: z.string(),
   personality: z.string(),

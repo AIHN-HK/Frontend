@@ -62,7 +62,11 @@ function ProfileForm({
       const raw = sessionStorage.getItem(storageKey);
       if (raw) {
         const parsed = profileSchema.safeParse(JSON.parse(raw));
-        if (parsed.success && parsed.data.userId === saved.userId)
+        if (
+          parsed.success &&
+          parsed.data.userId === saved.userId &&
+          JSON.stringify(parsed.data) !== JSON.stringify(saved)
+        )
           return parsed.data;
       }
     } catch {

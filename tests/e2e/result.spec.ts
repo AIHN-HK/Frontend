@@ -12,9 +12,40 @@ test('direct ID/reload loads owned scores and normalizes from its historical sna
   await page.reload(); await expect(page.getByText(topCode, { exact: true })).toBeVisible();
   expect(calls.filter(c => c.path === '/api/v1/result/812')).toHaveLength(2); expect(calls.filter(c => c.path.endsWith('/question'))).toHaveLength(0);
 });
-for (const id of ['0', '-1', 'abc', '1.5', '1e3', '9007199254740992', '']) test(`invalid result ID '${id}' never requests personal results`, async ({ page }) => {
+for (const id of ['0', '-1', 'abc', '1.5', '1e3', '9007199254740992']) test(`invalid result ID '${id}' never requests personal results`, async ({ page }) => {
   const calls = await resultFixture(page); await page.goto(`/assessment/results/${id}`); await expect(page.getByRole('heading', { name: 'Mã lần làm không hợp lệ' })).toBeVisible();
   expect(calls.filter(c => c.path.includes('/result/'))).toHaveLength(0); await expect(page.getByText(topCode, { exact: true })).toHaveCount(0);
+});
+test('result entry opens the latest owned attempt instead of reporting an invalid ID', async ({ page }) => {
+  await resultFixture(page);
+  await page.goto('/assessment/results');
+  await expect(page).toHaveURL(/\/assessment\/results\/812$/);
+  await expect(page.getByText(topCode, { exact: true })).toBeVisible();
+});
+test('result entry without completed attempts shows the assessment action without requesting a result', async ({ page }) => {
+  const calls = await resultFixture(page);
+  await page.route('**/api/v1/test-session/history-by-user*', route => route.fulfill({
+    json: { status: 200, data: { formattedHistory: [], pageInfo: { hasNext: false, nextCursor: null } } },
+  }));
+  await page.goto('/assessment/results');
+  await expect(page.getByRole('heading', { name: 'Chưa có kết quả Holland' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Làm bài trắc nghiệm', exact: true })).toHaveAttribute('href', '/assessment');
+  expect(calls.filter(c => c.path.includes('/result/'))).toHaveLength(0);
+});
+test('failed latest-result lookup stays recoverable and never guesses an attempt ID', async ({ page }) => {
+  const calls = await resultFixture(page);
+  let status = 503;
+  await page.route('**/api/v1/test-session/history-by-user*', async route => {
+    if (status === 200) await route.fallback();
+    else await route.fulfill({ status, json: { message: 'fixture unavailable' } });
+  });
+  await page.goto('/assessment/results');
+  await expect(page.getByRole('heading', { name: 'Không tải được lịch sử kết quả' })).toBeVisible();
+  expect(calls.filter(c => c.path.includes('/result/'))).toHaveLength(0);
+  status = 200;
+  await page.getByRole('button', { name: 'Thử lại lịch sử kết quả' }).click();
+  await expect(page).toHaveURL(/\/assessment\/results\/812$/);
+  await expect(page.getByText(topCode, { exact: true })).toBeVisible();
 });
 for (const status of [404, 403, 503]) test(`result ${status} is honest and never reveals stale or fabricated scores`, async ({ page }) => {
   const calls = await resultFixture(page, { resultStatus: status }); await page.goto('/assessment/results/812');
