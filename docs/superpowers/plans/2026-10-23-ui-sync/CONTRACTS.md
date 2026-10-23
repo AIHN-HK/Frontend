@@ -21,7 +21,7 @@ Nguồn thiết kế sống:
 | Hạng mục | Khảo sát trực tiếp | Quyết định cho plan |
 | --- | --- | --- |
 | Git workspace | `/home/hoang/do-an` không phải Git repo; `Frontend` và `Backend` độc lập | Mọi lệnh Git frontend chạy trong `Frontend` |
-| Frontend | Nhánh `fix/web-runtime-and-readability`, sạch, HEAD `2e26e57` | Task 00 tạo `feat/ui-sync-aihn-design` từ HEAD đang được kiểm tra lại |
+| Frontend | Nhánh `fix/web-runtime-and-readability`, sạch, HEAD `2e26e57` | P00 tạo `feat/ui-sync-aihn-design` từ HEAD đang được kiểm tra lại |
 | Backend | Cùng tên nhánh, sạch, HEAD `3f5f21d` | Chỉ đọc contract; không sửa backend trong đợt UI |
 | Router và structure | Router v8, `src/modules`, đã có đủ các nhóm page | **Người dùng đã chọn giữ v8 + src/modules**; thay thế yêu cầu v6 + `src/pages` trong prompt |
 | Dependencies | Đã có `antd`, `gsap`, `socket.io-client` | Không chạy `npm install gsap`, không thêm UI/chart/motion library |
@@ -34,7 +34,7 @@ Nguồn thiết kế sống:
 
 `home.html` không có task port; việc thay route `/` là yêu cầu routing riêng của prompt. Không xóa Home source, preview hay admin. Các route preview hiện hữu tiếp tục bị phân biệt với runtime và không được cấp session giả. Các route admin tiếp tục dùng guard/quyền hiện có.
 
-Không dựa vào số test hoặc trạng thái “đã hoàn thành” trong các hồ sơ cũ để tuyên bố phiên bản hiện tại pass. Task 00 phải lấy baseline mới.
+Không dựa vào số test hoặc trạng thái “đã hoàn thành” trong các hồ sơ cũ để tuyên bố phiên bản hiện tại pass. P00 phải lấy baseline mới.
 
 ### Cách tiếp cận đã chọn
 
@@ -44,7 +44,7 @@ Không dựa vào số test hoặc trạng thái “đã hoàn thành” trong c
 
 ## 2. File ownership và screen map
 
-Mọi đường dẫn source/test bên dưới tính từ `/home/hoang/do-an/Frontend`. Tài liệu plan/evidence ở parent `/home/hoang/do-an/docs/superpowers/` theo quy ước workspace hiện tại; các file đó không tự nằm trong commit frontend.
+Mọi đường dẫn source/test bên dưới tính từ root worktree Frontend đang thực thi (lượt này: `/home/hoang/do-an/.worktrees/ui-sync-aihn-sequential`). Bộ plan và evidence thực thi nằm trong repository Frontend: `docs/superpowers/plans/2026-10-23-ui-sync/` và `docs/superpowers/execution/ui-sync/`. Plan tổng ở parent là bản thiết kế ban đầu; bộ P00–P18 này là nguồn thực thi hiện hành.
 
 ### Foundation và shared UI
 
@@ -74,23 +74,23 @@ Shared components không import module, layout, router hoặc app. `AppHeader` c
 
 ### 15 màn, route và CSS Module đích
 
-| Task | HTML | Route canonical | Page runtime cần sửa/tạo | CSS Module mới |
+| Plan | HTML | Route canonical | Page runtime cần sửa/tạo | CSS Module mới |
 | --- | --- | --- | --- | --- |
-| 04 | `assessment-result.html` | `/assessment/results/:attemptId` | `src/modules/assessment/results/pages/AssessmentResultPage.tsx` | cùng thư mục: `AssessmentResultPage.module.css` |
-| 05 | `dashboard.html` | `/dashboard` | `src/modules/dashboard/pages/DashboardPage.tsx` | `DashboardPage.module.css` |
-| 06 | `recommendations.html` | `/recommendations` | `src/modules/career-platform/pages/CareerRecommendationsPage.tsx` | `CareerRecommendationsPage.module.css` |
-| 07 | `recommendation-detail.html` | `/recommendations/:recommendationId` | tạo `src/modules/career-platform/pages/CareerRecommendationDetailPage.tsx` | `CareerRecommendationDetailPage.module.css` |
-| 08 | `career-explorer.html` | `/careers` | `src/modules/career-platform/pages/CareerCatalogPage.tsx` | `CareerCatalogPage.module.css` |
-| 09 | `career-detail.html` | `/careers/:careerId` | `src/modules/career-platform/pages/CareerRuntimeDetailPage.tsx` | `CareerRuntimeDetailPage.module.css` |
-| 10 | `roadmap.html` | `/roadmap` | `src/modules/career-platform/pages/CareerRoadmapPage.tsx` | `CareerRoadmapPage.module.css` |
-| 11 | `advisor.html` | `/advisor` | `src/modules/advisor/pages/AdvisorPage.tsx` | `AdvisorPage.module.css` |
-| 12 | `career-profile.html` | `/career-profile` | `src/modules/profile/pages/CareerProfilePage.tsx` | `CareerProfilePage.module.css` |
-| 13 | `history.html` | `/history` | `src/modules/history/pages/HistoryPage.tsx` | `HistoryPage.module.css` |
-| 14 | `settings.html` | `/settings` | `src/modules/settings/pages/SettingsPage.tsx` | `SettingsPage.module.css` |
-| 15 | `login.html` | `/login` | `src/modules/auth/login/pages/LoginPage.tsx` | `LoginPage.module.css` |
-| 16 | `signup.html` | `/signup` | `src/modules/auth/registration/pages/SignupPage.tsx` | `SignupPage.module.css` |
-| 17 | `otp-verify.html` | `/otp-verify` | `src/modules/auth/verification/pages/OtpVerifyPage.tsx` | `OtpVerifyPage.module.css` |
-| 18 | `forgot-reset-password.html` | `/forgot-password`, `/reset-password` | `src/modules/auth/recovery/pages/ForgotPasswordPage.tsx`, `ResetPasswordPage.tsx` | riêng `ForgotPasswordPage.module.css`, `ResetPasswordPage.module.css` |
+| P03 | `assessment-result.html` | `/assessment/results/:attemptId` | `src/modules/assessment/results/pages/AssessmentResultPage.tsx` | cùng thư mục: `AssessmentResultPage.module.css` |
+| P04 | `dashboard.html` | `/dashboard` | `src/modules/dashboard/pages/DashboardPage.tsx` | `DashboardPage.module.css` |
+| P05 | `recommendations.html` | `/recommendations` | `src/modules/career-platform/pages/CareerRecommendationsPage.tsx` | `CareerRecommendationsPage.module.css` |
+| P06 | `recommendation-detail.html` | `/recommendations/:recommendationId` | tạo `src/modules/career-platform/pages/CareerRecommendationDetailPage.tsx` | `CareerRecommendationDetailPage.module.css` |
+| P07 | `career-explorer.html` | `/careers` | `src/modules/career-platform/pages/CareerCatalogPage.tsx` | `CareerCatalogPage.module.css` |
+| P08 | `career-detail.html` | `/careers/:careerId` | `src/modules/career-platform/pages/CareerRuntimeDetailPage.tsx` | `CareerRuntimeDetailPage.module.css` |
+| P09 | `roadmap.html` | `/roadmap` | `src/modules/career-platform/pages/CareerRoadmapPage.tsx` | `CareerRoadmapPage.module.css` |
+| P10 | `advisor.html` | `/advisor` | `src/modules/advisor/pages/AdvisorPage.tsx` | `AdvisorPage.module.css` |
+| P11 | `career-profile.html` | `/career-profile` | `src/modules/profile/pages/CareerProfilePage.tsx` | `CareerProfilePage.module.css` |
+| P12 | `history.html` | `/history` | `src/modules/history/pages/HistoryPage.tsx` | `HistoryPage.module.css` |
+| P13 | `settings.html` | `/settings` | `src/modules/settings/pages/SettingsPage.tsx` | `SettingsPage.module.css` |
+| P14 | `login.html` | `/login` | `src/modules/auth/login/pages/LoginPage.tsx` | `LoginPage.module.css` |
+| P15 | `signup.html` | `/signup` | `src/modules/auth/registration/pages/SignupPage.tsx` | `SignupPage.module.css` |
+| P16 | `otp-verify.html` | `/otp-verify` | `src/modules/auth/verification/pages/OtpVerifyPage.tsx` | `OtpVerifyPage.module.css` |
+| P17 | `forgot-reset-password.html` | `/forgot-password`, `/reset-password` | `src/modules/auth/recovery/pages/ForgotPasswordPage.tsx`, `ResetPasswordPage.tsx` | riêng `ForgotPasswordPage.module.css`, `ResetPasswordPage.module.css` |
 
 Một HTML recovery biểu diễn hai trạng thái/luồng hiện có; giữ hai page và URL, cùng một task nghiệm thu. `LatestAssessmentResultPage.tsx` tiếp tục tìm attempt gần nhất, không hardcode ID từ mẫu.
 
@@ -178,7 +178,7 @@ Radar shared giữ `viewBox 0 0 150 150`, tâm 75/75, bán kính 50 theo templat
 - Holland vẫn boolean `answers: [{ questionId, check: boolean }]`. Không hardcode 60, không đổi qua Likert. Tỷ lệ điểm người dùng lấy từ snapshot của chính attempt, không dùng ngân hàng câu hỏi hiện tại.
 - Career O*NET RIASEC 1–7, self-rated interests 0–5 và result percentages 0–100 là ba thang khác nhau. Shared radar chỉ nhận dữ liệu đã chuyển đổi kèm nhãn đúng thang; không tự xem vector O*NET là phần trăm phù hợp.
 - Gợi ý runtime có `run.id`, `attemptId`, `input.profileRevision`, `items[].careerId`, score/components/contributions/missing/gaps và source. Giữ nhãn “điểm xếp hạng /100”, không diễn giải thành xác suất thành công hay copy “92% phù hợp” từ HTML.
-- Schema run trả một danh sách nghề. `/recommendations/:recommendationId` hiện có ID của **run**, không phải ID nghề. Task 07 giữ ID đó và dùng query `careerId` để chọn item; không bịa endpoint detail hoặc lấy item đầu khi thiếu ID.
+- Schema run trả một danh sách nghề. `/recommendations/:recommendationId` hiện có ID của **run**, không phải ID nghề. P06 giữ ID đó và dùng query `careerId` để chọn item; không bịa endpoint detail hoặc lấy item đầu khi thiếu ID.
 - Query cá nhân giữ owner/revision trong key; truyền AbortSignal. Không thêm cache chung khiến tài khoản B thấy radar, history hay roadmap A.
 - Không retry/replay mutation tự động; unknown outcome giữ draft và có explicit đọc lại trạng thái trước khi retry. UI không báo “đã lưu” nếu chưa xác nhận server.
 - Sidebar “completed/active” lấy từ dữ liệu thật. Nếu không có nguồn cho một bước thì không đánh dấu completed chỉ để giống mẫu.
@@ -190,20 +190,22 @@ Không làm liên tiếp 15 desktop screen rồi mới nối API/mobile. Hoàn t
 
 Không viết unit test chỉ để mirror class hoặc màu literal. Với UI port, ưu tiên browser assertion cho layout/keyboard/animation/route và chạy lại test behavior đang có. Unit chỉ thêm khi có logic mới như parse selector cho detail, vector normalization hoặc dữ liệu missing/zero.
 
-Evidence mỗi màn đặt tại:
+Evidence tính từ root của worktree Frontend đang thực thi:
 
 ```text
-/home/hoang/do-an/docs/superpowers/execution/ui-sync-aihn-design/
-  U00.md ... U19.md
-  evidence/<screen>/reference-390.png
-  evidence/<screen>/reference-768.png
-  evidence/<screen>/reference-1440.png
-  evidence/<screen>/implementation-390.png
-  evidence/<screen>/implementation-768.png
-  evidence/<screen>/implementation-1440.png
+docs/superpowers/execution/ui-sync/
+  P00.md ... P18.md
+  source-manifest.json
+.superpowers/ui-sync/
+  Pxx/reference-390.png
+  Pxx/reference-768.png
+  Pxx/reference-1440.png
+  Pxx/implementation-390.png
+  Pxx/implementation-768.png
+  Pxx/implementation-1440.png
 ```
 
-U00–U19 khớp task number, không ghi đè hồ sơ T00–T24 cũ. Chụp cả source nguyên bản và implementation; nếu dựng reference cùng dữ liệu fixture, lưu riêng `reference-fixture-*` và mô tả thay đổi. Không sửa HTML gốc để làm ảnh diff đẹp hơn.
+Evidence Markdown và manifest được track trong mỗi commit của plan; ảnh chụp ở `.superpowers/` được giữ local. Không ghi đè hồ sơ T00–T24 cũ. Chụp source nguyên bản và implementation cùng viewport; fixture tham chiếu đã điều chỉnh phải lưu riêng, không sửa HTML gốc để làm diff đẹp hơn. P00 là preflight/theme, P01 shell, P02 shared presentation; browser/visual consumer của P02 được nghiệm thu ở P03 sau khi P02 đã commit.
 
 Khi chạy command ở các task, working directory là `Frontend`. Dùng `pnpm exec playwright test <specs>` để chạy scoped suite; runner hiện tự build rồi mở production preview. Script runner hiện gọi npm ở bên trong để dispatch scripts, không có nghĩa chuyển package manager hoặc tạo `package-lock.json`. Giữ Node/pnpm/lockfile hiện tại.
 
@@ -218,7 +220,7 @@ Khi chạy command ở các task, working directory là `Frontend`. Dùng `pnpm 
 - [ ] Các trạng thái applicable: loading/ready/empty/error/retry/forbidden/unavailable/unknown-save; không render số mẫu khi thiếu dữ liệu.
 - [ ] Kiểm tra browser console/pageerror, image/font/request lỗi mới; popup cùng theme; tài khoản/session cách ly.
 - [ ] `git diff --check`; review diff không sửa backend/scoring/legacy hoặc dependency ngoài phạm vi.
-- [ ] Cập nhật Uxx với delta so HTML và mức bằng chứng `UI reviewed`/`Integrated local`/chưa verify; không ghi production pass.
+- [ ] Cập nhật Pxx với delta so HTML và mức bằng chứng `UI reviewed`/`Integrated local`/chưa verify; không ghi production pass.
 - [ ] Checkpoint một màn. Nếu được giao thực thi cả prompt gồm commit từng màn, dùng message của task và stage đúng file; nếu phạm vi chỉ giao sửa màn thì tuân thủ `AGENTS.md`: dừng ở diff để user review/commit.
 
 ---
@@ -227,3 +229,7 @@ Khi chạy command ở các task, working directory là `Frontend`. Dùng `pnpm 
 ## Execution authorization
 
 User: “chia ra thành các plan nhỏ để vừa hợp 1 commit, rồi triển khai từng plan luôn”. Mỗi plan P00–P18 là một commit local, thực thi theo thứ tự, không chờ xác nhận lặp lại. Không thay backend/scoring. User đã chọn giữ Router v8 và src/modules. Evidence và source manifest ghi trong `Frontend/docs/superpowers/execution/ui-sync/`.
+
+## Nhánh và lịch sử thực thi lượt tiếp tục
+
+Nhánh mới: `feat/ui-sync-aihn-sequential`, tạo trong worktree riêng từ `e58489c` (đã có commit P00–P05). Không reset/cherry-pick lại sáu commit đó. Checkout gốc `feat/ui-sync-aihn-design` đang có P06 dở từ phiên khác; không sửa hay checkout nhánh tại đó. Mỗi P06–P18 tiếp theo là một commit local sau review và kiểm thử; không push/merge/deploy. Tất cả path nguồn và lệnh chạy tương đối với root worktree này. Snapshot Git/evidence cũ là lịch sử; kết quả kiểm thử mới phải ghi theo commit đang thực thi.

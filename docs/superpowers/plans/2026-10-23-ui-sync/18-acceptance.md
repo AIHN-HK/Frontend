@@ -25,7 +25,7 @@
 ## Nghiệm thu toàn luồng, kiểm tra diff và bàn giao
 
 **Modify nếu phát hiện lỗi thuộc scope:** đúng file của task tương ứng; không mở một đợt refactor toàn repo.
-**Docs:** `docs/superpowers/execution/ui-sync-aihn-design/U19.md` ở parent.
+**Docs:** `docs/superpowers/execution/ui-sync/P18.md` trong repo Frontend.
 
 - [ ] Rà lại đủ **15/15 HTML**, **16 page runtime** vì recovery có hai page; mỗi page có CSS Module riêng. `LatestAssessmentResultPage` vẫn là redirect/data-entry riêng, không tính là màn thứ 16 trong nguồn.
 - [ ] Rà allowlist imports antd và dependencies: không Layout/Menu/Card/Typography/UI library mới; không CDN GSAP trong runtime; không source `.html` nằm trong bundle; không module import test fixture/mock data.
@@ -40,7 +40,7 @@ pnpm run test:e2e
 pnpm run build
 git diff --check
 git status --short --branch
-git -C ../Backend status --short --branch
+git -C /home/hoang/do-an/Backend status --short --branch
 ```
 
 Expected: các command pass; mọi failure baseline mới/còn tồn tại được giải thích theo test cụ thể, không suy ra “pass” từ kết quả cũ.
@@ -49,5 +49,5 @@ Expected: các command pass; mọi failure baseline mới/còn tồn tại đư�
 - [ ] Không mượn fixture để kết luận backend integration. Khi có local backend đã xác minh origin/config, chạy smoke với tài khoản thử thuộc task; GET thực trên result/catalog/run/goal/history, mutation chỉ những action explicit của smoke, không migration/seed/đổi scoring. Ghi rõ nếu local integration chưa chạy.
 - [ ] Visual review 15 màn ở ba viewport chính, boundary/320px và reduced motion; ảnh source và app cùng viewport, fixed data/cùng điều kiện. Không yêu cầu pixel equality cho nội dung thật khác mock; ghi delta data/content có lý do, layout/token phải khớp.
 - [ ] Kiểm session isolation: logout A/login B khi query/mutation/socket pending, drafts/preview/avatar không rò; theme overlay không ảnh hưởng admin/preview; Holland boolean flow còn chạy.
-- [ ] Nếu commit đã được giao, chỉ stage task-owned files, commit theo từng màn; không `git add .`, không gom dirty file khác, không push/merge/deploy. Docs parent được báo riêng vì ngoài repo frontend.
+- [ ] Nếu commit đã được giao, chỉ stage task-owned files, commit theo từng màn; không `git add .`, không gom dirty file khác, không push/merge/deploy. Chỉ commit plan/evidence của worktree Frontend này; tài liệu parent ngoài repo được báo riêng.
 - [ ] Bàn giao rõ: đã sửa màn nào, visual reviewed hay chưa, test hiện tại, local integration có/chưa, commit hashes nếu có, dirty files còn lại; không tạo learning summary/task-summary-template khi user chưa yêu cầu.

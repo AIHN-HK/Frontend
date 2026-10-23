@@ -32,6 +32,6 @@
 - [ ] Port auth card/waves/logo/spacing, password visibility/remember/CTA bằng antd controls. Auth canvas #121214 và form cuộn được trên màn thấp.
 - [ ] Giữ validation, remember localStorage vs sessionStorage, single-flight refresh, no duplicate submit và same-account rotation.
 - [ ] Form `onFinish` hoặc native submit dùng **một** login handler; không để onClick và onSubmit cùng gửi. Không lưu password vào URL/storage.
-- [ ] Success chỉ sau server identity xác minh; USER dashboard, ADMIN admin hoặc returnTo được validate theo guard. Root redirect Task 02 không tạo loop.
+- [ ] Success chỉ sau server identity xác minh; USER dashboard, ADMIN admin hoặc returnTo được validate theo guard. Root redirect P01 không tạo loop.
 - [ ] OAuth Google mẫu nếu chưa có contract phải disabled/unavailable, không tự đăng nhập giả.
 - [ ] Chạy specs + Gate G; Enter submit, keyboard error focus, reload remembered session, logout/session changed và 320px.
