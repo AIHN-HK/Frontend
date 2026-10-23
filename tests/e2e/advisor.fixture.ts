@@ -1,12 +1,12 @@
 import type { Page, WebSocketRoute } from '@playwright/test';
-export type AdvisorOptions = { owner?: number; assessment?: boolean; sessionsStatus?: number; messagesStatus?: number; sessions?: unknown; messages?: unknown; messagesGate?: Promise<void>; mode?: 'complete' | 'hold' | 'failed' | 'silent' | 'early' | 'waiting'; connectedOwner?: number; connectGate?: Promise<void>; long?: boolean };
+export type AdvisorOptions = { authenticated?: boolean; owner?: number; assessment?: boolean; sessionsStatus?: number; messagesStatus?: number; sessions?: unknown; messages?: unknown; messagesGate?: Promise<void>; mode?: 'complete' | 'hold' | 'failed' | 'silent' | 'early' | 'waiting'; connectedOwner?: number; connectGate?: Promise<void>; long?: boolean };
 export async function advisorFixture(page: Page, options: AdvisorOptions = {}) {
   const requests: { path: string; method: string }[] = [], commands: { event: string; data: Record<string, unknown> }[] = [], sockets: WebSocketRoute[] = [], handshakes: { token: string }[] = [], closed: number[] = [];
   const stored = new Map<number, unknown[]>(), sessions = [{ id: 21, title: 'Phiên tư vấn đã lưu', status: 'CLOSED', createdAt: '2026-10-13T07:00:00.000Z' }];
   stored.set(21, [{ id: 1, sessionId: 21, content: options.long ? 'Câu hỏi đã lưu rất dài '.repeat(100) : 'Câu hỏi đã lưu', role: 'user', createdAt: '2026-10-13T07:00:01Z', checkpoint: 1 }, { id: 2, sessionId: 21, content: options.long ? 'Nội dung AI đã lưu rất dài '.repeat(180) : 'Câu trả lời đã lưu từ máy chủ.', role: 'assistant', createdAt: '2026-10-13T07:00:02Z', checkpoint: 0 }]);
   let nextSession = 100, nextMessage = 3, turn = 0;
   const emit = (event: string, data: unknown, index = sockets.length - 1) => { try { sockets[index]?.send(`42${JSON.stringify([event, data])}`); } catch { /* closed fixture socket */ } };
-  await page.addInitScript(() => { if (!sessionStorage.getItem('advisor.fixture.initialized')) { sessionStorage.setItem('advisor.fixture.initialized', 'true'); sessionStorage.setItem('aihn.auth.v1', JSON.stringify({ version: 1, ownerId: 71, rememberMe: false, tokens: { accessToken: 'access', refreshToken: 'refresh' } })); } });
+  if (options.authenticated !== false) await page.addInitScript(() => { if (!sessionStorage.getItem('advisor.fixture.initialized')) { sessionStorage.setItem('advisor.fixture.initialized', 'true'); sessionStorage.setItem('aihn.auth.v1', JSON.stringify({ version: 1, ownerId: 71, rememberMe: false, tokens: { accessToken: 'access', refreshToken: 'refresh' } })); } });
   await page.route('http://localhost:3000/api/v1/**', async route => {
     const request = route.request(), path = new URL(request.url()).pathname, method = request.method(), headers = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': '*', 'Access-Control-Allow-Methods': '*' };
     if (method === 'OPTIONS') { await route.fulfill({ status: 204, headers }); return; } requests.push({ path, method });

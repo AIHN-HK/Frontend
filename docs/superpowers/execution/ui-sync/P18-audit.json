@@ -1,0 +1,135 @@
+{
+  "runtime": [
+    {
+      "page": "src/modules/assessment/results/pages/AssessmentResultPage.tsx",
+      "css": "src/modules/assessment/results/pages/AssessmentResultPage.module.css",
+      "review_flags": []
+    },
+    {
+      "page": "src/modules/dashboard/pages/DashboardPage.tsx",
+      "css": "src/modules/dashboard/pages/DashboardPage.module.css",
+      "review_flags": []
+    },
+    {
+      "page": "src/modules/career-platform/pages/CareerRecommendationsPage.tsx",
+      "css": "src/modules/career-platform/pages/CareerRecommendationsPage.module.css",
+      "review_flags": []
+    },
+    {
+      "page": "src/modules/career-platform/pages/CareerRecommendationDetailPage.tsx",
+      "css": "src/modules/career-platform/pages/CareerRecommendationDetailPage.module.css",
+      "review_flags": []
+    },
+    {
+      "page": "src/modules/career-platform/pages/CareerCatalogPage.tsx",
+      "css": "src/modules/career-platform/pages/CareerCatalogPage.module.css",
+      "review_flags": []
+    },
+    {
+      "page": "src/modules/career-platform/pages/CareerRuntimeDetailPage.tsx",
+      "css": "src/modules/career-platform/pages/CareerRuntimeDetailPage.module.css",
+      "review_flags": []
+    },
+    {
+      "page": "src/modules/career-platform/pages/CareerRoadmapPage.tsx",
+      "css": "src/modules/career-platform/pages/CareerRoadmapPage.module.css",
+      "review_flags": []
+    },
+    {
+      "page": "src/modules/advisor/pages/AdvisorPage.tsx",
+      "css": "src/modules/advisor/pages/AdvisorPage.module.css",
+      "review_flags": []
+    },
+    {
+      "page": "src/modules/profile/pages/CareerProfilePage.tsx",
+      "css": "src/modules/profile/pages/CareerProfilePage.module.css",
+      "review_flags": []
+    },
+    {
+      "page": "src/modules/history/pages/HistoryPage.tsx",
+      "css": "src/modules/history/pages/HistoryPage.module.css",
+      "review_flags": []
+    },
+    {
+      "page": "src/modules/settings/pages/SettingsPage.tsx",
+      "css": "src/modules/settings/pages/SettingsPage.module.css",
+      "review_flags": []
+    },
+    {
+      "page": "src/modules/auth/login/pages/LoginPage.tsx",
+      "css": "src/modules/auth/login/pages/LoginPage.module.css",
+      "review_flags": []
+    },
+    {
+      "page": "src/modules/auth/registration/pages/SignupPage.tsx",
+      "css": "src/modules/auth/registration/pages/SignupPage.module.css",
+      "review_flags": []
+    },
+    {
+      "page": "src/modules/auth/verification/pages/OtpVerifyPage.tsx",
+      "css": "src/modules/auth/verification/pages/OtpVerifyPage.module.css",
+      "review_flags": []
+    },
+    {
+      "page": "src/modules/auth/recovery/pages/ForgotPasswordPage.tsx",
+      "css": "src/modules/auth/recovery/pages/ForgotPasswordPage.module.css",
+      "review_flags": []
+    },
+    {
+      "page": "src/modules/auth/recovery/pages/ResetPasswordPage.tsx",
+      "css": "src/modules/auth/recovery/pages/ResetPasswordPage.module.css",
+      "review_flags": []
+    }
+  ],
+  "changed_sources": [],
+  "design_screens": 15,
+  "runtime_pages": 16,
+  "dependencies_changed_since_continuation_base": false,
+  "antd_scope": "Migrated runtime pages and their consumers use only the allowlist plus ConfigProvider/theme infrastructure. Inherited RecommendationsSkeleton belongs to explicit preview routes.",
+  "local_backend": "Connection refused at http://127.0.0.1:3000; no live integration claim.",
+  "acceptance_corrections": [
+    "TimelineSidebar RIASEC links now have a 44px minimum hit area.",
+    "Career responsive assertions wait for the viewport layout to settle without relaxing the no-overflow condition."
+  ],
+  "source_files_hash_verified": 20,
+  "visual_review": {
+    "source_screens": 15,
+    "runtime_screens": 16,
+    "expected_source_and_runtime_captures": 96,
+    "missing_captures": [],
+    "widths": [
+      390,
+      768,
+      1440
+    ],
+    "responsive_boundaries": [
+      320,
+      390,
+      768,
+      769,
+      1024,
+      1025,
+      1440,
+      1600
+    ]
+  },
+  "final_gates": {
+    "typecheck": "passed",
+    "lint": "passed",
+    "unit": {
+      "files": 21,
+      "passed": 160
+    },
+    "e2e": {
+      "passed": 473,
+      "failed": 0,
+      "retries": 0
+    },
+    "capture_only_followup": {
+      "passed": 2,
+      "failed": 0
+    },
+    "build": "passed; existing non-blocking large-chunk warning",
+    "diff_check": "passed"
+  }
+}
