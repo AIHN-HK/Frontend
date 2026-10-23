@@ -11,4 +11,5 @@
 .active .description { color:var(--ce-violet); }
 .radar { margin-top:28px; padding:24px 20px 20px; background:var(--ce-glass-subtle); border:1px solid var(--ce-border); border-radius:16px; text-align:center; }
 .radar h2 { font-size:13px; text-transform:uppercase; letter-spacing:1.1px; margin-bottom:16px; }
+.radar a { display:inline-flex; align-items:center; justify-content:center; min-height:44px; }
 @media(max-width:1024px) { .sidebar { display:none; } }

@@ -13,7 +13,7 @@ test('recommendation filters keep the saved run and explicit career detail conte
   expect(fixture.calls.filter(c=>c.method==='POST'&&c.path==='/api/v1/career/recommendations')).toHaveLength(1);
   for(const width of [390,768,1440]) {
     await page.setViewportSize({width,height:width===768?1024:900});
-    expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+    await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     await page.screenshot({path:`.superpowers/ui-sync/P05/recommendations-${width}.png`,fullPage:true});
   }
 });
@@ -37,7 +37,7 @@ test('saved recommendation detail reloads the explicit item and preserves old ru
   await expect(page.getByRole('heading',{level:1})).toHaveText('Data Scientists');
   for(const width of [320,390,768,769,1024,1025,1440,1600]){
     await page.setViewportSize({width,height:width===768?1024:900});
-    expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+    await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     if(width <= 1024) await expect(page.getByRole('complementary',{name:'Tiến trình'})).toBeHidden();
     else await expect(page.getByRole('complementary',{name:'Tiến trình'})).toBeVisible();
     await page.screenshot({path:`.superpowers/ui-sync/P06/detail-${width}.png`,fullPage:true});
