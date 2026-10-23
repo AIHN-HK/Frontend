@@ -155,3 +155,124 @@ for (const width of [320, 390, 768, 769, 1024, 1025, 1440]) {
     }
   });
 }
+
+// Runtime catalog: source records and server filters stay separate from preview fixtures.
+test('runtime catalog submits only supported filters and resets pagination with keyboard controls', async ({ page }) => {
+  const { sourceCareer } = await import('./career-platform.fixture');
+  await careerPlatformFixture(page);
+  const requests: URL[] = [];
+  await page.route('**/api/v1/careers?**', async route => {
+    const url = new URL(route.request().url());
+    requests.push(url);
+    await route.fulfill({ json: { data: { items: [sourceCareer], total: 25, page: Number(url.searchParams.get('page')), limit: 12 } } });
+  });
+  await page.goto('/careers?page=2');
+  await expect(page.getByRole('article')).toHaveCount(1);
+  await page.getByRole('searchbox').fill('Software');
+  const group = page.getByRole('combobox', { name: 'Nhóm RIASEC nổi bật' });
+  await group.focus();
+  await page.keyboard.press('ArrowDown');
+  await page.keyboard.press('ArrowDown');
+  await page.keyboard.press('ArrowDown');
+  await page.keyboard.press('Enter');
+  await page.getByRole('button', { name: 'Tìm kiếm', exact: true }).click();
+  await expect(page).toHaveURL(/page=1/);
+  await expect.poll(() => requests.at(-1)?.searchParams.get('q')).toBe('Software');
+  expect([...requests.at(-1)!.searchParams.keys()].sort()).toEqual(['code', 'limit', 'page', 'q']);
+  expect(requests.at(-1)!.searchParams.get('code')).toBe('I');
+  await page.getByRole('button', { name: 'Trang sau', exact: true }).click();
+  await expect(page).toHaveURL(/page=2/);
+  await page.goBack();
+  await expect(page).toHaveURL(/page=1/);
+  await expect(page.getByRole('searchbox')).toHaveValue('Software');
+  await expect(page.getByRole('article').getByRole('link', { name: 'Nguồn O*NET: Software Developers' })).toHaveAttribute('href', sourceCareer.sourceUrl);
+});
+
+test('runtime catalog distinguishes empty source, no results, out-of-range and retry', async ({ page }) => {
+  await careerPlatformFixture(page);
+  let fail = true;
+  await page.route('**/api/v1/careers?**', route => {
+    const url = new URL(route.request().url());
+    return route.fulfill(fail ? { status: 503, json: {} } : { json: { data: { items: [], total: url.searchParams.get('page') === '999' ? 20 : 0, page: Number(url.searchParams.get('page')), limit: 12 } } });
+  });
+  await page.goto('/careers');
+  await expect(page.getByRole('alert')).toBeVisible();
+  fail = false;
+  await page.getByRole('button', { name: 'Thử tải lại dữ liệu nghề' }).click();
+  await expect(page.getByRole('heading', { name: 'Danh mục nghề chưa có dữ liệu' })).toBeVisible();
+  await page.getByRole('searchbox').fill('missing');
+  await page.getByRole('searchbox').press('Enter');
+  await expect(page.getByRole('heading', { name: 'Không có nghề phù hợp' })).toBeVisible();
+  await expect(page.getByRole('navigation', { name: 'Phân trang nghề', exact: true })).toHaveCount(0);
+  await page.goto('/careers?page=999');
+  await expect(page.getByRole('heading', { name: 'Trang này vượt quá kết quả' })).toBeVisible();
+  await page.getByRole('button', { name: 'Về trang đầu' }).click();
+  await expect(page).toHaveURL(/page=1/);
+});
+
+test('runtime catalog ignores late search responses and invalid source records', async ({ page }) => {
+  const { sourceCareer } = await import('./career-platform.fixture');
+  await careerPlatformFixture(page);
+  let release!: () => void;
+  const held = new Promise<void>(resolve => { release = resolve; });
+  await page.route('**/api/v1/careers?**', async route => {
+    const q = new URL(route.request().url()).searchParams.get('q');
+    if (q === 'old') await held;
+    await route.fulfill({ json: { data: { items: [{ ...sourceCareer, title: q === 'old' ? 'Obsolete career' : 'Current career', sourceUrl: q === 'invalid' ? 'https://example.com/fake' : sourceCareer.sourceUrl }], total: 1, page: 1, limit: 12 } } });
+  });
+  await page.goto('/careers?q=old');
+  await expect(page.getByRole('status')).toContainText('Đang tải');
+  await page.getByRole('searchbox').fill('new');
+  await page.getByRole('searchbox').press('Enter');
+  await expect(page.getByRole('heading', { name: 'Current career' })).toBeVisible();
+  release();
+  await expect(page.getByRole('heading', { name: 'Obsolete career' })).toHaveCount(0);
+  await page.getByRole('searchbox').fill('invalid');
+  await page.getByRole('searchbox').press('Enter');
+  await expect(page.getByRole('alert')).toBeVisible();
+  await expect(page.getByRole('article')).toHaveCount(0);
+});
+
+test('runtime catalog fits breakpoints, has one shell and keeps source cards visible with both motion preferences', async ({ page }) => {
+  const { sourceCareer } = await import('./career-platform.fixture');
+  await careerPlatformFixture(page);
+  await page.route('**/api/v1/careers?**', route => route.fulfill({ json: { data: { items: Array.from({ length: 6 }, (_, n) => ({ ...sourceCareer, id: `15-1252.0${n}`, title: `${sourceCareer.title} ${n + 1}` })), total: 6, page: 1, limit: 12 } } }));
+  const errors: string[] = [];
+  page.on('pageerror', error => errors.push(error.message));
+  for (const reducedMotion of ['reduce', 'no-preference'] as const) {
+    await page.emulateMedia({ reducedMotion });
+    await page.goto('/careers');
+    await expect(page.getByRole('article')).toHaveCount(6);
+    await expect(page.getByRole('article').first()).toHaveCSS('opacity', '1');
+    await expect(page.getByRole('main')).toHaveCount(1);
+    await expect(page.getByRole('banner')).toHaveCount(1);
+    for (const width of [320, 390, 768, 769, 1024, 1025, 1440, 1600]) {
+      await page.setViewportSize({ width, height: width === 768 ? 1024 : 900 });
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+      for (const control of await page.locator('main button, main a, main input, main .ant-select').all()) {
+        if (!await control.isVisible()) continue;
+        const box = (await control.boundingBox())!;
+        expect(box.height).toBeGreaterThanOrEqual(44);
+      }
+      if (reducedMotion === 'reduce') await page.screenshot({ path: `.superpowers/ui-sync/P07/implementation-${width}.png`, fullPage: true });
+    }
+  }
+  expect(errors).toEqual([]);
+});
+
+test('runtime catalog returns to the guarded filtered URL after login', async ({ page }) => {
+  const { resultFixture } = await import('./result.fixture');
+  await resultFixture(page, { authenticated: false });
+  const fixture = await careerPlatformFixture(page, { anonymous: true });
+  await page.goto('/careers?q=Software&code=I&page=1');
+  await expect(page).toHaveURL(/\/login\?returnTo=/);
+  await expect(page.getByRole('article')).toHaveCount(0);
+  expect(fixture.calls).toHaveLength(0);
+  await page.getByLabel('Email trường hoặc cá nhân').fill('student@example.test');
+  await page.getByLabel('Mật khẩu', { exact: true }).fill('password123');
+  await page.getByRole('button', { name: 'Đăng nhập vào Trang của tôi →' }).click();
+  await expect(page).toHaveURL('/careers?q=Software&code=I&page=1');
+  await expect(page.getByRole('heading', { name: 'Software Developers' })).toBeVisible();
+  await expect(page.getByRole('searchbox')).toHaveValue('Software');
+  await expect(page.getByRole('combobox', { name: 'Nhóm RIASEC nổi bật' })).toBeVisible();
+});
