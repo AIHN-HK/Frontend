@@ -81,3 +81,29 @@ test('history source tabs preserve real records in the dark responsive timeline'
   await expect(page.getByRole('article').first()).toBeVisible();
   await reviewResponsive(page,'P12','.history-page');
 });
+
+test('selected history records belong to their tab panel when switching sources', async ({page}) => {
+  await historyFixture(page);
+  await page.goto('/history');
+  await expect(page.getByRole('tabpanel').getByRole('article', {name:'Lần làm #812'})).toBeVisible();
+  await page.getByRole('tab', {name:/Phiên tư vấn$/}).click();
+  await expect(page.getByRole('tabpanel').getByRole('article', {name:'Phiên tư vấn #31'})).toBeVisible();
+  await expect(page.getByRole('tabpanel').getByRole('article', {name:'Lần làm #812'})).toHaveCount(0);
+});
+
+test('switching history tabs aborts the inactive read and refetches it on return', async ({page}) => {
+  let release!: () => void;
+  const firstGate = new Promise<void>(resolve => { release = resolve; });
+  const calls = await historyFixture(page, {firstGate});
+  let aborted = 0;
+  page.on('requestfailed', request => { if (request.url().includes('/history-by-user')) aborted++; });
+  await page.goto('/history');
+  await expect(page.getByRole('status')).toContainText('Đang tải lịch sử trắc nghiệm');
+  await page.getByRole('tab', {name:/Phiên tư vấn$/}).click();
+  release();
+  await expect(page.getByRole('article', {name:'Phiên tư vấn #31'})).toBeVisible();
+  await expect.poll(() => aborted).toBeGreaterThan(0);
+  await page.getByRole('tab', {name:/Trắc nghiệm Holland$/}).click();
+  await expect(page.getByRole('article', {name:'Lần làm #812'})).toBeVisible();
+  expect(calls.filter(call => call.path.endsWith('/history-by-user'))).toHaveLength(2);
+});

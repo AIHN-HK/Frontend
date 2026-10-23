@@ -15,3 +15,6 @@
 .page :global(.history-note),.page :global(.history-meta),.page :global(.history-count) { color:var(--ce-text-secondary); font-size:12px; }
 .page :global(.history-state) { background:var(--ce-bg-nav); border-color:var(--ce-border); }
 @media(max-width:768px) { .page { padding:28px 16px; } .page h1 { font-size:28px; } }
+
+.page :global(.history-header)::before { display:none; }
+.page :global(.ant-tabs-tabpane-active) { display:grid; gap:20px; }
