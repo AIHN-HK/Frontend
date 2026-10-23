@@ -12,7 +12,7 @@
 
 **Commit:** `feat(ui): add shared radar showcase and timeline components`.
 
-**Status:** Pending.
+**Status:** Completed; evidence [P02](../../execution/ui-sync/P02.md).
 
 ## Checkpoint bắt buộc
 
