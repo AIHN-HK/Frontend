@@ -213,3 +213,10 @@ for (const [width, height] of [[320, 844], [390, 844], [768, 1024], [769, 1024],
   await page.keyboard.press('Tab');
   await expect(page.getByRole('button', { name: 'Xác nhận đăng ký' })).toBeFocused();
 });
+
+test('OTP dark card keeps actual flow context and usable digits at every breakpoint', async ({page}) => {
+  const {reviewResponsive}=await import('./ui-sync.fixture');
+  await fixture(page); await signup(page);
+  await expect(digits(page)).toHaveCount(6);
+  await reviewResponsive(page,'P16','main>div');
+});
