@@ -12,15 +12,15 @@
 
 **Commit:** `feat(ui): port History page`.
 
-**Status:** Pending.
+**Status:** Completed. Evidence: [P12](../../execution/ui-sync/P12.md).
 
 ## Checkpoint bắt buộc
 
-- [ ] Đọc plan, CONTRACTS và git status.
-- [ ] Thực thi chỉ các file thuộc plan này.
-- [ ] Typecheck/lint, scoped tests và visual khi có UI consumer phải pass.
-- [ ] Ghi evidence thực tế, review diff, stage file cụ thể.
-- [ ] Tạo commit message ở trên; cập nhật status rồi mới chuyển plan kế tiếp.
+- [x] Đọc plan, CONTRACTS và git status.
+- [x] Thực thi chỉ các file thuộc plan này.
+- [x] Typecheck/lint, scoped tests và visual khi có UI consumer phải pass.
+- [x] Ghi evidence thực tế, review diff, stage file cụ thể.
+- [x] Tạo commit message ở trên; cập nhật status rồi mới chuyển plan kế tiếp.
 
 ## History
 
@@ -29,8 +29,8 @@
 **Create:** `HistoryPage.module.css` cùng thư mục.
 **Test:** `tests/e2e/history.spec.ts`, `result.spec.ts`, `advisor.spec.ts`.
 
-- [ ] Port tabs/filter/timeline/list theo source với Tabs antd và semantic list/table. Chỉ show category được history API hỗ trợ; không tạo sự kiện roadmap/like mẫu.
-- [ ] Giữ cursor/pagination/sort/state hiện có; không từ trang đầu suy ra total toàn hệ thống. Result/chat reopen trỏ đúng attempt/session.
-- [ ] Dates format theo dữ liệu/server và locale, không dùng ngày mẫu. Empty/loading/error của từng tab độc lập.
-- [ ] Owner-scoped query, abort khi đổi tab/account; không giữ history A ở B hoặc đổi tab khiến auto mutation.
-- [ ] Chạy specs + Gate G; tab keyboard, long title/date, duplicate load-more và deep link reopen.
+- [x] Port tabs/filter/timeline/list theo source với Tabs antd và semantic list/table. Chỉ show category được history API hỗ trợ; không tạo sự kiện roadmap/like mẫu.
+- [x] Giữ cursor/pagination/sort/state hiện có; không từ trang đầu suy ra total toàn hệ thống. Result/chat reopen trỏ đúng attempt/session.
+- [x] Dates format theo dữ liệu/server và locale, không dùng ngày mẫu. Empty/loading/error của từng tab độc lập.
+- [x] Owner-scoped query, abort khi đổi tab/account; không giữ history A ở B hoặc đổi tab khiến auto mutation.
+- [x] Chạy specs + Gate G; tab keyboard, long title/date, duplicate load-more và deep link reopen.

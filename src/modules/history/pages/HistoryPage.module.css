@@ -1,0 +1,17 @@
+.page { display:grid; gap:24px; max-width:800px; margin:auto; padding:52px 48px; }
+.page :global(.history-header) { padding:0; background:none; border:0; box-shadow:none; }
+.page h1 { font-size:36px; font-weight:500; letter-spacing:-.5px; line-height:1.2; }
+.page :global(.history-tag) { background:transparent; border:0; padding:0; color:var(--ce-violet); font-size:11px; }
+.page p { font-size:13px; line-height:1.6; }
+.page :global(.history-filters) { display:grid; grid-template-columns:minmax(0,1fr); gap:16px; padding:0; border:0; background:none; }
+.page :global(.ant-tabs) { min-width:0; }
+.page :global(.ant-tabs-tab-btn) { min-height:44px; display:flex; align-items:center; }
+.page :global(.history-filters select) { background:var(--ce-bg-nav); border-color:var(--ce-border); color:var(--ce-text-primary); min-height:44px; }
+.page :global(.history-card) { background:var(--ce-glass-subtle); border:1px solid var(--ce-border); border-radius:12px; padding:16px; box-shadow:none; }
+.page :global(.history-card h2) { font-size:14px; }
+.page :global(.history-icon) { background:var(--ce-c-subtle); color:var(--ce-violet); border-color:var(--ce-c-border); }
+.page :global(.history-icon.chat) { background:var(--ce-i-subtle); color:var(--ce-i); }
+.page a { min-height:44px; color:var(--ce-violet); font-size:13px; }
+.page :global(.history-note),.page :global(.history-meta),.page :global(.history-count) { color:var(--ce-text-secondary); font-size:12px; }
+.page :global(.history-state) { background:var(--ce-bg-nav); border-color:var(--ce-border); }
+@media(max-width:768px) { .page { padding:28px 16px; } .page h1 { font-size:28px; } }
