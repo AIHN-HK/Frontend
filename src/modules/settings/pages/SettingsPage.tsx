@@ -1,11 +1,15 @@
 import { Link } from 'react-router';
+import { Button, Input } from 'antd';
+import { usePageEntrance } from '@/shared/ui/ce/usePageEntrance';
 import { paths } from '@/routes/paths';
 import { useProfileQuery } from '@/modules/profile';
 import { choices, defaultAppearance, setAppearance, useAppearance } from '@/shared/appearance/appearance';
 import './settings.css';
+import styles from './SettingsPage.module.css';
 export function SettingsPage() {
   const appearance = useAppearance(),
     profile = useProfileQuery();
+  const root = usePageEntrance(profile.data ? profile.data.email : 'loading');
   const fields = {
     preset: 'Giao diện',
     accent: 'Điểm nhấn',
@@ -28,19 +32,19 @@ export function SettingsPage() {
     contrast: 'Tương phản',
   };
   return (
-    <div className="settings-page">
+    <div ref={root} className={`${styles.page} settings-page`}>
       <header>
         <h1>Cài đặt tài khoản</h1>
         <p>Quản lý thông tin và tùy chỉnh không gian học tập.</p>
       </header>
-      <section>
+      <section data-ce-enter="">
         <h2>Thông tin tài khoản</h2>
         {profile.isError ? (
           <p role="alert">
             Không tải được tài khoản.{' '}
-            <button className="btn btn-secondary" onClick={() => void profile.refetch()}>
+            <Button className="btn btn-secondary" onClick={() => void profile.refetch()}>
               Thử lại
-            </button>
+            </Button>
           </p>
         ) : profile.isPending ? (
           <p role="status">Đang tải tài khoản…</p>
@@ -48,11 +52,11 @@ export function SettingsPage() {
           <>
             <label>
               Họ và tên
-              <input value={profile.data.fullname} readOnly />
+              <Input value={profile.data.fullname} readOnly />
             </label>
             <label>
               Email
-              <input type="email" value={profile.data.email} readOnly />
+              <Input type="email" value={profile.data.email} readOnly />
             </label>
             <Link className="btn btn-secondary" to={paths.careerProfile}>
               Chỉnh sửa hồ sơ
@@ -61,11 +65,10 @@ export function SettingsPage() {
         )}
         <p>Đăng xuất bằng nút tài khoản trên trang để kết thúc phiên hiện tại.</p>
       </section>
-      <section>
+      <section data-ce-enter="">
         <h2>Giao diện &amp; Cá nhân hóa</h2>
         <p>
-          Lưu trên thiết bị này, áp dụng cho các tài khoản sử dụng cùng trình duyệt. Không đồng bộ lên máy
-          chủ.
+          Giao diện AIHN hiện dùng chủ đề tối cố định. Các lựa chọn bên dưới dành cho giao diện xem trước trên thiết bị này; không đồng bộ lên máy chủ.
         </p>
         <div className="settings-grid">
           {Object.entries(fields).map(([key, label]) => (
@@ -84,16 +87,16 @@ export function SettingsPage() {
             </label>
           ))}
         </div>
-        <button className="btn btn-secondary" onClick={() => setAppearance(defaultAppearance)}>
+        <Button className="btn btn-secondary" onClick={() => setAppearance(defaultAppearance)}>
           Khôi phục mặc định
-        </button>
+        </Button>
         <p role="status">
           {appearance.persisted
-            ? 'Lựa chọn được áp dụng trên thiết bị này.'
-            : 'Đã áp dụng tạm thời; trình duyệt không cho lưu. Tải lại có thể mất lựa chọn.'}
+            ? 'Lựa chọn được lưu cho giao diện xem trước trên thiết bị này.'
+            : 'Đã áp dụng tạm thời cho giao diện xem trước; trình duyệt không cho lưu. Tải lại có thể mất lựa chọn.'}
         </p>
       </section>
-      <section>
+      <section data-ce-enter="">
         <h2>Bảo mật &amp; Dữ liệu</h2>
         <p>Đổi mật khẩu, thông báo, xuất PDF và xóa tài khoản chưa được hỗ trợ tại đây.</p>
       </section>
