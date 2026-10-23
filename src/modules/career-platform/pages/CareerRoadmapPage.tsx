@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import { z } from "zod";
 import { useSession } from "@/shared/session/session";
-import { Button } from "@/shared/ui/Button";
+import { Button, Input } from "antd";
+import { TimelineSidebar } from "@/shared/ui/ce/TimelineSidebar";
+import styles from "./CareerRoadmapPage.module.css";
 import { paths } from "@/routes/paths";
 import { usePlatformCommand, usePlatformQuery } from "../api/platform.api";
 import { gapSchema, goalSchema, profileSchema } from "../model/contracts";
@@ -49,7 +51,11 @@ export function CareerRoadmapPage() {
     Boolean(target),
   );
   return (
-    <PlatformFrame title="Lộ trình và tiến độ cá nhân">
+    <PlatformFrame title="Lộ trình và tiến độ cá nhân" className={styles.page} animationKey={goals.data?.map(goal => `${goal.id}:${goal.revision}`).join(',') ?? 'loading'} sidebar={<TimelineSidebar steps={[
+      {id:'target',title:'Nghề mục tiêu',description:target ?? 'Chọn nghề trong hồ sơ',status:target?'completed':'pending'},
+      {id:'profile',title:'Hồ sơ kỹ năng',description:'Tự đánh giá và đọc khoảng cách',status:profile.data?.skills.length?'completed':'pending'},
+      {id:'roadmap',title:'Lộ trình',description:'Tiến độ có minh chứng do bạn xác nhận',status:'active'},
+    ]}/>}>
       <p>
         Lộ trình được tạo từ nghề mục tiêu và khoảng cách kỹ năng tại thời điểm
         tạo. Tiến độ là việc bạn tự xác nhận có minh chứng, chưa phải chứng nhận
@@ -65,7 +71,7 @@ export function CareerRoadmapPage() {
         }}
       />
       {profile.data && !target && (
-        <section className="platform-card">
+        <section className={styles.card}>
           <h2>Chọn nghề mục tiêu trước</h2>
           <p>Cập nhật kỹ năng và chọn nghề trong hồ sơ để tạo lộ trình.</p>
           <Link to={paths.careerProfile}>Mở hồ sơ định hướng</Link>
@@ -73,7 +79,7 @@ export function CareerRoadmapPage() {
         </section>
       )}
       {target && (
-        <section className="platform-card">
+        <section className={styles.card}>
           <h2>Khoảng cách kỹ năng · {target}</h2>
           <ReadState
             pending={gaps.isPending}
@@ -86,8 +92,8 @@ export function CareerRoadmapPage() {
                 Hồ sơ phiên bản {gaps.data.profileRevision} ·{" "}
                 {gaps.data.sourceVersion}
               </p>
-              <div className="platform-table-wrap">
-                <table className="platform-table">
+              <div className={styles.tableWrap}>
+                <table className={styles.table}>
                   <thead>
                     <tr>
                       <th>Kỹ năng</th>
@@ -144,19 +150,19 @@ function GoalCard({ goal }: { goal: Goal }) {
   const command = usePlatformCommand(),
     complete = goal.tasks.filter((t) => t.done).length;
   return (
-    <section className="platform-card">
+    <section className={styles.card}>
       <h2>{goal.title}</h2>
       <p>
         {complete}/{goal.tasks.length} nhiệm vụ hoàn thành · phiên bản{" "}
         {goal.revision}
       </p>
-      <progress
+      <progress className={styles.progress}
         value={complete}
         max={goal.tasks.length || 1}
         aria-label={`Tiến độ ${goal.title}`}
       />
       <Button
-        variant="secondary"
+
         disabled={command.isPending}
         onClick={() =>
           command.mutate({
@@ -174,8 +180,9 @@ function GoalCard({ goal }: { goal: Goal }) {
         thành các phase trước để mở phase sau.
       </p>
       <CommandState error={command.error} success={command.isSuccess} />
-      {phaseLabels.map((phase, index) => (
-        <section key={phase}>
+      {!goal.tasks.length && <p>Chưa có nhiệm vụ trong lộ trình này.</p>}
+      <div className={styles.timeline}>{phaseLabels.map((phase, index) => (
+        <section key={phase} className={styles.phase} data-ce-enter="" data-phase-state={goal.tasks.filter(t=>t.phase===index).length && goal.tasks.filter(t=>t.phase===index).every(t=>t.done) ? 'done' : goal.tasks.some(t=>t.phase<index&&!t.done) ? 'future' : 'current'}>
           <h3>
             {index + 1}. {phase}
           </h3>
@@ -185,7 +192,7 @@ function GoalCard({ goal }: { goal: Goal }) {
               <TaskForm key={task.id} task={task} goal={goal} />
             ))}
         </section>
-      ))}
+      ))}</div>
     </section>
   );
 }
@@ -210,7 +217,7 @@ function TaskForm({ task, goal }: { task: Goal["tasks"][number]; goal: Goal }) {
   const blocked = goal.tasks.some((t) => t.phase < task.phase && !t.done);
   return (
     <form
-      className="platform-card"
+      className={styles.card}
       onSubmit={(e) => {
         e.preventDefault();
         void command
@@ -235,7 +242,7 @@ function TaskForm({ task, goal }: { task: Goal["tasks"][number]; goal: Goal }) {
       </p>
       <label>
         Minh chứng — {task.title}
-        <textarea
+        <Input.TextArea
           maxLength={1000}
           value={evidence}
           onChange={(e) => setEvidence(e.target.value)}
@@ -243,8 +250,8 @@ function TaskForm({ task, goal }: { task: Goal["tasks"][number]; goal: Goal }) {
         />
       </label>
       <Button
-        type="submit"
-        variant={task.done ? "secondary" : "primary"}
+        htmlType="submit"
+        type={task.done ? "default" : "primary"}
         disabled={
           command.isPending || (!task.done && (blocked || !evidence.trim()))
         }

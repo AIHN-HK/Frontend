@@ -131,3 +131,14 @@ for (const width of [320, 390, 768, 769, 1024, 1025, 1440])
       .all())
       expect((await control.boundingBox())!.height).toBeGreaterThanOrEqual(44);
   });
+
+test('roadmap timeline uses confirmed tasks and fits responsive source layouts', async ({ page }) => {
+  const { reviewResponsive } = await import('./ui-sync.fixture');
+  const fixture = await careerPlatformFixture(page, { seedProfile: true });
+  await page.goto('/roadmap');
+  await page.getByRole('button', { name: 'Tạo lộ trình từ mục tiêu', exact: true }).click();
+  await expect(page.getByText('0/4 nhiệm vụ hoàn thành · phiên bản 1', { exact: true })).toBeVisible();
+  await expect(page.locator('[data-phase-state=done]')).toHaveCount(0);
+  await reviewResponsive(page, 'P09', '.career-platform');
+  expect(fixture.calls.filter(c => c.method === 'POST')).toHaveLength(1);
+});

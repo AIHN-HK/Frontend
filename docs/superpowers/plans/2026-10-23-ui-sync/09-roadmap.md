@@ -12,15 +12,15 @@
 
 **Commit:** `feat(ui): port Roadmap page`.
 
-**Status:** Pending.
+**Status:** Completed. Evidence: [P09](../../execution/ui-sync/P09.md).
 
 ## Checkpoint bắt buộc
 
-- [ ] Đọc plan, CONTRACTS và git status.
-- [ ] Thực thi chỉ các file thuộc plan này.
-- [ ] Typecheck/lint, scoped tests và visual khi có UI consumer phải pass.
-- [ ] Ghi evidence thực tế, review diff, stage file cụ thể.
-- [ ] Tạo commit message ở trên; cập nhật status rồi mới chuyển plan kế tiếp.
+- [x] Đọc plan, CONTRACTS và git status.
+- [x] Thực thi chỉ các file thuộc plan này.
+- [x] Typecheck/lint, scoped tests và visual khi có UI consumer phải pass.
+- [x] Ghi evidence thực tế, review diff, stage file cụ thể.
+- [x] Tạo commit message ở trên; cập nhật status rồi mới chuyển plan kế tiếp.
 
 ## Roadmap
 
@@ -29,9 +29,9 @@
 **Create:** `CareerRoadmapPage.module.css` cùng thư mục.
 **Test:** `tests/e2e/career-platform.spec.ts`, `roadmap.spec.ts`, `career-progress.spec.ts`.
 
-- [ ] Port timeline/phases/task cards/header/progress theo HTML nhưng dùng goal/tasks đã lưu, target/profile/gaps thật.
-- [ ] Giữ explicit tạo mục tiêu, revision khi cập nhật task, evidence/draft và failed/unknown mutation handling. Switch/Button antd thay control nhưng không thay event contract.
-- [ ] Progress tính từ `done` của task thuộc goal đã xác nhận; no tasks là “chưa có nhiệm vụ”, không `100%`. Tách rõ tiến độ tự xác nhận và chứng nhận năng lực.
-- [ ] Không copy mốc tháng, khóa học, trường hay chứng chỉ giả từ mockup. No target → CTA profile; gap unknown giữ unknown.
-- [ ] Error cập nhật không đánh dấu task complete thành công; double submit không gửi hai mutation, reload phải từ server.
-- [ ] Chạy specs + Gate G; keyboard toggle/modal evidence, mobile timeline, revision conflict và unknown-save.
+- [x] Port timeline/phases/task cards/header/progress theo HTML nhưng dùng goal/tasks đã lưu, target/profile/gaps thật.
+- [x] Giữ explicit tạo mục tiêu, revision khi cập nhật task, evidence/draft và failed/unknown mutation handling. Switch/Button antd thay control nhưng không thay event contract.
+- [x] Progress tính từ `done` của task thuộc goal đã xác nhận; no tasks là “chưa có nhiệm vụ”, không `100%`. Tách rõ tiến độ tự xác nhận và chứng nhận năng lực.
+- [x] Không copy mốc tháng, khóa học, trường hay chứng chỉ giả từ mockup. No target → CTA profile; gap unknown giữ unknown.
+- [x] Error cập nhật không đánh dấu task complete thành công; double submit không gửi hai mutation, reload phải từ server.
+- [x] Chạy specs + Gate G; keyboard toggle/modal evidence, mobile timeline, revision conflict và unknown-save.
