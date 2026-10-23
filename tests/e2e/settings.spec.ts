@@ -11,11 +11,7 @@ test('device appearance persists, resets, isolates admin and email is read only'
   await page.reload();
   await expect(page.getByLabel('Giao diện')).toHaveValue('dark');
   await expect(page.getByLabel('Email')).toHaveAttribute('readonly', '');
-  expect(
-    await page
-      .locator('.workspace-shell')
-      .evaluate((el) => getComputedStyle(el).getPropertyValue('--bg-app').trim().toLowerCase()),
-  ).toBe('#0b0f19');
+  await expect(page.locator('.ce-app')).toHaveCSS('background-color', 'rgb(18, 18, 20)');
   await page.goto('/preview/admin');
   expect(
     await page

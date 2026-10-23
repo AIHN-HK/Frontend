@@ -1,9 +1,11 @@
 import { expect, test } from '@playwright/test';
+import { careerPlatformFixture } from './career-platform.fixture';
 
 const preview = '/preview/careers';
 const fixture = '**/assets/catalog-preview-*.json';
 
 test('runtime catalog failure never falls back to preview data', async ({ page }) => {
+  await careerPlatformFixture(page);
   const requests: string[] = [];
   page.on('request', r => { if (/catalog-preview|\/api\/.*career/.test(r.url())) requests.push(r.url()); });
   await page.route('**/api/v1/careers**', route => route.fulfill({ status: 503, json: { message: 'fixture unavailable' } }));

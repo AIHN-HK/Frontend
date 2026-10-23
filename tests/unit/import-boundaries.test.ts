@@ -11,6 +11,7 @@ afterEach(async () => {
 });
 
 async function lint(files: Record<string, string>) {
+  await mkdir(path.resolve('.superpowers/sdd/00-nen-chung'), { recursive: true });
   const root = await mkdtemp(path.resolve('.superpowers/sdd/00-nen-chung/import-fixture-'));
   fixtures.push(root);
   await writeFile(path.join(root, 'tsconfig.app.json'), JSON.stringify({

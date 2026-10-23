@@ -164,14 +164,18 @@ test('a stale background GET cannot replace the profile cache after successful P
   await page.getByRole('link', { name: 'Về Trang của tôi' }).click(); await expect(page.getByRole('heading', { level: 1 })).toContainText('Tên sau PATCH'); releaseDashboard();
 });
 
-test('long metadata and maximum-length draft fit a small screen and save stays above bottom navigation', async ({ page }) => {
+test('long metadata and maximum-length draft fit a small screen and save stays visible and unobstructed', async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 844 });
   await fixture(page, { profile: { ...baseProfile, email: 'long'.repeat(40) + '@example.test' } }); await page.goto('/career-profile');
   await page.getByLabel('Họ và tên', { exact: true }).fill('x'.repeat(120)); await page.getByLabel('Địa chỉ', { exact: true }).fill('x'.repeat(500));
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await save(page).scrollIntoViewIfNeeded();
-  const action = (await save(page).boundingBox())!, nav = (await page.getByRole('navigation', { name: 'Điều hướng chính di động' }).boundingBox())!;
-  expect(action.y + action.height).toBeLessThanOrEqual(nav.y);
+  await expect(save(page)).toBeInViewport();
+  expect(await save(page).evaluate(element => {
+    const box = element.getBoundingClientRect();
+    const hit = document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2);
+    return box.bottom <= innerHeight && hit !== null && element.contains(hit);
+  })).toBe(true);
 });
 
 test('account switch during PATCH cannot update B profile or carry A draft', async ({ page }) => {

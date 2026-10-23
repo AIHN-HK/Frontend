@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 import catalog from '../../src/modules/careers/preview/catalog-preview.json' with { type: 'json' };
 import { advisorFixture } from './advisor.fixture';
+import { careerPlatformFixture } from './career-platform.fixture';
 
 const software = '/preview/careers/preview-software';
 const data = '/preview/careers/preview-data-engineer';
@@ -11,6 +12,11 @@ test('real detail never fetches preview records or claims a verified career', as
   page.on('request', (r) => {
     if (/catalog-preview|\/api\/.*career/.test(r.url())) requests.push(r.url());
   });
+  await page.goto('/careers/preview-software');
+  await expect(page).toHaveURL(/\/login\?returnTo=%2Fcareers%2Fpreview-software$/);
+  await expect(page.getByRole('heading', { name: 'Đăng nhập AIHN' })).toBeVisible();
+  expect(requests).toEqual([]);
+  await careerPlatformFixture(page);
   await page.goto('/careers/preview-software');
   await expect(page.getByText('Mã nghề không hợp lệ.')).toBeVisible();
   await page.reload();
