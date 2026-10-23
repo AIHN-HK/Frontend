@@ -51,8 +51,3 @@
     scroll-behavior: auto !important;
   }
 }
-
-/* Keep the existing result readable until P03 replaces its legacy CSS. */
-.ce-app .result-hero, .ce-app .result-metadata span, .ce-app .result-bridge,
-.ce-app .result-inline-state, .ce-app .result-radar { background:var(--ce-bg-card); }
-.ce-app .result-friendly-header { background:linear-gradient(145deg,var(--ce-card-gradient-start),var(--ce-card-gradient-end)); }

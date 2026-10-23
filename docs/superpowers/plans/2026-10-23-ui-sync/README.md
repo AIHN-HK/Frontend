@@ -9,7 +9,7 @@ Giữ v8 + src/modules theo xác nhận user. P00 gồm baseline/tokens/theme; P
 | P00 | [Preflight, nhánh riêng và baseline + Tokens, CSS boundary và Ant Design theme](00-tokens-theme.md) | `feat(ui): add AIHN dark tokens and theme boundary` | Completed |
 | P01 | [AppHeader, shell và routing thật](01-shell-routing.md) | `feat(ui): add AIHN navigation shell and guarded routes` | Completed |
 | P02 | [TimelineSidebar, radar, showcase, bars và assets](02-shared-visuals.md) | `feat(ui): add shared radar showcase and timeline components` | Completed |
-| P03 | [AssessmentResult, màn ưu tiên số một](03-assessment-result.md) | `feat(ui): port AssessmentResult page` | Pending |
+| P03 | [AssessmentResult, màn ưu tiên số một](03-assessment-result.md) | `feat(ui): port AssessmentResult page` | Completed |
 | P04 | [Dashboard](04-dashboard.md) | `feat(ui): port Dashboard page` | Pending |
 | P05 | [Recommendations list](05-recommendations.md) | `feat(ui): port Recommendations page` | Pending |
 | P06 | [RecommendationDetail, tách page runtime có context chính xác](06-recommendation-detail.md) | `feat(ui): port RecommendationDetail page` | Pending |

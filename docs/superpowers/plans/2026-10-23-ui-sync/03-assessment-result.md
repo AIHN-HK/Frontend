@@ -12,7 +12,7 @@
 
 **Commit:** `feat(ui): port AssessmentResult page`.
 
-**Status:** Pending.
+**Status:** Completed; evidence [P03](../../execution/ui-sync/P03.md).
 
 ## Checkpoint bắt buộc
 

@@ -121,7 +121,7 @@ test('long profile and analysis wrap, and unavailable tabs remain keyboard acces
   await last.press('ArrowRight'); await expect(page.getByRole('tab').nth(0)).toBeFocused();
   expect(await page.getByRole('tab').nth(0).evaluate(node => getComputedStyle(node).outlineStyle)).toBe('solid');
   await page.getByRole('button', { name: 'Mở menu phụ' }).click();
-  await expect(page.getByRole('dialog')).toBeVisible(); await page.keyboard.press('Escape');
+  await expect(page.getByRole('navigation', { name: 'Điều hướng bổ sung' })).toBeVisible(); await page.keyboard.press('Escape');
   await expect(page.getByRole('button', { name: 'Mở menu phụ' })).toBeFocused();
 });
 
