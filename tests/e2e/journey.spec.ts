@@ -131,13 +131,12 @@ test('student dark theme covers assessment and dashboard without changing admin 
     '/settings',
   ]) {
     await page.goto(path);
-    await expect(page.locator('.student-theme').first()).toBeVisible();
-    expect(
-      await page
-        .locator('.student-theme')
-        .first()
-        .evaluate((el) => getComputedStyle(el).getPropertyValue('--bg-app').trim().toLowerCase()),
-    ).toBe('#0b0f19');
+    if (path === '/assessment') {
+      await expect(page.locator('.student-theme').first()).toBeVisible();
+      expect(await page.locator('.student-theme').first().evaluate(el => getComputedStyle(el).getPropertyValue('--bg-app').trim().toLowerCase())).toBe('#0b0f19');
+    } else {
+      await expect(page.locator('.ce-app').first()).toHaveCSS('background-color', 'rgb(18, 18, 20)');
+    }
   }
   await page.goto('/preview/admin');
   expect(

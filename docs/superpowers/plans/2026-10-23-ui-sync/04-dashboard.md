@@ -12,7 +12,7 @@
 
 **Commit:** `feat(ui): port Dashboard page`.
 
-**Status:** Pending.
+**Status:** Completed; evidence [P04](../../execution/ui-sync/P04.md).
 
 ## Checkpoint bắt buộc
 

@@ -4,10 +4,10 @@ import { Link } from 'react-router';
 import gsap from 'gsap';
 import { paths } from '@/routes/paths';
 import { Icon } from '@/shared/ui/Icon';
-import { Button } from '@/shared/ui/Button';
+import { Button } from '@/shared/ui/ce/Button';
 import advisorMascot from '@/assets/dashboard/aihn-advisor-mascot.svg';
 import { useDashboardQueries } from '../queries/dashboard.queries';
-import './dashboard.css';
+import styles from './DashboardPage.module.css';
 
 const tabs = ['Gợi ý nghề nghiệp', 'Lộ trình mục tiêu', 'Khoảng cách kỹ năng'];
 
@@ -17,7 +17,7 @@ export function DashboardPage() {
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const resultPath = latest ? paths.assessmentResult(latest.attemptId) : paths.assessment;
   const historyError = (
-    <div role="alert" className="dashboard-state">
+    <div role="alert" className={[styles['dashboard-state']].join(' ')}>
       <p>Không tải được kết quả. Vui lòng thử lại.</p>
       <Button
         variant="secondary"
@@ -36,7 +36,7 @@ export function DashboardPage() {
     historyError
   ) : latest ? (
     <>
-      <p className="dashboard-source">Hoàn thành: {latest.finishAt} · Nguồn: lịch sử trắc nghiệm</p>
+      <p className={[styles['dashboard-source']].join(' ')}>Hoàn thành: {latest.finishAt} · Nguồn: lịch sử trắc nghiệm</p>
       {latest.primaryAnalyze ? (
         <>
           <h3>{latest.primaryAnalyze.title}</h3>
@@ -45,7 +45,7 @@ export function DashboardPage() {
       ) : (
         <p>Phân tích kết quả chưa sẵn sàng.</p>
       )}
-      <Link className="btn btn-secondary" to={resultPath}>
+      <Link className={['btn', 'btn-secondary'].join(' ')} to={resultPath}>
         Xem chi tiết Holland
       </Link>
     </>
@@ -59,13 +59,12 @@ export function DashboardPage() {
       const mm = gsap.matchMedia();
       mm.add({ noPreference: "(prefers-reduced-motion: no-preference)" }, () => {
         const tl = gsap.timeline({ defaults: { ease: "power2.out", duration: 0.5 } });
-        tl.from(".dashboard-greeting", { y: 12, autoAlpha: 0 })
-          .from(".exam-tracker-card", { y: 16, autoAlpha: 0 }, "-=0.25")
-          .from(".dashboard-quick", { y: 12, autoAlpha: 0, stagger: 0.08 }, "-=0.2")
-          .from(".dashboard-next", { y: 14, autoAlpha: 0 }, "-=0.2")
-          .from(".dashboard-card", { y: 16, autoAlpha: 0, stagger: 0.1 }, "-=0.2");
+        tl.from(`.${styles['db-greeting']}`, { y: 12, autoAlpha: 0 })
+          .from(`.${styles['db-progress-banner']}`, { y: 16, autoAlpha: 0 }, "-=0.25")
+          .from(`.${styles['db-card']}`, { y: 12, autoAlpha: 0, stagger: 0.08 }, "-=0.2")
+          .from(`.${styles['dashboard-next']}`, { y: 14, autoAlpha: 0 }, "-=0.2");
 
-        const scoreFill = document.querySelector(".score-bar-fill");
+        const scoreFill = containerRef.current?.querySelector("[data-ce-score-fill]");
         if (scoreFill) {
           gsap.from(scoreFill, {
             width: "0%",
@@ -80,31 +79,30 @@ export function DashboardPage() {
   }, []);
 
   return (
-    <div className="dashboard-page" ref={containerRef}>
-      <section className="dashboard-greeting" aria-label="Lời chào">
+    <div className={[styles['db-wrapper'], 'dashboard-page'].join(' ')} ref={containerRef}>
+      <section className={[styles['db-greeting']].join(' ')} aria-label="Lời chào">
         <div>
-          <div className="dashboard-greeting-title">
+          <div className={[styles['db-greeting-title']].join(' ')}>
             <h1>
               Xin chào
               {profile.isSuccess && profile.data.fullname.trim() ? `, ${profile.data.fullname}` : ', bạn'} 👋
             </h1>
             {profile.isSuccess && profile.data.class !== null && (
-              <span className="dashboard-journey">Học sinh lớp {profile.data.class}</span>
+              <span className={[styles['dashboard-journey']].join(' ')}>Học sinh lớp {profile.data.class}</span>
             )}
           </div>
           <p>Khám phá ngành học và nghề nghiệp tương lai phù hợp với bạn.</p>
         </div>
       </section>
-      <section className="exam-tracker-card" aria-label="Mục tiêu học tập">
-        <p>Bạn chưa thiết lập mục tiêu học tập. Cập nhật hồ sơ và khám phá nghề trước khi chọn lộ trình.</p>
-        <Link className="btn btn-secondary" to={paths.careerProfile}>Cập nhật hồ sơ</Link>
+      <section className={[styles['db-progress-banner']].join(' ')} aria-label="Mục tiêu học tập">
+        <p>Từng bước hiểu bản thân, khám phá nghề và xây dựng mục tiêu từ dữ liệu của bạn.</p>
+        <Link className={['btn', 'btn-secondary'].join(' ')} to={paths.careerProfile}>Cập nhật hồ sơ</Link>
       </section>
 
-      <CareerAnalyticsPanel />
-      <div className="dashboard-quick-strip">
-        <section className="dashboard-quick">
-          <div className="dashboard-quick-heading">
-            <span className="dashboard-quick-icon mint">
+      <div className={[styles['db-row']].join(' ')}>
+        <section className={[styles['db-card']].join(' ')}>
+          <div className={[styles['dashboard-quick-heading']].join(' ')}>
+            <span className={[styles['dashboard-quick-icon'], styles['mint']].join(' ')}>
               <Icon name="compass" />
             </span>
             <div>
@@ -120,13 +118,13 @@ export function DashboardPage() {
               </p>
             </div>
           </div>
-          <Link className="dashboard-pill" to={resultPath}>
+          <Link className={[styles['dashboard-pill']].join(' ')} to={resultPath}>
             {latest ? 'Mở kết quả Holland' : 'Mở trắc nghiệm'}
           </Link>
         </section>
-        <section className="dashboard-quick">
-          <div className="dashboard-quick-heading">
-            <span className="dashboard-quick-icon purple">
+        <section className={[styles['db-card']].join(' ')}>
+          <div className={[styles['dashboard-quick-heading']].join(' ')}>
+            <span className={[styles['dashboard-quick-icon'], styles['purple']].join(' ')}>
               <Icon name="check" />
             </span>
             <div>
@@ -134,13 +132,13 @@ export function DashboardPage() {
               <p>Mở các bản gợi ý đã lưu</p>
             </div>
           </div>
-          <Link className="dashboard-pill" to={paths.recommendations}>
+          <Link className={[styles['dashboard-pill']].join(' ')} to={paths.recommendations}>
             Xem trạng thái gợi ý
           </Link>
         </section>
-        <section className="dashboard-quick">
-          <div className="dashboard-quick-heading">
-            <span className="dashboard-quick-icon amber">
+        <section className={[styles['db-card']].join(' ')}>
+          <div className={[styles['dashboard-quick-heading']].join(' ')}>
+            <span className={[styles['dashboard-quick-icon'], styles['amber']].join(' ')}>
               <Icon name="roadmap" />
             </span>
             <div>
@@ -148,13 +146,13 @@ export function DashboardPage() {
               <p>Theo dõi các mục tiêu đã lưu</p>
             </div>
           </div>
-          <Link className="dashboard-pill" to={paths.roadmap}>
+          <Link className={[styles['dashboard-pill']].join(' ')} to={paths.roadmap}>
             Xem trạng thái lộ trình
           </Link>
         </section>
-        <section className="dashboard-quick">
-          <div className="dashboard-quick-heading">
-            <span className="dashboard-quick-icon rose">
+        <section className={[styles['db-card']].join(' ')}>
+          <div className={[styles['dashboard-quick-heading']].join(' ')}>
+            <span className={[styles['dashboard-quick-icon'], styles['rose']].join(' ')}>
               <Icon name="chat" />
             </span>
             <div>
@@ -162,16 +160,16 @@ export function DashboardPage() {
               <p>Mở hội thoại tại trang Cố vấn</p>
             </div>
           </div>
-          <Link className="dashboard-pill" to={paths.advisor}>
+          <Link className={[styles['dashboard-pill']].join(' ')} to={paths.advisor}>
             Đi tới Cố vấn
           </Link>
         </section>
       </div>
-      <div className="dashboard-grid">
-        <div className="dashboard-main-col">
-          <section className="dashboard-next" aria-label="Hành động tiếp theo">
+      <div className={[styles['db-main-grid']].join(' ')}>
+        <div className={[styles['dashboard-main-col']].join(' ')}>
+          <section className={[styles['dashboard-next']].join(' ')} aria-label="Hành động tiếp theo">
             <div>
-              <span className="dashboard-next-badge">Hành động trọng tâm tiếp theo</span>
+              <span className={[styles['dashboard-next-badge']].join(' ')}>Hành động trọng tâm tiếp theo</span>
               <h2>
                 {history.isPending
                   ? 'Đang kiểm tra kết quả của bạn'
@@ -188,27 +186,27 @@ export function DashboardPage() {
               </p>
             </div>
             {history.isSuccess && (
-              <Link className="btn btn-primary" to={resultPath}>
+              <Link className={['btn', 'btn-primary'].join(' ')} to={resultPath}>
                 {latest ? 'Xem kết quả gần nhất' : 'Bắt đầu / tiếp tục trắc nghiệm'}
               </Link>
             )}
             {history.isError && <p>Thử tải lại kết quả trong phần thông tin bên dưới.</p>}
           </section>
-          <section className="dashboard-snapshot" aria-labelledby="snapshot-title">
-            <div className="dashboard-snapshot-heading">
+          <section className={[styles['dashboard-snapshot']].join(' ')} aria-labelledby="snapshot-title">
+            <div className={[styles['dashboard-snapshot-heading']].join(' ')}>
               <h2 id="snapshot-title">AIHN đang hiểu bạn như thế nào?</h2>
               {latest?.primaryAnalyze && (
-                <span className="dashboard-code">Mã phân tích: {latest.primaryAnalyze.code}</span>
+                <span className={[styles['dashboard-code']].join(' ')}>Mã phân tích: {latest.primaryAnalyze.code}</span>
               )}
             </div>
-            <div className="dashboard-snapshot-grid">
-              <div className="dashboard-result">{resultState}</div>
-              <div className="dashboard-profile">
+            <div className={[styles['dashboard-snapshot-grid']].join(' ')}>
+              <div className={[styles['dashboard-result'], 'dashboard-result'].join(' ')}>{resultState}</div>
+              <div className={[styles['dashboard-profile']].join(' ')}>
                 <h3>Hồ sơ của bạn</h3>
                 {profile.isPending ? (
                   <p role="status">Đang tải hồ sơ…</p>
                 ) : profile.isError ? (
-                  <div role="alert" className="dashboard-state">
+                  <div role="alert" className={[styles['dashboard-state']].join(' ')}>
                     <p>Không tải được hồ sơ. Vui lòng thử lại.</p>
                     <Button
                       variant="secondary"
@@ -226,20 +224,20 @@ export function DashboardPage() {
                     <p>
                       {profile.data.class === null ? 'Chưa có thông tin lớp' : `Lớp ${profile.data.class}`}
                     </p>
-                    <p className="dashboard-source">Nguồn: hồ sơ tài khoản</p>
+                    <p className={[styles['dashboard-source']].join(' ')}>Nguồn: hồ sơ tài khoản</p>
                   </>
                 )}
-                <Link className="btn btn-ghost" to={paths.careerProfile}>
+                <Link className={['btn', 'btn-ghost'].join(' ')} to={paths.careerProfile}>
                   Xem hồ sơ
                 </Link>
               </div>
             </div>
-            <p className="dashboard-source">Chưa thể xác định bài đang làm từ dữ liệu hiện có.</p>
+            <p className={[styles['dashboard-source']].join(' ')}>Chưa thể xác định bài đang làm từ dữ liệu hiện có.</p>
           </section>
-          <section className="dashboard-opportunities" aria-labelledby="opportunities-title">
+          <section className={[styles['dashboard-opportunities']].join(' ')} aria-labelledby="opportunities-title">
             <h2 id="opportunities-title">Không gian Định hướng &amp; Cơ hội Nghề nghiệp</h2>
             <p>Các thông tin cá nhân hóa sẽ xuất hiện khi có dữ liệu.</p>
-            <div className="dashboard-tabs" role="tablist" aria-label="Tab phân tích Dashboard">
+            <div className={[styles['dashboard-tabs']].join(' ')} role="tablist" aria-label="Tab phân tích Dashboard">
               {tabs.map((label, index) => (
                 <button
                   key={label}
@@ -276,7 +274,7 @@ export function DashboardPage() {
               ))}
             </div>
             <div
-              className="dashboard-panel"
+              className={[styles['dashboard-panel']].join(' ')}
               id={`dashboard-panel-${tab}`}
               role="tabpanel"
               aria-labelledby={`dashboard-tab-${tab}`}
@@ -294,37 +292,37 @@ export function DashboardPage() {
             </div>
           </section>
         </div>
-        <div className="dashboard-side-col">
-          <section className="dashboard-advisor">
-            <div className="dashboard-advisor-heading">
+        <div className={[styles['dashboard-side-col']].join(' ')}>
+          <section className={[styles['dashboard-advisor']].join(' ')}>
+            <div className={[styles['dashboard-advisor-heading']].join(' ')}>
               <img src={advisorMascot} width="68" height="68" alt="" />
               <div>
                 <h2>Cố vấn AIHN</h2>
                 <p>Cùng bạn tìm hướng đi</p>
               </div>
             </div>
-            <span className="dashboard-context">Tư vấn tại trang Cố vấn</span>
-            <p className="dashboard-advisor-note">
+            <span className={[styles['dashboard-context']].join(' ')}>Tư vấn tại trang Cố vấn</span>
+            <p className={[styles['dashboard-advisor-note']].join(' ')}>
               Đọc lại các phiên đã lưu hoặc bắt đầu hội thoại mới tại trang Cố vấn AIHN.
             </p>
-            <Link className="btn btn-secondary" to={paths.advisor}>
+            <Link className={['btn', 'btn-secondary'].join(' ')} to={paths.advisor}>
               Mở trang Cố vấn
             </Link>
           </section>
-          <section className="dashboard-activity">
+          <section className={[styles['dashboard-activity']].join(' ')}>
             <h2>Hoạt động gần đây</h2>
-            <p className="dashboard-source">Nguồn: lịch sử trắc nghiệm</p>
+            <p className={[styles['dashboard-source']].join(' ')}>Nguồn: lịch sử trắc nghiệm</p>
             {history.isPending ? (
               <p>Đang tải hoạt động…</p>
             ) : history.isError ? (
               <p>Chưa tải được hoạt động trắc nghiệm.</p>
             ) : latest ? (
-              <div className="dashboard-activity-item">
+              <div className={[styles['dashboard-activity-item']].join(' ')}>
                 <Icon name="check" />
                 <div>
                   <p>Hoàn thành trắc nghiệm Holland</p>
-                  <p className="dashboard-source">{latest.finishAt}</p>
-                  <Link className="btn btn-ghost" to={resultPath}>
+                  <p className={[styles['dashboard-source']].join(' ')}>{latest.finishAt}</p>
+                  <Link className={['btn', 'btn-ghost'].join(' ')} to={resultPath}>
                     Mở kết quả hoạt động
                   </Link>
                 </div>
@@ -335,6 +333,7 @@ export function DashboardPage() {
           </section>
         </div>
       </div>
+      <CareerAnalyticsPanel />
     </div>
   );
 }

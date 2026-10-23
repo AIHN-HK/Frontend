@@ -127,10 +127,12 @@ test('long profile and analysis wrap, and unavailable tabs remain keyboard acces
 
 for (const width of [320, 390, 768, 769, 1024, 1025, 1440]) {
   test(`dashboard responsive and targets at ${width}`, async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.setViewportSize({ width, height: width === 768 ? 1024 : 900 });
     await fixture(page, { history: { formattedHistory: [result] } }); await page.goto('/dashboard');
     await expect(page.getByText('Mã phân tích: ISA')).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    await page.screenshot({ path: `.superpowers/ui-sync/P04/dashboard-${width}.png`, fullPage: true });
     const column = (await page.locator('.dashboard-result').boundingBox())!;
     const detail = (await page.getByRole('link', { name: 'Xem chi tiết Holland' }).boundingBox())!;
     expect(detail.x + detail.width).toBeLessThanOrEqual(column.x + column.width + 1);
