@@ -25,4 +25,4 @@
 .page :global(.otp-resend) { text-align:center; }
 .page :global(.recovery-password) { display:grid; gap:8px; }
 .page :global(.recovery-toggle) { justify-self:end; }
-@media(max-width:360px) { .page h1 { font-size:24px; } .page :global(.otp-digits) { grid-template-columns:repeat(3,minmax(44px,1fr)); } }
+@media(max-width:360px) { .page h1 { font-size:24px; } }
