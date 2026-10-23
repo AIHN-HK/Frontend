@@ -192,3 +192,9 @@ for (const [width, height] of [[320, 844], [390, 844], [768, 1024], [769, 1024],
     await info.attach(`signup-${width}`, { path: screenshot, contentType: 'image/png' });
   });
 }
+
+test('signup dark card retains the real fields and scrolls at mobile breakpoints', async ({page}) => {
+  const {reviewResponsive}=await import('./ui-sync.fixture');
+  await fixture(page); await page.goto('/signup');
+  await reviewResponsive(page,'P15','main>div');
+});
