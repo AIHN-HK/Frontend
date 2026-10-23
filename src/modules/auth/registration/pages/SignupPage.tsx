@@ -6,21 +6,25 @@ import { paths } from '@/routes/paths';
 import { ApiError } from '@/shared/api/api-error';
 import { useHttpClient } from '@/shared/api/api-context';
 import { session } from '@/shared/session/session';
-import { Field } from '@/shared/ui/Field';
+import { Button } from 'antd';
+import { AuthField as Field, AuthInput } from '../../components/AuthFields';
+import { usePageEntrance } from '@/shared/ui/ce/usePageEntrance';
 import { sendRegistrationOtp } from '../../api/auth.api';
 import { registrationDraft } from '../../model/registration-draft';
 import { recoveryState } from '../../model/recovery-state';
 import { signupSchema } from '../model/signup.schema';
 import type { SignupForm } from '../model/signup.schema';
-import './signup.css';
+import styles from './SignupPage.module.css';
+import authStyles from '../../components/AuthScreen.module.css';
 
 export function SignupPage(): React.JSX.Element {
+  const root = usePageEntrance('signup');
   const http = useHttpClient(), navigate = useNavigate();
   const navigation = useNavigation();
   const leaving = navigation.state !== 'idle' && navigation.location.pathname !== paths.signup;
   const pending = useRef(false), active = useRef(false), request = useRef<AbortController | null>(null);
   const [visible, setVisible] = useState(false), [error, setError] = useState<string | null>(null);
-  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<SignupForm>({
+  const { control, handleSubmit, formState: { errors, isSubmitting } } = useForm<SignupForm>({
     resolver: zodResolver(signupSchema),
     defaultValues: registrationDraft.read() ?? { fullname: '', email: '', yob: '', phone: '', password: '' },
   });
@@ -50,36 +54,36 @@ export function SignupPage(): React.JSX.Element {
       setError(failure instanceof ApiError && failure.outcomeUnknown ? `${message} Chưa xác nhận OTP đã được gửi. Hãy kiểm tra email trước khi thử lại; tài khoản chưa được tạo.` : message);
     } finally { pending.current = false; request.current = null; }
   };
-  return <>
-    <div className="signup-intro">
+  return <div ref={root} className={`${authStyles.page} ${styles.page}`}>
+    <div className="signup-intro" data-ce-enter="">
       <span className="brand-badge" aria-hidden="true">AI</span>
       <h1>Tạo tài khoản mới</h1>
       <p>Bắt đầu xác định hướng đi tương lai cùng AIHN</p>
     </div>
-    <form className="signup-form" noValidate aria-busy={isSubmitting} onSubmit={event => {
+    <form data-ce-enter="" className="signup-form" noValidate aria-busy={isSubmitting} onSubmit={event => {
       if (pending.current || leaving) { event.preventDefault(); return; }
       pending.current = true;
       void handleSubmit(sendOtp, () => { pending.current = false; })(event);
     }}>
       <fieldset disabled={isSubmitting}>
         <legend className="signup-fieldset-label">Thông tin đăng ký</legend>
-        <Field label="Họ và tên của bạn" id="signup-fullname" autoComplete="name" placeholder="Nguyễn Hoàng Nam" error={errors.fullname?.message} {...register('fullname')} />
-        <Field label="Địa chỉ Email" id="signup-email" type="email" inputMode="email" autoComplete="email" placeholder="name@email.com" error={errors.email?.message} {...register('email')} />
-        <Field label="Ngày sinh" id="signup-yob" type="date" autoComplete="bday" error={errors.yob?.message} {...register('yob')} />
-        <Field label="Số điện thoại" id="signup-phone" type="tel" inputMode="tel" autoComplete="tel" placeholder="0901234567" error={errors.phone?.message} {...register('phone')} />
+        <Field label="Họ và tên của bạn" id="signup-fullname" autoComplete="name" placeholder="Nguyễn Hoàng Nam" error={errors.fullname?.message} control={control} name="fullname" />
+        <Field label="Địa chỉ Email" id="signup-email" type="email" inputMode="email" autoComplete="email" placeholder="name@email.com" error={errors.email?.message} control={control} name="email" />
+        <Field label="Ngày sinh" id="signup-yob" type="date" autoComplete="bday" error={errors.yob?.message} control={control} name="yob" />
+        <Field label="Số điện thoại" id="signup-phone" type="tel" inputMode="tel" autoComplete="tel" placeholder="0901234567" error={errors.phone?.message} control={control} name="phone" />
         <div className="field">
           <label htmlFor="signup-password">Tạo mật khẩu</label>
           <div className="signup-password-input">
-            <input id="signup-password" type={visible ? 'text' : 'password'} autoComplete="new-password" placeholder="Tối thiểu 8 ký tự" aria-invalid={!!errors.password} aria-describedby="signup-password-description" {...register('password')} />
-            <button type="button" aria-label={visible ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'} aria-pressed={visible} onClick={() => setVisible(value => !value)}>{visible ? 'Ẩn' : 'Hiện'}</button>
+            <AuthInput id="signup-password" type={visible ? 'text' : 'password'} autoComplete="new-password" placeholder="Tối thiểu 8 ký tự" aria-invalid={!!errors.password} aria-describedby="signup-password-description" control={control} name="password" />
+            <Button htmlType="button" aria-label={visible ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'} aria-pressed={visible} onClick={() => setVisible(value => !value)}>{visible ? 'Ẩn' : 'Hiện'}</Button>
           </div>
           <span id="signup-password-description" className={errors.password ? 'field-error' : 'field-hint'}>{errors.password?.message ?? 'Từ 8 đến 72 ký tự.'}</span>
         </div>
       </fieldset>
       {error && <p className="signup-error" role="alert">{error}</p>}
-      <button className="btn btn-primary signup-submit" type="submit" disabled={isSubmitting || leaving}>{isSubmitting ? 'Đang gửi OTP…' : 'Tiếp tục xác thực OTP →'}</button>
+      <Button className="btn btn-primary signup-submit" htmlType="submit" disabled={isSubmitting || leaving}>{isSubmitting ? 'Đang gửi OTP…' : 'Tiếp tục xác thực OTP →'}</Button>
     </form>
     <p className="signup-login">Đã có tài khoản AIHN? <Link to={paths.login}>Đăng nhập ngay</Link></p>
     <div className="signup-home"><Link to={paths.home}>← Về trang chủ</Link></div>
-  </>;
+  </div>;
 }
