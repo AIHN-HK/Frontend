@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { z } from "zod";
 import { useSearchParams, Link } from "react-router";
 import { useSession } from "@/shared/session/session";
-import { Button } from "@/shared/ui/Button";
+import { Button } from "antd";
 import { paths } from "@/routes/paths";
 import { usePlatformCommand, usePlatformQuery } from "../api/platform.api";
 import { profileSchema, skillSchema, codes } from "../model/contracts";
@@ -124,12 +124,12 @@ function ProfileForm({
             Bản nháp thuộc phiên bản hồ sơ cũ. So sánh dữ liệu máy chủ trước khi
             lưu lại.
           </p>
-          <Button variant="secondary" onClick={() => setDraft(saved)}>
+          <Button  onClick={() => setDraft(saved)}>
             Dùng hồ sơ máy chủ
           </Button>
         </div>
       )}
-      {params.get('target') && /^\d{2}-\d{4}\.\d{2}$/.test(params.get('target')!) && params.get('target') !== draft.targetCareerId && <div><p>Bạn vừa chọn nghề {params.get('target')}. Bản nháp hiện tại vẫn được giữ.</p><Button variant="secondary" onClick={()=>setDraft({...draft,targetCareerId:params.get('target')})}>Dùng nghề vừa chọn</Button></div>}
+      {params.get('target') && /^\d{2}-\d{4}\.\d{2}$/.test(params.get('target')!) && params.get('target') !== draft.targetCareerId && <div><p>Bạn vừa chọn nghề {params.get('target')}. Bản nháp hiện tại vẫn được giữ.</p><Button  onClick={()=>setDraft({...draft,targetCareerId:params.get('target')})}>Dùng nghề vừa chọn</Button></div>}
       <label>
         Mã nghề mục tiêu
         <input
@@ -228,11 +228,11 @@ function ProfileForm({
         Phiên bản máy chủ: {saved.revision}. Thông tin tài khoản như tuổi, giới
         tính và địa chỉ không được dùng để xếp hạng nghề.
       </p>
-      <Button type="submit" disabled={command.isPending || stale}>
+      <Button htmlType="submit" disabled={command.isPending || stale}>
         Lưu hồ sơ định hướng
       </Button>
       <CommandState error={command.error} success={command.isSuccess} />
-      <Button variant="secondary" onClick={() => window.location.reload()}>
+      <Button  onClick={() => window.location.reload()}>
         Đọc lại hồ sơ máy chủ
       </Button>
     </form>

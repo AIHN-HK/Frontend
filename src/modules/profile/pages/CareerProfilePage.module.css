@@ -1,0 +1,22 @@
+.page { max-width:1100px; padding:48px; margin:auto; gap:24px; }
+.header { padding:28px; border:1px solid var(--ce-card-border); border-radius:18px; background:linear-gradient(135deg,var(--ce-card-gradient-start),var(--ce-card-gradient-end)); display:grid; gap:10px; }
+.header h1 { font-size:32px; line-height:1.2; font-weight:600; }
+.page .tag { font-size:11px; text-transform:uppercase; letter-spacing:1.3px; color:var(--ce-violet); }
+.page p { font-size:13px; line-height:1.65; }
+.page h2 { font-size:18px; }
+.page :global(.career-profile-card),.page :global(.career-platform) { border:1px solid var(--ce-border); border-radius:16px; background:var(--ce-glass-subtle); box-shadow:none; min-width:0; }
+.page :global(.career-profile-card-header),.page :global(.career-profile-card-footer),.page :global(.career-profile-review) { background:var(--ce-bg-nav); border-color:var(--ce-border); }
+.page :global(.career-profile-card-body) { background:transparent; }
+.page :global(.career-profile-fields) { border:0; padding:0; margin:0; }
+.page :global(.career-profile-fields input),.page :global(.career-profile-fields textarea),.page :global(.career-profile-fields select) { background:var(--ce-bg-nav); border:1px solid var(--ce-border); color:var(--ce-text-primary); border-radius:10px; min-height:44px; }
+.page :global(.career-profile-fields textarea) { min-height:90px; }
+.page :global(.career-profile-unavailable) { background:var(--ce-glass-subtle); border-color:var(--ce-border); }
+.page :global(.career-profile-error) { background:var(--ce-e-subtle); color:var(--ce-e); }
+.page :global(.career-profile-success) { background:var(--ce-r-subtle); color:var(--ce-emerald); }
+.page :global(.career-platform) { padding:24px; width:100%; }
+.page :global(.platform-card) { background:var(--ce-bg-nav); border-color:var(--ce-border); }
+.page :global(.career-profile-card-footer) { gap:16px; }
+.page button,.page a { min-height:44px; font-size:13px; }
+.page a { color:var(--ce-violet); }
+.advice { display:grid; gap:12px; border-top:1px solid var(--ce-border); padding-top:20px; }
+@media(max-width:768px) { .page { padding:28px 16px; } .header { padding:22px; } .header h1 { font-size:28px; } .page :global(.career-platform) { padding:16px; } }

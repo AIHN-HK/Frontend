@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigation } from 'react-router';
 import { ApiError } from '@/shared/api/api-error';
 import { session } from '@/shared/session/session';
-import { Button } from '@/shared/ui/Button';
+import { Button } from 'antd';
 import { paths } from '@/routes/paths';
 import { avatarFileError } from '../api/avatar.api';
 import { useAvatarMutation, useAvatarQuery } from '../queries/avatar.queries';
@@ -61,12 +61,12 @@ export function AvatarEditor({ scope }: { scope: ProfileScope }) {
       {success && <p className="career-profile-success" role="status">Đã lưu ảnh đại diện.</p>}
       {query.isError && <p role="alert">Không tải được ảnh đại diện. Hãy thử tải lại trước khi lưu ảnh mới.</p>}
       <div className="career-profile-actions">
-        <Button disabled={busy || query.isFetching} variant="secondary" onClick={async () => {
+        <Button disabled={busy || query.isFetching}  onClick={async () => {
           const result = await query.refetch();
           if (owned()) setReviewed(result.isSuccess);
         }}>{query.isFetching ? 'Đang tải ảnh…' : 'Kiểm tra ảnh đã lưu'}</Button>
-        {needsReview && reviewed && <Button variant="secondary" disabled={busy} onClick={() => { setNeedsReview(false); setError(null); }}>Đã kiểm tra, cho phép lưu lại</Button>}
-        {file && <Button variant="secondary" disabled={busy} onClick={() => { setFile(null); if (input.current) input.current.value = ''; setSuccess(false); }}>Bỏ ảnh đã chọn</Button>}
+        {needsReview && reviewed && <Button  disabled={busy} onClick={() => { setNeedsReview(false); setError(null); }}>Đã kiểm tra, cho phép lưu lại</Button>}
+        {file && <Button  disabled={busy} onClick={() => { setFile(null); if (input.current) input.current.value = ''; setSuccess(false); }}>Bỏ ảnh đã chọn</Button>}
         <Button disabled={!file || busy || needsReview || !query.isSuccess || query.isFetching} onClick={() => { void save(); }}>{mutation.isPending ? 'Đang lưu ảnh…' : 'Lưu ảnh đại diện'}</Button>
       </div>
     </div>

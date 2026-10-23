@@ -201,3 +201,11 @@ for (const width of [320, 390, 768, 769, 1024, 1025, 1440]) {
     await page.getByLabel('Họ và tên', { exact: true }).focus(); await page.keyboard.press('Tab'); await expect(page.getByLabel('Số điện thoại', { exact: true })).toBeFocused();
   });
 }
+
+test('profile dark layout preserves separate forms and a real avatar editor across breakpoints', async ({ page }) => {
+  const { reviewResponsive } = await import('./ui-sync.fixture');
+  await fixture(page);
+  await page.goto('/career-profile');
+  await expect(page.getByLabel('Họ và tên', { exact: true })).toHaveValue('Học sinh A');
+  await reviewResponsive(page, 'P11', '.career-profile-page');
+});
