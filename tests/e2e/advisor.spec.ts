@@ -86,8 +86,8 @@ test('Dashboard entry reflects available Advisor and navigation alone creates no
   const fixture = await advisorFixture(page); await page.goto('/dashboard'); await expect(page.getByText('Tư vấn tại trang Cố vấn', { exact: true })).toBeVisible(); await page.getByRole('link', { name: 'Mở trang Cố vấn', exact: true }).click(); await expect(page.getByRole('heading', { name: 'Cố vấn AIHN', exact: true })).toBeVisible(); await expect(connect(page)).toBeVisible(); expect(fixture.sockets).toHaveLength(0);
 });
 
-test('Ant Design Skeleton covers the first-token wait and is replaced only by the current reply', async ({ page }) => {
-  const fixture = await advisorFixture(page, { mode: 'silent' }); await page.goto('/advisor'); await connect(page).click(); await expect(page).toHaveURL(/sessionId=100/); await input(page).fill('Chờ phản hồi'); await send(page).click(); const waiting = page.getByRole('status', { name: 'Đang chờ phản hồi từ AI', exact: true }); await expect(waiting).toBeVisible(); await expect(waiting.locator('.ant-skeleton-paragraph > li')).toHaveCount(3);
+test('Reply placeholder covers the first-token wait and is replaced only by the current reply', async ({ page }) => {
+  const fixture = await advisorFixture(page, { mode: 'silent' }); await page.goto('/advisor'); await connect(page).click(); await expect(page).toHaveURL(/sessionId=100/); await input(page).fill('Chờ phản hồi'); await send(page).click(); const waiting = page.getByRole('status', { name: 'Đang chờ phản hồi từ AI', exact: true }); await expect(waiting).toBeVisible(); await expect(waiting.locator('[data-advisor-wait-line]')).toHaveCount(3);
   fixture.emit('queue_joined', { ...fixture.current(), message: 'Đang xử lý' }); await expect(waiting).toBeVisible(); fixture.emit('answer_token', { sessionId: 21, turnId: 'turn-1', content: 'Khác phiên' }); fixture.emit('answer_token', { sessionId: 100, turnId: 'wrong', content: 'Khác lượt' }); await expect(waiting).toBeVisible();
   fixture.emit('answer_token', { ...fixture.current(), content: 'Câu trả lời thật' }); await expect(log(page)).toContainText('Câu trả lời thật'); await expect(waiting).toHaveCount(0);
 });
@@ -101,5 +101,14 @@ test('AI Skeleton does not remain after an acknowledgement timeout', async ({ pa
 });
 
 test('AI Skeleton fits a narrow viewport and respects reduced motion', async ({ page }) => {
-  await page.setViewportSize({ width: 320, height: 844 }); await page.emulateMedia({ reducedMotion: 'reduce' }); await advisorFixture(page, { mode: 'waiting' }); await page.goto('/advisor'); await connect(page).click(); await expect(page).toHaveURL(/sessionId=100/); await input(page).fill('Chờ phản hồi'); await send(page).click(); const waiting = page.getByRole('status', { name: 'Đang chờ phản hồi từ AI', exact: true }); await expect(waiting).toBeVisible(); expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true); expect(await waiting.locator('.ant-skeleton-paragraph > li').first().evaluate(node => getComputedStyle(node).animationName)).toBe('none');
+  await page.setViewportSize({ width: 320, height: 844 }); await page.emulateMedia({ reducedMotion: 'reduce' }); await advisorFixture(page, { mode: 'waiting' }); await page.goto('/advisor'); await connect(page).click(); await expect(page).toHaveURL(/sessionId=100/); await input(page).fill('Chờ phản hồi'); await send(page).click(); const waiting = page.getByRole('status', { name: 'Đang chờ phản hồi từ AI', exact: true }); await expect(waiting).toBeVisible(); expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true); expect(await waiting.locator('[data-advisor-wait-line]').first().evaluate(node => getComputedStyle(node).animationName)).toBe('none');
+});
+
+test('advisor dark workspace keeps saved messages and prompts without opening a socket on navigation', async ({ page }) => {
+  const { reviewResponsive } = await import('./ui-sync.fixture');
+  const fixture = await advisorFixture(page);
+  await page.goto('/advisor?sessionId=21');
+  await expect(page.getByRole('log')).toContainText('Câu trả lời đã lưu từ máy chủ.');
+  await reviewResponsive(page, 'P10', '.advisor-page');
+  expect(fixture.sockets).toHaveLength(0);
 });

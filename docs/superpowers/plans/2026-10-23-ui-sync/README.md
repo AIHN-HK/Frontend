@@ -18,7 +18,7 @@ Nhánh tiếp tục mới: `feat/ui-sync-aihn-sequential`, base `e58489c` (kế 
 | P07 | [CareerExplorer trên catalog runtime](07-career-explorer.md) | `feat(ui): port CareerExplorer page` | Completed |
 | P08 | [CareerDetail trên O*NET career ID](08-career-detail.md) | `feat(ui): port CareerDetail page` | Completed |
 | P09 | [Roadmap](09-roadmap.md) | `feat(ui): port Roadmap page` | Completed |
-| P10 | [Advisor](10-advisor.md) | `feat(ui): port Advisor page` | Pending |
+| P10 | [Advisor](10-advisor.md) | `feat(ui): port Advisor page` | Completed |
 | P11 | [CareerProfile, giữ avatar và career profile panel](11-career-profile.md) | `feat(ui): port CareerProfile page` | Pending |
 | P12 | [History](12-history.md) | `feat(ui): port History page` | Pending |
 | P13 | [Settings, dark canvas và chức năng có thật](13-settings.md) | `feat(ui): port Settings page` | Pending |
