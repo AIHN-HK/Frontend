@@ -6,6 +6,8 @@ Giữ v8 + src/modules theo xác nhận user. P00 gồm baseline/tokens/theme; P
 
 Nhánh tiếp tục mới: `feat/ui-sync-aihn-sequential`, base `e58489c` (kế thừa P00–P05). Worktree riêng tránh thay đổi checkout đang chạy ở phiên khác. [R00: chuẩn hóa bộ plan](R00-plan-consistency.md) là commit tài liệu trước khi tiếp tục P06. [R01](R01-baseline-guards.md) sửa các regression test kế thừa trước khi port tiếp. Evidence mới ghi trong `docs/superpowers/execution/ui-sync/`; ảnh local ở `.superpowers/ui-sync/Pxx/`. Trạng thái Completed cũ được đối chiếu evidence lịch sử, không tự nhận toàn bộ checklist đã được chạy lại.
 
+Sau P18, user yêu cầu Home phải hiện trước. [P19: Home editorial mới tại `/`](19-home-editorial.md) thay thế hành vi root redirect của P01; login/guard vẫn giữ nguyên. Nhánh hoàn chỉnh hiện được checkout trực tiếp tại `/home/hoang/do-an/Frontend`.
+
 | Plan | Phạm vi | Commit | Trạng thái |
 | --- | --- | --- | --- |
 | P00 | [Preflight, nhánh riêng và baseline + Tokens, CSS boundary và Ant Design theme](00-tokens-theme.md) | `feat(ui): add AIHN dark tokens and theme boundary` | Completed |
@@ -27,3 +29,4 @@ Nhánh tiếp tục mới: `feat/ui-sync-aihn-sequential`, base `e58489c` (kế 
 | P16 | [OtpVerify](16-otp-verify.md) | `feat(ui): port OtpVerify page` | Completed |
 | P17 | [ForgotPassword + ResetPassword](17-password-recovery.md) | `feat(ui): port ForgotPassword and ResetPassword pages` | Completed |
 | P18 | [Nghiệm thu toàn luồng, kiểm tra diff và bàn giao](18-acceptance.md) | `docs(ui): record AIHN UI migration acceptance` | Completed |
+| P19 | [Home mới từ OpenDesign và public entry](19-home-editorial.md) | `feat(ui): port editorial OpenDesign Home` | Completed |
