@@ -26,3 +26,7 @@
 .page :global(.recovery-password) { display:grid; gap:8px; }
 .page :global(.recovery-toggle) { justify-self:end; }
 @media(max-width:360px) { .page h1 { font-size:24px; } }
+.page :global(.recovery-steps) { margin:0; padding:0; list-style:none; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; }
+.page :global(.recovery-steps li) { padding-block:10px; border-bottom:2px solid var(--ce-border); color:var(--ce-text-muted); font-size:11px; }
+.page :global(.recovery-steps [aria-current=step]) { border-color:var(--ce-c); color:var(--ce-violet); }
+.page :global(.recovery-steps [data-confirmed=true]) { border-color:var(--ce-r); color:var(--ce-emerald); }
