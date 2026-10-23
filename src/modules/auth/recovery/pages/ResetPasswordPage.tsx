@@ -6,13 +6,17 @@ import { paths } from '@/routes/paths';
 import { ApiError } from '@/shared/api/api-error';
 import { useHttpClient } from '@/shared/api/api-context';
 import { session, useSession } from '@/shared/session/session';
-import { Field } from '@/shared/ui/Field';
+import { Button } from 'antd';
+import { AuthField as Field } from '../../components/AuthFields';
+import { usePageEntrance } from '@/shared/ui/ce/usePageEntrance';
+import { RecoverySteps } from '../components/RecoverySteps';
 import { resetPassword } from '../../api/auth.api';
 import { recoveryState } from '../../model/recovery-state';
 import { resetPasswordSchema } from '../model/reset-password.schema';
 import type { ResetPasswordForm } from '../model/reset-password.schema';
 import { useRecoveryState } from '../model/useRecoveryState';
-import './recovery.css';
+import styles from './ResetPasswordPage.module.css';
+import authStyles from '../../components/AuthScreen.module.css';
 
 export function ResetPasswordPage(): React.JSX.Element {
   const http = useHttpClient();
@@ -27,7 +31,7 @@ export function ResetPasswordPage(): React.JSX.Element {
   const [visible, setVisible] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [completed, setCompleted] = useState(false);
-  const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm<ResetPasswordForm>({
+  const { control, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm<ResetPasswordForm>({
     resolver: zodResolver(resetPasswordSchema), defaultValues: flow?.resetDraft ?? { newPassword: '', confirmPassword: '' },
   });
   useEffect(() => {
@@ -59,8 +63,9 @@ export function ResetPasswordPage(): React.JSX.Element {
     }
   };
 
+  const root = usePageEntrance(flow?.verifiedOtp ? 'reset-ready' : 'reset-missing');
   if (completed) return <p role="status">Mật khẩu đã được đặt lại. Đang chuyển đến đăng nhập…</p>;
-  if (!flow?.verifiedOtp || flow.revision !== currentSession.revision) return <div className="recovery-missing">
+  if (!flow?.verifiedOtp || flow.revision !== currentSession.revision) return <div ref={root} className={`${authStyles.page} ${styles.page} recovery-missing`}>
     <span className="brand-badge" aria-hidden="true">AI</span>
     <h1>Không thể đặt lại mật khẩu</h1>
     <p role="status">Thông tin khôi phục chưa được xác thực, đã hết hạn hoặc đã mất khi tải lại trang.</p>
@@ -68,13 +73,14 @@ export function ResetPasswordPage(): React.JSX.Element {
     <Link className="recovery-link" to={paths.login}>Quay lại đăng nhập</Link>
   </div>;
 
-  return <>
-    <div className="recovery-intro">
+  return <div ref={root} className={`${authStyles.page} ${styles.page}`}>
+    <div className="recovery-intro" data-ce-enter="">
       <span className="brand-badge" aria-hidden="true">AI</span>
       <h1>Đặt lại mật khẩu</h1>
       <p>Đặt mật khẩu mới cho tài khoản <strong>{flow.email.replace(/^(.{1,3})[^@]*@/, '$1***@')}</strong>.</p>
     </div>
-    <form className="recovery-form" noValidate aria-busy={isSubmitting} onSubmit={event => {
+    <RecoverySteps active={3} />
+    <form data-ce-enter="" className="recovery-form" noValidate aria-busy={isSubmitting} onSubmit={event => {
       if (pending.current || leaving) { event.preventDefault(); return; }
       pending.current = true;
       void handleSubmit(submit, () => { pending.current = false; })(event);
@@ -82,16 +88,16 @@ export function ResetPasswordPage(): React.JSX.Element {
       <fieldset disabled={isSubmitting || leaving}>
         <legend className="recovery-legend">Mật khẩu mới</legend>
         <div className="recovery-password">
-          <Field id="reset-password" label="Mật khẩu mới" type={visible ? 'text' : 'password'} autoComplete="new-password" placeholder="Từ 8 đến 72 ký tự" error={errors.newPassword?.message} {...register('newPassword')} />
-          <button type="button" className="recovery-toggle" aria-label={visible ? 'Ẩn mật khẩu mới' : 'Hiện mật khẩu mới'} aria-pressed={visible} onClick={() => setVisible(value => !value)}>{visible ? 'Ẩn' : 'Hiện'}</button>
+          <Field id="reset-password" label="Mật khẩu mới" type={visible ? 'text' : 'password'} autoComplete="new-password" placeholder="Từ 8 đến 72 ký tự" error={errors.newPassword?.message} control={control} name="newPassword" />
+          <Button htmlType="button" className="recovery-toggle" aria-label={visible ? 'Ẩn mật khẩu mới' : 'Hiện mật khẩu mới'} aria-pressed={visible} onClick={() => setVisible(value => !value)}>{visible ? 'Ẩn' : 'Hiện'}</Button>
         </div>
-        <Field id="reset-confirm" label="Xác nhận mật khẩu mới" type={visible ? 'text' : 'password'} autoComplete="new-password" error={errors.confirmPassword?.message} {...register('confirmPassword')} />
+        <Field id="reset-confirm" label="Xác nhận mật khẩu mới" type={visible ? 'text' : 'password'} autoComplete="new-password" error={errors.confirmPassword?.message} control={control} name="confirmPassword" />
       </fieldset>
       <p className="recovery-hint">Mật khẩu từ 8 đến 72 ký tự. Thông tin khôi phục chỉ được giữ trong tab này; tải lại trang sẽ cần bắt đầu lại.</p>
       {error && <p className="recovery-error" role="alert">{error}</p>}
-      <button className="btn btn-primary recovery-submit" type="submit" disabled={isSubmitting || leaving}>{isSubmitting ? 'Đang đặt lại…' : 'Đặt lại mật khẩu'}</button>
+      <Button className="btn btn-primary recovery-submit" htmlType="submit" disabled={isSubmitting || leaving}>{isSubmitting ? 'Đang đặt lại…' : 'Đặt lại mật khẩu'}</Button>
       <Link className="recovery-link" to={paths.verifyOtp}>Xác thực lại mã OTP</Link>
     </form>
     <div className="recovery-footer"><Link to={paths.forgotPassword}>Bắt đầu khôi phục lại</Link><Link to={paths.login}>Quay lại đăng nhập</Link></div>
-  </>;
+  </div>;
 }

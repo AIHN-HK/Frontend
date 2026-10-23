@@ -215,3 +215,13 @@ test('forgot and reset cards fit viewports and keep keyboard targets at least 44
     }
   }
 });
+
+test('recovery dark cards show real verified steps and fit responsive viewports', async ({page}) => {
+  const {reviewResponsive}=await import('./ui-sync.fixture');
+  await fixture(page); await page.goto('/forgot-password');
+  await expect(page.locator('[aria-current=step]')).toHaveText('1. Email');
+  await reviewResponsive(page,'P17/forgot','main>div');
+  await verified(page);
+  await expect(page.locator('[aria-current=step]')).toHaveText('3. Mật khẩu');
+  await reviewResponsive(page,'P17/reset','main>div');
+});
