@@ -252,7 +252,8 @@ test('runtime catalog fits breakpoints, has one shell and keeps source cards vis
       for (const control of await page.locator('main button, main a, main input, main .ant-select').all()) {
         if (!await control.isVisible()) continue;
         const box = (await control.boundingBox())!;
-        expect(box.height).toBeGreaterThanOrEqual(44);
+        // Animated fractional positions can introduce DOMRect noise below 0.001px.
+        expect(Math.round(box.height * 100) / 100).toBeGreaterThanOrEqual(44);
       }
       if (reducedMotion === 'reduce') await page.screenshot({ path: `.superpowers/ui-sync/P07/implementation-${width}.png`, fullPage: true });
     }

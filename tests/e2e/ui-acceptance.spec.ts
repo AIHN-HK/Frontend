@@ -21,6 +21,8 @@ test('migrated runtime journey connects saved result, exact recommendation, targ
   const errors:string[]=[];
   page.on('pageerror',error=>errors.push(error.message));
   await page.goto('/');
+  await expect(page.getByRole('heading', {level:1})).toContainText('Khám phá con đường');
+  await page.getByRole('banner').getByRole('link', {name:'Đăng nhập',exact:true}).click();
   await expect(page).toHaveURL(/\/login$/);
   await page.getByLabel('Email trường hoặc cá nhân').fill('student@example.test');
   await page.getByLabel('Mật khẩu',{exact:true}).fill('password123');

@@ -1,5 +1,9 @@
 # UI sync shared contracts
 
+## Điều chỉnh sau P18 — Home trước, 24/10/2026
+
+Theo yêu cầu mới của user “home trc chứ?”, `/` luôn hiển thị Home công khai cho khách, USER và ADMIN. Logo/menu Trang chủ trỏ về `/`; `/preview/home` tiếp tục hoạt động như alias. Người dùng chủ động mở đăng nhập hoặc trang chức năng; các guard và đích sau đăng nhập vẫn giữ nguyên. Điều chỉnh này thay thế phần EntryRedirect ở `/` trong P01 và nghiệm thu lịch sử P18. [Plan và evidence P19](19-home-editorial.md).
+
 ## 1. Phạm vi, quyết định và bằng chứng hiện tại
 
 Ngày lập plan: **23/10/2026**, múi giờ Asia/Saigon. Người dùng đã yêu cầu tách thành các plan nhỏ một commit và triển khai tuần tự. Được phép tạo commit local cho từng plan sau kiểm thử/review; không push/merge/deploy.
@@ -27,12 +31,12 @@ Nguồn thiết kế sống:
 | Dependencies | Đã có `antd`, `gsap`, `socket.io-client` | Không chạy `npm install gsap`, không thêm UI/chart/motion library |
 | Số màn | 17 HTML trong `screens`; prompt liệt kê 15 | Port đúng 15 màn; `home.html`, `holland-test.html` chỉ kiểm thử hồi quy |
 | Easing | CSS thật là `cubic-bezier(0.16, 1, 0.3, 1)`; prompt ghi `(0.34, 1.56, 0.64, 1)` | Giá trị prompt được ưu tiên: giữ nguyên các token khác, override riêng `--ce-ease`; ghi delta này trong evidence |
-| Routing hiện tại | `/` là Home; career catalog/detail public; OTP ở `/verify-otp` | Đổi `/` thành redirect theo session; career routes protected theo prompt; thêm `/otp-verify` canonical, giữ alias `/verify-otp` |
+| Routing hiện tại | `/` là Home công khai; `/preview/home` là alias | P19 khôi phục Home trước cho mọi session; career routes vẫn protected; `/otp-verify` canonical, giữ alias `/verify-otp` |
 | Kết quả Holland | Có query/result parser/snapshot normalization/radar thật | Chỉ thay UI; giữ server TopCode và mẫu số từ snapshot lịch sử |
 | Nghề/gợi ý/lộ trình | Route runtime trỏ `modules/career-platform` | Sửa page runtime này; không thay bằng các page preview cũ |
 | Cài đặt appearance | Đang có preset/accent/background/sidebar | Canvas mới cố định dark `#121214`; không để preset cũ override token mới; giữ cấu hình lưu để tương thích ngoài scope |
 
-`home.html` không có task port; việc thay route `/` là yêu cầu routing riêng của prompt. Không xóa Home source, preview hay admin. Các route preview hiện hữu tiếp tục bị phân biệt với runtime và không được cấp session giả. Các route admin tiếp tục dùng guard/quyền hiện có.
+`home.html` nằm ngoài phạm vi port ban đầu P00–P18. P19 bổ sung port Home editorial và khôi phục route `/` theo yêu cầu mới của user. Không xóa Home source, preview hay admin. Home mới được port theo `styles/aihn-editorial.css` và motion script trong P19; theme riêng không đổi palette runtime career/admin. Các route preview hiện hữu tiếp tục bị phân biệt với runtime và không được cấp session giả. Các route admin tiếp tục dùng guard/quyền hiện có.
 
 Không dựa vào số test hoặc trạng thái “đã hoàn thành” trong các hồ sơ cũ để tuyên bố phiên bản hiện tại pass. P00 phải lấy baseline mới.
 
@@ -68,7 +72,7 @@ Mọi đường dẫn source/test bên dưới tính từ root worktree Frontend
 | `src/layouts/StudentLayout.tsx` | Một AppHeader + một main Outlet cho runtime student |
 | `src/layouts/AuthLayout.tsx` | Auth dark canvas/waves, không student header/sidebar |
 | `src/layouts/CareerCatalogLayout.tsx` | Dark shell cho career routes sau khi chuyển sang protected |
-| `src/routes/EntryRedirect.tsx` | Chờ hydration, điều hướng `/` theo session/role thật |
+| `src/routes/public.routes.tsx` | Home công khai tại `/` và alias `/preview/home`; bỏ EntryRedirect sau P18 theo P19 |
 
 Shared components không import module, layout, router hoặc app. `AppHeader` có session/navigation nên đặt trong `layouts/components`; đây là tên component yêu cầu nhưng theo ownership hiện có, không tạo root `src/components` song song.
 

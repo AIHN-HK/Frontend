@@ -4,7 +4,7 @@ import { paths } from '@/routes/paths';
 import { Icon } from '@/shared/ui/Icon';
 
 const links = [
-  [paths.previewHome, 'Trang chủ'],
+  [paths.home, 'Trang chủ'],
   [paths.careers, 'Khám phá nghề nghiệp'],
   [paths.assessment, 'Trắc nghiệm Holland'],
   [paths.roadmap, 'Lộ trình phát triển'],
@@ -33,7 +33,7 @@ export function PublicNavigation() {
     if (open && event.key === 'Escape') { event.preventDefault(); close(); }
   }}>
     <div className="home-navbar">
-      <Link to={paths.previewHome} className="brand-logo-group" aria-label="AIHN trang chủ" onClick={() => setOpen(false)}>
+      <Link to={paths.home} className="brand-logo-group" aria-label="AIHN trang chủ" onClick={() => setOpen(false)}>
         <span className="brand-logo-icon" aria-hidden="true">AI</span><span className="brand-logo-text">AIHN</span>
       </Link>
       <nav className="home-nav-links" aria-label="Điều hướng chính">{navigationLinks}</nav>

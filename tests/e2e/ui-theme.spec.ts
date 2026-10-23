@@ -2,19 +2,30 @@ import { expect, test } from '@playwright/test';
 import { resultFixture } from './result.fixture';
 import { adminFixture } from './admin.fixture';
 
-test('entry routes by verified identity and catalog preserves the protected return URL', async ({ page }) => {
+test('Home stays public for guests and students while catalog preserves the protected return URL', async ({ page }) => {
   await page.goto('/');
-  await expect(page).toHaveURL(/\/login$/);
+  await expect(page).toHaveURL('/');
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Khám phá con đường');
   await page.goto('/careers/15-1252.00');
   await expect(page).toHaveURL(/\/login\?returnTo=%2Fcareers%2F15-1252.00$/);
   await resultFixture(page);
   await page.goto('/');
+  await expect(page).toHaveURL('/');
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Khám phá con đường');
+  await page.reload();
+  await expect(page).toHaveURL('/');
+  await page.getByRole('banner').getByRole('link', {name:'Đăng nhập',exact:true}).click();
   await expect(page).toHaveURL(/\/dashboard$/);
 });
 
-test('admin entry retains the admin guard and destination', async ({ page }) => {
+test('Home stays public for admins and login still opens their admin destination', async ({ page }) => {
   await adminFixture(page);
   await page.goto('/');
+  await expect(page).toHaveURL('/');
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Khám phá con đường');
+  await page.reload();
+  await expect(page).toHaveURL('/');
+  await page.getByRole('banner').getByRole('link', {name:'Đăng nhập',exact:true}).click();
   await expect(page).toHaveURL(/\/admin$/);
 });
 
