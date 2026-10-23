@@ -50,3 +50,10 @@ test('blocked preference storage keeps controls usable and reports temporary cha
   await page.getByRole('button', { name: 'Đăng xuất', exact: true }).click();
   await expect(page).toHaveURL(/login/);
 });
+
+test('settings explains fixed career colors while retaining honest scoped device preferences', async ({page}) => {
+  const {reviewResponsive}=await import('./ui-sync.fixture');
+  await page.goto('/settings');
+  await expect(page.getByText(/Giao diện AIHN hiện dùng chủ đề tối cố định/)).toBeVisible();
+  await reviewResponsive(page,'P13','.settings-page');
+});

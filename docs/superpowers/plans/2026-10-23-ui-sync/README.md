@@ -21,7 +21,7 @@ Nhánh tiếp tục mới: `feat/ui-sync-aihn-sequential`, base `e58489c` (kế 
 | P10 | [Advisor](10-advisor.md) | `feat(ui): port Advisor page` | Completed |
 | P11 | [CareerProfile, giữ avatar và career profile panel](11-career-profile.md) | `feat(ui): port CareerProfile page` | Completed |
 | P12 | [History](12-history.md) | `feat(ui): port History page` | Completed |
-| P13 | [Settings, dark canvas và chức năng có thật](13-settings.md) | `feat(ui): port Settings page` | Pending |
+| P13 | [Settings, dark canvas và chức năng có thật](13-settings.md) | `feat(ui): port Settings page` | Completed |
 | P14 | [Login](14-login.md) | `feat(ui): port Login page` | Pending |
 | P15 | [Signup](15-signup.md) | `feat(ui): port Signup page` | Pending |
 | P16 | [OtpVerify](16-otp-verify.md) | `feat(ui): port OtpVerify page` | Pending |
