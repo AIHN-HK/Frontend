@@ -1,0 +1,28 @@
+.page { display:grid; gap:22px; min-width:0; }
+.page h1 { font-size:26px; line-height:1.25; font-weight:600; letter-spacing:-.3px; text-align:center; }
+.page p { font-size:13px; line-height:1.6; overflow-wrap:anywhere; }
+.page a { display:inline-flex; align-items:center; min-height:44px; min-width:44px; color:var(--ce-violet); font-size:12.5px; }
+.page :global(.brand-badge) { margin:0 auto 16px; width:38px; height:38px; background:var(--ce-c-subtle); color:var(--ce-violet); border:1px solid var(--ce-c-border); box-shadow:0 0 18px var(--ce-card-glow); border-radius:50%; }
+.page :global(.field),.page form,.page fieldset { display:grid; gap:8px; min-width:0; }
+.page form,.page fieldset { gap:16px; }
+.page fieldset { padding:0; margin:0; border:0; }
+.page label,.page legend { font-size:12.5px; color:var(--ce-text-secondary); }
+.page input:not([type=checkbox]) { min-width:0; width:100%; min-height:46px; border:1px solid var(--ce-border); border-radius:10px; color:var(--ce-text-primary); background:var(--ce-glass-subtle); padding:10px 14px; font-size:14px; }
+.page :global(.field-error),.page [role=alert] { color:var(--ce-e); font-size:12px; }
+.page :global(.field-hint) { font-size:11px; color:var(--ce-text-muted); }
+.page button { min-height:44px; min-width:44px; }
+.page :global(.login-submit),.page :global(.signup-submit),.page :global(.otp-submit),.page :global(.recovery-submit) { width:100%; min-height:48px; padding:10px 12px; border:0; border-radius:10px; background:var(--ce-btn-white); color:var(--ce-btn-text); font-size:13px; font-weight:700; justify-content:center; }
+.page :global(.login-intro),.page :global(.signup-intro),.page :global(.otp-intro),.page :global(.recovery-intro) { text-align:center; display:grid; gap:8px; }
+.page :global(.login-password-label) { display:flex; align-items:center; justify-content:space-between; gap:8px; flex-wrap:wrap; }
+.page :global(.login-password-input),.page :global(.signup-password-input) { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:8px; }
+.page :global(.login-remember) { display:flex; align-items:center; gap:10px; min-height:44px; }
+.page :global(.login-remember input) { width:18px; height:18px; accent-color:var(--ce-c); flex-shrink:0; }
+.page :global(.login-home),.page :global(.signup-home),.page :global(.otp-footer),.page :global(.recovery-footer) { text-align:center; display:flex; flex-wrap:wrap; gap:8px; justify-content:center; }
+.page :global(.otp-digits) { grid-template-columns:repeat(6,minmax(44px,1fr)); gap:6px; }
+.page :global(.otp-digits input) { padding:6px; text-align:center; font-size:22px; height:54px; }
+.page :global(.otp-legend) { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); }
+.page :global(.otp-missing),.page :global(.recovery-missing) { display:grid; gap:16px; text-align:center; }
+.page :global(.otp-resend) { text-align:center; }
+.page :global(.recovery-password) { display:grid; gap:8px; }
+.page :global(.recovery-toggle) { justify-self:end; }
+@media(max-width:360px) { .page h1 { font-size:24px; } .page :global(.otp-digits) { grid-template-columns:repeat(3,minmax(44px,1fr)); } }
