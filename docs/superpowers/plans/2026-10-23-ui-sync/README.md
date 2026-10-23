@@ -14,7 +14,7 @@ Nhánh tiếp tục mới: `feat/ui-sync-aihn-sequential`, base `e58489c` (kế 
 | P03 | [AssessmentResult, màn ưu tiên số một](03-assessment-result.md) | `feat(ui): port AssessmentResult page` | Completed |
 | P04 | [Dashboard](04-dashboard.md) | `feat(ui): port Dashboard page` | Completed |
 | P05 | [Recommendations list](05-recommendations.md) | `feat(ui): port Recommendations page` | Completed |
-| P06 | [RecommendationDetail, tách page runtime có context chính xác](06-recommendation-detail.md) | `feat(ui): port RecommendationDetail page` | Pending |
+| P06 | [RecommendationDetail, tách page runtime có context chính xác](06-recommendation-detail.md) | `feat(ui): port RecommendationDetail page` | Completed |
 | P07 | [CareerExplorer trên catalog runtime](07-career-explorer.md) | `feat(ui): port CareerExplorer page` | Pending |
 | P08 | [CareerDetail trên O*NET career ID](08-career-detail.md) | `feat(ui): port CareerDetail page` | Pending |
 | P09 | [Roadmap](09-roadmap.md) | `feat(ui): port Roadmap page` | Pending |

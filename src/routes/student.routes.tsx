@@ -64,11 +64,7 @@ export const studentRoutes: RouteObject[] = [
           },
           {
             path: '/recommendations/:recommendationId',
-            lazy: async () => ({
-              Component: (
-                await import('@/modules/career-platform/pages/CareerRecommendationsPage')
-              ).CareerRecommendationsPage,
-            }),
+            lazy: async () => ({ Component: (await import('@/modules/career-platform/pages/CareerRecommendationDetailPage')).CareerRecommendationDetailPage }),
           },
           {
             path: paths.roadmap,

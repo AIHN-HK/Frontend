@@ -9,17 +9,19 @@ export function PlatformFrame({
   className,
   sidebar,
   animationKey,
+  showTitle = true,
 }: {
   title: string;
   children: ReactNode;
   className?: string;
   sidebar?: ReactNode;
   animationKey?: string | number;
+  showTitle?: boolean;
 }) {
   const root = usePageEntrance(className ? animationKey ?? title : undefined);
   const content = (
     <div ref={root} className={`career-platform ${className ?? ''}`}>
-      <h1 data-ce-enter="">{title}</h1>
+      {showTitle && <h1 data-ce-enter="">{title}</h1>}
       {children}
     </div>
   );

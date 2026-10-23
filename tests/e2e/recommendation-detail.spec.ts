@@ -34,7 +34,7 @@ test('stale preview is labeled, general sources are not personal evidence and no
 test('runtime uses an owned API read and never fetches preview data', async ({ page }) => {
   const fixture = await advisorFixture(page);
   await page.goto('/recommendations/71');
-  await expect(page.getByRole('heading', { name: 'Gợi ý nghề nghiệp có giải thích' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Chi tiết gợi ý nghề nghiệp' })).toBeVisible();
   await expect.poll(() => fixture.requests.filter(r => r.path === '/api/v1/career/recommendations/71').length).toBe(1);
   expect(fixture.requests.filter(r => /recommendation/.test(r.path)).every(r => r.method === 'GET')).toBe(true);
   expect(fixture.commands).toEqual([]);
