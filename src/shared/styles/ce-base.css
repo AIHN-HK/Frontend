@@ -1,0 +1,51 @@
+.ce-app {
+  color-scheme: dark;
+  min-height: 100dvh;
+  background: var(--ce-bg-main);
+  color: var(--ce-text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --bg-app: var(--ce-bg-main);
+  --bg-app-deep: var(--ce-bg-sidebar);
+  --bg-surface: var(--ce-bg-nav);
+  --bg-surface-secondary: var(--ce-bg-card);
+  --bg-surface-subtle: var(--ce-bg-card);
+  --bg-surface-hover: var(--ce-bg-elevated);
+  --bg-surface-active: var(--ce-c-subtle);
+  --border-default: var(--ce-border);
+  --border-subtle: var(--ce-border-subtle);
+  --border-strong: var(--ce-border-strong);
+  --text-primary: var(--ce-text-primary);
+  --text-secondary: var(--ce-text-secondary);
+  --text-muted: var(--ce-text-muted);
+  --primary: var(--ce-c);
+  --primary-hover: var(--ce-violet);
+  --primary-active: var(--ce-c);
+  --primary-subtle: var(--ce-c-subtle);
+  --primary-border: var(--ce-c-border);
+  --primary-content: var(--ce-text-primary);
+  --riasec-r: var(--ce-r);
+  --riasec-i: var(--ce-i);
+  --riasec-a: var(--ce-a);
+  --riasec-s: var(--ce-s);
+  --riasec-e: var(--ce-e);
+  --riasec-c: var(--ce-c);
+}
+.ce-app *, .ce-app *::before, .ce-app *::after { box-sizing: border-box; }
+.ce-app :where(h1, h2, h3, h4, p, figure) { margin: 0; }
+.ce-app :where(h1, h2, h3, h4) { color: var(--ce-text-primary); }
+.ce-app :where(p) { color: var(--ce-text-secondary); }
+.ce-app :where(a, button, input, select, textarea) { -webkit-tap-highlight-color: transparent; }
+.ce-app :where(button, input, select, textarea) { font: inherit; }
+.ce-app :focus-visible { outline: 2px solid var(--ce-violet); outline-offset: 3px; }
+.ce-app :where(.ant-btn, .ant-input, .ant-input-affix-wrapper, .ant-select-selector) { min-height: 44px; }
+.ce-app :where(.ant-btn) { white-space: normal; height: auto; }
+.ce-app :where(img, svg) { max-width: 100%; }
+.ce-app :where(.async-state) { color: var(--ce-text-secondary); }
+.ce-app :where(.btn) { min-height: 44px; }
+@media (prefers-reduced-motion: reduce) {
+  .ce-app *, .ce-app *::before, .ce-app *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

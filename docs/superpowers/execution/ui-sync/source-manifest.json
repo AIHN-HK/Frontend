@@ -1,0 +1,22 @@
+{
+  "assets/hero-student.png": "0dbbe7eb4b19027b05852be0489a6aa59e94f333e6e2023128e60dd610dafa58",
+  "assets/student-male-laptop.jpg": "ae63d6c272e4ecafc6aafe46040e3b49342636c4e33047f59426556ec547022c",
+  "screens/advisor.html": "97e96a832c51959e6b02cd2d52f9babcc2fef8fb7b84447c9857169b93b1c08a",
+  "screens/assessment-result.html": "fc691a4c8492136c895d6b464816afe924738ca2f9bf3af44f253235a1591b96",
+  "screens/career-detail.html": "f74175c146fc2acd2ee04822a7149d7f040286cad863b3330dd0e7c53ec38815",
+  "screens/career-explorer.html": "6c5504a14c3c85fee216a1cfd43d1c29253da7f73249199a43bd1010186c0b6f",
+  "screens/career-profile.html": "8fe4ec147c3ba12630dfb4022e4ad90c1d025b060d5993cb00988bc905c7e474",
+  "screens/dashboard.html": "14a5e24696dcf7549a81e10a2d73b40a3e5f04d171ff311f692d5162871a18b3",
+  "screens/forgot-reset-password.html": "2b78dcfdd49f8eb4648e98231619103205c386a288aa3db1cf2a33f98e8e3665",
+  "screens/history.html": "55e467d3e0046102e0075e3a5c639c9b30d0e3391cf32bdf1fcbc9a6f9c0b23b",
+  "screens/holland-test.html": "5b7a63593c536a183d6f43acfb23d4b404a24db0038f392581d2ff057233715b",
+  "screens/home.html": "c7725f053cee327841c8e56ec07e6e7f46e4d348136d4c4e5c641d685320a0aa",
+  "screens/login.html": "22ff4c1961b5bbb3824305ed6d0c071b4e8bfeaaf8da9b14d714e5dc62c2e929",
+  "screens/otp-verify.html": "61dc98bb24615f89d47a602505c1c6217db4556cc47661a94536af4155483566",
+  "screens/recommendation-detail.html": "0788593a592e66e60c6fb5e6c64a1d5f36e22ed10e43acca677d1ebb7e4937da",
+  "screens/recommendations.html": "710f771c55d27b29b8aa0b18154095b31e9f1a5ba34586258b90f469aa38f08f",
+  "screens/roadmap.html": "d1b5ee7afdb544bd9ec09b395c7959567f684cdb91803a98af22794d829d0287",
+  "screens/settings.html": "4ab173597bfdd21ac2cc4e37bd19aaddc23532105e7ea8af360e6d3506ccef2e",
+  "screens/signup.html": "5de53057989dd1ec4234e6b71795cf276bcd1fff34f4f16b8378d2412fbe1fae",
+  "styles/screens/aihn-system.css": "0246e1606571e9ec05b27990bb69945d9ce1a9b9f8a1e8a1963cf064b78c28d8"
+}

@@ -165,3 +165,67 @@
   --content-max-width: 1240px;
   --touch-target-min: 44px;
 }
+
+/* AIHN Career dark UI: token names preserved from the current design. */
+:root {
+  /* Canvas */
+  --ce-bg-main: #121214;
+  --ce-bg-sidebar: #0b0b0d;
+  --ce-bg-nav: #161618;
+  --ce-bg-card: #1c1c20;
+  --ce-bg-elevated: #27272e;
+
+  /* Borders */
+  --ce-border: rgba(255, 255, 255, 0.09);
+  --ce-border-subtle: rgba(255, 255, 255, 0.05);
+  --ce-border-strong: rgba(167, 139, 250, 0.45);
+
+  /* Text */
+  --ce-text-primary: #ffffff;
+  --ce-text-secondary: #9e9ea7;
+  --ce-text-muted: #6e6e76;
+
+  /* Showcase Card Gradient (Deep Midnight Purple) */
+  --ce-card-gradient-start: #191433;
+  --ce-card-gradient-mid: #251e4c;
+  --ce-card-gradient-end: #1c163b;
+  --ce-card-border: rgba(139, 92, 246, 0.28);
+  --ce-card-glow: rgba(124, 58, 237, 0.16);
+
+  /* Buttons */
+  --ce-btn-white: #ffffff;
+  --ce-btn-text: #121214;
+
+  /* Accent */
+  --ce-star-gold: #f59e0b;
+  --ce-cyan: #38bdf8;
+  --ce-violet: #a78bfa;
+  --ce-emerald: #10b981;
+
+  /* Holland RIASEC 6 Dimensions */
+  --ce-r: #10b981;  /* Realistic  — Emerald */
+  --ce-i: #06b6d4;  /* Investigative — Cyan */
+  --ce-a: #ec4899;  /* Artistic — Magenta */
+  --ce-s: #38bdf8;  /* Social — Sky Blue */
+  --ce-e: #f59e0b;  /* Enterprising — Amber */
+  --ce-c: #8b5cf6;  /* Conventional — Violet */
+
+  --ce-r-subtle: rgba(16, 185, 129, 0.12);
+  --ce-i-subtle: rgba(6, 182, 212, 0.12);
+  --ce-a-subtle: rgba(236, 72, 153, 0.12);
+  --ce-s-subtle: rgba(56, 189, 248, 0.12);
+  --ce-e-subtle: rgba(245, 158, 11, 0.12);
+  --ce-c-subtle: rgba(139, 92, 246, 0.12);
+
+  --ce-r-border: rgba(16, 185, 129, 0.35);
+  --ce-i-border: rgba(6, 182, 212, 0.35);
+  --ce-a-border: rgba(236, 72, 153, 0.35);
+  --ce-s-border: rgba(56, 189, 248, 0.35);
+  --ce-e-border: rgba(245, 158, 11, 0.35);
+  --ce-c-border: rgba(139, 92, 246, 0.35);
+
+  /* Transitions */
+  --ce-ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+/* Explicit prompt easing takes precedence over the design CSS value. */
+:root { --ce-ease: cubic-bezier(0.34, 1.56, 0.64, 1); }
