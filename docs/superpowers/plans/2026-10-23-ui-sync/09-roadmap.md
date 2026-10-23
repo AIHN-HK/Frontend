@@ -35,5 +35,3 @@
 - [ ] Không copy mốc tháng, khóa học, trường hay chứng chỉ giả từ mockup. No target → CTA profile; gap unknown giữ unknown.
 - [ ] Error cập nhật không đánh dấu task complete thành công; double submit không gửi hai mutation, reload phải từ server.
 - [ ] Chạy specs + Gate G; keyboard toggle/modal evidence, mobile timeline, revision conflict và unknown-save.
-
-

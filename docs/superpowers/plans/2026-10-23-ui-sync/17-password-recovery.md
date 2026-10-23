@@ -34,5 +34,3 @@
 - [ ] Recovery secrets/password giữ memory-only theo TTL/revision hiện có; không URL/localStorage/log. Timeout/unknown giữ draft để review/reconcile, không auto resend/reset.
 - [ ] Reset success xóa password/recovery state và về login, không tự login. Giữ test old password rejection và session invalidation ở mức integration phù hợp.
 - [ ] Chạy specs + Gate G cho cả hai page; long validation, keyboard, reload thiếu context và auth canvas viewport thấp.
-
-

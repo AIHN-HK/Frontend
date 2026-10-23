@@ -34,5 +34,3 @@
 - [ ] Register success chuyển đúng OTP flow; error/unknown giữ draft theo chính sách hiện có, không tự replay register.
 - [ ] Có link login/OTP canonical qua paths; không để `.html` link, không session giả sau register.
 - [ ] Chạy specs + Gate G; duplicate email, invalid fields, failed submit, back/forward và mobile keyboard.
-
-

@@ -34,5 +34,3 @@
 - [ ] Notification/privacy/delete-account/password-change controls trong HTML chỉ hoạt động nếu đã có contract. Không toast success cho local toggle giả server; unsupported control có unavailable state rõ ràng.
 - [ ] Các preference còn được hỗ trợ áp dụng scope cũ thực tế, không ghi đè ce tokens. Logout/security action vẫn qua auth API hiện có.
 - [ ] Chạy specs + Gate G; reload persistence được hỗ trợ, legacy stored preset không đổi canvas khỏi rgb(18,18,20), admin palette isolation không regress.
-
-

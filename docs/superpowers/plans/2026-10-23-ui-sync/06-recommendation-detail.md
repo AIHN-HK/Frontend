@@ -57,5 +57,3 @@ test('selects only an explicitly requested item from the saved run', () => {
 - [ ] CTA career detail dùng item.careerId; “chọn mục tiêu/lộ trình” tiếp tục flow profile/goal hiện có, không mutation tự phát khi mở link.
 - [ ] Deep link, reload, URL đổi nghề cùng run, unknown careerId, run 404/403, account switch phải đúng; giữ old `/recommendations/:runId` usable qua màn chọn.
 - [ ] Chạy unit `pnpm exec vitest run tests/unit/recommendation-selection.test.ts`, browser specs + Gate G.
-
-

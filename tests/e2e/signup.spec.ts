@@ -68,7 +68,7 @@ test('sends only trimmed email, hands off without creating an account and keeps 
   await expect(page.getByLabel('Tạo mật khẩu')).toHaveAttribute('type', 'text');
   await page.getByRole('button', { name: 'Ẩn mật khẩu' }).click();
   await page.getByRole('button', { name: submitName }).click();
-  await expect(page).toHaveURL(/\/verify-otp$/);
+  await expect(page).toHaveURL(/\/otp-verify$/);
   await expect(page.getByText('Tài khoản chưa được tạo.', { exact: false })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Xác thực tài khoản' })).toBeVisible();
   expect(calls).toEqual([{ path: '/api/v1/auth/register/send-otp', body: { email: 'student@example.test' } }]);
@@ -156,7 +156,7 @@ test('returning to the handoff after a failed retry preserves the draft without 
   await page.goto('/signup');
   await fill(page);
   await page.getByRole('button', { name: submitName }).click();
-  await expect(page).toHaveURL(/\/verify-otp$/);
+  await expect(page).toHaveURL(/\/otp-verify$/);
   await page.goBack();
   await expect(page.getByLabel('Tạo mật khẩu')).toHaveValue(password);
   await fixture(page, { status: 503 });

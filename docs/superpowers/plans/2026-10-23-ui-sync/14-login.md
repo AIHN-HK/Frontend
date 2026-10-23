@@ -35,5 +35,3 @@
 - [ ] Success chỉ sau server identity xác minh; USER dashboard, ADMIN admin hoặc returnTo được validate theo guard. Root redirect Task 02 không tạo loop.
 - [ ] OAuth Google mẫu nếu chưa có contract phải disabled/unavailable, không tự đăng nhập giả.
 - [ ] Chạy specs + Gate G; Enter submit, keyboard error focus, reload remembered session, logout/session changed và 320px.
-
-

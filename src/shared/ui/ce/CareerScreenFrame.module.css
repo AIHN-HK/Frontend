@@ -1,0 +1,7 @@
+.grid { display:grid; grid-template-columns:minmax(0,1fr) 420px; min-height:calc(100dvh - 64px); }
+.single { min-height:calc(100dvh - 64px); }
+.stage { padding:60px 48px; min-width:0; }
+.single .stage { max-width:1340px; margin:auto; }
+@media(min-width:1600px) { .grid { grid-template-columns:minmax(0,1fr) 460px; } }
+@media(max-width:1024px) { .grid { grid-template-columns:minmax(0,1fr); } .stage { padding:40px 24px; } }
+@media(max-width:768px) { .stage { padding:28px 16px; } }

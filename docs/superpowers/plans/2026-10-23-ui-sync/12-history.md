@@ -34,5 +34,3 @@
 - [ ] Dates format theo dữ liệu/server và locale, không dùng ngày mẫu. Empty/loading/error của từng tab độc lập.
 - [ ] Owner-scoped query, abort khi đổi tab/account; không giữ history A ở B hoặc đổi tab khiến auto mutation.
 - [ ] Chạy specs + Gate G; tab keyboard, long title/date, duplicate load-more và deep link reopen.
-
-

@@ -2,12 +2,12 @@ import { expect, test } from '@playwright/test';
 
 test('catalog route and direct unknown URLs keep distinct states', async ({ page }) => {
   await page.goto('/careers');
-  await expect(page.getByRole('heading', { name: 'Khám phá nghề nghiệp', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Đăng nhập AIHN', exact: true })).toBeVisible();
   await page.goto('/khong-ton-tai/deep-link');
   await page.reload();
   await expect(page.getByRole('heading', { name: 'Không tìm thấy trang' })).toBeVisible();
   await page.getByRole('link', { name: 'Về trang chủ' }).click();
-  await expect(page).toHaveURL(/\/$/);
+  await expect(page).toHaveURL(/\/login$/);
 });
 
 for (const [width, sidebarWidth] of [
@@ -161,7 +161,7 @@ test('public entry does not eagerly request workspace layouts or legacy runtime 
     if (request.resourceType() === 'script') scripts.push(request.url());
   });
   page.on('pageerror', (error) => errors.push(error.message));
-  await page.goto('/');
+  await page.goto('/preview/home');
   await expect(page.getByRole('heading', { level: 1 })).toContainText('phù hợp nhất của bạn');
   expect(scripts.join('\n')).not.toMatch(
     /AdminLayout|StudentLayout|WorkspaceShell|LoginPage|socket|expo|react-native/i,

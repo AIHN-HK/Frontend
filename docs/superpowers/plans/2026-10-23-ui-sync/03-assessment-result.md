@@ -37,5 +37,3 @@
 - [ ] Giữ analysis missing/partial/aggregate special case; không tạo ba nhận xét tính cách cố định. Bridge dùng links thật, không tự POST tạo gợi ý hay chat khi render.
 - [ ] Thêm assertion sidebar visible ở 1025px, hidden ở 1024px; node visual 26×26; badge offset 12px và không có overlay che vùng giữa ảnh.
 - [ ] Chạy specs + Gate G; ảnh so sánh ít nhất ready, zero, snapshot-unavailable và mobile. Dừng để review màn đầu tiên trước dashboard.
-
-

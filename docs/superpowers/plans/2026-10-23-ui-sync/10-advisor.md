@@ -35,5 +35,3 @@
 - [ ] Prompt suggestion chỉ điền draft hoặc thao tác rõ theo behavior đã có; không tự gửi khi click mở page. Context RIASEC/profile chỉ hiển thị nếu được dữ liệu thật xác nhận.
 - [ ] Auto-scroll chỉ khi người dùng đang gần cuối, không giật viewport khi đọc tin cũ; composer không bị keyboard/mobile overlap, danh sách dài cuộn nội bộ hợp lý.
 - [ ] Chạy specs + Gate G; reduced motion giữ full message text, unmount/remount không duplicate listener/message, account switch không lộ chat cũ.
-
-

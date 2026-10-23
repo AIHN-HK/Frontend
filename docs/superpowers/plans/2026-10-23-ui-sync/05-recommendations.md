@@ -36,5 +36,3 @@
 - [ ] Filter chỉ áp dụng trường có thật; state pending/empty/error/null score rõ ràng. Các filter mẫu không có dữ liệu hỗ trợ disabled với mô tả ngắn.
 - [ ] Giữ phần explanation contribution/weights/missing ở khối đọc được hoặc Modal, không xóa để khớp ít chữ trong mockup.
 - [ ] Chạy specs + Gate G; test click một nghề mở đúng cặp run/career và browser back giữ context.
-
-

@@ -1,11 +1,11 @@
 import { expect, test } from '@playwright/test';
 
-test('guest sees public Home and explicitly labeled example data without personal requests', async ({ page }) => {
+test('preview Home preserves explicitly labeled examples and explicitly labeled example data without personal requests', async ({ page }) => {
   const personal: string[] = [];
   const errors: string[] = [];
   page.on('request', request => { if (['fetch', 'xhr', 'websocket'].includes(request.resourceType())) personal.push(request.url()); });
   page.on('pageerror', error => errors.push(error.message));
-  await page.goto('/');
+  await page.goto('/preview/home');
   await expect(page.getByRole('heading', { level: 1 })).toContainText('phù hợp nhất của bạn');
   await expect(page.getByRole('region', { name: 'Ví dụ bàn làm việc · Dữ liệu mẫu' })).toBeVisible();
   await expect(page.getByRole('banner').getByText('Minh Hải')).toHaveCount(0);
@@ -18,18 +18,18 @@ test('guest sees public Home and explicitly labeled example data without persona
   expect(errors).toEqual([]);
 });
 
-test('Home CTAs register the real URLs and enforce guest guards/unavailable catalog', async ({ page }) => {
-  await page.goto('/');
+test('Home CTAs register the real URLs and enforce guest guards for catalog', async ({ page }) => {
+  await page.goto('/preview/home');
   await page.getByRole('link', { name: /^Làm trắc nghiệm Holland/ }).click();
   await expect(page).toHaveURL(/\/login(?:\?|$)/);
   await expect(page.getByRole('heading', { name: 'Đăng nhập AIHN' })).toBeVisible();
-  await page.goto('/');
+  await page.goto('/preview/home');
   await page.getByRole('link', { name: /^Khám phá nghề nghiệp/ }).click();
-  await expect(page).toHaveURL(/\/careers$/);
-  await expect(page.getByRole('heading', { name: 'Khám phá nghề nghiệp', exact: true })).toBeVisible();
+  await expect(page).toHaveURL(/\/login\?returnTo=%2Fcareers$/);
+  await expect(page.getByRole('heading', { name: 'Đăng nhập AIHN', exact: true })).toBeVisible();
   await page.reload();
-  await expect(page.getByRole('heading', { name: 'Khám phá nghề nghiệp', exact: true })).toBeVisible();
-  await page.goto('/');
+  await expect(page.getByRole('heading', { name: 'Đăng nhập AIHN', exact: true })).toBeVisible();
+  await page.goto('/preview/home');
   await page.getByRole('link', { name: 'Bắt đầu ngay →', exact: true }).click();
   await expect(page).toHaveURL(/\/signup$/);
 });
@@ -37,7 +37,7 @@ test('Home CTAs register the real URLs and enforce guest guards/unavailable cata
 test('every product example action uses a registered guarded destination', async ({ page }) => {
   const actions = [['Xem kết quả', '/assessment/results'], ['Khám phá ngay', '/recommendations'], ['Xem lộ trình', '/roadmap'], ['Đặt câu hỏi', '/advisor'], ['Xem tất cả →', '/recommendations']] as const;
   for (const [label, href] of actions) {
-    await page.goto('/');
+    await page.goto('/preview/home');
     const link = page.getByRole('region', { name: 'Ví dụ bàn làm việc · Dữ liệu mẫu' }).getByRole('link', { name: label, exact: true });
     await expect(link).toHaveAttribute('href', href);
     await link.click();
@@ -48,7 +48,7 @@ test('every product example action uses a registered guarded destination', async
 for (const width of [320, 390, 768, 769, 1024, 1025, 1280, 1281, 1440]) {
   test(`Home remains usable at ${width}px including navigation and touch targets`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
-    await page.goto('/');
+    await page.goto('/preview/home');
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     const opener = page.getByRole('button', { name: 'Mở menu' });
@@ -75,7 +75,7 @@ for (const width of [320, 390, 768, 769, 1024, 1025, 1280, 1281, 1440]) {
 
 test('mobile menu supports keyboard, same-route close, Escape and resize reset', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto('/');
+  await page.goto('/preview/home');
   const opener = page.getByRole('button', { name: 'Mở menu' });
   await opener.focus();
   await page.keyboard.press('Enter');
@@ -96,12 +96,12 @@ test('mobile menu supports keyboard, same-route close, Escape and resize reset',
   await expect(menu).toBeHidden();
   await opener.click();
   await menu.getByRole('link', { name: 'Khám phá nghề nghiệp', exact: true }).click();
-  await expect(page).toHaveURL(/\/careers$/);
+  await expect(page).toHaveURL(/\/login\?returnTo=%2Fcareers$/);
   await expect(menu).toBeHidden();
 });
 
 test('keyboard skip link reaches Home main content', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/preview/home');
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
   await page.keyboard.press('Tab');
   await expect(page.getByRole('link', { name: 'Bỏ qua điều hướng' })).toBeFocused();
@@ -116,7 +116,7 @@ test('keyboard skip link reaches Home main content', async ({ page }) => {
 test('desktop header keeps login/signup text on a single line without clipping', async ({ page }) => {
   for (const width of [1281, 1440]) {
     await page.setViewportSize({ width, height: 900 });
-    await page.goto('/');
+    await page.goto('/preview/home');
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
     for (const label of ['Đăng nhập', 'Bắt đầu ngay →']) {
       const link = page.getByRole('banner').getByRole('link', { name: label, exact: true });
@@ -135,7 +135,7 @@ test('Home review screenshots include loaded illustrations at standard viewports
   await page.emulateMedia({ reducedMotion: 'reduce' });
   for (const [width, height] of [[390, 844], [768, 1024], [1440, 900]]) {
     await page.setViewportSize({ width: width!, height: height! });
-    await page.goto('/');
+    await page.goto('/preview/home');
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
     const image = page.getByRole('img', { name: 'Học sinh THPT ôm laptop học tập tự tin và rạng rỡ' });
     await expect.poll(() => image.evaluate(node => (node as HTMLImageElement).complete && (node as HTMLImageElement).naturalWidth > 0)).toBe(true);

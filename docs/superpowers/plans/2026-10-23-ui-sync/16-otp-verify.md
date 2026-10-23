@@ -35,5 +35,3 @@
 - [ ] Verify success chỉ sau server response; unknown outcome giữ draft, disable duplicate send và không tự replay resend/verify.
 - [ ] `/otp-verify` và alias `/verify-otp` đều hoạt động đúng state scope; mở trực tiếp thiếu flow context có hướng khôi phục, không crash hoặc lấy email mẫu.
 - [ ] Chạy specs + Gate G; paste đủ mã, mobile numeric keyboard, reduced motion và error announcement accessible.
-
-

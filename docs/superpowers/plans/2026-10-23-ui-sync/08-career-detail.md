@@ -35,5 +35,3 @@
 - [ ] Salary/market/local degree blocks không có nguồn giữ unavailable; không đổi dữ liệu nghề tiếng Anh thành lời mô tả VN tự bịa.
 - [ ] Giữ CTA `/career-profile?target=<careerId>` chọn mục tiêu và nguồn nghề; unknown/invalid ID không rơi vào nghề đầu danh sách.
 - [ ] Chạy specs + Gate G; reload, 404, empty skills, long title, 320px và protected deep link.
-
-

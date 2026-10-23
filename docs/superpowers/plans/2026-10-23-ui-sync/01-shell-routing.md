@@ -12,7 +12,7 @@
 
 **Commit:** `feat(ui): add AIHN navigation shell and guarded routes`.
 
-**Status:** Pending.
+**Status:** Completed; evidence [P01](../../execution/ui-sync/P01.md).
 
 ## Checkpoint bắt buộc
 
@@ -38,4 +38,3 @@
 - [ ] `paths.verifyOtp` đổi thành `/otp-verify`; thêm alias route `/verify-otp` cùng lazy Page để giữ draft, query và flow cũ. Giữ `/reset-password`. Không thêm route sinh ID giả.
 - [ ] Giữ `/assessment` ở cấu trúc riêng hiện có; không bọc trùng header hoặc đổi boolean flow. Protected guard/owner checks tiếp tục áp dụng cho result/history/advisor/profile/settings/recommendations/roadmap. Không thay quyền admin bằng RequireSession đơn giản.
 - [ ] Chạy các spec của task và unit boundary. Gate: không redirect loop, chỉ một header/main, deep links/reload/404/guard và login returnTo vẫn đúng.
-

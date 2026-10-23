@@ -51,4 +51,3 @@ Expected: các command pass; mọi failure baseline mới/còn tồn tại đư�
 - [ ] Kiểm session isolation: logout A/login B khi query/mutation/socket pending, drafts/preview/avatar không rò; theme overlay không ảnh hưởng admin/preview; Holland boolean flow còn chạy.
 - [ ] Nếu commit đã được giao, chỉ stage task-owned files, commit theo từng màn; không `git add .`, không gom dirty file khác, không push/merge/deploy. Docs parent được báo riêng vì ngoài repo frontend.
 - [ ] Bàn giao rõ: đã sửa màn nào, visual reviewed hay chưa, test hiện tại, local integration có/chưa, commit hashes nếu có, dirty files còn lại; không tạo learning summary/task-summary-template khi user chưa yêu cầu.
-

@@ -1,4 +1,4 @@
-import { Link, Outlet, useNavigation, useRouteError } from 'react-router';
+import { Link, Outlet, useLocation, useNavigation, useRouteError } from 'react-router';
 import { AsyncState } from '@/shared/ui/AsyncState';
 import { Button } from '@/shared/ui/Button';
 import { paths } from './paths';
@@ -32,5 +32,7 @@ export function RoutePending() {
 
 export function RootRoute() {
   const navigation = useNavigation();
-  return <><AccountControls />{navigation.state === 'loading' && <div className="route-progress" role="status">Đang tải…</div>}<Outlet /></>;
+  const { pathname } = useLocation();
+  const careerShell = /^\/(dashboard|career-profile|assessment\/results|history|advisor|careers|recommendations|roadmap|settings)(\/|$)/.test(pathname);
+  return <>{!careerShell && <AccountControls />}{navigation.state === 'loading' && <div className="route-progress" role="status">Đang tải…</div>}<Outlet /></>;
 }

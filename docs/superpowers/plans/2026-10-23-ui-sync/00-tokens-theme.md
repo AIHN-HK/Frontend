@@ -81,4 +81,3 @@ test('career canvas uses the shared dark token', async ({ page }) => {
 - [x] Chạy `pnpm run typecheck`, `pnpm run lint`; Task 01–02 là một foundation increment, chưa coi theme test pass khi shell chưa render boundary.
 
 Commit foundation đề xuất sau Task 03: `feat(ui): add AIHN dark tokens and shared shell`.
-

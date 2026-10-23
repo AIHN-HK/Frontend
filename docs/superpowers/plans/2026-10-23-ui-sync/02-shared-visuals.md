@@ -36,4 +36,3 @@
 - [ ] CSS Module shared dùng token, không sao chép class global `.active`/`.completed` có thể đụng component khác.
 - [ ] Nối thử bằng data thật qua Task 04; test hai radar cùng DOM không trùng title ID, all-zero có tọa độ hữu hạn; không tạo trang demo có mock session.
 - [ ] Chạy foundation + Task 04 scoped specs trước commit foundation; ghi phần nào chỉ scaffold chưa consumer để không tự nhận visual pass.
-

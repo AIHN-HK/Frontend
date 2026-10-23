@@ -60,10 +60,10 @@ Mọi đường dẫn source/test bên dưới tính từ `/home/hoang/do-an/Fro
 | `src/shared/ui/ce/RiasecBar.module.css` | Track/fill, màu theo `var(--ce-r)` … |
 | `src/layouts/components/AppHeader.tsx` | Navigation/session controls dùng API auth hiện có; shell component, không thuộc shared thuần |
 | `src/layouts/components/AppHeader.module.css` | Header 64px, link active, điều hướng mobile bằng HTML/CSS |
-| `src/layouts/components/TimelineSidebar.tsx` | 26px nodes; step state và radar nhận props, không giả hoàn thành |
-| `src/layouts/components/TimelineSidebar.module.css` | Sidebar 420px/460px, sticky/scroll, ẩn ≤1024 |
-| `src/layouts/components/CareerScreenFrame.tsx` | Bố cục main/optional sidebar, không fetch hoặc tự lồng header |
-| `src/layouts/components/CareerScreenFrame.module.css` | 2-column grid và breakpoint |
+| `src/shared/ui/ce/TimelineSidebar.tsx` | 26px nodes; step state và radar nhận props, không giả hoàn thành |
+| `src/shared/ui/ce/TimelineSidebar.module.css` | Sidebar 420px/460px, sticky/scroll, ẩn ≤1024 |
+| `src/shared/ui/ce/CareerScreenFrame.tsx` | Bố cục main/optional sidebar, không fetch hoặc tự lồng header |
+| `src/shared/ui/ce/CareerScreenFrame.module.css` | 2-column grid và breakpoint |
 | `src/layouts/components/CareerThemeBoundary.tsx` | `.ce-app` + ConfigProvider; message/modal context cùng theme |
 | `src/layouts/StudentLayout.tsx` | Một AppHeader + một main Outlet cho runtime student |
 | `src/layouts/AuthLayout.tsx` | Auth dark canvas/waves, không student header/sidebar |

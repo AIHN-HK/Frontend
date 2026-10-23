@@ -35,5 +35,3 @@
 - [ ] Chuyển page-local CSS/import sang module; các shared control dùng Button antd đúng loading/disabled semantics.
 - [ ] Entrance chỉ tác động card của dashboard, reduced motion vẫn hiện đủ; 320px mọi action ≥44px, không lặp lỗi touch target 34px từ evidence cũ.
 - [ ] Chạy scoped specs + Gate G, kiểm reload/dashboard → latest result → back.
-
-

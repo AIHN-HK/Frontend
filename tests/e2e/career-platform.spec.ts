@@ -1,9 +1,9 @@
 import { expect, test } from "@playwright/test";
 import { careerPlatformFixture } from "./career-platform.fixture";
-test("public catalog and exact career detail use API provenance without preview fixtures", async ({
+test("guarded catalog and exact career detail use API provenance without preview fixtures", async ({
   page,
 }) => {
-  const fixture = await careerPlatformFixture(page, { anonymous: true });
+  const fixture = await careerPlatformFixture(page);
   await page.goto("/careers");
   await expect(
     page.getByRole("heading", { name: "Software Developers" }),
@@ -102,7 +102,7 @@ for (const width of [320, 390, 768, 1440])
     page,
   }) => {
     await page.setViewportSize({ width, height: 900 });
-    await careerPlatformFixture(page, { anonymous: true });
+    await careerPlatformFixture(page);
     await page.goto("/careers/15-1252.00");
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(
       "Software Developers",

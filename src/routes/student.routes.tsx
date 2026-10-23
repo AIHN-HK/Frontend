@@ -13,8 +13,10 @@ export const studentRoutes: RouteObject[] = [
         }),
       },
       {
-        lazy: async () => ({ Component: (await import('@/layouts/StudentLayout')).StudentLayout }),
+        lazy: async () => ({ Component: (await import('./CareerWorkspaceRoute')).CareerWorkspaceRoute }),
         children: [
+          { path: paths.careers, lazy: async () => ({ Component: (await import('@/modules/career-platform/pages/CareerCatalogPage')).CareerCatalogPage }) },
+          { path: '/careers/:careerId', lazy: async () => ({ Component: (await import('@/modules/career-platform/pages/CareerRuntimeDetailPage')).CareerRuntimeDetailPage }) },
           {
             path: paths.dashboard,
             lazy: async () => ({

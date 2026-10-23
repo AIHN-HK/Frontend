@@ -24,7 +24,7 @@ async function start(page: Page) {
   await page.goto('/forgot-password');
   await page.getByLabel('Email tài khoản').fill(email);
   await page.getByRole('button', { name: 'Gửi mã OTP', exact: true }).click();
-  await expect(page).toHaveURL(/\/verify-otp$/);
+  await expect(page).toHaveURL(/\/otp-verify$/);
   await expect(page.getByRole('heading', { name: 'Xác thực khôi phục mật khẩu' })).toBeVisible();
 }
 async function verified(page: Page) {

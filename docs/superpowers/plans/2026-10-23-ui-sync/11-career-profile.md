@@ -35,5 +35,3 @@
 - [ ] Giữ target `?target=<careerId>`, explicit save và profile revision; self-rating 0 là giá trị hợp lệ, unknown khác zero.
 - [ ] Chuyển light inline badge colors sang ce tokens. Không hiển thị phần trăm hoàn thiện hồ sơ hoặc kinh nghiệm không có nguồn.
 - [ ] Chạy specs + Gate G; unsaved draft/failed save giữ dữ liệu, account switch xóa đúng scope, avatar lỗi không mất profile draft.
-
-
