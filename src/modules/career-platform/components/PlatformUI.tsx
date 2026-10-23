@@ -1,19 +1,29 @@
 import type { ReactNode } from "react";
+import { CareerScreenFrame } from '@/shared/ui/ce/CareerScreenFrame';
+import { usePageEntrance } from '@/shared/ui/ce/usePageEntrance';
 import { Button } from "@/shared/ui/Button";
 import "./platform.css";
 export function PlatformFrame({
   title,
   children,
+  className,
+  sidebar,
+  animationKey,
 }: {
   title: string;
   children: ReactNode;
+  className?: string;
+  sidebar?: ReactNode;
+  animationKey?: string | number;
 }) {
-  return (
-    <div className="career-platform">
-      <h1>{title}</h1>
+  const root = usePageEntrance(className ? animationKey ?? title : undefined);
+  const content = (
+    <div ref={root} className={`career-platform ${className ?? ''}`}>
+      <h1 data-ce-enter="">{title}</h1>
       {children}
     </div>
   );
+  return className ? <CareerScreenFrame sidebar={sidebar}>{content}</CareerScreenFrame> : content;
 }
 export function SourceNote() {
   return (

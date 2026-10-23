@@ -1,7 +1,10 @@
+import { useState } from 'react';
+import { TimelineSidebar } from '@/shared/ui/ce/TimelineSidebar';
+import styles from './CareerRecommendationsPage.module.css';
 import { Link, useParams } from "react-router";
 import { useAssessmentHistoryQuery } from "@/modules/assessment";
 import { paths } from "@/routes/paths";
-import { Button } from "@/shared/ui/Button";
+import { Button } from "@/shared/ui/ce/Button";
 import { usePlatformCommand, usePlatformQuery } from "../api/platform.api";
 import { profileSchema, runSchema, componentLabels } from "../model/contracts";
 import type { RecommendationRun } from "../model/contracts";
@@ -12,6 +15,7 @@ import {
   CommandState,
 } from "../components/PlatformUI";
 export function CareerRecommendationsPage() {
+  const [filter,setFilter] = useState<'all'|'scored'|'missing'>('all');
   const { recommendationId } = useParams(),
     history = useAssessmentHistoryQuery(),
     command = usePlatformCommand();
@@ -31,12 +35,15 @@ export function CareerRecommendationsPage() {
   );
   const latest = history.data?.[0];
   return (
-    <PlatformFrame title="Gợi ý nghề nghiệp có giải thích">
-      <SourceNote />
+    <PlatformFrame title="Gợi ý nghề nghiệp có giải thích" className={styles.page} animationKey={result.data?.id} sidebar={<TimelineSidebar steps={[
+        {id:'result',title:'Holland',description:'Kết quả đầu vào',status:result.data?'completed':'pending'},
+        {id:'recommendations',title:'Gợi ý nghề',description:'Khám phá và so sánh',status:'active'},
+        {id:'target',title:'Chọn mục tiêu',description:'Lưu chủ động trong hồ sơ',status:'pending'},
+        {id:'roadmap',title:'Lộ trình',description:'Phát triển kỹ năng',status:'pending'},
+      ]} radar={result.data ? <Link to={paths.assessmentResult(result.data.attemptId)}>Mở bản đồ RIASEC của lần làm #{result.data.attemptId}</Link> : <p>Bản đồ RIASEC sẽ có trong kết quả Holland đã lưu.</p>}/>}>
       <p>
-        Chỉ số xếp hạng giúp khám phá nghề, không phải xác suất thành công. Cấu
-        hình v1 ưu tiên RIASEC 65%, skills 25%, sở thích bổ sung 10%; trọng số
-        được chuẩn hóa lại khi thiếu dữ liệu.
+        Khám phá nghề từ kết quả Holland và hồ sơ đã lưu của bạn. Điểm xếp
+        hạng giúp so sánh các nghề, không phải xác suất thành công.
       </p>
       <ReadState
         pending={result.isPending}
@@ -44,7 +51,7 @@ export function CareerRecommendationsPage() {
         retry={() => void result.refetch()}
       />
       {!recommendationId && (
-        <section className="platform-card">
+        <section className={`platform-card ${styles.createPanel}`}>
           <h2>Tạo gợi ý từ kết quả gần nhất</h2>
           {history.isPending ? (
             <p>Đang đọc kết quả Holland…</p>
@@ -87,26 +94,32 @@ export function CareerRecommendationsPage() {
           <CommandState error={command.error} success={command.isSuccess} />
         </section>
       )}
+      <div className={styles.filters} aria-label="Lọc bản gợi ý">{([['all','Tất cả'],['scored','Có điểm xếp hạng'],['missing','Cần bổ sung dữ liệu']] as const).map(([value,label]) => <Button key={value} variant="secondary" aria-pressed={filter===value} onClick={() => setFilter(value)}>{label}</Button>)}</div>
+      {result.data && !result.data.items.some(item => filter==='all'||(filter==='scored'&&item.score!==null)||(filter==='missing'&&item.missing.length>0)) && <p role="status">Không có gợi ý phù hợp với bộ lọc này.</p>}
       {result.isSuccess && !result.data && <p>Chưa có bản gợi ý đã lưu.</p>}
       {result.data && (
         <ExplainedRun
           run={result.data}
           currentRevision={profile.data?.revision}
+          filter={filter}
         />
       )}
+      <footer className={styles.sourceFooter}><SourceNote /></footer>
     </PlatformFrame>
   );
 }
 function ExplainedRun({
   run,
   currentRevision,
+  filter,
 }: {
   run: RecommendationRun;
   currentRevision: number | undefined;
+  filter: 'all'|'scored'|'missing';
 }) {
   return (
     <>
-      <section className="platform-card">
+      <section className={`platform-card ${styles.runSummary}`}>
         <h2>Bản gợi ý đã lưu</h2>
         <p>
           Lần làm #{run.attemptId} · {run.algorithmVersion} ·{" "}
@@ -120,9 +133,9 @@ function ExplainedRun({
         </p>
         <Link to={`/recommendations/${run.id}`}>Đường dẫn bản gợi ý này</Link>
       </section>
-      <div className="platform-grid">
+      <div className={`platform-grid ${styles['rec-grid']}`}>
         {run.items.map((item, index) => (
-          <article className="platform-card" key={item.careerId}>
+          (filter==='all'||(filter==='scored'&&item.score!==null)||(filter==='missing'&&item.missing.length>0)) && <article className={`platform-card ${styles['career-card']}`} key={item.careerId}>
             <h2>
               {index + 1}. {item.title}
             </h2>
@@ -167,6 +180,7 @@ function ExplainedRun({
             <Link to={`${paths.careerProfile}?target=${item.careerId}`}>
               Chọn mục tiêu này
             </Link>
+            <Link className={styles.detailLink} to={`${paths.recommendation(run.id)}?careerId=${encodeURIComponent(item.careerId)}`}>Xem gợi ý nghề này</Link>
             <details>
               <summary>Khoảng cách kỹ năng từ lúc tạo gợi ý</summary>
               <ul>

@@ -11,7 +11,7 @@ Giữ v8 + src/modules theo xác nhận user. P00 gồm baseline/tokens/theme; P
 | P02 | [TimelineSidebar, radar, showcase, bars và assets](02-shared-visuals.md) | `feat(ui): add shared radar showcase and timeline components` | Completed |
 | P03 | [AssessmentResult, màn ưu tiên số một](03-assessment-result.md) | `feat(ui): port AssessmentResult page` | Completed |
 | P04 | [Dashboard](04-dashboard.md) | `feat(ui): port Dashboard page` | Completed |
-| P05 | [Recommendations list](05-recommendations.md) | `feat(ui): port Recommendations page` | Pending |
+| P05 | [Recommendations list](05-recommendations.md) | `feat(ui): port Recommendations page` | Completed |
 | P06 | [RecommendationDetail, tách page runtime có context chính xác](06-recommendation-detail.md) | `feat(ui): port RecommendationDetail page` | Pending |
 | P07 | [CareerExplorer trên catalog runtime](07-career-explorer.md) | `feat(ui): port CareerExplorer page` | Pending |
 | P08 | [CareerDetail trên O*NET career ID](08-career-detail.md) | `feat(ui): port CareerDetail page` | Pending |

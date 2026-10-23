@@ -12,7 +12,7 @@
 
 **Commit:** `feat(ui): port Recommendations page`.
 
-**Status:** Pending.
+**Status:** Completed; evidence [P05](../../execution/ui-sync/P05.md).
 
 ## Checkpoint bắt buộc
 
