@@ -20,9 +20,11 @@
       "source": "screens/holland-test.html",
       "route": "/assessment",
       "runtime": "src/modules/assessment/testing/pages/HollandTestPage.tsx",
-      "status": "gap-P21",
-      "difference": "Old light UI, no source welcome/carousel/sidebar; question UI still old; hardcoded group ranges.",
-      "source_sha256": "5b7a63593c536a183d6f43acfb23d4b404a24db0038f392581d2ff057233715b"
+      "status": "corrected-P21",
+      "difference": "Both welcome/question states now use dark source shell, carousel, five-step sidebar and temporary radar. Actual API question count and Boolean answers replace prototype 60/Likert/fake rating.",
+      "source_sha256": "5b7a63593c536a183d6f43acfb23d4b404a24db0038f392581d2ff057233715b",
+      "initial_status": "gap-P21",
+      "initial_difference": "Old light UI, no source welcome/carousel/sidebar; question UI still old; hardcoded group ranges."
     },
     {
       "source": "screens/assessment-result.html",
@@ -36,25 +38,31 @@
       "source": "screens/dashboard.html",
       "route": "/dashboard",
       "runtime": "src/modules/dashboard/pages/DashboardPage.tsx",
-      "status": "gap-P24",
-      "difference": "Generic goal banner/action cards; real analytics are below rather than source summary positions.",
-      "source_sha256": "14a5e24696dcf7549a81e10a2d73b40a3e5f04d171ff311f692d5162871a18b3"
+      "status": "corrected-P24",
+      "difference": "Source-style goal/progress/TopCode banner and metric cards now use actual analytics, saved goals and result IDs; missing reads show unknown counts.",
+      "source_sha256": "14a5e24696dcf7549a81e10a2d73b40a3e5f04d171ff311f692d5162871a18b3",
+      "initial_status": "gap-P24",
+      "initial_difference": "Generic goal banner/action cards; real analytics are below rather than source summary positions."
     },
     {
       "source": "screens/recommendations.html",
       "route": "/recommendations",
       "runtime": "src/modules/career-platform/pages/CareerRecommendationsPage.tsx",
-      "status": "gap-P23",
-      "difference": "Source card grid present with real runs; sidebar radar replaced by result link.",
-      "source_sha256": "710f771c55d27b29b8aa0b18154095b31e9f1a5ba34586258b90f469aa38f08f"
+      "status": "corrected-P23",
+      "difference": "Owned saved-run sidebar radar uses that exact attempt and validated snapshot, including when newer history exists.",
+      "source_sha256": "710f771c55d27b29b8aa0b18154095b31e9f1a5ba34586258b90f469aa38f08f",
+      "initial_status": "gap-P23",
+      "initial_difference": "Source card grid present with real runs; sidebar radar replaced by result link."
     },
     {
       "source": "screens/recommendation-detail.html",
       "route": "/recommendations/:runId?careerId=...",
       "runtime": "src/modules/career-platform/pages/CareerRecommendationDetailPage.tsx",
-      "status": "gap-P23",
-      "difference": "Exact career/run selection and showcase present; sidebar radar replaced by result link.",
-      "source_sha256": "0788593a592e66e60c6fb5e6c64a1d5f36e22ed10e43acca677d1ebb7e4937da"
+      "status": "corrected-P23",
+      "difference": "Selected career/run source showcase plus owned saved-run radar, snapshot failure states and exact attempt link.",
+      "source_sha256": "0788593a592e66e60c6fb5e6c64a1d5f36e22ed10e43acca677d1ebb7e4937da",
+      "initial_status": "gap-P23",
+      "initial_difference": "Exact career/run selection and showcase present; sidebar radar replaced by result link."
     },
     {
       "source": "screens/career-explorer.html",
@@ -76,17 +84,21 @@
       "source": "screens/career-profile.html",
       "route": "/career-profile",
       "runtime": "src/modules/profile/pages/CareerProfilePage.tsx",
-      "status": "gap-P22",
-      "difference": "Editor/avatar present; missing source-style account/result/metrics overview.",
-      "source_sha256": "8fe4ec147c3ba12630dfb4022e4ad90c1d025b060d5993cb00988bc905c7e474"
+      "status": "corrected-P22",
+      "difference": "Source-style account/metrics/normalized RIASEC/target/goal overview added; existing owned editors preserved. No fake saved-career count or best-match percentage.",
+      "source_sha256": "8fe4ec147c3ba12630dfb4022e4ad90c1d025b060d5993cb00988bc905c7e474",
+      "initial_status": "gap-P22",
+      "initial_difference": "Editor/avatar present; missing source-style account/result/metrics overview."
     },
     {
       "source": "screens/roadmap.html",
       "route": "/roadmap",
       "runtime": "src/modules/career-platform/pages/CareerRoadmapPage.tsx",
-      "status": "gap-P23",
-      "difference": "Real tasks/timeline present; no mini RIASEC result in sidebar.",
-      "source_sha256": "d1b5ee7afdb544bd9ec09b395c7959567f684cdb91803a98af22794d829d0287"
+      "status": "corrected-P23",
+      "difference": "Real tasks/timeline plus latest completed owned result mini radar; no invented four-year curriculum.",
+      "source_sha256": "d1b5ee7afdb544bd9ec09b395c7959567f684cdb91803a98af22794d829d0287",
+      "initial_status": "gap-P23",
+      "initial_difference": "Real tasks/timeline present; no mini RIASEC result in sidebar."
     },
     {
       "source": "screens/advisor.html",
@@ -202,5 +214,6 @@
     "archive_experiments/screens/careerexplorer-assessment.html",
     "archive_experiments/screens/holland-test-palette-version.html"
   ],
-  "extra_runtime_route": "/admin/holland-content"
+  "extra_runtime_route": "/admin/holland-content",
+  "scope": "All 23 active templates compared at three widths. Route coverage and deliberate contract adaptations do not imply pixel equivalence."
 }

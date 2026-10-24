@@ -1,4 +1,4 @@
-import { CareerAnalyticsPanel } from '@/modules/career-platform';
+import { CareerAnalyticsPanel, CareerDashboardSummary } from '@/modules/career-platform';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router';
 import gsap from 'gsap';
@@ -60,8 +60,8 @@ export function DashboardPage() {
       mm.add({ noPreference: "(prefers-reduced-motion: no-preference)" }, () => {
         const tl = gsap.timeline({ defaults: { ease: "power2.out", duration: 0.5 } });
         tl.from(`.${styles['db-greeting']}`, { y: 12, autoAlpha: 0 })
-          .from(`.${styles['db-progress-banner']}`, { y: 16, autoAlpha: 0 }, "-=0.25")
-          .from(`.${styles['db-card']}`, { y: 12, autoAlpha: 0, stagger: 0.08 }, "-=0.2")
+          .from('[data-journey-banner]', { y: 16, autoAlpha: 0 }, "-=0.25")
+          .from('[data-journey-metric]', { y: 12, autoAlpha: 0, stagger: 0.08 }, "-=0.2")
           .from(`.${styles['dashboard-next']}`, { y: 14, autoAlpha: 0 }, "-=0.2");
 
         const scoreFill = containerRef.current?.querySelector("[data-ce-score-fill]");
@@ -94,77 +94,7 @@ export function DashboardPage() {
           <p>Khám phá ngành học và nghề nghiệp tương lai phù hợp với bạn.</p>
         </div>
       </section>
-      <section className={[styles['db-progress-banner']].join(' ')} aria-label="Mục tiêu học tập">
-        <p>Từng bước hiểu bản thân, khám phá nghề và xây dựng mục tiêu từ dữ liệu của bạn.</p>
-        <Link className={['btn', 'btn-secondary'].join(' ')} to={paths.careerProfile}>Cập nhật hồ sơ</Link>
-      </section>
-
-      <div className={[styles['db-row']].join(' ')}>
-        <section className={[styles['db-card']].join(' ')}>
-          <div className={[styles['dashboard-quick-heading']].join(' ')}>
-            <span className={[styles['dashboard-quick-icon'], styles['mint']].join(' ')}>
-              <Icon name="compass" />
-            </span>
-            <div>
-              <h2>Trắc nghiệm Holland</h2>
-              <p>
-                {history.isPending
-                  ? 'Đang tải kết quả…'
-                  : history.isError
-                    ? 'Chưa tải được kết quả'
-                    : latest
-                      ? `Hoàn thành: ${latest.finishAt}`
-                      : 'Chưa có kết quả hoàn thành'}
-              </p>
-            </div>
-          </div>
-          <Link className={[styles['dashboard-pill']].join(' ')} to={resultPath}>
-            {latest ? 'Mở kết quả Holland' : 'Mở trắc nghiệm'}
-          </Link>
-        </section>
-        <section className={[styles['db-card']].join(' ')}>
-          <div className={[styles['dashboard-quick-heading']].join(' ')}>
-            <span className={[styles['dashboard-quick-icon'], styles['purple']].join(' ')}>
-              <Icon name="check" />
-            </span>
-            <div>
-              <h2>Nghề nghiệp gợi ý</h2>
-              <p>Mở các bản gợi ý đã lưu</p>
-            </div>
-          </div>
-          <Link className={[styles['dashboard-pill']].join(' ')} to={paths.recommendations}>
-            Xem trạng thái gợi ý
-          </Link>
-        </section>
-        <section className={[styles['db-card']].join(' ')}>
-          <div className={[styles['dashboard-quick-heading']].join(' ')}>
-            <span className={[styles['dashboard-quick-icon'], styles['amber']].join(' ')}>
-              <Icon name="roadmap" />
-            </span>
-            <div>
-              <h2>Lộ trình phát triển</h2>
-              <p>Theo dõi các mục tiêu đã lưu</p>
-            </div>
-          </div>
-          <Link className={[styles['dashboard-pill']].join(' ')} to={paths.roadmap}>
-            Xem trạng thái lộ trình
-          </Link>
-        </section>
-        <section className={[styles['db-card']].join(' ')}>
-          <div className={[styles['dashboard-quick-heading']].join(' ')}>
-            <span className={[styles['dashboard-quick-icon'], styles['rose']].join(' ')}>
-              <Icon name="chat" />
-            </span>
-            <div>
-              <h2>Cố vấn AI</h2>
-              <p>Mở hội thoại tại trang Cố vấn</p>
-            </div>
-          </div>
-          <Link className={[styles['dashboard-pill']].join(' ')} to={paths.advisor}>
-            Đi tới Cố vấn
-          </Link>
-        </section>
-      </div>
+      <CareerDashboardSummary resultPath={resultPath} hasResult={Boolean(latest)} />
       <div className={[styles['db-main-grid']].join(' ')}>
         <div className={[styles['dashboard-main-col']].join(' ')}>
           <section className={[styles['dashboard-next']].join(' ')} aria-label="Hành động tiếp theo">
