@@ -10,7 +10,7 @@ Branches: Frontend `feat/guest-assessment-onboarding` from merged main `3a1fe2f`
 | G01 | Public signed question catalog/result preview; authenticated atomic idempotent claim and lookup; migration and backend tests | Completed: Backend dd01ec6 |
 | G02 | Public assessment and RIASEC result, sessionStorage draft, responsive source UI and guest tests | Completed |
 | G03 | Signup/OTP/login return intent and explicit import recovery, account isolation and exact AI/roadmap destination | Completed |
-| G04 | Full regression and integrated local browser/API/DB acceptance | Pending |
+| G04 | Full regression and integrated local browser/API/DB acceptance | Completed: [acceptance](../../execution/guest-assessment/G04.md) |
 
 ## Contract
 
@@ -20,3 +20,13 @@ Branches: Frontend `feat/guest-assessment-onboarding` from merged main `3a1fe2f`
 - `GET /api/v1/guest-assessment/claim/:id`: authenticated reconciliation after unknown import outcome. Draft is retained until confirmed success; POST is never automatically replayed.
 - Signed catalog/receipt lasts 24 hours. Edits/deletions to the question bank are detected before import. Keep the result visible and offer an explicit new test rather than silently mapping stale answers.
 - Default guest storage is tab-scoped sessionStorage with an in-memory fallback and honest persistence notice. Passwords and OTP state retain the existing memory-only policy. Existing owned assessment and result routes remain guarded; private result IDs never become public.
+
+## Completed commits and verification
+
+- G00 Frontend `7f8ab15`: plan/contracts.
+- G01 Backend `dd01ec6`: signed preview, claim/reconciliation, migration and backend regressions.
+- G02 Frontend `a6dec3c`: public Holland/RIASEC and session draft.
+- G03 Frontend `1c823a7`: auth return intent and durable import handoff.
+- G04 Backend `062570e`: isolated real signup/import acceptance; Frontend final acceptance commit records final presentation/OTP-restart corrections and regression evidence.
+
+Final gates: FE 166 unit tests, 531-case full browser run and 18-case final focused run (532 distinct current cases). BE 253 unit/security tests and 11 runtime cases. Integrated 108-question signup/OTP/login/import/idempotency/ownership checks passed. Both repositories retain local feature branches; no feature push/deploy.

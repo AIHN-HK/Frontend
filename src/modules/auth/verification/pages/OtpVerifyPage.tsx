@@ -103,7 +103,7 @@ export function OtpVerifyPage(): React.JSX.Element {
     <h1>Thiếu thông tin xác thực</h1>
     <p role="status">{recovery ? 'Thông tin khôi phục đã hết hạn. Vui lòng bắt đầu lại.' : 'Không có thông tin đăng ký trong tab này. Vui lòng trở lại đăng ký.'}</p>
     <p>Thông tin được giữ trong tab hiện tại và sẽ mất khi tải lại trang.</p>
-    <Link className="btn btn-secondary" to={recovery ? paths.forgotPassword : paths.signup}>{recovery ? 'Bắt đầu khôi phục lại' : 'Trở lại đăng ký'}</Link>
+    <Link className="btn btn-secondary" to={withAuthReturn(recovery ? paths.forgotPassword : paths.signup, location.search)}>{recovery ? 'Bắt đầu khôi phục lại' : 'Trở lại đăng ký'}</Link>
   </div>;
 
   const maskedEmail = flow.email.replace(/^(.{1,3})[^@]*@/, '$1***@');

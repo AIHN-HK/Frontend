@@ -69,3 +69,17 @@ test('a denied import checkpoint never dispatches a POST that could be replayed 
   await expect(page.getByRole('alert')).toContainText('quyền lưu trữ');
   expect(calls.filter(call => call.path.endsWith('/guest-assessment/claim') && call.method === 'POST')).toHaveLength(0);
 });
+
+test('reloading OTP keeps guest answers and the return destination when registration must restart', async ({ page }) => {
+  await guestFixture(page); await completeGuest(page);
+  await page.getByRole('link', { name: 'Xây dựng lộ trình', exact: true }).click();
+  await page.getByRole('link', { name: 'Đăng ký miễn phí' }).click();
+  await page.getByLabel('Họ và tên của bạn').fill('Guest Student'); await page.getByLabel('Địa chỉ Email').fill('guest@example.test');
+  await page.getByLabel('Ngày sinh').fill('2008-01-01'); await page.getByLabel('Số điện thoại', { exact: true }).fill('0901234567');
+  await page.getByLabel('Tạo mật khẩu', { exact: true }).fill('Password123!'); await page.getByRole('button', { name: 'Tiếp tục xác thực OTP →' }).click();
+  await expect(page).toHaveURL(/otp-verify\?returnTo=/); await page.reload();
+  await expect(page.getByRole('heading', { name: 'Thiếu thông tin xác thực' })).toBeVisible();
+  await page.getByRole('link', { name: 'Trở lại đăng ký' }).click(); await expect(page).toHaveURL(/signup\?returnTo=/);
+  expect(new URL(page.url()).searchParams.get('returnTo')).toBe('/assessment/claim?target=roadmap');
+  expect(await page.evaluate(() => JSON.parse(sessionStorage.getItem('aihn.assessment.guest.v1')!).answers['22'])).toBe(false);
+});
