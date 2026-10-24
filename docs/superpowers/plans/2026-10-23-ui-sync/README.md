@@ -36,7 +36,7 @@ Full-project re-audit after the user identified the missing Holland screen: [P20
 | Follow-up | Scope | Status |
 | --- | --- | --- |
 | P20 | [Audit every active OpenDesign screen](20-complete-design-audit.md) | Completed |
-| P21 | [Port Holland welcome and question states](21-holland-assessment.md) | Pending |
-| P22 | [Complete source-style Profile overview](22-profile-overview.md) | Pending |
+| P21 | [Port Holland welcome and question states](21-holland-assessment.md) | Completed |
+| P22 | [Complete source-style Profile overview](22-profile-overview.md) | Completed |
 | P23 | [Complete owned result mini radars](23-result-sidebars.md) | Pending |
 | P24 | [Complete Dashboard goal and metric summaries](24-dashboard-summary.md) | Pending |
