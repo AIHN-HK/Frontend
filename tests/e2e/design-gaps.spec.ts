@@ -68,3 +68,37 @@ test('a mismatched recommendation owner cannot render a run or trigger its resul
   await expect(page.getByRole('complementary', { name: 'Tiến trình' }).getByRole('img')).toHaveCount(0);
   expect(resultReads).toEqual([]);
 });
+
+for (const width of [390, 768, 1440]) test(`dashboard summary reflects saved goal progress and analytics at ${width}px`, async ({ page }) => {
+  await careerPlatformFixture(page, { seedProfile: true });
+  await page.goto('/roadmap'); await page.getByRole('button', { name: 'Tạo lộ trình từ mục tiêu', exact: true }).click();
+  await page.getByLabel('Minh chứng — Fixture roadmap explore', { exact: true }).fill('Đã đọc nguồn nghề và ghi lại nhiệm vụ chính.');
+  await page.getByRole('button', { name: 'Xác nhận hoàn thành', exact: true }).first().click();
+  await expect(page.getByText('1/4 nhiệm vụ hoàn thành · phiên bản 2', { exact: true })).toBeVisible();
+  await page.setViewportSize({ width, height: width === 768 ? 1024 : 900 }); await page.goto('/dashboard');
+  const summary = page.getByRole('region', { name: 'Tổng quan hành trình Dashboard' });
+  await expect(summary.getByRole('heading', { name: 'Lộ trình: Software Developers' })).toBeVisible();
+  await expect(summary.getByRole('progressbar', { name: 'Tiến độ Software Developers' })).toHaveAttribute('value', '1');
+  await expect(summary.getByRole('progressbar')).toHaveAttribute('max', '4');
+  await expect(summary).toContainText('25% nhiệm vụ hoàn thành');
+  await expect(summary.getByRole('region', { name: 'Trắc nghiệm Holland', exact: true })).toContainText('2');
+  await expect(summary.getByRole('region', { name: 'Lộ trình phát triển', exact: true })).toContainText('1/4');
+  await expect(summary.getByRole('link', { name: 'Xem TopCode đã lưu' })).toHaveAttribute('href', '/assessment/results/812');
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await page.screenshot({ path: `.superpowers/ui-sync/P24/dashboard-${width}.png`, fullPage: true });
+});
+
+test('dashboard analytics failure shows unknown metrics and can be explicitly retried', async ({ page }) => {
+  await careerPlatformFixture(page, { seedProfile: true });
+  await page.route('**/api/v1/career/analytics', handler => handler.fulfill({ status: 503, json: { status: 503 } }));
+  await page.goto('/dashboard');
+  const summary = page.getByRole('region', { name: 'Tổng quan hành trình Dashboard' });
+  await expect(summary.getByRole('heading', { name: 'Chưa tải được tổng quan hành trình' })).toBeVisible();
+  await expect(summary.getByText('—', { exact: true })).toHaveCount(4);
+  await expect(summary.getByRole('progressbar')).toHaveCount(0);
+  await expect(summary.getByRole('link', { name: 'Mở kết quả Holland', exact: true })).toHaveAttribute('href', '/assessment/results/812');
+  await page.unroute('**/api/v1/career/analytics');
+  await summary.getByRole('button', { name: 'Thử lại tổng quan hành trình' }).click();
+  await expect(summary.getByRole('region', { name: 'Trắc nghiệm Holland', exact: true })).toContainText('2');
+  await expect(summary.getByText('—', { exact: true })).toHaveCount(0);
+});

@@ -1,6 +1,6 @@
 # P24 — Complete Dashboard goal and metric summaries
 
-**Status:** Pending.
+**Status:** Completed.
 
 **Commit:** `feat(ui): connect dashboard journey summaries`.
 
