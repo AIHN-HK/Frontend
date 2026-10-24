@@ -7,8 +7,8 @@ Branches: Frontend `feat/guest-assessment-onboarding` from merged main `3a1fe2f`
 | Plan | Scope | Status |
 | --- | --- | --- |
 | G00 | Inspect contracts, select guest storage/import design and record execution boundaries | Completed |
-| G01 | Public signed question catalog/result preview; authenticated atomic idempotent claim and lookup; migration and backend tests | Pending |
-| G02 | Public assessment and RIASEC result, sessionStorage draft, responsive source UI and guest tests | Pending |
+| G01 | Public signed question catalog/result preview; authenticated atomic idempotent claim and lookup; migration and backend tests | Completed: Backend dd01ec6 |
+| G02 | Public assessment and RIASEC result, sessionStorage draft, responsive source UI and guest tests | Completed |
 | G03 | Signup/OTP/login return intent and explicit import recovery, account isolation and exact AI/roadmap destination | Pending |
 | G04 | Full regression and integrated local browser/API/DB acceptance | Pending |
 

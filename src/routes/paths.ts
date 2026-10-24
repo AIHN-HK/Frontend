@@ -9,6 +9,8 @@ export const paths = {
   dashboard: '/dashboard',
   careerProfile: '/career-profile',
   assessment: '/assessment',
+  guestAssessmentResult: '/assessment/guest-result',
+  guestAssessmentClaim: '/assessment/claim',
   assessmentResults: '/assessment/results',
   assessmentResult: (id: string | number) => `/assessment/results/${encodeURIComponent(id)}`,
   history: '/history',

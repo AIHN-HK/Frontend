@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { guestFixture } from './guest-assessment.fixture';
 
 const headline = 'Khám phá con đường';
 
@@ -24,12 +25,13 @@ test('public editorial Home and its alias render labeled examples without person
   expect(errors).toEqual([]);
 });
 
-test('Home actions use real guarded feature routes and the how-it-works anchor', async ({page}) => {
+test('Home opens guest assessment while private feature routes remain guarded', async ({page}) => {
+  await guestFixture(page);
   await page.emulateMedia({reducedMotion:'reduce'});
   await page.goto('/');
   await page.getByRole('region',{name:'Khám phá con đường phù hợp',exact:true}).getByRole('link',{name:'Bắt đầu khám phá',exact:true}).click();
-  await expect(page).toHaveURL(/\/login\?returnTo=%2Fassessment$/);
-  await expect(page.getByRole('heading',{name:'Đăng nhập AIHN',exact:true})).toBeVisible();
+  await expect(page).toHaveURL('/assessment');
+  await expect(page.getByRole('heading',{name:'Trắc nghiệm Holland RIASEC',exact:true})).toBeVisible();
   await page.goto('/');
   await page.getByRole('contentinfo').getByRole('link',{name:'Thư viện nghề nghiệp',exact:true}).click();
   await expect(page).toHaveURL(/\/login\?returnTo=%2Fcareers$/);

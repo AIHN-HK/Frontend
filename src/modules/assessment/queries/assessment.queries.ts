@@ -16,12 +16,12 @@ export function useAssessmentHistoryQuery() {
 }
 
 
-export function useAssessmentQuestionsQuery() {
+export function useAssessmentQuestionsQuery(allowGuest = false) {
   const http = useHttpClient(), current = useSession();
   return useQuery({
     queryKey: ['assessment', 'questions', current.user?.id, current.revision],
     queryFn: ({ signal }) => readAssessmentQuestions(http, signal),
-    enabled: current.status === 'authenticated', retry: false, refetchOnWindowFocus: false,
+    enabled: current.status === 'authenticated' || (allowGuest && current.status === 'anonymous'), retry: false, refetchOnWindowFocus: false,
   });
 }
 
