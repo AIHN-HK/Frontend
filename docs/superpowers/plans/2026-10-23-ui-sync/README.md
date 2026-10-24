@@ -30,3 +30,13 @@ Sau P18, user yêu cầu Home phải hiện trước. [P19: Home editorial mới
 | P17 | [ForgotPassword + ResetPassword](17-password-recovery.md) | `feat(ui): port ForgotPassword and ResetPassword pages` | Completed |
 | P18 | [Nghiệm thu toàn luồng, kiểm tra diff và bàn giao](18-acceptance.md) | `docs(ui): record AIHN UI migration acceptance` | Completed |
 | P19 | [Home mới từ OpenDesign và public entry](19-home-editorial.md) | `feat(ui): port editorial OpenDesign Home` | Completed |
+
+Full-project re-audit after the user identified the missing Holland screen: [P20 evidence](../../execution/ui-sync/P20.md). P00–P19 completion does not imply all 23 templates are visually identical.
+
+| Follow-up | Scope | Status |
+| --- | --- | --- |
+| P20 | [Audit every active OpenDesign screen](20-complete-design-audit.md) | Completed |
+| P21 | [Port Holland welcome and question states](21-holland-assessment.md) | Pending |
+| P22 | [Complete source-style Profile overview](22-profile-overview.md) | Pending |
+| P23 | [Complete owned result mini radars](23-result-sidebars.md) | Pending |
+| P24 | [Complete Dashboard goal and metric summaries](24-dashboard-summary.md) | Pending |
