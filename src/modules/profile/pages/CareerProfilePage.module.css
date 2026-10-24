@@ -20,3 +20,12 @@
 .page a { color:var(--ce-violet); }
 .advice { display:grid; gap:12px; border-top:1px solid var(--ce-border); padding-top:20px; }
 @media(max-width:768px) { .page { padding:28px 16px; } .header { padding:22px; } .header h1 { font-size:28px; } .page :global(.career-platform) { padding:16px; } }
+
+.header { display:flex; align-items:center; gap:24px; margin-bottom:24px; }
+.header > div { flex:1; min-width:0; display:grid; gap:8px; }
+.header h1 { font-size:15px; font-weight:500; color:var(--ce-text-secondary); }
+.header .name { font-size:28px; font-weight:600; color:var(--ce-text-primary); line-height:1.2; }
+.initials { width:76px; height:76px; flex:0 0 76px; display:grid; place-items:center; border-radius:20px; background:var(--ce-c-subtle); color:var(--ce-violet); font-size:26px; font-weight:600; border:1px solid var(--ce-c-border); }
+.header a { display:flex; align-items:center; border:1px solid var(--ce-border); border-radius:8px; padding:10px 16px; text-decoration:none; }
+.editors { display:grid; gap:24px; scroll-margin-top:88px; }
+@media(max-width:768px) { .header { flex-wrap:wrap; gap:16px; }.header > div { flex-basis:calc(100% - 92px); }.header .name { font-size:24px; } }

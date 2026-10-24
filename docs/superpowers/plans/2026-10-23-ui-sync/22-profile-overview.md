@@ -1,6 +1,6 @@
 # P22 — Complete source-style Profile overview
 
-**Status:** Pending.
+**Status:** Completed.
 
 **Commit:** `feat(ui): add owned profile journey overview`.
 

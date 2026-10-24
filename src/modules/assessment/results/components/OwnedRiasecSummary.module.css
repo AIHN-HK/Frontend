@@ -1,0 +1,6 @@
+.summary { display:grid; gap:16px; min-width:0; overflow-wrap:anywhere; font-size:13px; }
+.code { color:var(--ce-violet); }.code strong { color:var(--ce-violet); }
+.grid { display:grid; grid-template-columns:minmax(0,1fr) 220px; gap:28px; align-items:center; }.bars { display:grid; gap:14px; min-width:0; }
+.summary a { display:inline-flex; align-items:center; min-height:44px; color:var(--ce-violet); font-weight:600; }
+.summary button { min-height:44px; }.compact { min-width:0; }
+@media(max-width:768px) { .grid { grid-template-columns:minmax(0,1fr); }.grid figure { max-width:250px; width:100%; margin:auto; } }
