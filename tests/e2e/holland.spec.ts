@@ -139,3 +139,31 @@ test('401 never replays a POST and preserves the owner draft', async ({ page }) 
   await expect(page).toHaveURL(/\/login/); expect(calls.filter(c => c.path.endsWith('/submit-v2'))).toHaveLength(1); expect(calls.filter(c => c.path.endsWith('/refresh'))).toHaveLength(0);
   expect(await page.evaluate(() => localStorage.getItem('aihn.assessment.boolean.v1.71'))).not.toBeNull();
 });
+
+test('welcome carousel wraps without starting an attempt and overview preserves a No draft', async ({ page }) => {
+  const calls = await fixture(page); await page.goto('/assessment');
+  await expect(page.getByRole('heading', { name: 'Trắc nghiệm Holland RIASEC', exact: true })).toBeVisible();
+  const carousel = page.getByRole('region', { name: 'Giới thiệu hành trình Holland' });
+  await carousel.getByRole('button', { name: 'Nội dung giới thiệu trước' }).click();
+  await expect(carousel.getByRole('heading')).toHaveText('Từng bước xây dựng mục tiêu và lộ trình của riêng bạn.');
+  await carousel.getByRole('button', { name: 'Nội dung giới thiệu tiếp theo' }).click();
+  await expect(carousel.getByRole('heading')).toHaveText('Khám phá nghề nghiệp từ những điều bạn yêu thích.');
+  expect(calls.filter(c => c.path.endsWith('/test-session'))).toHaveLength(0);
+  await start(page).click(); await no(page).check();
+  await page.getByRole('button', { name: 'Quay lại giới thiệu' }).click();
+  await page.getByRole('button', { name: 'Tiếp tục bài đang làm' }).click();
+  await expect(no(page)).toBeChecked(); await expect(page.getByRole('progressbar')).toHaveAttribute('aria-valuenow', '1');
+  expect(calls.filter(c => c.path.endsWith('/test-session'))).toHaveLength(1);
+  const sidebar = page.getByRole('complementary', { name: 'Tiến trình' });
+  await expect(sidebar).toContainText('0 Có / 1 đã trả lời · 1 câu');
+  await expect(sidebar.locator('[data-radar-values]')).toHaveCount(0);
+});
+
+for (const width of [390, 768, 1440]) test(`Holland source welcome and question capture at ${width}px`, async ({ page }) => {
+  await page.setViewportSize({ width, height: width === 768 ? 1024 : 900 }); await page.emulateMedia({ reducedMotion: 'reduce' });
+  await fixture(page); await page.goto('/assessment'); await expect(start(page)).toBeVisible();
+  await page.screenshot({ path: `.superpowers/ui-sync/P21/holland-welcome-${width}.png`, fullPage: true });
+  await start(page).click(); await yes(page).check();
+  await page.screenshot({ path: `.superpowers/ui-sync/P21/holland-question-${width}.png`, fullPage: true });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+});
