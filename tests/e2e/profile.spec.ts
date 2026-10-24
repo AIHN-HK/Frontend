@@ -10,6 +10,7 @@ async function fixture(page: Page, options: Options = {}) {
     const request = route.request(), method = request.method(), path = new URL(request.url()).pathname;
     const headers = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': '*', 'Access-Control-Allow-Methods': '*' };
     if (method === 'OPTIONS') { await route.fulfill({ status: 204, headers }); return; }
+    if (path.endsWith('/users/me/avatar')) { await route.fulfill({ status: 404, headers, json: { status: 404 } }); return; }
     const call = { method, path, body: request.postDataJSON() as unknown, authorization: request.headers().authorization, finished: false }; calls.push(call);
     const user = { id: options.ownerId ?? 71, fullname: (options.profile ?? baseProfile).fullname, role: 'USER' };
     let status = 200, data: unknown = user;
@@ -69,8 +70,8 @@ test('blank optional values are sent as null; career fields are unavailable and 
   await save(page).click(); await expect(page.getByText('Đã lưu cập nhật hồ sơ.', { exact: true })).toBeVisible();
   expect(calls.find(call => call.method === 'PATCH')?.body).toEqual({ fullname: 'Học sinh A', phone: '0901234567', address: null, gender: null, class: null });
   await expect(page.getByText('Trường THPT, tổ hợp môn và nguyện vọng đại học chưa sẵn sàng.')).toBeVisible();
-  await expect(page.getByRole('heading', { name: '2. Kỹ năng cá nhân' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: '3. Sở thích công việc & Mục tiêu tương lai' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Kỹ năng, sở thích và nghề mục tiêu' })).toBeVisible();
+  await expect(page.getByRole('region', { name: 'Hồ sơ kỹ năng và mục tiêu' })).toBeVisible();
   await expect(page.getByText(/85%|Đã tự động lưu|Python cơ bản|áp dụng ngay vào thuật toán/)).toHaveCount(0);
   expect(calls.filter(call => call.method === 'PATCH')).toHaveLength(1);
 });
@@ -89,7 +90,7 @@ for (const failure of ['503', '400', 'network', 'malformed'] as const) {
     const options: Options = { patchStatus: failure === '503' ? 503 : failure === '400' ? 400 : 200, patchNetwork: failure === 'network', malformed: failure === 'malformed' };
     const calls = await fixture(page, options); await page.goto('/career-profile');
     await page.getByLabel('Họ và tên', { exact: true }).fill('Draft chưa xác nhận'); await save(page).click();
-    await expect(page.getByRole('alert')).toBeVisible(); await expect(page.getByLabel('Họ và tên', { exact: true })).toHaveValue('Draft chưa xác nhận');
+    await expect(page.locator('form.career-profile-card').getByRole('alert')).toBeVisible(); await expect(page.getByLabel('Họ và tên', { exact: true })).toHaveValue('Draft chưa xác nhận');
     expect(calls.filter(call => call.method === 'PATCH')).toHaveLength(1);
     await page.getByRole('button', { name: 'Kiểm tra dữ liệu đã lưu' }).click();
     await expect(page.getByRole('region', { name: 'Dữ liệu đã lưu trên máy chủ' })).toContainText('Học sinh A');
@@ -105,7 +106,7 @@ test('real transport timeout preserves the draft and requires explicit review or
   const options = { patchDelay: new Promise<void>(resolve => { release = resolve; }) };
   const calls = await fixture(page, options); await page.goto('/career-profile');
   await page.getByLabel('Họ và tên', { exact: true }).fill('Draft timeout'); await save(page).click();
-  await expect(page.getByRole('alert')).toContainText('Chưa xác nhận', { timeout: 15_000 });
+  await expect(page.locator('form.career-profile-card').getByRole('alert')).toContainText('Chưa xác nhận', { timeout: 15_000 });
   await expect(page.getByLabel('Họ và tên', { exact: true })).toHaveValue('Draft timeout'); expect(calls.filter(call => call.method === 'PATCH')).toHaveLength(1);
   release();
 });
@@ -119,7 +120,7 @@ test('rapid submit is single-flight; navigation preserves uncertain draft and ig
   await page.getByRole('link', { name: 'Về Trang của tôi' }).click(); await expect(page).toHaveURL(/\/dashboard$/);
   release(); await page.getByRole('link', { name: 'Xem hồ sơ', exact: true }).click();
   await expect(page.getByLabel('Họ và tên', { exact: true })).toHaveValue('Draft sau navigation');
-  await expect(page.getByRole('alert')).toContainText('chưa được xác nhận');
+  await expect(page.locator('form.career-profile-card').getByRole('alert')).toContainText('chưa được xác nhận');
   await expect(page.getByText('Đã lưu cập nhật hồ sơ.', { exact: true })).toHaveCount(0);
 });
 
@@ -145,7 +146,7 @@ test('background read failure while reviewing keeps the form and draft available
   const options: Options = {}; await fixture(page, options); await page.goto('/career-profile');
   await page.getByLabel('Họ và tên', { exact: true }).fill('Draft trong lúc GET lỗi');
   options.getError = true; await page.getByRole('button', { name: 'Kiểm tra dữ liệu đã lưu' }).click();
-  await expect(page.getByRole('alert')).toContainText('Không tải được dữ liệu đã lưu');
+  await expect(page.locator('form.career-profile-card').getByRole('alert')).toContainText('Không tải được dữ liệu đã lưu');
   await expect(page.getByLabel('Họ và tên', { exact: true })).toHaveValue('Draft trong lúc GET lỗi'); await expect(save(page)).toBeEnabled();
   options.getError = false; await page.getByRole('button', { name: 'Kiểm tra dữ liệu đã lưu' }).click(); await expect(page.getByRole('region', { name: 'Dữ liệu đã lưu trên máy chủ' })).toBeVisible();
 });
@@ -163,14 +164,18 @@ test('a stale background GET cannot replace the profile cache after successful P
   await page.getByRole('link', { name: 'Về Trang của tôi' }).click(); await expect(page.getByRole('heading', { level: 1 })).toContainText('Tên sau PATCH'); releaseDashboard();
 });
 
-test('long metadata and maximum-length draft fit a small screen and save stays above bottom navigation', async ({ page }) => {
+test('long metadata and maximum-length draft fit a small screen and save stays visible and unobstructed', async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 844 });
   await fixture(page, { profile: { ...baseProfile, email: 'long'.repeat(40) + '@example.test' } }); await page.goto('/career-profile');
   await page.getByLabel('Họ và tên', { exact: true }).fill('x'.repeat(120)); await page.getByLabel('Địa chỉ', { exact: true }).fill('x'.repeat(500));
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await save(page).scrollIntoViewIfNeeded();
-  const action = (await save(page).boundingBox())!, nav = (await page.getByRole('navigation', { name: 'Điều hướng chính di động' }).boundingBox())!;
-  expect(action.y + action.height).toBeLessThanOrEqual(nav.y);
+  await expect(save(page)).toBeInViewport();
+  expect(await save(page).evaluate(element => {
+    const box = element.getBoundingClientRect();
+    const hit = document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2);
+    return box.bottom <= innerHeight && hit !== null && element.contains(hit);
+  })).toBe(true);
 });
 
 test('account switch during PATCH cannot update B profile or carry A draft', async ({ page }) => {
@@ -196,3 +201,11 @@ for (const width of [320, 390, 768, 769, 1024, 1025, 1440]) {
     await page.getByLabel('Họ và tên', { exact: true }).focus(); await page.keyboard.press('Tab'); await expect(page.getByLabel('Số điện thoại', { exact: true })).toBeFocused();
   });
 }
+
+test('profile dark layout preserves separate forms and a real avatar editor across breakpoints', async ({ page }) => {
+  const { reviewResponsive } = await import('./ui-sync.fixture');
+  await fixture(page);
+  await page.goto('/career-profile');
+  await expect(page.getByLabel('Họ và tên', { exact: true })).toHaveValue('Học sinh A');
+  await reviewResponsive(page, 'P11', '.career-profile-page');
+});

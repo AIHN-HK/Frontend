@@ -7,14 +7,16 @@ export const studentRoutes: RouteObject[] = [
     Component: RequireSession,
     children: [
       {
-        path: paths.assessment,
-        lazy: async () => ({
-          Component: (await import('@/modules/assessment/testing/pages/HollandTestPage')).HollandTestPage,
-        }),
-      },
-      {
-        lazy: async () => ({ Component: (await import('@/layouts/StudentLayout')).StudentLayout }),
+        lazy: async () => ({ Component: (await import('./CareerWorkspaceRoute')).CareerWorkspaceRoute }),
         children: [
+          {
+            path: paths.assessment,
+            lazy: async () => ({
+              Component: (await import('@/modules/assessment/testing/pages/HollandTestPage')).HollandTestPage,
+            }),
+          },
+          { path: paths.careers, lazy: async () => ({ Component: (await import('@/modules/career-platform/pages/CareerCatalogPage')).CareerCatalogPage }) },
+          { path: '/careers/:careerId', lazy: async () => ({ Component: (await import('@/modules/career-platform/pages/CareerRuntimeDetailPage')).CareerRuntimeDetailPage }) },
           {
             path: paths.dashboard,
             lazy: async () => ({
@@ -37,8 +39,8 @@ export const studentRoutes: RouteObject[] = [
           {
             path: paths.assessmentResults,
             lazy: async () => ({
-              Component: (await import('@/modules/assessment/results/pages/AssessmentResultPage'))
-                .AssessmentResultPage,
+              Component: (await import('@/modules/assessment/results/pages/LatestAssessmentResultPage'))
+                .LatestAssessmentResultPage,
             }),
           },
           {
@@ -56,23 +58,19 @@ export const studentRoutes: RouteObject[] = [
           {
             path: paths.recommendations,
             lazy: async () => ({
-              Component: (await import('@/modules/recommendations/list/pages/RecommendationsPage'))
-                .RecommendationsPage,
+              Component: (await import('@/modules/career-platform/pages/CareerRecommendationsPage'))
+                .CareerRecommendationsPage,
             }),
           },
           {
             path: '/recommendations/:recommendationId',
-            lazy: async () => ({
-              Component: (
-                await import('@/modules/recommendations/detail/pages/RecommendationDetailUnavailablePage')
-              ).RecommendationDetailUnavailablePage,
-            }),
+            lazy: async () => ({ Component: (await import('@/modules/career-platform/pages/CareerRecommendationDetailPage')).CareerRecommendationDetailPage }),
           },
           {
             path: paths.roadmap,
             lazy: async () => ({
-              Component: (await import('@/modules/roadmap/pages/RoadmapUnavailablePage'))
-                .RoadmapUnavailablePage,
+              Component: (await import('@/modules/career-platform/pages/CareerRoadmapPage'))
+                .CareerRoadmapPage,
             }),
           },
           {

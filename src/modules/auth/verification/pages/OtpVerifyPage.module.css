@@ -1,0 +1,8 @@
+.page { width:100%; }
+:global(#main-content):has(.page) { max-width:400px; padding:44px 40px; border-radius:24px; }
+.page:global(.otp-missing) { text-align:center; }
+.page :global(.otp-flow-status),.page :global(.otp-hint) { text-align:center; font-size:12px; }
+.page :global(.otp-error),.page :global(.otp-notice) { padding:14px; border:1px solid var(--ce-e-border); background:var(--ce-e-subtle); border-radius:12px; }
+@media(max-width:768px) { :global(#main-content):has(.page) { padding:28px 22px; } }
+
+@media(max-width:360px) { :global(#main-content):has(.page) { padding-inline:8px; } .page form :global(.otp-digits) { gap:1px; } }

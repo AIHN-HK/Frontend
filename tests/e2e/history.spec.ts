@@ -32,7 +32,7 @@ test('chat metadata uses its own source/filter, actual time and links to read-on
 });
 test('source errors and retries are separate from the other history', async ({ page }) => {
   const options: HistoryOptions = { firstStatus: 503 }, calls = await historyFixture(page, options); await page.goto('/history'); await expect(page.getByText('Không tải được lịch sử trắc nghiệm.', { exact: true })).toBeVisible();
-  await page.getByLabel('Loại lịch sử').selectOption('chats'); await expect(page.getByRole('article', { name: 'Phiên tư vấn #31' })).toBeVisible(); await page.getByLabel('Loại lịch sử').selectOption('tests'); await expect(page.getByText('Không tải được lịch sử trắc nghiệm.', { exact: true })).toBeVisible(); options.firstStatus = 200; await page.getByRole('button', { name: 'Thử lại lịch sử trắc nghiệm' }).click(); await expect(page.getByRole('article', { name: 'Lần làm #812' })).toBeVisible();
+  await page.getByRole('tab', { name: 'Phiên tư vấn', exact: true }).click(); await expect(page.getByRole('article', { name: 'Phiên tư vấn #31' })).toBeVisible(); await page.getByRole('tab', { name: 'Trắc nghiệm Holland', exact: true }).click(); await expect(page.getByText('Không tải được lịch sử trắc nghiệm.', { exact: true })).toBeVisible(); options.firstStatus = 200; await page.getByRole('button', { name: 'Thử lại lịch sử trắc nghiệm' }).click(); await expect(page.getByRole('article', { name: 'Lần làm #812' })).toBeVisible();
   expect(calls.filter(c => c.method !== 'GET' && !c.path.includes('/auth/'))).toHaveLength(0);
 });
 test('empty chat and malformed metadata are honest states', async ({ page }) => {
@@ -46,7 +46,7 @@ test('late previous-owner pagination cannot appear after logout/login B', async 
 });
 for (const width of [320,390,768,769,1024,1025,1440]) test(`history long titles/filter controls/touch targets fit ${width}px`, async ({ page }) => {
   await page.setViewportSize({ width, height: width === 768 ? 1024 : 900 }); await historyFixture(page, { long: true }); await page.goto('/history'); await expect(page.getByRole('article', { name: 'Lần làm #812' })).toBeVisible();
-  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true); await page.getByLabel('Loại lịch sử').selectOption('chats'); await expect(page.getByRole('article', { name: 'Phiên tư vấn #31' })).toBeVisible(); expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true); await page.getByRole('tab', { name: 'Phiên tư vấn', exact: true }).click(); await expect(page.getByRole('article', { name: 'Phiên tư vấn #31' })).toBeVisible(); expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   for (const control of await page.locator('.history-page button:visible, .history-page a:visible, .history-page select:visible').all()) { const box = await control.boundingBox(); expect(box?.height).toBeGreaterThanOrEqual(44); }
 });
 
@@ -60,8 +60,50 @@ test('late initial chat response cannot leak into a new owner', async ({ page })
   await page.getByRole('button', { name: 'Đăng xuất', exact: true }).click(); await expect(page).toHaveURL(/\/login/); options.owner = 72; options.chats = [];
   await page.getByLabel('Email trường hoặc cá nhân').fill('b@example.test'); await page.getByLabel('Mật khẩu', { exact: true }).fill('Password123!'); await page.getByRole('button', { name: 'Đăng nhập vào Trang của tôi →', exact: true }).click(); release(); await page.goto('/history?kind=chats'); await expect(page.getByText('Chưa có phiên tư vấn đã lưu.', { exact: true })).toBeVisible(); await expect(page.getByRole('article')).toHaveCount(0);
 });
-test('keyboard source selection and result link work with visible focus', async ({ page }) => {
-  await historyFixture(page); await page.goto('/history?kind=invalid&analysis=invalid'); const source = page.getByLabel('Loại lịch sử'); await expect(source).toHaveValue('tests'); await expect(page.getByLabel('Loại phân tích')).toHaveValue(''); await source.focus(); await expect(source).toBeFocused();
-  await page.keyboard.press('ArrowDown'); await page.keyboard.press('Enter'); await expect(source).toHaveValue('chats'); await expect(page.getByRole('article', { name: 'Phiên tư vấn #31' })).toBeVisible();
-  await source.focus(); await page.keyboard.press('ArrowUp'); await page.keyboard.press('Enter'); await expect(source).toHaveValue('tests'); const link = page.getByRole('article', { name: 'Lần làm #812' }).getByRole('link', { name: 'Xem kết quả', exact: true }); await link.focus(); await expect(link).toBeFocused(); await page.keyboard.press('Enter'); await expect(page).toHaveURL(/\/assessment\/results\/812$/);
+test('keyboard tabs and result link work with visible focus', async ({ page }) => {
+  await historyFixture(page); await page.goto('/history?kind=invalid&analysis=invalid');
+  const tests = page.getByRole('tab', {name:/Trắc nghiệm Holland$/});
+  const chats = page.getByRole('tab', {name:/Phiên tư vấn$/});
+  await expect(tests).toHaveAttribute('aria-selected','true');
+  await tests.focus(); await page.keyboard.press('ArrowRight'); await page.keyboard.press('Enter');
+  await expect(chats).toHaveAttribute('aria-selected','true');
+  await expect(page.getByRole('article', {name:'Phiên tư vấn #31'})).toBeVisible();
+  await chats.focus(); await page.keyboard.press('ArrowLeft'); await page.keyboard.press('Enter');
+  await expect(tests).toHaveAttribute('aria-selected','true');
+  const link=page.getByRole('article',{name:'Lần làm #812'}).getByRole('link',{name:'Xem kết quả',exact:true});
+  await link.focus(); await expect(link).toBeFocused(); await page.keyboard.press('Enter');
+  await expect(page).toHaveURL(/\/assessment\/results\/812$/);
+});
+
+test('history source tabs preserve real records in the dark responsive timeline', async ({page}) => {
+  const {reviewResponsive}=await import('./ui-sync.fixture');
+  await historyFixture(page); await page.goto('/history');
+  await expect(page.getByRole('article').first()).toBeVisible();
+  await reviewResponsive(page,'P12','.history-page');
+});
+
+test('selected history records belong to their tab panel when switching sources', async ({page}) => {
+  await historyFixture(page);
+  await page.goto('/history');
+  await expect(page.getByRole('tabpanel').getByRole('article', {name:'Lần làm #812'})).toBeVisible();
+  await page.getByRole('tab', {name:/Phiên tư vấn$/}).click();
+  await expect(page.getByRole('tabpanel').getByRole('article', {name:'Phiên tư vấn #31'})).toBeVisible();
+  await expect(page.getByRole('tabpanel').getByRole('article', {name:'Lần làm #812'})).toHaveCount(0);
+});
+
+test('switching history tabs aborts the inactive read and refetches it on return', async ({page}) => {
+  let release!: () => void;
+  const firstGate = new Promise<void>(resolve => { release = resolve; });
+  const calls = await historyFixture(page, {firstGate});
+  let aborted = 0;
+  page.on('requestfailed', request => { if (request.url().includes('/history-by-user')) aborted++; });
+  await page.goto('/history');
+  await expect(page.getByRole('status')).toContainText('Đang tải lịch sử trắc nghiệm');
+  await page.getByRole('tab', {name:/Phiên tư vấn$/}).click();
+  release();
+  await expect(page.getByRole('article', {name:'Phiên tư vấn #31'})).toBeVisible();
+  await expect.poll(() => aborted).toBeGreaterThan(0);
+  await page.getByRole('tab', {name:/Trắc nghiệm Holland$/}).click();
+  await expect(page.getByRole('article', {name:'Lần làm #812'})).toBeVisible();
+  expect(calls.filter(call => call.path.endsWith('/history-by-user'))).toHaveLength(2);
 });

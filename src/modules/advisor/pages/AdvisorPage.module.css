@@ -1,0 +1,35 @@
+.page { display:grid; grid-template-columns:280px minmax(0,1fr); min-width:0; height:calc(100dvh - 64px); min-height:780px; }
+.page p,.page h1,.page h2 { overflow-wrap:anywhere; }
+.page :global(.advisor-context) { padding:28px 22px; display:flex; flex-direction:column; gap:24px; border-right:1px solid var(--ce-border); background:var(--ce-bg-sidebar); overflow:auto; min-width:0; }
+.page :global(.advisor-heading) { display:flex; align-items:center; gap:12px; }
+.page h1 { font-size:20px; }
+.page h2 { font-size:16px; }
+.page p { font-size:13px; line-height:1.65; }
+.page :global(.advisor-caption) { font-size:12px; color:var(--ce-text-secondary); }
+.page summary { min-height:44px; padding-block:12px; cursor:pointer; font-size:13px; color:var(--ce-violet); }
+.page :global(.advisor-session-controls) { display:grid; gap:12px; min-width:0; }
+.page label { font-size:12px; color:var(--ce-text-secondary); }
+.page select { width:100%; min-width:0; min-height:44px; padding:10px; border:1px solid var(--ce-border); border-radius:10px; color:var(--ce-text-primary); background:var(--ce-bg-nav); font:inherit; font-size:12px; }
+.page a { display:inline-flex; align-items:center; min-height:44px; font-size:12px; color:var(--ce-violet); }
+.page :global(.advisor-chat) { display:flex; flex-direction:column; min-width:0; min-height:0; overflow:hidden; }
+.page :global(.advisor-chat-header) { display:flex; flex-wrap:wrap; gap:16px; align-items:center; justify-content:space-between; padding:18px 28px; border-bottom:1px solid var(--ce-border); }
+.page :global(.advisor-readonly) { padding:8px 28px; background:var(--ce-glass-subtle); }
+.page :global(.advisor-messages) { flex:1; min-height:140px; overflow:auto; overscroll-behavior:contain; padding:28px; display:flex; flex-direction:column; gap:20px; }
+.page :global(.advisor-message) { flex-shrink:0; max-width:85%; padding:16px 20px; border:1px solid var(--ce-border); background:var(--ce-bg-nav); border-radius:14px 14px 14px 2px; align-self:flex-start; }
+.page :global(.advisor-message p) { white-space:pre-wrap; color:var(--ce-text-primary); }
+.page :global(.advisor-message.user) { align-self:flex-end; background:var(--ce-c-subtle); border-color:var(--ce-c-border); border-radius:14px 14px 2px 14px; }
+.page :global(.advisor-empty) { margin:auto; text-align:center; max-width:480px; display:grid; gap:14px; }
+.page :global(.advisor-composer) { padding:20px 28px; border-top:1px solid var(--ce-border); display:grid; gap:12px; }
+.page :global(.advisor-prompts),.page :global(.advisor-composer-actions) { display:flex; flex-wrap:wrap; gap:8px; justify-content:space-between; align-items:center; }
+.page :global(.advisor-prompts button) { font-size:12px; flex:1; min-width:120px; border-radius:12px; }
+.page form { display:grid; gap:8px; min-width:0; }
+.page textarea { min-height:60px; max-height:160px; resize:vertical; font-size:14px; scroll-margin-block:80px; }
+.page :global(.advisor-notice),.page :global(.advisor-review) { padding:12px; background:var(--ce-e-subtle); border:1px solid var(--ce-e-border); border-radius:10px; display:flex; flex-wrap:wrap; gap:8px; }
+.page :global(.advisor-chat>.advisor-notice) { margin:12px 28px; }
+.page :global(.advisor-wait-lines) { display:grid; gap:8px; width:240px; max-width:100%; margin-top:12px; }
+.page :global([data-advisor-wait-line]) { height:10px; border-radius:8px; background:var(--ce-border); animation:waitPulse 1.2s ease infinite alternate; }
+.page :global([data-advisor-wait-line]:nth-child(2)) { width:86%; }
+.page :global([data-advisor-wait-line]:last-child) { width:60%; }
+@keyframes waitPulse { to { opacity:.4; } }
+@media(prefers-reduced-motion:reduce) { .page :global([data-advisor-wait-line]) { animation:none; } }
+@media(max-width:900px) { .page { grid-template-columns:minmax(0,1fr); height:auto; min-height:0; } .page :global(.advisor-context) { padding:16px; border-right:0; border-bottom:1px solid var(--ce-border); gap:12px; } .page :global(.advisor-chat) { min-height:640px; } .page :global(.advisor-messages) { max-height:55dvh; padding:16px; } .page :global(.advisor-chat-header),.page :global(.advisor-composer) { padding:16px; } .page :global(.advisor-message) { max-width:95%; } .page textarea { font-size:16px; } }

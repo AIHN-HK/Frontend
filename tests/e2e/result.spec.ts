@@ -12,9 +12,40 @@ test('direct ID/reload loads owned scores and normalizes from its historical sna
   await page.reload(); await expect(page.getByText(topCode, { exact: true })).toBeVisible();
   expect(calls.filter(c => c.path === '/api/v1/result/812')).toHaveLength(2); expect(calls.filter(c => c.path.endsWith('/question'))).toHaveLength(0);
 });
-for (const id of ['0', '-1', 'abc', '1.5', '1e3', '9007199254740992', '']) test(`invalid result ID '${id}' never requests personal results`, async ({ page }) => {
+for (const id of ['0', '-1', 'abc', '1.5', '1e3', '9007199254740992']) test(`invalid result ID '${id}' never requests personal results`, async ({ page }) => {
   const calls = await resultFixture(page); await page.goto(`/assessment/results/${id}`); await expect(page.getByRole('heading', { name: 'Mã lần làm không hợp lệ' })).toBeVisible();
   expect(calls.filter(c => c.path.includes('/result/'))).toHaveLength(0); await expect(page.getByText(topCode, { exact: true })).toHaveCount(0);
+});
+test('result entry opens the latest owned attempt instead of reporting an invalid ID', async ({ page }) => {
+  await resultFixture(page);
+  await page.goto('/assessment/results');
+  await expect(page).toHaveURL(/\/assessment\/results\/812$/);
+  await expect(page.getByText(topCode, { exact: true })).toBeVisible();
+});
+test('result entry without completed attempts shows the assessment action without requesting a result', async ({ page }) => {
+  const calls = await resultFixture(page);
+  await page.route('**/api/v1/test-session/history-by-user*', route => route.fulfill({
+    json: { status: 200, data: { formattedHistory: [], pageInfo: { hasNext: false, nextCursor: null } } },
+  }));
+  await page.goto('/assessment/results');
+  await expect(page.getByRole('heading', { name: 'Chưa có kết quả Holland' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Làm bài trắc nghiệm', exact: true })).toHaveAttribute('href', '/assessment');
+  expect(calls.filter(c => c.path.includes('/result/'))).toHaveLength(0);
+});
+test('failed latest-result lookup stays recoverable and never guesses an attempt ID', async ({ page }) => {
+  const calls = await resultFixture(page);
+  let status = 503;
+  await page.route('**/api/v1/test-session/history-by-user*', async route => {
+    if (status === 200) await route.fallback();
+    else await route.fulfill({ status, json: { message: 'fixture unavailable' } });
+  });
+  await page.goto('/assessment/results');
+  await expect(page.getByRole('heading', { name: 'Không tải được lịch sử kết quả' })).toBeVisible();
+  expect(calls.filter(c => c.path.includes('/result/'))).toHaveLength(0);
+  status = 200;
+  await page.getByRole('button', { name: 'Thử lại lịch sử kết quả' }).click();
+  await expect(page).toHaveURL(/\/assessment\/results\/812$/);
+  await expect(page.getByText(topCode, { exact: true })).toBeVisible();
 });
 for (const status of [404, 403, 503]) test(`result ${status} is honest and never reveals stale or fabricated scores`, async ({ page }) => {
   const calls = await resultFixture(page, { resultStatus: status }); await page.goto('/assessment/results/812');
@@ -29,7 +60,7 @@ test('partial scores or mismatched attempt ID are errors, not zero-filled result
 });
 test('all zeros produce finite radar points and keep server TopCode', async ({ page }) => {
   await resultFixture(page, { zero: true }); await page.goto('/assessment/results/812'); const radar = page.getByRole('img', { name: 'Biểu đồ tỷ lệ Có theo 6 nhóm RIASEC' }); await expect(radar).toBeVisible();
-  await expect(page.getByText(topCode, { exact: true })).toBeVisible(); const points = await radar.locator('[data-radar-values]').getAttribute('points'); expect(points).not.toMatch(/NaN|Infinity/); expect(points?.split(' ').every(point => point === '180,170')).toBe(true);
+  await expect(page.getByText(topCode, { exact: true })).toBeVisible(); const points = await radar.locator('[data-radar-values]').getAttribute('points'); expect(points).not.toMatch(/NaN|Infinity/); expect(points?.split(' ').every(point => point === '75,75')).toBe(true);
 });
 for (const failure of ['missing', 'malformed', 'legacy', 'mismatch'] as const) test(`snapshot ${failure} preserves raw scores and does not invent percentages`, async ({ page }) => {
   const snapshot = snapshotData(); if (failure === 'legacy') snapshot.snapshot.questions[0]!.answerValue = 5; if (failure === 'mismatch') snapshot.snapshot.questions.find(q => q.type === 'I')!.answerValue = 0;
@@ -49,7 +80,7 @@ test('special analysis case stays a case and does not masquerade as three person
 });
 test('real route links, unknown career/advisor features and no sample matching promises', async ({ page }) => {
   const calls = await resultFixture(page); await page.goto('/assessment/results/812'); await expect(page.getByText(topCode, { exact: true })).toBeVisible();
-  await expect(page.getByText('Gợi ý nghề và tư vấn AI từ kết quả chưa sẵn sàng.', { exact: true })).toBeVisible(); await expect(page.getByText(/92%|89%|85%|12 nghề|44\/50|60\/60|Hoàng Nam/)).toHaveCount(0);
+  await expect(page.getByText('Tạo gợi ý nghề có giải thích hoặc trao đổi với cố vấn từ kết quả đã lưu.', { exact: true })).toBeVisible(); await expect(page.getByText(/92%|89%|85%|12 nghề|44\/50|60\/60|Hoàng Nam/)).toHaveCount(0);
   await expect(page.getByRole('link', { name: 'Cập nhật hồ sơ cá nhân', exact: true })).toHaveAttribute('href', '/career-profile'); await expect(page.getByRole('link', { name: 'Làm bài trắc nghiệm', exact: true })).toHaveAttribute('href', '/assessment');
   expect(calls.filter(c => /chat|advisor|recommendation|career/.test(c.path))).toHaveLength(0);
   await page.getByRole('link', { name: 'Về Trang của tôi', exact: true }).click(); await page.getByRole('link', { name: 'Xem kết quả gần nhất', exact: true }).click(); await expect(page.getByText(topCode, { exact: true })).toBeVisible();
@@ -68,7 +99,7 @@ test('pending old analysis cannot leak after logout and login B', async ({ page 
 for (const width of [320, 390, 768, 769, 1024, 1025, 1440]) test(`radar labels, long server text and touch controls fit ${width}px`, async ({ page }) => {
   await page.setViewportSize({ width, height: width === 768 ? 1024 : 900 }); await resultFixture(page, { long: true }); await page.goto('/assessment/results/812'); const radar = page.getByRole('img', { name: 'Biểu đồ tỷ lệ Có theo 6 nhóm RIASEC' }); await expect(radar).toBeVisible(); await expect(page.getByRole('heading', { name: /Phân tích nhóm I/ })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-  expect(await radar.evaluate(svg => Array.from(svg.querySelectorAll('text')).every(text => { const box = text.getBBox(); return box.x >= 0 && box.y >= 0 && box.x + box.width <= 360 && box.y + box.height <= 340; }))).toBe(true);
+  expect(await radar.evaluate(svg => Array.from(svg.querySelectorAll('text')).every(text => { const box = text.getBBox(); return box.x >= 0 && box.y >= 0 && box.x + box.width <= 150 && box.y + box.height <= 150; }))).toBe(true);
   for (const control of await page.locator('.assessment-result-page a:visible, .assessment-result-page button:visible').all()) { const box = await control.boundingBox(); expect(box?.height).toBeGreaterThanOrEqual(44); }
 });
 

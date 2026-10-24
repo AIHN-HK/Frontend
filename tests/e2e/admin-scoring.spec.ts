@@ -49,3 +49,19 @@ test('Holland content saves arrays and reads them after reload', async ({ page }
   await page.reload();
   await expect(page.getByLabel('Tiêu đề nhóm')).toHaveValue('Nhóm thực tế cập nhật');
 });
+test('admin can load incomplete Holland content and fill the required sections', async ({ page }) => {
+  const writes = await scoringFixture(page, { emptyContent: true });
+  await page.goto('/admin/holland-content');
+  await expect(page.getByRole('heading', { name: 'Nội dung nhóm R', exact: true })).toBeVisible();
+  await expect(page.getByLabel('Tính cách', { exact: true })).toHaveValue('');
+  await page.getByRole('button', { name: 'Lưu nội dung Holland' }).click();
+  expect(writes).toHaveLength(0);
+  for (const label of ['Tính cách', 'Điểm mạnh', 'Điểm cần cải thiện', 'Nghề tham khảo']) {
+    await page.getByLabel(label, { exact: true }).fill('Nội dung đã được biên tập');
+  }
+  await page.getByRole('button', { name: 'Lưu nội dung Holland' }).click();
+  await expect(page.getByRole('status')).toContainText('Đã lưu');
+  expect(writes).toHaveLength(1);
+  await page.reload();
+  await expect(page.getByRole('textbox', { name: 'Tính cách', exact: true })).toHaveValue('Nội dung đã được biên tập');
+});

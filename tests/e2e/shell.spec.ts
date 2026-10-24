@@ -1,13 +1,14 @@
 import { expect, test } from '@playwright/test';
 
-test('unfinished catalog and direct unknown URLs give an honest unavailable/404 state', async ({ page }) => {
+test('catalog route and direct unknown URLs keep distinct states', async ({ page }) => {
   await page.goto('/careers');
-  await expect(page.getByRole('heading', { name: 'Trang đang được chuẩn bị' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Đăng nhập AIHN', exact: true })).toBeVisible();
   await page.goto('/khong-ton-tai/deep-link');
   await page.reload();
   await expect(page.getByRole('heading', { name: 'Không tìm thấy trang' })).toBeVisible();
   await page.getByRole('link', { name: 'Về trang chủ' }).click();
-  await expect(page).toHaveURL(/\/$/);
+  await expect(page).toHaveURL('/');
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Khám phá con đường');
 });
 
 for (const [width, sidebarWidth] of [
@@ -34,7 +35,7 @@ for (const [width, sidebarWidth] of [
       await expect(sidebar).toBeHidden();
       await expect(bottom).toBeVisible();
       await expect(opener).toBeVisible();
-      expect((await bottom.boundingBox())!.height).toBe(64);
+      expect((await bottom.boundingBox())!.height).toBeGreaterThanOrEqual(72);
     }
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     const main = (await page.getByRole('main').boundingBox())!;
@@ -47,6 +48,13 @@ for (const [width, sidebarWidth] of [
         const box = (await link.boundingBox())!;
         expect(box.width).toBeGreaterThanOrEqual(44);
         expect(box.height).toBeGreaterThanOrEqual(44);
+        const text = await link.evaluate(node => ({
+          size: parseFloat(getComputedStyle(node).fontSize),
+          height: node.clientHeight,
+          content: node.scrollHeight,
+        }));
+        expect(text.size).toBeGreaterThanOrEqual(14);
+        expect(text.content).toBeLessThanOrEqual(text.height + 1);
       }
     }
   });
@@ -155,7 +163,7 @@ test('public entry does not eagerly request workspace layouts or legacy runtime 
   });
   page.on('pageerror', (error) => errors.push(error.message));
   await page.goto('/');
-  await expect(page.getByRole('heading', { level: 1 })).toContainText('phù hợp nhất của bạn');
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Khám phá con đường');
   expect(scripts.join('\n')).not.toMatch(
     /AdminLayout|StudentLayout|WorkspaceShell|LoginPage|socket|expo|react-native/i,
   );

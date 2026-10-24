@@ -1,22 +1,22 @@
 .otp-intro { text-align: center; }
 .otp-intro .brand-badge { margin: 0 auto 12px; width: 38px; height: 38px; font-size: 16px; }
 .otp-intro h1 { font-size: 20px; font-weight: 700; }
-.otp-intro p { margin-top: 4px; font-size: 13.5px; overflow-wrap: anywhere; }
+.otp-intro p { margin-top: 4px; font-size: var(--font-size-body); overflow-wrap: anywhere; }
 .otp-form { display: flex; flex-direction: column; gap: 20px; }
-.otp-flow-status, .otp-hint { text-align: center; font-size: 12px; }
+.otp-flow-status, .otp-hint { text-align: center; font-size: var(--font-size-caption); }
 .otp-digits { display: grid; grid-template-columns: repeat(6, minmax(44px, 48px)); justify-content: center; gap: 8px; border: 0; padding: 0; margin: 0; min-width: 0; }
 .otp-digits input { width: 100%; min-width: 44px; height: 54px; text-align: center; font-size: 22px; font-weight: 700; border: 1px solid var(--border-default); border-radius: var(--radius-sm); background: var(--bg-surface); color: var(--text-primary); }
 .otp-digits input[aria-invalid="true"] { border-color: var(--error); }
 .otp-legend { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-.otp-resend { text-align: center; font-size: 13px; }
+.otp-resend { text-align: center; font-size: var(--font-size-body); }
 .otp-resend strong { color: var(--primary); }
-.otp-resend button { min-height: 44px; min-width: 44px; border: 0; padding: 8px; background: transparent; color: var(--primary); font-size: 13px; font-weight: 500; }
+.otp-resend button { min-height: 44px; min-width: 44px; border: 0; padding: 8px; background: transparent; color: var(--primary); font-size: var(--font-size-body); font-weight: 500; }
 .otp-resend button:disabled { color: var(--text-muted); }
-.otp-error, .otp-notice { padding: 10px 12px; border-radius: var(--radius-sm); font-size: 13px; overflow-wrap: anywhere; }
+.otp-error, .otp-notice { padding: 10px 12px; border-radius: var(--radius-sm); font-size: var(--font-size-body); overflow-wrap: anywhere; }
 .otp-error { background: var(--error-subtle); color: var(--error-text); border: 1px solid var(--error-border); }
 .otp-notice { background: var(--success-subtle); color: var(--success-text); border: 1px solid var(--success-border); }
-.otp-submit { width: 100%; min-height: 48px; font-size: 15px; padding: 12px 24px; border-radius: var(--radius-full); box-shadow: 0 2px 6px rgb(22 39 54 / 4%); }
-.otp-footer { display: flex; flex-direction: column; align-items: center; border-top: 1px solid var(--border-subtle); padding-top: 8px; font-size: 12px; color: var(--text-secondary); }
+.otp-submit { width: 100%; min-height: 48px; font-size: var(--font-size-body); padding: 12px 24px; border-radius: var(--radius-full); box-shadow: 0 2px 6px rgb(22 39 54 / 4%); }
+.otp-footer { display: flex; flex-direction: column; align-items: center; border-top: 1px solid var(--border-subtle); padding-top: 8px; font-size: var(--font-size-caption); color: var(--text-secondary); }
 .otp-footer a { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; min-width: 44px; padding: 8px; }
 .otp-footer a:hover { color: var(--primary); }
 .otp-missing { display: grid; justify-items: center; gap: 16px; text-align: center; }

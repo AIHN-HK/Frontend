@@ -63,7 +63,7 @@ for (const zone of ['profile', 'history'] as const) {
     options.profileError = false; options.historyError = false;
     await page.getByRole('button', { name: zone === 'profile' ? 'Thử lại hồ sơ' : 'Thử lại kết quả' }).click();
     await expect.poll(() => calls.filter(path => path.endsWith(endpoint)).length).toBeGreaterThan(before);
-    await expect(page.getByRole('alert')).toHaveCount(0);
+    await expect(page.locator('.dashboard-snapshot').getByRole('alert')).toHaveCount(0);
   });
 }
 
@@ -78,8 +78,8 @@ test('tabs support arrows/Home/End and Advisor never generates fake chat', async
   const tabs = page.getByRole('tab'); await expect(tabs).toHaveCount(3);
   await tabs.nth(0).focus(); await tabs.nth(0).press('ArrowRight');
   await expect(tabs.nth(1)).toBeFocused(); await expect(tabs.nth(1)).toHaveAttribute('aria-selected', 'true');
-  await expect(page.getByRole('tabpanel')).toContainText('Lộ trình mục tiêu chưa sẵn sàng');
-  await tabs.nth(1).press('End'); await expect(page.getByRole('tabpanel')).toContainText('Khoảng cách kỹ năng chưa sẵn sàng');
+  await expect(page.getByRole('tabpanel')).toContainText('Mở lộ trình để chọn mục tiêu');
+  await tabs.nth(1).press('End'); await expect(page.getByRole('tabpanel')).toContainText('Mở lộ trình để xem khoảng cách kỹ năng');
   await tabs.nth(2).press('Home'); await expect(tabs.nth(0)).toBeFocused();
   await expect(page.getByRole('textbox')).toHaveCount(0);
   await page.getByRole('link', { name: 'Mở trang Cố vấn' }).click(); await expect(page).toHaveURL(/\/advisor$/);
@@ -121,16 +121,18 @@ test('long profile and analysis wrap, and unavailable tabs remain keyboard acces
   await last.press('ArrowRight'); await expect(page.getByRole('tab').nth(0)).toBeFocused();
   expect(await page.getByRole('tab').nth(0).evaluate(node => getComputedStyle(node).outlineStyle)).toBe('solid');
   await page.getByRole('button', { name: 'Mở menu phụ' }).click();
-  await expect(page.getByRole('dialog')).toBeVisible(); await page.keyboard.press('Escape');
+  await expect(page.getByRole('navigation', { name: 'Điều hướng bổ sung' })).toBeVisible(); await page.keyboard.press('Escape');
   await expect(page.getByRole('button', { name: 'Mở menu phụ' })).toBeFocused();
 });
 
 for (const width of [320, 390, 768, 769, 1024, 1025, 1440]) {
   test(`dashboard responsive and targets at ${width}`, async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.setViewportSize({ width, height: width === 768 ? 1024 : 900 });
     await fixture(page, { history: { formattedHistory: [result] } }); await page.goto('/dashboard');
     await expect(page.getByText('Mã phân tích: ISA')).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    await page.screenshot({ path: `.superpowers/ui-sync/P04/dashboard-${width}.png`, fullPage: true });
     const column = (await page.locator('.dashboard-result').boundingBox())!;
     const detail = (await page.getByRole('link', { name: 'Xem chi tiết Holland' }).boundingBox())!;
     expect(detail.x + detail.width).toBeLessThanOrEqual(column.x + column.width + 1);

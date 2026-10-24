@@ -1,0 +1,19 @@
+.header { height:64px; background:var(--ce-bg-nav); border-bottom:1px solid var(--ce-border); position:sticky; top:0; z-index:50; flex-shrink:0; }
+.container { height:100%; padding:0 24px; display:flex; align-items:center; justify-content:space-between; gap:24px; }
+.brand { display:flex; align-items:center; gap:8px; font-size:19px; font-weight:700; letter-spacing:-.4px; white-space:nowrap; min-height:44px; }
+.brand span { width:7px; height:7px; border-radius:50%; background:var(--ce-violet); box-shadow:0 0 8px var(--ce-c-border); }
+.primary { display:flex; gap:22px; align-items:center; }
+.primary a { display:flex; align-items:center; min-height:44px; font-size:14px; font-weight:500; color:var(--ce-text-secondary); white-space:nowrap; }
+.primary a:hover,.primary .active { color:var(--ce-text-primary); }
+.actions { display:flex; align-items:center; gap:12px; min-width:0; }
+.actions :global(.account-controls) { background:transparent; border:0; padding:0; gap:10px; font-size:13px; }
+.actions :global(.account-controls) > span { max-width:140px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.actions :global(.account-controls) button { font-size:13px; padding:8px 12px; }
+.actions :global(.account-controls) p { position:absolute; top:64px; right:16px; background:var(--ce-bg-card); padding:12px; max-width:320px; border:1px solid var(--ce-border); }
+.toggle { display:grid; place-items:center; width:44px; height:44px; flex-shrink:0; color:var(--ce-text-primary); background:transparent; border:1px solid var(--ce-border); border-radius:10px; font-size:21px; }
+.menu { position:absolute; top:64px; right:16px; width:min(320px,calc(100vw - 32px)); max-height:calc(100dvh - 84px); overflow:auto; padding:12px; display:grid; gap:4px; background:var(--ce-bg-nav); border:1px solid var(--ce-border); border-radius:12px; box-shadow:0 16px 40px var(--ce-card-glow); }
+.menu a { min-height:44px; padding:12px; border-radius:8px; font-size:14px; }
+.menu a:hover { background:var(--ce-c-subtle); }
+@media(max-width:1200px) { .container { gap:16px; } .primary { gap:12px; } .primary a { font-size:12px; } .actions :global(.account-controls)>span { max-width:90px; } }
+@media(max-width:1024px) { .primary { display:none; } }
+@media(max-width:768px) { .container { padding:0 16px; gap:8px; } .brand { font-size:17px; } .actions { gap:8px; } .actions :global(.account-controls)>span { display:none; } }

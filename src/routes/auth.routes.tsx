@@ -9,6 +9,7 @@ export const authRoutes: RouteObject[] = [{
     children: [
       { path: paths.login, lazy: async () => ({ Component: (await import('@/modules/auth/login/pages/LoginPage')).LoginPage }) },
       { path: paths.signup, lazy: async () => ({ Component: (await import('@/modules/auth/registration/pages/SignupPage')).SignupPage }) },
+      { path: '/verify-otp', lazy: async () => ({ Component: (await import('@/modules/auth/verification/pages/OtpVerifyPage')).OtpVerifyPage }) },
       { path: paths.verifyOtp, lazy: async () => ({ Component: (await import('@/modules/auth/verification/pages/OtpVerifyPage')).OtpVerifyPage }) },
       { path: paths.forgotPassword, lazy: async () => ({ Component: (await import('@/modules/auth/recovery/pages/ForgotPasswordPage')).ForgotPasswordPage }) },
       { path: paths.resetPassword, lazy: async () => ({ Component: (await import('@/modules/auth/recovery/pages/ResetPasswordPage')).ResetPasswordPage }) },

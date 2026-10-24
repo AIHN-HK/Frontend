@@ -262,3 +262,13 @@ test('Login review screenshots and touch targets at standard and boundary viewpo
     await info.attach(`login-${width}`, { path: screenshot, contentType: 'image/png' });
   }
 });
+
+test('login dark source card remains scrollable on short screens and OAuth is explicitly unavailable', async ({page}) => {
+  const {reviewResponsive}=await import('./ui-sync.fixture');
+  await fixture(page); await page.goto('/login');
+  await expect(page.getByRole('button',{name:'Đăng nhập với Google'})).toBeDisabled();
+  await reviewResponsive(page,'P14','main>div');
+  await page.setViewportSize({width:320,height:450});
+  await page.getByRole('button',{name:'Đăng nhập vào Trang của tôi →'}).scrollIntoViewIfNeeded();
+  await expect(page.getByRole('button',{name:'Đăng nhập vào Trang của tôi →'})).toBeInViewport();
+});

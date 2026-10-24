@@ -1,0 +1,27 @@
+{
+  "project": "/home/hoang/open-design/.od/projects/183966d9-0488-4ad3-ac9e-57774fc5a6ab",
+  "files": {
+    "screens/home.html": "c7725f053cee327841c8e56ec07e6e7f46e4d348136d4c4e5c641d685320a0aa",
+    "styles/aihn-editorial.css": "c032942ea3ad286ca4beffd695eec262e32035ccbf65a65283f80433902bbec8",
+    "styles/tokens.css": "c0923b505bed6bc505b11b6f41ff9477178bac0d27acb2472c26d2fbbca5d5f9",
+    "styles/global.css": "403fb9d176d7a4c1b903e9ff25a8eae0f8d63050dce11336cfc3c345eb40731f",
+    "styles/components.css": "041d862ebd6a890300bc6435f46d6095194d61f2fbee44f4026ecd1dcdb6ece4",
+    "scripts/aihn-editorial-motion.js": "3054fba95ccdc8e9b2a9ff168f9bc69df5201efc143d9496423140b6404efa88"
+  },
+  "font_origin": "Google Fonts, Newsreader optical-size/weight and italic axes; Plus Jakarta Sans weight axis",
+  "font_license": "SIL Open Font License 1.1; bundled beside the self-hosted font subsets",
+  "fonts": {
+    "src/assets/home/fonts/plus-jakarta-sans-normal-latin.woff2": "153fc85b70298beeb1d61a5f723331649e7f23bb77302a66e61cb3e2fbdb5e79",
+    "src/assets/home/fonts/newsreader-italic-vietnamese.woff2": "0c22099dbcb30110e74c393b51e00018b9b5d7d224a1a5324d9701b3a8266bb3",
+    "src/assets/home/fonts/newsreader-OFL.txt": "865f0949b59fab5925506f80102dff3d12e8666412daf52d212db969d40adc25",
+    "src/assets/home/fonts/newsreader-italic-latin.woff2": "5dfcd10d24af8c82927ba57f7983dd997f7b200594c09c35a1b1ed9fc4597506",
+    "src/assets/home/fonts/newsreader-italic-latin-ext.woff2": "bb24f6648f75d909eb74535916015c97ef72a1344e532ec7bbaf3f80eb6f389f",
+    "src/assets/home/fonts/newsreader-normal-vietnamese.woff2": "6d0543f06b9d5393afe5baaeb040817e85af372bf5609d5d55746b1eb56b4010",
+    "src/assets/home/fonts/plus-jakarta-sans-normal-vietnamese.woff2": "b275d1258601dda240fc6a1d4a6cad56e691d898f5cdf1b0e4fd6ca0022d8e40",
+    "src/assets/home/fonts/plus-jakarta-sans-normal-latin-ext.woff2": "38e3b8fd8045048eb311d90170a4429ed2c8f405852dc3d91b5af8452758703f",
+    "src/assets/home/fonts/newsreader-normal-latin-ext.woff2": "45683de03de37187604102316c0b42c0cb2d8dc9c4140a20ad471c3148cc1278",
+    "src/assets/home/fonts/plusjakartasans-OFL.txt": "f9a8e776b4b048227f2f046b8716083eb04b1539d9ad1d4b87e81c1df28f86e3",
+    "src/assets/home/fonts/newsreader-normal-latin.woff2": "6e4f2958c3a7c4a80acde4e5a679abe7e01bc1e30b92be3c7a8b696ef401d101"
+  },
+  "source_freeze_for_static_review": "Browser only: reduced motion, kill prototype pin triggers, finish active tweens, set each bar to the source data-score. No source files modified."
+}

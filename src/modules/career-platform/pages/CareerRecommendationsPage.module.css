@@ -1,0 +1,30 @@
+.page:global(.career-platform) { padding:0; max-width:860px; margin:0 auto; gap:24px; }
+.page>h1 { font-size:38px; font-weight:500; letter-spacing:-.6px; line-height:1.2; }
+.page>p { font-size:14px; line-height:1.6; }
+.page :global(.platform-source) { font-size:11px; }
+.page :global(.platform-card) { background:var(--ce-glass-subtle); border:1px solid var(--ce-border); border-radius:16px; padding:22px 20px 18px; gap:14px; }
+.page :global(.platform-card) h2 { font-size:16px; line-height:1.3; }
+.page :global(.platform-card) p,.page li { font-size:13px; line-height:1.6; }
+.page :global(.platform-card) a,.page summary { display:inline-flex; align-items:center; min-height:44px; font-size:13px; color:var(--ce-violet); }
+.page summary { cursor:pointer; }
+.page ul { margin:0; padding-left:18px; color:var(--ce-text-secondary); }
+.filters { display:flex; flex-wrap:wrap; gap:8px; }
+.filters button { border-radius:99px; font-size:12px; }
+.filters button[aria-pressed=true] { color:var(--ce-text-primary); background:var(--ce-bg-elevated); border-color:var(--ce-border-strong); }
+.rec-grid:global(.platform-grid) { grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+.career-card { position:relative; transition:border-color .22s var(--ce-ease),transform .22s var(--ce-ease); }
+.career-card:hover { border-color:var(--ce-border-strong); transform:translateY(-2px); }
+.career-card strong { color:var(--ce-cyan); font-size:20px; }
+.page .detailLink { font-weight:700; color:var(--ce-text-primary); border-bottom:1px solid var(--ce-border); }
+@media(max-width:768px) { .page>h1 { font-size:28px; } .rec-grid:global(.platform-grid) { grid-template-columns:minmax(0,1fr); } }
+
+.page .createPanel { display:flex; align-items:center; flex-wrap:wrap; gap:8px 16px; padding:16px 20px; }
+.page .createPanel h2 { font-size:13px; }
+.page .createPanel p { font-size:12px; }
+.page .createPanel a { font-size:12px; }
+.page .createPanel button { margin-left:auto; }
+.page .runSummary { display:flex; flex-wrap:wrap; align-items:center; gap:6px 18px; border:0; border-bottom:1px solid var(--ce-border); border-radius:0; padding:0 0 16px; background:transparent; }
+.page .runSummary h2 { font-size:13px; }
+.page .runSummary p,.page .runSummary a { font-size:11px; }
+.sourceFooter { margin-top:16px; padding-top:16px; border-top:1px solid var(--ce-border); }
+@media(max-width:768px) { .page .createPanel { align-items:flex-start; } .page .createPanel button { margin-left:0; } }

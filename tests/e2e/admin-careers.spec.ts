@@ -1,11 +1,11 @@
 import { expect, test } from '@playwright/test';
 import { adminFixture } from './admin.fixture';
-test('real admin dataset is unavailable and never loads sample career records', async ({ page }) => {
+test('failed admin dataset read never falls back to sample career records', async ({ page }) => {
   await adminFixture(page);
   const calls: string[] = [];
   page.on('request', (r) => calls.push(r.url()));
   await page.goto('/admin/careers');
-  await expect(page.getByRole('heading', { name: 'Danh mục nghề chưa sẵn sàng' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Dữ liệu nghề và phân tích hệ thống' })).toBeVisible();
   expect(calls.some((s) => s.includes('catalog-preview'))).toBe(false);
   await expect(page.getByRole('button', { name: /Lưu|Xuất|Đồng bộ/ })).toHaveCount(0);
 });

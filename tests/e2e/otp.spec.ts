@@ -28,7 +28,7 @@ async function signup(page: Page) {
   await page.getByLabel('Số điện thoại').fill(fields.phone);
   await page.getByLabel('Tạo mật khẩu').fill(fields.password);
   await page.getByRole('button', { name: 'Tiếp tục xác thực OTP →' }).click();
-  await expect(page).toHaveURL(/\/verify-otp$/);
+  await expect(page).toHaveURL(/\/otp-verify$/);
   await expect(page.getByRole('heading', { name: 'Xác thực tài khoản' })).toBeVisible();
 }
 function digits(page: Page) { return page.getByRole('textbox', { name: /^Chữ số/ }); }
@@ -92,7 +92,7 @@ for (const [name, options] of [['invalid/expired', { status: 401 }], ['conflict'
     await expect(page.getByRole('alert')).toBeVisible();
     if ('status' in options && options.status === 401) await expect(page.getByRole('alert')).toContainText('không đúng hoặc đã hết hạn');
     if (name === 'server' || name === 'network' || name === 'malformed') await expect(page.getByRole('alert')).toContainText('Chưa xác nhận');
-    await expect(page).toHaveURL(/\/verify-otp$/);
+    await expect(page).toHaveURL(/\/otp-verify$/);
     await expect(page.getByRole('button', { name: 'Xác nhận đăng ký' })).toBeEnabled();
     expect(calls).toHaveLength(2);
     await noSecrets(page);
@@ -190,7 +190,7 @@ test('a cross-tab session invalidation drops the draft and ignores an in-flight 
   await expect(page.getByRole('heading', { name: 'Thiếu thông tin xác thực' })).toBeVisible();
   await expect.poll(() => cancelled).toBe(1);
   release();
-  await expect(page).toHaveURL(/\/verify-otp$/);
+  await expect(page).toHaveURL(/\/otp-verify$/);
   await expect(digits(page)).toHaveCount(0);
   expect(calls).toHaveLength(2);
   await page.getByRole('link', { name: 'Trở lại đăng ký' }).click();
@@ -212,4 +212,11 @@ for (const [width, height] of [[320, 844], [390, 844], [768, 1024], [769, 1024],
   await expect(digits(page).last()).toBeFocused();
   await page.keyboard.press('Tab');
   await expect(page.getByRole('button', { name: 'Xác nhận đăng ký' })).toBeFocused();
+});
+
+test('OTP dark card keeps actual flow context and usable digits at every breakpoint', async ({page}) => {
+  const {reviewResponsive}=await import('./ui-sync.fixture');
+  await fixture(page); await signup(page);
+  await expect(digits(page)).toHaveCount(6);
+  await reviewResponsive(page,'P16','main>div');
 });

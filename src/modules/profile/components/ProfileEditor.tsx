@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigation } from 'react-router';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { UseQueryResult } from '@tanstack/react-query';
 import { paths } from '@/routes/paths';
 import { session } from '@/shared/session/session';
 import { ApiError } from '@/shared/api/api-error';
-import { Field } from '@/shared/ui/Field';
-import { Button } from '@/shared/ui/Button';
+import { Input } from 'antd';
+import { Button } from 'antd';
 import { useProfileMutation } from '../queries/profile.queries';
 import { profileDraft } from '../model/profile-draft';
 import { profileSchema, profileToForm, toProfilePatch } from '../model/profile.schema';
@@ -23,7 +23,7 @@ export function ProfileEditor({ profile, scope, query }: { profile: Profile; sco
   const active = useRef(false), pending = useRef(false), request = useRef<AbortController | null>(null);
   const [error, setError] = useState<string | null>(() => draft?.needsReview ? 'Yêu cầu lưu trước chưa được xác nhận. Kiểm tra dữ liệu đã lưu trước khi gửi lại.' : null);
   const [success, setSuccess] = useState(false), [review, setReview] = useState<Profile | null>(null), [checking, setChecking] = useState(false);
-  const { register, getValues, handleSubmit, reset, formState: { errors, isSubmitting, isDirty } } = useForm<ProfileForm>({
+  const { control, register, getValues, handleSubmit, reset, formState: { errors, isSubmitting, isDirty } } = useForm<ProfileForm>({
     resolver: zodResolver(profileSchema), defaultValues: draft?.fields ?? profileToForm(profile),
   });
   const busy = isSubmitting || mutation.isPending;
@@ -70,8 +70,8 @@ export function ProfileEditor({ profile, scope, query }: { profile: Profile; sco
       <div className="career-profile-card-body">
         <dl className="career-profile-metadata"><div><dt>Email tài khoản</dt><dd>{profile.email}</dd></div>{profile.age !== undefined && <div><dt>Tuổi</dt><dd>{profile.age}</dd></div>}</dl>
         <fieldset disabled={busy || checking || leaving} className="career-profile-fields"><legend className="career-profile-legend">Thông tin có thể chỉnh sửa</legend>
-          <Field id="profile-fullname" label="Họ và tên" autoComplete="name" {...register('fullname')} error={errors.fullname?.message} />
-          <Field id="profile-phone" label="Số điện thoại" type="tel" inputMode="tel" autoComplete="tel" {...register('phone')} error={errors.phone?.message} />
+          <Controller name="fullname" control={control} render={({field}) => <div className="field"><label htmlFor="profile-fullname">Họ và tên</label><Input {...field} id="profile-fullname" type="text" autoComplete="name" aria-invalid={!!errors.fullname} aria-describedby={errors.fullname ? "profile-fullname-error" : undefined}/>{errors.fullname && <span className="field-error" id="profile-fullname-error">{errors.fullname.message}</span>}</div>} />
+          <Controller name="phone" control={control} render={({field}) => <div className="field"><label htmlFor="profile-phone">Số điện thoại</label><Input {...field} id="profile-phone" type="tel" autoComplete="tel" aria-invalid={!!errors.phone} aria-describedby={errors.phone ? "profile-phone-error" : undefined}/>{errors.phone && <span className="field-error" id="profile-phone-error">{errors.phone.message}</span>}</div>} />
           <div className="field career-profile-wide"><label htmlFor="profile-address">Địa chỉ</label><textarea id="profile-address" rows={3} autoComplete="street-address" aria-invalid={!!errors.address} aria-describedby={errors.address ? 'profile-address-error' : undefined} {...register('address')} />{errors.address && <span className="field-error" id="profile-address-error">{errors.address.message}</span>}</div>
           <div className="field"><label htmlFor="profile-gender">Giới tính</label><select id="profile-gender" aria-invalid={!!errors.gender} aria-describedby={errors.gender ? 'profile-gender-error' : undefined} {...register('gender')}><option value="">Chưa chọn</option><option value="MALE">Nam</option><option value="FEMALE">Nữ</option><option value="OTHER">Khác</option></select>{errors.gender && <span className="field-error" id="profile-gender-error">{errors.gender.message}</span>}</div>
           <div className="field"><label htmlFor="profile-class">Lớp hiện tại</label><select id="profile-class" aria-invalid={!!errors.class} aria-describedby={errors.class ? 'profile-class-error' : undefined} {...register('class')}><option value="">Chưa chọn</option>{Array.from({ length: 12 }, (_, index) => <option key={index + 1} value={String(index + 1)}>Lớp {index + 1}</option>)}</select>{errors.class && <span className="field-error" id="profile-class-error">{errors.class.message}</span>}</div>
@@ -82,9 +82,9 @@ export function ProfileEditor({ profile, scope, query }: { profile: Profile; sco
         {query.isError && <p className="career-profile-error">Chưa tải lại được hồ sơ đã lưu. Bản nháp vẫn được giữ.</p>}
         {review && <section className="career-profile-review" aria-label="Dữ liệu đã lưu trên máy chủ"><h3>Dữ liệu đã lưu trên máy chủ</h3><p>Đối chiếu với bản nháp của bạn trước khi lưu lại.</p><dl>
           <div><dt>Họ và tên</dt><dd>{review.fullname || 'Chưa có'}</dd></div><div><dt>Điện thoại</dt><dd>{review.phone || 'Chưa có'}</dd></div><div><dt>Địa chỉ</dt><dd>{review.address || 'Chưa có'}</dd></div><div><dt>Giới tính</dt><dd>{review.gender === null ? 'Chưa chọn' : genderLabels[review.gender]}</dd></div><div><dt>Lớp</dt><dd>{review.class ?? 'Chưa chọn'}</dd></div>
-        </dl><Button type="button" variant="secondary" disabled={busy || checking || leaving} onClick={() => { reset(profileToForm(review)); profileDraft.clear(scope); setError(null); setSuccess(false); setReview(null); }}>Thay bản nháp bằng dữ liệu đã lưu</Button></section>}
+        </dl><Button htmlType="button"  disabled={busy || checking || leaving} onClick={() => { reset(profileToForm(review)); profileDraft.clear(scope); setError(null); setSuccess(false); setReview(null); }}>Thay bản nháp bằng dữ liệu đã lưu</Button></section>}
       </div>
-      <footer className="career-profile-card-footer"><p>Chỉ lưu khi bạn chọn “Lưu cập nhật”.</p><div className="career-profile-actions"><Button type="button" variant="secondary" disabled={busy || checking || leaving} onClick={() => { void checkSaved(); }}>{checking ? 'Đang kiểm tra…' : 'Kiểm tra dữ liệu đã lưu'}</Button><Button type="submit" disabled={busy || checking || leaving}>{busy ? 'Đang lưu…' : 'Lưu cập nhật'}</Button></div></footer>
+      <footer className="career-profile-card-footer"><p>Chỉ lưu khi bạn chọn “Lưu cập nhật”.</p><div className="career-profile-actions"><Button htmlType="button"  disabled={busy || checking || leaving} onClick={() => { void checkSaved(); }}>{checking ? 'Đang kiểm tra…' : 'Kiểm tra dữ liệu đã lưu'}</Button><Button htmlType="submit" disabled={busy || checking || leaving}>{busy ? 'Đang lưu…' : 'Lưu cập nhật'}</Button></div></footer>
     </form>
   </>;
 }

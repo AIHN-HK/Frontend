@@ -24,7 +24,7 @@ async function start(page: Page) {
   await page.goto('/forgot-password');
   await page.getByLabel('Email tài khoản').fill(email);
   await page.getByRole('button', { name: 'Gửi mã OTP', exact: true }).click();
-  await expect(page).toHaveURL(/\/verify-otp$/);
+  await expect(page).toHaveURL(/\/otp-verify$/);
   await expect(page.getByRole('heading', { name: 'Xác thực khôi phục mật khẩu' })).toBeVisible();
 }
 async function verified(page: Page) {
@@ -214,4 +214,14 @@ test('forgot and reset cards fit viewports and keep keyboard targets at least 44
       for (const box of layout.targets) { expect(box.width).toBeGreaterThanOrEqual(44); expect(box.height).toBeGreaterThanOrEqual(44); }
     }
   }
+});
+
+test('recovery dark cards show real verified steps and fit responsive viewports', async ({page}) => {
+  const {reviewResponsive}=await import('./ui-sync.fixture');
+  await fixture(page); await page.goto('/forgot-password');
+  await expect(page.locator('[aria-current=step]')).toHaveText('1. Email');
+  await reviewResponsive(page,'P17/forgot','main>div');
+  await verified(page);
+  await expect(page.locator('[aria-current=step]')).toHaveText('3. Mật khẩu');
+  await reviewResponsive(page,'P17/reset','main>div');
 });

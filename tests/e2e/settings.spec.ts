@@ -11,11 +11,7 @@ test('device appearance persists, resets, isolates admin and email is read only'
   await page.reload();
   await expect(page.getByLabel('Giao diện')).toHaveValue('dark');
   await expect(page.getByLabel('Email')).toHaveAttribute('readonly', '');
-  expect(
-    await page
-      .locator('.workspace-shell')
-      .evaluate((el) => getComputedStyle(el).getPropertyValue('--bg-app').trim().toLowerCase()),
-  ).toBe('#0b0f19');
+  await expect(page.locator('.ce-app')).toHaveCSS('background-color', 'rgb(18, 18, 20)');
   await page.goto('/preview/admin');
   expect(
     await page
@@ -53,4 +49,11 @@ test('blocked preference storage keeps controls usable and reports temporary cha
   await expect(page.getByRole('status')).toContainText('Đã áp dụng tạm thời');
   await page.getByRole('button', { name: 'Đăng xuất', exact: true }).click();
   await expect(page).toHaveURL(/login/);
+});
+
+test('settings explains fixed career colors while retaining honest scoped device preferences', async ({page}) => {
+  const {reviewResponsive}=await import('./ui-sync.fixture');
+  await page.goto('/settings');
+  await expect(page.getByText(/Giao diện AIHN hiện dùng chủ đề tối cố định/)).toBeVisible();
+  await reviewResponsive(page,'P13','.settings-page');
 });

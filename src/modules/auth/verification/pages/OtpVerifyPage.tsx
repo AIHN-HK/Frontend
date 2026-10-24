@@ -7,7 +7,10 @@ import { session, useSession } from '@/shared/session/session';
 import { resendOtp, verifyOtp } from '../../api/auth.api';
 import { registrationDraft } from '../../model/registration-draft';
 import { recoveryState } from '../../model/recovery-state';
-import './otp.css';
+import { Button, Input } from 'antd';
+import { usePageEntrance } from '@/shared/ui/ce/usePageEntrance';
+import styles from './OtpVerifyPage.module.css';
+import authStyles from '../../components/AuthScreen.module.css';
 
 const readFlow = () => recoveryState.read() ?? registrationDraft.read();
 
@@ -90,8 +93,10 @@ export function OtpVerifyPage(): React.JSX.Element {
     }
   };
 
+  const root = usePageEntrance(flow ? `otp:${flow.purpose}` : 'otp-missing');
+
   if (completed) return <p role="status">Đã xác thực thành công. Đang chuyển trang…</p>;
-  if (missing) return <div className="otp-missing">
+  if (missing) return <div ref={root} className={`${authStyles.page} ${styles.page} otp-missing`}>
     <span className="brand-badge" aria-hidden="true">AI</span>
     <h1>Thiếu thông tin xác thực</h1>
     <p role="status">{recovery ? 'Thông tin khôi phục đã hết hạn. Vui lòng bắt đầu lại.' : 'Không có thông tin đăng ký trong tab này. Vui lòng trở lại đăng ký.'}</p>
@@ -100,18 +105,18 @@ export function OtpVerifyPage(): React.JSX.Element {
   </div>;
 
   const maskedEmail = flow.email.replace(/^(.{1,3})[^@]*@/, '$1***@');
-  return <>
-    <div className="otp-intro">
+  return <div ref={root} className={`${authStyles.page} ${styles.page}`}>
+    <div className="otp-intro" data-ce-enter="">
       <span className="brand-badge" aria-hidden="true">AI</span>
       <h1>{recovery ? 'Xác thực khôi phục mật khẩu' : 'Xác thực tài khoản'}</h1>
       <p>Nhập mã xác thực 6 chữ số từ email <strong>{maskedEmail}</strong></p>
     </div>
     {!recovery && <p className="otp-flow-status" role="status">{flow.otpRequested ? 'Máy chủ đã xác nhận yêu cầu gửi OTP. Tài khoản chưa được tạo.' : 'Chưa xác nhận yêu cầu gửi OTP. Thông tin đăng ký vẫn được giữ trong tab này; tài khoản chưa được tạo.'}</p>}
     {recovery && <p className="otp-flow-status" role="status">{flow.otpRequested ? 'Máy chủ đã xác nhận yêu cầu gửi mã khôi phục. Mật khẩu chưa được thay đổi.' : 'Chưa xác nhận mã đã được gửi. Hãy kiểm tra email; mật khẩu chưa được thay đổi.'}</p>}
-    <form className="otp-form" noValidate aria-busy={busy !== null} onSubmit={event => { event.preventDefault(); void command('verify'); }}>
+    <form data-ce-enter="" className="otp-form" noValidate aria-busy={busy !== null} onSubmit={event => { event.preventDefault(); void command('verify'); }}>
       <fieldset className="otp-digits" disabled={locked} aria-describedby={error ? 'otp-error' : 'otp-hint'}>
         <legend className="otp-legend">Mã xác thực 6 chữ số</legend>
-        {digits.map((digit, index) => <input key={index} ref={element => { inputs.current[index] = element; }}
+        {digits.map((digit, index) => <Input key={index} ref={element => { inputs.current[index] = element?.input ?? null; }}
           aria-label={`Chữ số ${index + 1}`} aria-invalid={error !== null} type="text" inputMode="numeric" autoComplete={index === 0 ? 'one-time-code' : 'off'} maxLength={6} value={digit} placeholder="•"
           onFocus={event => { event.currentTarget.select(); }}
           onChange={event => { input(index, event.target.value); }}
@@ -128,15 +133,15 @@ export function OtpVerifyPage(): React.JSX.Element {
       <p id="otp-hint" className="otp-hint">Kiểm tra cả thư mục spam và dùng mã mới nhất.</p>
       <div className="otp-resend">
         <p>{wait > 0 ? <>Gửi lại mã sau <strong>{wait} giây</strong></> : 'Bạn chưa nhận được mã?'}</p>
-        <button type="button" disabled={locked || wait > 0} onClick={() => { void command('resend'); }}>{busy === 'resend' ? 'Đang gửi lại…' : 'Gửi lại mã qua email'}</button>
+        <Button htmlType="button" disabled={locked || wait > 0} onClick={() => { void command('resend'); }}>{busy === 'resend' ? 'Đang gửi lại…' : 'Gửi lại mã qua email'}</Button>
       </div>
       {error && <p id="otp-error" className="otp-error" role="alert">{error}</p>}
       {notice && <p className="otp-notice" role="status">{notice}</p>}
-      <button className="btn btn-primary otp-submit" type="submit" disabled={locked || !/^\d{6}$/.test(otp)}>{busy === 'verify' ? 'Đang xác nhận…' : recovery ? 'Xác nhận mã' : 'Xác nhận đăng ký'}<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><polyline points="20 6 9 17 4 12" /></svg></button>
+      <Button className="btn btn-primary otp-submit" htmlType="submit" disabled={locked || !/^\d{6}$/.test(otp)}>{busy === 'verify' ? 'Đang xác nhận…' : recovery ? 'Xác nhận mã' : 'Xác nhận đăng ký'}<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><polyline points="20 6 9 17 4 12" /></svg></Button>
     </form>
     <div className="otp-footer">
       <Link to={recovery ? paths.forgotPassword : paths.signup}>{recovery ? 'Thay đổi địa chỉ email' : 'Trở lại đăng ký'}</Link>
       <Link to={paths.login}>Đăng nhập</Link>
     </div>
-  </>;
+  </div>;
 }

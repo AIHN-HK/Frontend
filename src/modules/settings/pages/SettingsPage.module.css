@@ -1,0 +1,10 @@
+.page:global(.settings-page) { max-width:760px; margin:auto; padding:52px 48px; gap:28px; }
+.page h1 { font-size:36px; font-weight:500; letter-spacing:-.5px; line-height:1.2; }
+.page h2 { font-size:17px; }
+.page p { font-size:13px; line-height:1.65; }
+.page section { background:var(--ce-glass-subtle); border-color:var(--ce-border); border-radius:16px; padding:24px 22px; gap:18px; }
+.page label { font-size:12px; color:var(--ce-text-secondary); }
+.page input,.page select { color:var(--ce-text-primary); background:var(--ce-bg-nav); border-color:var(--ce-border); }
+.page button,.page a { min-height:44px; font-size:13px; }
+.page a { color:var(--ce-violet); }
+@media(max-width:768px) { .page:global(.settings-page) { padding:28px 16px; } .page h1 { font-size:28px; } .page section { padding:20px; } }

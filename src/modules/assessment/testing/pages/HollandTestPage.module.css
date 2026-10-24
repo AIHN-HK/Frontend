@@ -1,0 +1,32 @@
+.page { width:100%; max-width:860px; margin:0 auto; color:var(--ce-text-primary); overflow-wrap:anywhere; }
+.page button,.page a { min-height:44px; }
+.page :global(.btn) { border-radius:8px; padding:12px 20px; }
+.utility { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:24px; color:var(--ce-text-secondary); font-size:12px; }
+.utility a,.back { display:inline-flex; align-items:center; gap:8px; color:var(--ce-text-secondary); text-decoration:none; }
+.welcome h1 { font-size:40px; line-height:1.2; font-weight:500; letter-spacing:-1px; margin:0 0 16px; }
+.description { color:var(--ce-text-secondary); font-size:15px; line-height:1.7; margin:0 0 28px; }
+.stats { display:flex; flex-wrap:wrap; gap:24px 48px; margin:0 0 30px; }
+.stats div { display:grid; gap:8px; }.stats strong { font-size:20px; font-weight:600; }.stats span { font-size:10px; letter-spacing:1px; color:var(--ce-text-secondary); }
+.page .start { width:100%; min-height:54px; background:#fff; border:1px solid #fff; color:#111; justify-content:center; font-weight:600; }
+.page .start:hover { background:#e9e9ee; color:#111; }
+.help,.radarNote { color:var(--ce-text-secondary); font-size:12px; line-height:1.6; }
+.legend { list-style:none; padding:0; margin:16px 0 0; display:grid; grid-template-columns:1fr 1fr; gap:16px 12px; font-size:12px; }
+.legend small { display:block; color:var(--ce-text-secondary); font-size:11px; margin-top:4px; }
+.notice,.error { padding:20px; border:1px solid var(--ce-border); border-radius:12px; background:var(--ce-bg-elevated); margin:16px 0; line-height:1.7; }
+.error { border-color:var(--ce-a); }.notice h1 { font-size:26px; }.notice button { margin:4px; }
+.back { border:0; padding:0; background:none; cursor:pointer; margin-bottom:24px; }
+.questionMeta,.counts { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; font-size:13px; color:var(--ce-text-secondary); }
+.pill { padding:8px 12px; background:var(--ce-c-subtle); color:var(--ce-violet); border:1px solid var(--ce-c-border); border-radius:20px; }
+.progress { height:4px; background:var(--ce-border); border-radius:4px; margin:20px 0 12px; overflow:hidden; }.progress span { display:block; height:100%; background:linear-gradient(90deg,var(--ce-violet),var(--ce-cyan)); }
+.counts { font-size:12px; }
+.question { padding:52px 0 36px; text-align:center; }.question h1 { font-size:30px; font-weight:500; line-height:1.5; margin:0 0 28px; }.question h1:focus { outline:none; }
+.answers { border:0; padding:0; margin:0; min-width:0; }.answers legend { font-size:14px; color:var(--ce-text-secondary); margin-bottom:28px; width:100%; }
+.choices { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.choice { position:relative; display:flex; align-items:center; flex-direction:column; gap:12px; min-width:0; padding:28px 18px; border:1px solid var(--ce-border); border-radius:12px; background:var(--ce-bg-elevated); cursor:pointer; }
+.choice:focus-within { outline:2px solid var(--ce-cyan); outline-offset:4px; }.selected { border-color:var(--ce-violet); background:var(--ce-c-subtle); }
+.choice input { position:absolute; opacity:0; width:1px; height:1px; }.choiceIcon { display:grid; place-items:center; width:40px; height:40px; border-radius:50%; background:var(--ce-glass-subtle); color:var(--ce-violet); font-size:24px; }.choice strong { font-size:16px; font-weight:600; }.choice small { font-size:12px; color:var(--ce-text-secondary); }
+.answers:disabled .choice { cursor:wait; opacity:.65; }
+.nav { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; padding:20px 0; border-top:1px solid var(--ce-border); }.nav button { display:flex; align-items:center; gap:8px; }
+@media(max-width:767px) { .welcome h1 { font-size:30px; }.question h1 { font-size:24px; }.stats { gap:20px; }.stats strong { font-size:17px; }.question { padding:32px 0 24px; }.choices { grid-template-columns:1fr; }.choice { padding:20px 16px; }.nav button { padding:12px; } }
+
+.utility[hidden] { display:none; }

@@ -42,7 +42,7 @@ export const previewRoutes: RouteObject[] = [
   },
   {
     path: paths.previewStudent,
-    lazy: async () => ({ Component: (await import('@/layouts/StudentLayout')).StudentLayout }),
+    lazy: async () => ({ Component: (await import('@/layouts/StudentPreviewLayout')).StudentPreviewLayout }),
     children: [{ index: true, lazy: preview }],
   },
   {
@@ -60,7 +60,7 @@ export const previewRoutes: RouteObject[] = [
   },
   {
     path: paths.previewAuth,
-    lazy: async () => ({ Component: (await import('@/layouts/AuthLayout')).AuthLayout }),
+    lazy: async () => ({ Component: (await import('@/layouts/AuthPreviewLayout')).AuthPreviewLayout }),
     children: [{ index: true, lazy: preview }],
   },
 ];

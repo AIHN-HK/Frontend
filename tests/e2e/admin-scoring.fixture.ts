@@ -1,16 +1,16 @@
 import type { Page } from '@playwright/test';
 import { adminFixture } from './admin.fixture.ts';
-export async function scoringFixture(page: Page, options: { status?: number } = {}, base = true) {
+export async function scoringFixture(page: Page, options: { status?: number; emptyContent?: boolean } = {}, base = true) {
   if (base) await adminFixture(page);
   let priorities = ['R', 'I', 'A', 'S', 'E', 'C'].map((type, i) => ({ id: i + 1, type, priority: i + 1 }));
   const codes = priorities.map((p) => ({
       id: p.id,
       code: p.type,
       title: `Nhóm ${p.type}`,
-      personality: ['Tính cách mẫu'],
-      strengths: ['Điểm mạnh mẫu'],
-      weaknesses: ['Điểm cần cải thiện'],
-      careers: ['Nghề tham khảo'],
+      personality: options.emptyContent ? [] : ['Tính cách mẫu'],
+      strengths: options.emptyContent ? [] : ['Điểm mạnh mẫu'],
+      weaknesses: options.emptyContent ? [] : ['Điểm cần cải thiện'],
+      careers: options.emptyContent ? [] : ['Nghề tham khảo'],
     })),
     writes: unknown[] = [];
   await page.route(
