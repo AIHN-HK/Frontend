@@ -8,6 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { ApiError } from '@/shared/api/api-error';
 import { paths } from '@/routes/paths';
 import { useAuth } from '../../model/useAuth';
+import { withAuthReturn } from '../../model/post-login-path';
 import { loginSchema } from '../model/login.schema';
 import type { LoginForm } from '../model/login.schema';
 import styles from './LoginPage.module.css';
@@ -31,6 +32,7 @@ export function LoginPage() {
   return <div ref={root} className={`${authStyles.page} ${styles.page}`}>
     {(location.state as { registrationComplete?: unknown } | null)?.registrationComplete === true && <p role="status">Đăng ký thành công. Vui lòng đăng nhập để tiếp tục.</p>}
     {(location.state as { passwordResetComplete?: unknown } | null)?.passwordResetComplete === true && <p role="status">Đặt lại mật khẩu thành công. Vui lòng đăng nhập bằng mật khẩu mới.</p>}
+    {new URLSearchParams(location.search).get('returnTo')?.startsWith(paths.guestAssessmentClaim) && <p role="note">Đăng nhập hoặc tạo tài khoản để lưu bài Holland vừa làm và tiếp tục tính năng bạn đã chọn. Kết quả vẫn được giữ trong tab này.</p>}
     <div className="login-intro" data-ce-enter="">
       <span className="brand-badge" aria-hidden="true">AI</span>
       <h1>Đăng nhập AIHN</h1>
@@ -47,7 +49,7 @@ export function LoginPage() {
         {errors.email && <p className="field-error" id="login-email-error">{errors.email.message}</p>}
       </div>
       <div className="field">
-        <div className="login-password-label"><label htmlFor="login-password">Mật khẩu</label><Link to={paths.forgotPassword}>Quên mật khẩu?</Link></div>
+        <div className="login-password-label"><label htmlFor="login-password">Mật khẩu</label><Link to={withAuthReturn(paths.forgotPassword, location.search)}>Quên mật khẩu?</Link></div>
         <div className="login-password-input">
           <AuthInput id="login-password" type={visible ? 'text' : 'password'} autoComplete="current-password" placeholder="••••••••" aria-invalid={!!errors.password} aria-describedby={errors.password ? 'login-password-error' : undefined} control={control} name="password" />
           <Button htmlType="button" aria-label={visible ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'} aria-pressed={visible} onClick={() => setVisible(value => !value)}>{visible ? 'Ẩn' : 'Hiện'}</Button>
@@ -62,7 +64,7 @@ export function LoginPage() {
       <Button className="btn btn-primary login-submit" htmlType="submit" disabled={isSubmitting}>{isSubmitting ? 'Đang đăng nhập…' : 'Đăng nhập vào Trang của tôi →'}</Button>
     </form>
     <div className={styles.oauth}><span>hoặc</span><Button disabled>Đăng nhập với Google</Button><p>Đăng nhập Google chưa được hỗ trợ.</p></div>
-    <p className="login-signup">Chưa có tài khoản sinh viên? <Link to={paths.signup}>Đăng ký miễn phí</Link></p>
+    <p className="login-signup">Chưa có tài khoản sinh viên? <Link to={withAuthReturn(paths.signup, location.search)}>Đăng ký miễn phí</Link></p>
     <div className="login-home"><Link to={paths.home}>← Về trang chủ</Link></div>
   </div>;
 }

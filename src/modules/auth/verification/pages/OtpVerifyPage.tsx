@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
-import { Link, useNavigate, useNavigation } from 'react-router';
+import { Link, useLocation, useNavigate, useNavigation } from 'react-router';
 import { paths } from '@/routes/paths';
 import { ApiError } from '@/shared/api/api-error';
 import { useHttpClient } from '@/shared/api/api-context';
 import { session, useSession } from '@/shared/session/session';
 import { resendOtp, verifyOtp } from '../../api/auth.api';
 import { registrationDraft } from '../../model/registration-draft';
+import { withAuthReturn } from '../../model/post-login-path';
 import { recoveryState } from '../../model/recovery-state';
 import { Button, Input } from 'antd';
 import { usePageEntrance } from '@/shared/ui/ce/usePageEntrance';
@@ -16,6 +17,7 @@ const readFlow = () => recoveryState.read() ?? registrationDraft.read();
 
 export function OtpVerifyPage(): React.JSX.Element {
   const http = useHttpClient(), navigate = useNavigate(), navigation = useNavigation();
+  const location = useLocation();
   const currentSession = useSession();
   const leaving = navigation.state !== 'idle' && navigation.location.pathname !== paths.verifyOtp;
   const [flow, setFlow] = useState(readFlow), [digits, setDigits] = useState<string[]>(Array<string>(6).fill(''));
@@ -77,9 +79,9 @@ export function OtpVerifyPage(): React.JSX.Element {
         if (!valid()) return;
         if (flow.purpose === 'registration') {
           setCompleted(true); registrationDraft.clear();
-          await navigate(paths.login, { replace: true, state: { registrationComplete: true } });
+          await navigate(withAuthReturn(paths.login, location.search), { replace: true, state: { registrationComplete: true } });
         } else if (recoveryState.verify(otp, flow.revision)) {
-          setCompleted(true); await navigate(paths.resetPassword);
+          setCompleted(true); await navigate(withAuthReturn(paths.resetPassword, location.search));
         } else setError('Thông tin khôi phục đã hết hạn. Vui lòng bắt đầu lại.');
       }
     } catch (failure) {
@@ -140,8 +142,8 @@ export function OtpVerifyPage(): React.JSX.Element {
       <Button className="btn btn-primary otp-submit" htmlType="submit" disabled={locked || !/^\d{6}$/.test(otp)}>{busy === 'verify' ? 'Đang xác nhận…' : recovery ? 'Xác nhận mã' : 'Xác nhận đăng ký'}<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><polyline points="20 6 9 17 4 12" /></svg></Button>
     </form>
     <div className="otp-footer">
-      <Link to={recovery ? paths.forgotPassword : paths.signup}>{recovery ? 'Thay đổi địa chỉ email' : 'Trở lại đăng ký'}</Link>
-      <Link to={paths.login}>Đăng nhập</Link>
+      <Link to={withAuthReturn(recovery ? paths.forgotPassword : paths.signup, location.search)}>{recovery ? 'Thay đổi địa chỉ email' : 'Trở lại đăng ký'}</Link>
+      <Link to={withAuthReturn(paths.login, location.search)}>Đăng nhập</Link>
     </div>
   </div>;
 }

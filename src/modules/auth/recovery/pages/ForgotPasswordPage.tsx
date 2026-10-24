@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Link, useNavigate, useNavigation } from 'react-router';
+import { Link, useLocation, useNavigate, useNavigation } from 'react-router';
 import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { paths } from '@/routes/paths';
@@ -12,6 +12,7 @@ import { usePageEntrance } from '@/shared/ui/ce/usePageEntrance';
 import { RecoverySteps } from '../components/RecoverySteps';
 import { sendRecoveryOtp } from '../../api/auth.api';
 import { recoveryState } from '../../model/recovery-state';
+import { withAuthReturn } from '../../model/post-login-path';
 import { recoveryEmailSchema } from '../model/reset-password.schema';
 import type { RecoveryEmailForm } from '../model/reset-password.schema';
 import { useRecoveryState } from '../model/useRecoveryState';
@@ -21,6 +22,7 @@ import authStyles from '../../components/AuthScreen.module.css';
 export function ForgotPasswordPage(): React.JSX.Element {
   const http = useHttpClient();
   const navigate = useNavigate();
+  const location = useLocation();
   const navigation = useNavigation();
   const currentSession = useSession();
   const { flow, now } = useRecoveryState();
@@ -57,7 +59,7 @@ export function ForgotPasswordPage(): React.JSX.Element {
     try {
       await sendRecoveryOtp(http, fields.email, controller.signal);
       if (!valid()) return;
-      if (recoveryState.resent(revision)) await navigate(paths.verifyOtp);
+      if (recoveryState.resent(revision)) await navigate(withAuthReturn(paths.verifyOtp, location.search));
     } catch (failure) {
       if (!valid()) return;
       const unknown = failure instanceof ApiError && failure.outcomeUnknown;
@@ -92,6 +94,6 @@ export function ForgotPasswordPage(): React.JSX.Element {
       <Button className="btn btn-primary recovery-submit" htmlType="submit" disabled={isSubmitting || leaving || wait > 0}>{isSubmitting ? 'Đang gửi OTP…' : 'Gửi mã OTP'} <span aria-hidden="true">→</span></Button>
       {!isSubmitting && flow?.email === email && <Link className="recovery-link" to={paths.verifyOtp}>Tôi đã nhận mã OTP</Link>}
     </form>
-    <div className="recovery-footer"><span>Đã nhớ ra mật khẩu?</span><Link to={paths.login}>Quay lại đăng nhập</Link></div>
+    <div className="recovery-footer"><span>Đã nhớ ra mật khẩu?</span><Link to={withAuthReturn(paths.login, location.search)}>Quay lại đăng nhập</Link></div>
   </div>;
 }

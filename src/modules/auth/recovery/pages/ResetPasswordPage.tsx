@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Link, useNavigate, useNavigation } from 'react-router';
+import { Link, useLocation, useNavigate, useNavigation } from 'react-router';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { paths } from '@/routes/paths';
@@ -12,6 +12,7 @@ import { usePageEntrance } from '@/shared/ui/ce/usePageEntrance';
 import { RecoverySteps } from '../components/RecoverySteps';
 import { resetPassword } from '../../api/auth.api';
 import { recoveryState } from '../../model/recovery-state';
+import { withAuthReturn } from '../../model/post-login-path';
 import { resetPasswordSchema } from '../model/reset-password.schema';
 import type { ResetPasswordForm } from '../model/reset-password.schema';
 import { useRecoveryState } from '../model/useRecoveryState';
@@ -21,6 +22,7 @@ import authStyles from '../../components/AuthScreen.module.css';
 export function ResetPasswordPage(): React.JSX.Element {
   const http = useHttpClient();
   const navigate = useNavigate();
+  const location = useLocation();
   const navigation = useNavigation();
   const currentSession = useSession();
   const { flow } = useRecoveryState();
@@ -53,7 +55,7 @@ export function ResetPasswordPage(): React.JSX.Element {
       await resetPassword(http, { email: credential.email, otp: credential.verifiedOtp, newPassword: fields.newPassword }, controller.signal);
       if (!valid()) return;
       setCompleted(true); recoveryState.clear(); reset({ newPassword: '', confirmPassword: '' });
-      await navigate(paths.login, { replace: true, state: { passwordResetComplete: true } });
+      await navigate(withAuthReturn(paths.login, location.search), { replace: true, state: { passwordResetComplete: true } });
     } catch (failure) {
       if (!valid()) return;
       const message = failure instanceof ApiError ? failure.message : 'Không thể đặt lại mật khẩu.';
@@ -69,8 +71,8 @@ export function ResetPasswordPage(): React.JSX.Element {
     <span className="brand-badge" aria-hidden="true">AI</span>
     <h1>Không thể đặt lại mật khẩu</h1>
     <p role="status">Thông tin khôi phục chưa được xác thực, đã hết hạn hoặc đã mất khi tải lại trang.</p>
-    <Link className="btn btn-primary recovery-submit" to={paths.forgotPassword}>Bắt đầu khôi phục lại</Link>
-    <Link className="recovery-link" to={paths.login}>Quay lại đăng nhập</Link>
+    <Link className="btn btn-primary recovery-submit" to={withAuthReturn(paths.forgotPassword, location.search)}>Bắt đầu khôi phục lại</Link>
+    <Link className="recovery-link" to={withAuthReturn(paths.login, location.search)}>Quay lại đăng nhập</Link>
   </div>;
 
   return <div ref={root} className={`${authStyles.page} ${styles.page}`}>
@@ -98,6 +100,6 @@ export function ResetPasswordPage(): React.JSX.Element {
       <Button className="btn btn-primary recovery-submit" htmlType="submit" disabled={isSubmitting || leaving}>{isSubmitting ? 'Đang đặt lại…' : 'Đặt lại mật khẩu'}</Button>
       <Link className="recovery-link" to={paths.verifyOtp}>Xác thực lại mã OTP</Link>
     </form>
-    <div className="recovery-footer"><Link to={paths.forgotPassword}>Bắt đầu khôi phục lại</Link><Link to={paths.login}>Quay lại đăng nhập</Link></div>
+    <div className="recovery-footer"><Link to={withAuthReturn(paths.forgotPassword, location.search)}>Bắt đầu khôi phục lại</Link><Link to={withAuthReturn(paths.login, location.search)}>Quay lại đăng nhập</Link></div>
   </div>;
 }

@@ -1,4 +1,4 @@
-import type { Page } from '@playwright/test';
+import { expect, type Page } from '@playwright/test';
 import { analysisData, resultData, snapshotData } from './result.fixture';
 
 export const guestId = '2e0a792e-5522-4d3a-839e-2405c34e98e9';
@@ -17,7 +17,7 @@ export async function guestFixture(page: Page, options: GuestOptions = {}) {
     const headers = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': '*', 'Access-Control-Allow-Methods': '*' };
     if (method === 'OPTIONS') { await route.fulfill({ status: 204, headers }); return; }
     calls.push({ path, method, body: request.postDataJSON() as unknown });
-    const user = { id: options.owner ?? 71, fullname: `Học sinh ${options.owner ?? 71}`, role: 'USER' };
+    const user = { id: options.owner ?? 71, fullname: `Học sinh ${options.owner ?? 71}`, email: 'guest@example.test', role: 'USER' };
     let data: unknown = user, status = 200;
     if (path.endsWith('/question')) data = { questions: Object.fromEntries(guestQuestions.map(q => [q.type, { 'Sở thích': [q] }])) };
     if (path.endsWith('/guest-assessment/catalog')) data = { id: guestId, catalogToken: 'signed-catalog-fixture', expiresAt: options.catalogExpired ? Date.now() - 1000 : Date.now() + 86400000, questions: guestQuestions };
@@ -33,7 +33,7 @@ export async function guestFixture(page: Page, options: GuestOptions = {}) {
     }
     if (path.endsWith(`/guest-assessment/claim/${guestId}`)) { status = options.claimed ? 200 : 404; data = { attemptId: 812 }; }
     if (path.endsWith('/login')) { status = 201; data = { user, accessToken: 'guest-access', refreshToken: 'guest-refresh' }; }
-    if (path.endsWith('/auth/send-otp') || path.endsWith('/auth/register')) { status = 201; data = { sent: true }; }
+    if (path.startsWith('/api/v1/auth/register')) { status = 201; data = path.endsWith('/register') ? { user } : { sent: true }; }
     if (path.endsWith('/auth/me')) data = user;
     if (path.endsWith('/users/me')) data = { fullname: user.fullname, email: 'guest@example.test', class: null, phone: null, address: null, gender: null };
     if (path.endsWith('/history-by-user')) data = { formattedHistory: options.claimed ? [{ attemptId: 812, finishAt: '24/10/2026', analyzeType: 'NORMAL', primaryAnalyze: null }] : [] };
@@ -44,4 +44,12 @@ export async function guestFixture(page: Page, options: GuestOptions = {}) {
     await route.fulfill({ status, headers, json: { status, data } });
   });
   return { calls, options };
+}
+
+export async function completeGuest(page: Page) {
+  await page.goto('/assessment'); await page.getByRole('button', { name: 'Bắt đầu bài trắc nghiệm', exact: true }).click();
+  await page.getByRole('radio', { name: 'Có — Tôi thích', exact: true }).check(); await page.getByRole('button', { name: 'Tiếp theo', exact: true }).click();
+  await page.getByRole('radio', { name: 'Không — Tôi không thích', exact: true }).check(); await page.getByRole('button', { name: 'Tiếp theo', exact: true }).click();
+  await page.getByRole('radio', { name: 'Không — Tôi không thích', exact: true }).check(); await page.getByRole('button', { name: 'Xem tổng kết RIASEC', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'TopCode: ISC', exact: true })).toBeVisible();
 }

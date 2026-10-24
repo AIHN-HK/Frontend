@@ -1,13 +1,5 @@
-import { expect, test, type Page } from '@playwright/test';
-import { guestFixture } from './guest-assessment.fixture';
-
-export async function completeGuest(page: Page) {
-  await page.goto('/assessment'); await page.getByRole('button', { name: 'Bắt đầu bài trắc nghiệm', exact: true }).click();
-  await page.getByRole('radio', { name: 'Có — Tôi thích', exact: true }).check(); await page.getByRole('button', { name: 'Tiếp theo', exact: true }).click();
-  await page.getByRole('radio', { name: 'Không — Tôi không thích', exact: true }).check(); await page.getByRole('button', { name: 'Tiếp theo', exact: true }).click();
-  await page.getByRole('radio', { name: 'Không — Tôi không thích', exact: true }).check(); await page.getByRole('button', { name: 'Xem tổng kết RIASEC', exact: true }).click();
-  await expect(page.getByRole('heading', { name: 'TopCode: ISC', exact: true })).toBeVisible();
-}
+import { expect, test } from '@playwright/test';
+import { guestFixture, completeGuest } from './guest-assessment.fixture';
 test('guest completes and reloads full RIASEC without registration or private writes', async ({ page }) => {
   const { calls } = await guestFixture(page); await completeGuest(page);
   await expect(page).toHaveURL('/assessment/guest-result');

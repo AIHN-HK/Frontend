@@ -18,3 +18,17 @@ export async function previewGuestAssessment(http: AxiosInstance, draft: GuestDr
   if (!parsed.success || parsed.data.data.id !== draft.catalog.id) throw new ApiError('configuration', 'Chưa xác nhận được tổng kết RIASEC. Đáp án vẫn được giữ.');
   return parsed.data.data;
 }
+
+const claimEnvelope = z.object({ status: z.literal(200), data: z.object({ attemptId: z.number().int().positive() }) });
+export async function claimGuestAssessment(http: AxiosInstance, receipt: string, signal: AbortSignal) {
+  const response = await http.post<unknown>('/api/v1/guest-assessment/claim', { receipt }, { signal });
+  const parsed = claimEnvelope.safeParse(response.data);
+  if (!parsed.success) throw new ApiError('configuration', 'Chưa xác nhận bài đã lưu.', undefined, true);
+  return parsed.data.data;
+}
+export async function lookupGuestClaim(http: AxiosInstance, id: string, signal: AbortSignal) {
+  const response = await http.get<unknown>(`/api/v1/guest-assessment/claim/${encodeURIComponent(id)}`, { signal });
+  const parsed = claimEnvelope.safeParse(response.data);
+  if (!parsed.success) throw new ApiError('configuration', 'Chưa kiểm tra được bài đã lưu.');
+  return parsed.data.data;
+}
