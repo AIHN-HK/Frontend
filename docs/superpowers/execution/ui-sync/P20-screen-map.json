@@ -1,0 +1,206 @@
+{
+  "source_root": "/home/hoang/open-design/.od/projects/183966d9-0488-4ad3-ac9e-57774fc5a6ab",
+  "source_html_count": 23,
+  "mapped_runtime_page_count": 24,
+  "capture_widths": [
+    390,
+    768,
+    1440
+  ],
+  "rows": [
+    {
+      "source": "screens/home.html",
+      "route": "/",
+      "runtime": "src/modules/public/pages/HomePage.tsx",
+      "status": "ported",
+      "difference": "10 editorial sections; sample data is explicitly illustrative.",
+      "source_sha256": "c7725f053cee327841c8e56ec07e6e7f46e4d348136d4c4e5c641d685320a0aa"
+    },
+    {
+      "source": "screens/holland-test.html",
+      "route": "/assessment",
+      "runtime": "src/modules/assessment/testing/pages/HollandTestPage.tsx",
+      "status": "gap-P21",
+      "difference": "Old light UI, no source welcome/carousel/sidebar; question UI still old; hardcoded group ranges.",
+      "source_sha256": "5b7a63593c536a183d6f43acfb23d4b404a24db0038f392581d2ff057233715b"
+    },
+    {
+      "source": "screens/assessment-result.html",
+      "route": "/assessment/results/:attemptId",
+      "runtime": "src/modules/assessment/results/pages/AssessmentResultPage.tsx",
+      "status": "ported",
+      "difference": "Owned saved result and snapshot-normalized bars; sample analysis/PDF omitted when unsupported.",
+      "source_sha256": "fc691a4c8492136c895d6b464816afe924738ca2f9bf3af44f253235a1591b96"
+    },
+    {
+      "source": "screens/dashboard.html",
+      "route": "/dashboard",
+      "runtime": "src/modules/dashboard/pages/DashboardPage.tsx",
+      "status": "gap-P24",
+      "difference": "Generic goal banner/action cards; real analytics are below rather than source summary positions.",
+      "source_sha256": "14a5e24696dcf7549a81e10a2d73b40a3e5f04d171ff311f692d5162871a18b3"
+    },
+    {
+      "source": "screens/recommendations.html",
+      "route": "/recommendations",
+      "runtime": "src/modules/career-platform/pages/CareerRecommendationsPage.tsx",
+      "status": "gap-P23",
+      "difference": "Source card grid present with real runs; sidebar radar replaced by result link.",
+      "source_sha256": "710f771c55d27b29b8aa0b18154095b31e9f1a5ba34586258b90f469aa38f08f"
+    },
+    {
+      "source": "screens/recommendation-detail.html",
+      "route": "/recommendations/:runId?careerId=...",
+      "runtime": "src/modules/career-platform/pages/CareerRecommendationDetailPage.tsx",
+      "status": "gap-P23",
+      "difference": "Exact career/run selection and showcase present; sidebar radar replaced by result link.",
+      "source_sha256": "0788593a592e66e60c6fb5e6c64a1d5f36e22ed10e43acca677d1ebb7e4937da"
+    },
+    {
+      "source": "screens/career-explorer.html",
+      "route": "/careers",
+      "runtime": "src/modules/career-platform/pages/CareerCatalogPage.tsx",
+      "status": "ported",
+      "difference": "Real catalog/search/group/pagination; no sample salary or personal match percentages.",
+      "source_sha256": "6c5504a14c3c85fee216a1cfd43d1c29253da7f73249199a43bd1010186c0b6f"
+    },
+    {
+      "source": "screens/career-detail.html",
+      "route": "/careers/:careerId",
+      "runtime": "src/modules/career-platform/pages/CareerRuntimeDetailPage.tsx",
+      "status": "ported",
+      "difference": "Source hero, raw occupational RIASEC and skills; VN salary/market/degree fields explicitly unavailable.",
+      "source_sha256": "f74175c146fc2acd2ee04822a7149d7f040286cad863b3330dd0e7c53ec38815"
+    },
+    {
+      "source": "screens/career-profile.html",
+      "route": "/career-profile",
+      "runtime": "src/modules/profile/pages/CareerProfilePage.tsx",
+      "status": "gap-P22",
+      "difference": "Editor/avatar present; missing source-style account/result/metrics overview.",
+      "source_sha256": "8fe4ec147c3ba12630dfb4022e4ad90c1d025b060d5993cb00988bc905c7e474"
+    },
+    {
+      "source": "screens/roadmap.html",
+      "route": "/roadmap",
+      "runtime": "src/modules/career-platform/pages/CareerRoadmapPage.tsx",
+      "status": "gap-P23",
+      "difference": "Real tasks/timeline present; no mini RIASEC result in sidebar.",
+      "source_sha256": "d1b5ee7afdb544bd9ec09b395c7959567f684cdb91803a98af22794d829d0287"
+    },
+    {
+      "source": "screens/advisor.html",
+      "route": "/advisor",
+      "runtime": "src/modules/advisor/pages/AdvisorPage.tsx",
+      "status": "adapted",
+      "difference": "Chat layout/live/history/composer present; no invented initial greeting, conversation or unsupported context.",
+      "source_sha256": "97e96a832c51959e6b02cd2d52f9babcc2fef8fb7b84447c9857169b93b1c08a"
+    },
+    {
+      "source": "screens/history.html",
+      "route": "/history",
+      "runtime": "src/modules/history/pages/HistoryPage.tsx",
+      "status": "adapted",
+      "difference": "Two real history sources; viewed/saved-career/roadmap mock activity has no event contract.",
+      "source_sha256": "55e467d3e0046102e0075e3a5c639c9b30d0e3391cf32bdf1fcbc9a6f9c0b23b"
+    },
+    {
+      "source": "screens/settings.html",
+      "route": "/settings",
+      "runtime": "src/modules/settings/pages/SettingsPage.tsx",
+      "status": "adapted",
+      "difference": "Real read-only account and device settings; unsupported notification/security/delete controls explained.",
+      "source_sha256": "4ab173597bfdd21ac2cc4e37bd19aaddc23532105e7ea8af360e6d3506ccef2e"
+    },
+    {
+      "source": "screens/login.html",
+      "route": "/login",
+      "runtime": "src/modules/auth/login/pages/LoginPage.tsx",
+      "status": "ported",
+      "difference": "Dark auth card and real login lifecycle; Google explicitly unavailable.",
+      "source_sha256": "22ff4c1961b5bbb3824305ed6d0c071b4e8bfeaaf8da9b14d714e5dc62c2e929"
+    },
+    {
+      "source": "screens/signup.html",
+      "route": "/signup",
+      "runtime": "src/modules/auth/registration/pages/SignupPage.tsx",
+      "status": "adapted",
+      "difference": "Dark card; required birthday/password fields reflect real contract, not prototype split-name/role fields.",
+      "source_sha256": "5de53057989dd1ec4234e6b71795cf276bcd1fff34f4f16b8378d2412fbe1fae"
+    },
+    {
+      "source": "screens/otp-verify.html",
+      "route": "/otp-verify",
+      "runtime": "src/modules/auth/verification/pages/OtpVerifyPage.tsx",
+      "status": "ported",
+      "difference": "Six controlled digits, memory-only handoff, resend/cooldown; signup and recovery modes.",
+      "source_sha256": "61dc98bb24615f89d47a602505c1c6217db4556cc47661a94536af4155483566"
+    },
+    {
+      "source": "screens/forgot-reset-password.html",
+      "route": "/forgot-password + /reset-password",
+      "runtime": "src/modules/auth/recovery/pages/ForgotPasswordPage.tsx + ResetPasswordPage.tsx",
+      "status": "ported",
+      "difference": "Two guarded recovery pages plus shared OTP handoff; actual verified credentials.",
+      "source_sha256": "2b78dcfdd49f8eb4648e98231619103205c386a288aa3db1cf2a33f98e8e3665"
+    },
+    {
+      "source": "admin/overview.html",
+      "route": "/admin",
+      "runtime": "src/modules/admin/overview/pages/OverviewPage.tsx",
+      "status": "adapted-admin",
+      "difference": "Light admin shell and actual counts/recent attempts. Prototype trends/activity logs/system health have no contract; not pixel parity.",
+      "source_sha256": "70ae8d28804c8952e360a6c2466d6f538dab25b851db5a8a3c466c13a15214b0"
+    },
+    {
+      "source": "admin/questions.html",
+      "route": "/admin/questions",
+      "runtime": "src/modules/admin/questions/pages/QuestionsPage.tsx",
+      "status": "adapted-admin",
+      "difference": "Actual search/group/editor/usage locks. No prototype weights, bulk status/delete or export contract; not pixel parity.",
+      "source_sha256": "35f629da614ce1e005a78cff95205f48c8800cf3565332bfdd5df0954b9e80a2"
+    },
+    {
+      "source": "admin/scoring-config.html",
+      "route": "/admin/scoring",
+      "runtime": "src/modules/admin/scoring/pages/ScoringConfigPage.tsx",
+      "status": "adapted-admin",
+      "difference": "Actual tie priorities and separate Holland content editor. No threshold/weight/Likert simulator contract; not pixel parity.",
+      "source_sha256": "ff9a8ef3bc20e93cef21e71ca4cc699960d5290ff8c38b8185287a55595d17fb"
+    },
+    {
+      "source": "admin/careers.html",
+      "route": "/admin/careers",
+      "runtime": "src/modules/career-platform/pages/AdminCareerDataPage.tsx",
+      "status": "adapted-admin",
+      "difference": "Real catalog/source/skill/revision/publish flow. Source prototype table has fields/actions absent from current dataset; not pixel parity.",
+      "source_sha256": "5b9d975b2d97540f6d6bb7c4df862e0e06c9d91ba364e36f16facd0b1810fc37"
+    },
+    {
+      "source": "admin/students.html",
+      "route": "/admin/students",
+      "runtime": "src/modules/admin/students/pages/StudentsPage.tsx",
+      "status": "adapted-admin",
+      "difference": "Real server search/list/detail/pagination; no fake progress, matching, arbitrary status or export fields; not pixel parity.",
+      "source_sha256": "89b848a0adee9febe4fbe606aac44d6a836e915d7f72215709aacdb56db7c4c1"
+    },
+    {
+      "source": "admin/student-detail.html",
+      "route": "/admin/students/:studentId",
+      "runtime": "src/modules/admin/students/pages/StudentDetailPage.tsx",
+      "status": "adapted-admin",
+      "difference": "Actual account/completed results and explicit unavailable AI layers; no fake recommendation/chat/support actions; not pixel parity.",
+      "source_sha256": "f8ef1dffc5215da2d3eb0558d29d5c844ecf42a0a0a5c71ed8da447a261c2c7a"
+    }
+  ],
+  "aliases_not_missing_screens": [
+    "index.html duplicates screens/home.html",
+    "/preview/home aliases /",
+    "/verify-otp aliases /otp-verify"
+  ],
+  "archived_not_active": [
+    "archive_experiments/screens/careerexplorer-assessment.html",
+    "archive_experiments/screens/holland-test-palette-version.html"
+  ],
+  "extra_runtime_route": "/admin/holland-content"
+}
