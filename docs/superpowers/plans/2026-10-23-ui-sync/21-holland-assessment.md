@@ -1,6 +1,6 @@
 # P21 — Port Holland welcome and question states
 
-**Status:** Pending.
+**Status:** Completed.
 
 **Commit:** `feat(ui): port Holland assessment welcome and questions`.
 

@@ -33,6 +33,6 @@ export function RoutePending() {
 export function RootRoute() {
   const navigation = useNavigation();
   const { pathname } = useLocation();
-  const careerShell = /^\/(dashboard|career-profile|assessment\/results|history|advisor|careers|recommendations|roadmap|settings)(\/|$)/.test(pathname);
+  const careerShell = /^\/(dashboard|career-profile|assessment|history|advisor|careers|recommendations|roadmap|settings)(\/|$)/.test(pathname);
   return <>{!careerShell && <AccountControls />}{navigation.state === 'loading' && <div className="route-progress" role="status">Đang tải…</div>}<Outlet /></>;
 }
