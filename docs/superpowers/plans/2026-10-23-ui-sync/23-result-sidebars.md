@@ -1,6 +1,6 @@
 # P23 — Complete owned result mini radars
 
-**Status:** Pending.
+**Status:** Completed.
 
 **Commit:** `feat(ui): render owned RIASEC sidebar summaries`.
 

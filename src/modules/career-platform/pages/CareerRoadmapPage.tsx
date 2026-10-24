@@ -1,3 +1,4 @@
+import { LatestRiasecSummary } from '@/modules/assessment';
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import { z } from "zod";
@@ -55,7 +56,7 @@ export function CareerRoadmapPage() {
       {id:'target',title:'Nghề mục tiêu',description:target ?? 'Chọn nghề trong hồ sơ',status:target?'completed':'pending'},
       {id:'profile',title:'Hồ sơ kỹ năng',description:'Tự đánh giá và đọc khoảng cách',status:profile.data?.skills.length?'completed':'pending'},
       {id:'roadmap',title:'Lộ trình',description:'Tiến độ có minh chứng do bạn xác nhận',status:'active'},
-    ]}/>}>
+    ]} radar={<LatestRiasecSummary compact />} />}>
       <p>
         Lộ trình được tạo từ nghề mục tiêu và khoảng cách kỹ năng tại thời điểm
         tạo. Tiến độ là việc bạn tự xác nhận có minh chứng, chưa phải chứng nhận

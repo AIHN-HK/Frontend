@@ -1,3 +1,4 @@
+import { OwnedRiasecSummary } from '@/modules/assessment';
 import { Link, useParams, useSearchParams } from 'react-router';
 import { paths } from '@/routes/paths';
 import { useSession } from '@/shared/session/session';
@@ -24,7 +25,7 @@ export function CareerRecommendationDetailPage() {
     {id:'career',title:'Chi tiết nghề',description:'Đọc điểm và khoảng cách kỹ năng',status:'active'},
     {id:'target',title:'Chọn mục tiêu',description:'Lưu chủ động trong hồ sơ',status:'pending'},
     {id:'roadmap',title:'Lộ trình',description:'Phát triển từng bước',status:'pending'},
-  ]} radar={run ? <Link to={paths.assessmentResult(run.attemptId)}>Mở kết quả Holland #{run.attemptId}</Link> : undefined}/> }>
+  ]} radar={run ? <OwnedRiasecSummary attemptId={run.attemptId} compact /> : undefined}/> }>
     <nav className={styles.breadcrumb} aria-label="Đường dẫn"><Link to={paths.recommendations}>Gợi ý nghề nghiệp</Link><span aria-hidden="true">›</span><span>{selected?.title ?? 'Bản gợi ý đã lưu'}</span></nav>
     {!valid ? <p role="alert">Mã bản gợi ý không hợp lệ.</p> : <ReadState pending={result.isPending} error={result.isError} retry={() => void result.refetch()}/>}
     {valid && result.isSuccess && !run && <p role="alert">Không tìm thấy bản gợi ý đã lưu.</p>}

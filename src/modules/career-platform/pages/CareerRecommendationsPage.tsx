@@ -1,3 +1,5 @@
+import { OwnedRiasecSummary } from '@/modules/assessment';
+import { useSession } from '@/shared/session/session';
 import { useState } from 'react';
 import { TimelineSidebar } from '@/shared/ui/ce/TimelineSidebar';
 import styles from './CareerRecommendationsPage.module.css';
@@ -34,13 +36,16 @@ export function CareerRecommendationsPage() {
     true,
   );
   const latest = history.data?.[0];
+  const current = useSession();
+  const run = result.data && result.data.userId === current.user?.id && (!recommendationId || result.data.id === recommendationId) ? result.data : null;
+  const mismatched = Boolean(result.data && !run);
   return (
-    <PlatformFrame title="Gợi ý nghề nghiệp có giải thích" className={styles.page} animationKey={result.data?.id} sidebar={<TimelineSidebar steps={[
-        {id:'result',title:'Holland',description:'Kết quả đầu vào',status:result.data?'completed':'pending'},
+    <PlatformFrame title="Gợi ý nghề nghiệp có giải thích" className={styles.page} animationKey={run?.id} sidebar={<TimelineSidebar steps={[
+        {id:'result',title:'Holland',description:'Kết quả đầu vào',status:run?'completed':'pending'},
         {id:'recommendations',title:'Gợi ý nghề',description:'Khám phá và so sánh',status:'active'},
         {id:'target',title:'Chọn mục tiêu',description:'Lưu chủ động trong hồ sơ',status:'pending'},
         {id:'roadmap',title:'Lộ trình',description:'Phát triển kỹ năng',status:'pending'},
-      ]} radar={result.data ? <Link to={paths.assessmentResult(result.data.attemptId)}>Mở bản đồ RIASEC của lần làm #{result.data.attemptId}</Link> : <p>Bản đồ RIASEC sẽ có trong kết quả Holland đã lưu.</p>}/>}>
+      ]} radar={run ? <OwnedRiasecSummary attemptId={run.attemptId} compact /> : <p>Bản đồ RIASEC sẽ có trong kết quả Holland đã lưu.</p>}/>}>
       <p>
         Khám phá nghề từ kết quả Holland và hồ sơ đã lưu của bạn. Điểm xếp
         hạng giúp so sánh các nghề, không phải xác suất thành công.
@@ -95,11 +100,12 @@ export function CareerRecommendationsPage() {
         </section>
       )}
       <div className={styles.filters} aria-label="Lọc bản gợi ý">{([['all','Tất cả'],['scored','Có điểm xếp hạng'],['missing','Cần bổ sung dữ liệu']] as const).map(([value,label]) => <Button key={value} variant="secondary" aria-pressed={filter===value} onClick={() => setFilter(value)}>{label}</Button>)}</div>
-      {result.data && !result.data.items.some(item => filter==='all'||(filter==='scored'&&item.score!==null)||(filter==='missing'&&item.missing.length>0)) && <p role="status">Không có gợi ý phù hợp với bộ lọc này.</p>}
-      {result.isSuccess && !result.data && <p>Chưa có bản gợi ý đã lưu.</p>}
-      {result.data && (
+      {mismatched && <p role="alert">Bản gợi ý không khớp tài khoản hoặc mã được yêu cầu.</p>}
+      {run && !run.items.some(item => filter==='all'||(filter==='scored'&&item.score!==null)||(filter==='missing'&&item.missing.length>0)) && <p role="status">Không có gợi ý phù hợp với bộ lọc này.</p>}
+      {result.isSuccess && !run && !mismatched && <p>Chưa có bản gợi ý đã lưu.</p>}
+      {run && (
         <ExplainedRun
-          run={result.data}
+          run={run}
           currentRevision={profile.data?.revision}
           filter={filter}
         />
