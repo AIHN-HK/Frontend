@@ -261,19 +261,22 @@ test('runtime catalog fits breakpoints, has one shell and keeps source cards vis
   expect(errors).toEqual([]);
 });
 
-test('runtime catalog returns to the guarded filtered URL after login', async ({ page }) => {
-  const { resultFixture } = await import('./result.fixture');
-  await resultFixture(page, { authenticated: false });
+test('guests can open and reload a filtered catalog without personal requests', async ({ page }) => {
   const fixture = await careerPlatformFixture(page, { anonymous: true });
+  const requests: string[] = [];
+  page.on('request', request => {
+    if (['fetch', 'xhr', 'websocket'].includes(request.resourceType())) requests.push(new URL(request.url()).pathname);
+  });
   await page.goto('/careers?q=Software&code=I&page=1');
-  await expect(page).toHaveURL(/\/login\?returnTo=/);
-  await expect(page.getByRole('article')).toHaveCount(0);
-  expect(fixture.calls).toHaveLength(0);
-  await page.getByLabel('Email trường hoặc cá nhân').fill('student@example.test');
-  await page.getByLabel('Mật khẩu', { exact: true }).fill('password123');
-  await page.getByRole('button', { name: 'Đăng nhập vào Trang của tôi →' }).click();
   await expect(page).toHaveURL('/careers?q=Software&code=I&page=1');
   await expect(page.getByRole('heading', { name: 'Software Developers' })).toBeVisible();
   await expect(page.getByRole('searchbox')).toHaveValue('Software');
   await expect(page.getByRole('combobox', { name: 'Nhóm RIASEC nổi bật' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Đăng nhập', exact: true })).toBeVisible();
+  await page.reload();
+  await expect(page).toHaveURL('/careers?q=Software&code=I&page=1');
+  await expect(page.getByRole('heading', { name: 'Software Developers' })).toBeVisible();
+  expect(fixture.calls.length).toBeGreaterThan(0);
+  expect(requests.length).toBeGreaterThan(0);
+  expect(requests.every(path => path === '/api/v1/careers')).toBe(true);
 });

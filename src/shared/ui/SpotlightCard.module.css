@@ -1,0 +1,34 @@
+/* Adapted from React Bits SpotlightCard. Copyright (c) 2026 David Haz.
+ * See public/licenses/react-bits.txt and REACT_BITS_EXPERIMENT.md.
+ */
+.card { position: relative; isolation: isolate; }
+.light {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0;
+  background: radial-gradient(circle 240px at var(--spotlight-x, 50%) var(--spotlight-y, 50%), color-mix(in srgb, var(--ce-violet) 12%, transparent), transparent 100%);
+}
+
+/* Steady keyboard/touch feedback keeps links and focus outlines unobscured. */
+.card:focus-within { border-color: var(--ce-border-strong); }
+.card:has(:focus-visible) .light {
+  background: radial-gradient(circle 240px at 50% 50%, color-mix(in srgb, var(--ce-violet) 8%, transparent), transparent 100%);
+  opacity: 1;
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .light { transition: opacity .2s ease-out; }
+  .card:hover .light { opacity: 1; }
+}
+
+@media (hover: none) {
+  .card:active { border-color: var(--ce-border-strong); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card.card:hover { transform: none; }
+  .light { display: none; }
+}

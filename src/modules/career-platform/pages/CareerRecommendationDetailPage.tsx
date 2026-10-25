@@ -4,6 +4,8 @@ import { paths } from '@/routes/paths';
 import { useSession } from '@/shared/session/session';
 import { ShowcaseCard } from '@/shared/ui/ce/ShowcaseCard';
 import { TimelineSidebar } from '@/shared/ui/ce/TimelineSidebar';
+import { CountUp } from '@/shared/ui/CountUp';
+import { ShinyText } from '@/shared/ui/ShinyText';
 import student from '@/assets/aihn/student-male-laptop.jpg';
 import { usePlatformQuery } from '../api/platform.api';
 import { componentLabels, profileSchema, runSchema } from '../model/contracts';
@@ -32,10 +34,10 @@ export function CareerRecommendationDetailPage() {
     {choose && <section className={styles.chooser}><h2>Chọn nghề trong bản gợi ý đã lưu</h2>{careerId !== null && <p role="alert">Nghề được yêu cầu không thuộc bản gợi ý này hoặc đường dẫn chọn nghề không hợp lệ.</p>}{run.items.length ? run.items.map((item,index) => <article key={item.careerId}><h2>{index+1}. {item.title}</h2><p>{item.score===null?'Chưa đủ tín hiệu':`${item.score.toFixed(1)} / 100`}</p><Link to={`${paths.recommendation(run.id)}?careerId=${encodeURIComponent(item.careerId)}`}>Xem gợi ý nghề này</Link></article>) : <p>Bản gợi ý này chưa có nghề.</p>}</section>}
     {run && selected && <>
       <ShowcaseCard className={styles.hero} media={<img src={student} alt="Sinh viên học tập với laptop · ảnh minh họa"/>} badge="Khám phá nghề có nguồn">
-        <p className={styles.overline}>Gợi ý từ kết quả Holland</p>
+        <p className={styles.overline}><ShinyText>Gợi ý từ kết quả Holland</ShinyText></p>
         <h1 className={styles.heroTitle}>{selected.title}</h1>
         <p>{selected.sourceVersion}</p>
-        <div className={styles.rankBadge}><strong className={styles.score}>{selected.score===null?'Chưa đủ tín hiệu':`${selected.score.toFixed(1)} / 100`}</strong><span>Điểm xếp hạng</span></div>
+        <div className={styles.rankBadge}><strong className={styles.score}>{selected.score===null?'Chưa đủ tín hiệu':<CountUp value={selected.score} decimals={1} suffix=" / 100" />}</strong><span>Điểm xếp hạng</span></div>
       </ShowcaseCard>
       <dl className={styles.infoRow} data-ce-enter="">
         <div><dt>Tín hiệu RIASEC /100</dt><dd>{selected.components.riasec === null ? 'Chưa có dữ liệu' : selected.components.riasec.toFixed(1)}</dd></div>

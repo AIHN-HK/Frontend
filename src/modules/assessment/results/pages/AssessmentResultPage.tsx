@@ -6,6 +6,7 @@ import gsap from 'gsap';
 import { paths } from '@/routes/paths';
 import { ApiError } from '@/shared/api/api-error';
 import { AsyncState } from '@/shared/ui/AsyncState';
+import { CountUp } from '@/shared/ui/CountUp';
 import { CareerScreenFrame } from '@/shared/ui/ce/CareerScreenFrame';
 import { RadarChart } from '@/shared/ui/ce/RadarChart';
 import { RiasecBar } from '@/shared/ui/ce/RiasecBar';
@@ -74,7 +75,8 @@ export function AssessmentResultPage() {
           <div className={styles['ar-score-list']}>{riasecCodes.map(code => {
             const percentage = normalization?.percentages[code] ?? null;
             const label = normalization ? percentage === null ? 'Không có câu hỏi' : `${Math.round(percentage)}% · ${ready.scores[code]}/${normalization.counts[code]} câu Có` : `${ready.scores[code]} điểm`;
-            return <RiasecBar key={code} code={code} label={`${riasecGroups[code].name} (${riasecGroups[code].english})`} percentage={percentage} valueLabel={label}/>;
+            const content = normalization ? percentage === null ? label : <><CountUp value={Math.round(percentage)} suffix="%" /> · {ready.scores[code]}/{normalization.counts[code]} câu Có</> : <CountUp value={ready.scores[code]} suffix=" điểm" />;
+            return <RiasecBar key={code} code={code} label={`${riasecGroups[code].name} (${riasecGroups[code].english})`} percentage={percentage} valueLabel={label} valueContent={content}/>;
           })}</div>
         </section>
         {!normalization && <section className={styles.inlineState}>{snapshot.isPending ? <p role="status">Đang đọc bản ghi để chuẩn hóa biểu đồ…</p> : <><h2>Chưa thể chuẩn hóa biểu đồ</h2><p>Chưa có bản ghi Có/Không hợp lệ của lần làm này. Điểm đã lưu vẫn được hiển thị; tỷ lệ chưa được xác nhận.</p><Button onClick={() => void snapshot.refetch()}>Thử lại bản ghi lần làm</Button></>}</section>}

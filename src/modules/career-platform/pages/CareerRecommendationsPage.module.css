@@ -15,6 +15,7 @@
 .career-card { position:relative; transition:border-color .22s var(--ce-ease),transform .22s var(--ce-ease); }
 .career-card:hover { border-color:var(--ce-border-strong); transform:translateY(-2px); }
 .career-card strong { color:var(--ce-cyan); font-size:20px; }
+.featuredTitle { color:var(--ce-violet); }
 .page .detailLink { font-weight:700; color:var(--ce-text-primary); border-bottom:1px solid var(--ce-border); }
 @media(max-width:768px) { .page>h1 { font-size:28px; } .rec-grid:global(.platform-grid) { grid-template-columns:minmax(0,1fr); } }
 

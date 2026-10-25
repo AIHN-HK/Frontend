@@ -27,9 +27,8 @@
 .page :global(.advisor-notice),.page :global(.advisor-review) { padding:12px; background:var(--ce-e-subtle); border:1px solid var(--ce-e-border); border-radius:10px; display:flex; flex-wrap:wrap; gap:8px; }
 .page :global(.advisor-chat>.advisor-notice) { margin:12px 28px; }
 .page :global(.advisor-wait-lines) { display:grid; gap:8px; width:240px; max-width:100%; margin-top:12px; }
-.page :global([data-advisor-wait-line]) { height:10px; border-radius:8px; background:var(--ce-border); animation:waitPulse 1.2s ease infinite alternate; }
+.page :global([data-advisor-wait-line]) { height:10px; border-radius:8px; background:var(--ce-border); }
 .page :global([data-advisor-wait-line]:nth-child(2)) { width:86%; }
 .page :global([data-advisor-wait-line]:last-child) { width:60%; }
-@keyframes waitPulse { to { opacity:.4; } }
 @media(prefers-reduced-motion:reduce) { .page :global([data-advisor-wait-line]) { animation:none; } }
 @media(max-width:900px) { .page { grid-template-columns:minmax(0,1fr); height:auto; min-height:0; } .page :global(.advisor-context) { padding:16px; border-right:0; border-bottom:1px solid var(--ce-border); gap:12px; } .page :global(.advisor-chat) { min-height:640px; } .page :global(.advisor-messages) { max-height:55dvh; padding:16px; } .page :global(.advisor-chat-header),.page :global(.advisor-composer) { padding:16px; } .page :global(.advisor-message) { max-width:95%; } .page textarea { font-size:16px; } }

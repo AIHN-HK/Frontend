@@ -1,8 +1,12 @@
 import { expect, test } from '@playwright/test';
+import { careerPlatformFixture } from './career-platform.fixture';
 
 test('catalog route and direct unknown URLs keep distinct states', async ({ page }) => {
+  await careerPlatformFixture(page, { anonymous: true });
   await page.goto('/careers');
-  await expect(page.getByRole('heading', { name: 'Đăng nhập AIHN', exact: true })).toBeVisible();
+  await expect(page).toHaveURL('/careers');
+  await expect(page.getByRole('heading', { name: 'Khám phá nghề nghiệp', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Software Developers', exact: true })).toBeVisible();
   await page.goto('/khong-ton-tai/deep-link');
   await page.reload();
   await expect(page.getByRole('heading', { name: 'Không tìm thấy trang' })).toBeVisible();

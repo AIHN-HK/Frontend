@@ -4,6 +4,8 @@ import { paths } from './paths';
 
 export const publicRoutes: RouteObject[] = [
   { lazy: async () => ({ Component: (await import('./CareerWorkspaceRoute')).CareerWorkspaceRoute }), children: [
+    { path: paths.careers, lazy: async () => ({ Component: (await import('@/modules/career-platform/pages/CareerCatalogPage')).CareerCatalogPage }) },
+    { path: '/careers/:careerId', lazy: async () => ({ Component: (await import('@/modules/career-platform/pages/CareerRuntimeDetailPage')).CareerRuntimeDetailPage }) },
     { path: paths.assessment, lazy: async () => ({ Component: (await import('@/modules/assessment/guest/pages/AssessmentEntryPage')).AssessmentEntryPage }) },
     { path: paths.guestAssessmentResult, lazy: async () => ({ Component: (await import('@/modules/assessment/guest/pages/GuestResultPage')).GuestResultPage }) },
   ] },

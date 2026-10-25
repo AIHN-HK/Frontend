@@ -7,6 +7,9 @@ import { Link, useParams } from "react-router";
 import { useAssessmentHistoryQuery } from "@/modules/assessment";
 import { paths } from "@/routes/paths";
 import { Button } from "@/shared/ui/ce/Button";
+import { CountUp } from '@/shared/ui/CountUp';
+import { ShinyText } from '@/shared/ui/ShinyText';
+import { SpotlightCard } from '@/shared/ui/SpotlightCard';
 import { usePlatformCommand, usePlatformQuery } from "../api/platform.api";
 import { profileSchema, runSchema, componentLabels } from "../model/contracts";
 import type { RecommendationRun } from "../model/contracts";
@@ -86,7 +89,7 @@ export function CareerRecommendationsPage() {
                   })
                 }
               >
-                Tạo gợi ý nghề
+                <ShinyText>Tạo gợi ý nghề</ShinyText>
               </Button>
             </>
           ) : (
@@ -141,15 +144,15 @@ function ExplainedRun({
       </section>
       <div className={`platform-grid ${styles['rec-grid']}`}>
         {run.items.map((item, index) => (
-          (filter==='all'||(filter==='scored'&&item.score!==null)||(filter==='missing'&&item.missing.length>0)) && <article className={`platform-card ${styles['career-card']}`} key={item.careerId}>
+          (filter==='all'||(filter==='scored'&&item.score!==null)||(filter==='missing'&&item.missing.length>0)) && <SpotlightCard className={`platform-card ${styles['career-card']}`} key={item.careerId}>
             <h2>
-              {index + 1}. {item.title}
+              {index === 0 && item.score !== null ? <ShinyText className={styles.featuredTitle}>{index + 1}. {item.title}</ShinyText> : <>{index + 1}. {item.title}</>}
             </h2>
             <p>
               <strong>
                 {item.score === null
                   ? "Chưa đủ tín hiệu"
-                  : `${item.score.toFixed(1)} / 100`}
+                  : <CountUp value={item.score} decimals={1} suffix=" / 100" />}
               </strong>{" "}
               · chỉ số xếp hạng
             </p>
@@ -200,7 +203,7 @@ function ExplainedRun({
                 ))}
               </ul>
             </details>
-          </article>
+          </SpotlightCard>
         ))}
       </div>
     </>

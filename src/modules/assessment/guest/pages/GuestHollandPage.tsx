@@ -15,6 +15,7 @@ import type { GuestDraft } from '../model/guest-assessment';
 import { readGuestCatalog, previewGuestAssessment } from '../api/guest-assessment.api';
 import { useGuestExpiry } from '../model/useGuestExpiry';
 import styles from '../../testing/pages/HollandTestPage.module.css';
+import fade from './FadeContent.module.css';
 
 export function GuestHollandPage() {
   const http = useHttpClient(), navigate = useNavigate();
@@ -64,7 +65,7 @@ export function GuestHollandPage() {
       {!guestAssessmentStore.available() && <p className={styles.notice} role="note">Chưa lưu được trên trình duyệt. Đáp án chỉ còn trong màn này; tải lại hoặc rời trang có thể mất bài.</p>}
       {guestAssessmentStore.invalid() && <p className={styles.notice}>Bản nháp trước không hợp lệ. Bạn có thể chủ động bắt đầu bài mới.</p>}
       {draft?.result ? <section className={styles.welcome}><h1>Bạn đã hoàn thành Holland</h1><p>Kết quả đang được giữ trong phiên trình duyệt này.</p><Link className="btn btn-primary" to={paths.guestAssessmentResult}>Xem tổng kết RIASEC</Link><Button variant="secondary" onClick={() => setDiscard(true)}>Làm bài mới</Button></section> : welcome ? <section className={styles.welcome}>
-        <h1>Trắc nghiệm Holland RIASEC</h1><p className={styles.description}>Khám phá sở thích nghề nghiệp và xem tổng kết RIASEC ngay. Bạn có thể đăng ký sau để lưu kết quả, trao đổi với AI và xây dựng lộ trình.</p>
+        <div className={fade.intro}><h1>Trắc nghiệm Holland RIASEC</h1><p className={styles.description}>Khám phá sở thích nghề nghiệp và xem tổng kết RIASEC ngay. Bạn có thể đăng ký sau để lưu kết quả, trao đổi với AI và xây dựng lộ trình.</p></div>
         <div className={styles.stats}><div><strong>{total ?? '…'} câu hỏi</strong><span>BỘ ĐỀ HIỆN TẠI</span></div><div><strong>Có / Không</strong><span>THEO CẢM NHẬN CỦA BẠN</span></div><div><strong>Không cần tài khoản</strong><span>LÀM BÀI VÀ XEM RIASEC</span></div></div>
         {questions.isError && !draft ? <AsyncState state="error" title="Không tải được bộ câu hỏi." action={<Button onClick={() => { void questions.refetch(); }}>Thử lại câu hỏi</Button>} /> : questions.isPending && !draft ? <AsyncState state="loading" title="Đang tải bộ câu hỏi…" /> : !total ? <p>Bộ đề chưa có câu hỏi.</p> : <Button className={styles.start} aria-label={draft ? 'Tiếp tục bài đang làm' : 'Bắt đầu bài trắc nghiệm'} disabled={busy} onClick={() => { if (draft) setOverview(false); else void start(); }}>{busy ? 'Đang bắt đầu…' : draft ? `Tiếp tục bài đang làm (${answered}/${total} câu)` : `Bắt đầu làm bài trắc nghiệm (${total} câu) →`}</Button>}
         <HollandShowcase /><p className={styles.help}>Tiến độ được giữ trong tab này khi tải lại trang. Đóng tab có thể mất bài chưa lưu. Phiên làm bài có hiệu lực 24 giờ.</p>

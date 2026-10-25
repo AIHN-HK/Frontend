@@ -1,0 +1,13 @@
+/* React Bits FadeContent (fade / mount / once), ported to CSS.
+ * Copyright (c) 2026 David Haz. See public/licenses/react-bits.txt and REACT_BITS_EXPERIMENT.md.
+ */
+.intro { opacity: 1; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .intro { animation: reveal .45s cubic-bezier(.215, .61, .355, 1) both; }
+}
+
+@keyframes reveal {
+  from { opacity: .65; }
+  to { opacity: 1; }
+}

@@ -5,6 +5,7 @@ import gsap from 'gsap';
 import { paths } from '@/routes/paths';
 import { Icon } from '@/shared/ui/Icon';
 import { Button } from '@/shared/ui/ce/Button';
+import { ShinyText } from '@/shared/ui/ShinyText';
 import advisorMascot from '@/assets/dashboard/aihn-advisor-mascot.svg';
 import { useDashboardQueries } from '../queries/dashboard.queries';
 import styles from './DashboardPage.module.css';
@@ -99,7 +100,7 @@ export function DashboardPage() {
         <div className={[styles['dashboard-main-col']].join(' ')}>
           <section className={[styles['dashboard-next']].join(' ')} aria-label="Hành động tiếp theo">
             <div>
-              <span className={[styles['dashboard-next-badge']].join(' ')}>Hành động trọng tâm tiếp theo</span>
+              <span className={[styles['dashboard-next-badge']].join(' ')}><ShinyText>Hành động trọng tâm tiếp theo</ShinyText></span>
               <h2>
                 {history.isPending
                   ? 'Đang kiểm tra kết quả của bạn'

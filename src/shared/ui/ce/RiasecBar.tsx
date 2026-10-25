@@ -1,10 +1,10 @@
 import { useEffect, useRef } from 'react';
-import type { CSSProperties } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import gsap from 'gsap';
 import type { RadarCode } from './radar.model';
 import styles from './RiasecBar.module.css';
 
-export function RiasecBar({ code, label, percentage, valueLabel }: { code: RadarCode; label: string; percentage: number|null; valueLabel: string }) {
+export function RiasecBar({ code, label, percentage, valueLabel, valueContent }: { code: RadarCode; label: string; percentage: number|null; valueLabel: string; valueContent?: ReactNode }) {
   const fill = useRef<HTMLSpanElement>(null);
   const valid = percentage !== null && Number.isFinite(percentage) && percentage >= 0 && percentage <= 100;
   const target = valid ? percentage : null;
@@ -23,6 +23,6 @@ export function RiasecBar({ code, label, percentage, valueLabel }: { code: Radar
   return <div className={styles.row} style={color}>
     <div className={styles.label}><span className={styles.badge}>{code}</span><span>{label}</span></div>
     <div className={styles.track} aria-hidden="true">{target !== null && <span ref={fill} className={styles.fill} data-ce-score-fill="" style={barStyle} />}</div>
-    <span className={styles.value}>{valueLabel}</span>
+    <span className={styles.value}>{valueContent ?? valueLabel}</span>
   </div>;
 }

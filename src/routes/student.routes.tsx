@@ -10,8 +10,6 @@ export const studentRoutes: RouteObject[] = [
         lazy: async () => ({ Component: (await import('./CareerWorkspaceRoute')).CareerWorkspaceRoute }),
         children: [
           { path: paths.guestAssessmentClaim, lazy: async () => ({ Component: (await import('@/modules/assessment/guest/pages/GuestClaimPage')).GuestClaimPage }) },
-          { path: paths.careers, lazy: async () => ({ Component: (await import('@/modules/career-platform/pages/CareerCatalogPage')).CareerCatalogPage }) },
-          { path: '/careers/:careerId', lazy: async () => ({ Component: (await import('@/modules/career-platform/pages/CareerRuntimeDetailPage')).CareerRuntimeDetailPage }) },
           {
             path: paths.dashboard,
             lazy: async () => ({

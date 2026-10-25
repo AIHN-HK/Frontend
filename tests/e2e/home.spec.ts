@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { guestFixture } from './guest-assessment.fixture';
+import { careerPlatformFixture } from './career-platform.fixture';
 
 const headline = 'Khám phá con đường';
 
@@ -25,8 +26,9 @@ test('public editorial Home and its alias render labeled examples without person
   expect(errors).toEqual([]);
 });
 
-test('Home opens guest assessment while private feature routes remain guarded', async ({page}) => {
+test('Home opens guest assessment, career library and the public AIHN introduction', async ({page}) => {
   await guestFixture(page);
+  await careerPlatformFixture(page, { anonymous: true });
   await page.emulateMedia({reducedMotion:'reduce'});
   await page.goto('/');
   await page.getByRole('region',{name:'Khám phá con đường phù hợp',exact:true}).getByRole('link',{name:'Bắt đầu khám phá',exact:true}).click();
@@ -34,7 +36,8 @@ test('Home opens guest assessment while private feature routes remain guarded', 
   await expect(page.getByRole('heading',{name:'Trắc nghiệm Holland RIASEC',exact:true})).toBeVisible();
   await page.goto('/');
   await page.getByRole('contentinfo').getByRole('link',{name:'Thư viện nghề nghiệp',exact:true}).click();
-  await expect(page).toHaveURL(/\/login\?returnTo=%2Fcareers$/);
+  await expect(page).toHaveURL('/careers');
+  await expect(page.getByRole('heading', { name: 'Software Developers' })).toBeVisible();
   await page.goto('/');
   await page.getByRole('link',{name:'AIHN hoạt động thế nào?',exact:true}).click();
   await expect(page).toHaveURL('/#how-it-works');
@@ -86,6 +89,7 @@ for (const width of [320,390,768,769,1024,1025,1280,1281,1440,1600]) {
 }
 
 test('mobile menu supports keyboard, same-route close, Escape and resize reset', async ({page}) => {
+  await careerPlatformFixture(page, { anonymous: true });
   await page.setViewportSize({width:390,height:844});
   await page.goto('/');
   const opener=page.getByRole('button',{name:'Mở menu',exact:true});
@@ -102,7 +106,8 @@ test('mobile menu supports keyboard, same-route close, Escape and resize reset',
   await expect(menu).toBeHidden();
   await page.setViewportSize({width:390,height:844}); await expect(menu).toBeHidden();
   await opener.click(); await menu.getByRole('link',{name:'Nghề nghiệp',exact:true}).click();
-  await expect(page).toHaveURL(/\/login\?returnTo=%2Fcareers$/);
+  await expect(page).toHaveURL('/careers');
+  await expect(page.getByRole('heading', { name: 'Software Developers' })).toBeVisible();
 });
 
 test('keyboard skip link reaches Home main content', async ({page}) => {

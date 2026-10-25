@@ -1,6 +1,7 @@
 export const paths = {
   home: '/',
   previewHome: '/preview/home',
+  previewLottie: '/preview/lottie',
   login: '/login',
   signup: '/signup',
   verifyOtp: '/otp-verify',

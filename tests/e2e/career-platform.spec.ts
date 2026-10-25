@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 import { careerPlatformFixture } from "./career-platform.fixture";
-test("guarded catalog and exact career detail use API provenance without preview fixtures", async ({
+test("public catalog and exact career detail use API provenance without preview fixtures", async ({
   page,
 }) => {
   const fixture = await careerPlatformFixture(page);
@@ -208,29 +208,43 @@ test('runtime career detail shows delayed source data and keeps late responses o
   await expect(page.locator('[data-ce-enter]').first()).toHaveCSS('opacity', '1');
 });
 
-test('protected source detail returns to the exact career after login and hides a pending response after logout', async ({ page }) => {
+for (const [label, destination] of [
+  ['Chọn làm mục tiêu trong hồ sơ', '/career-profile?target=15-1252.00'],
+  ['Xem gợi ý cá nhân và khoảng cách kỹ năng', '/recommendations?career=15-1252.00'],
+] as const) test(`public career detail requires login for ${label} and preserves the destination`, async ({ page }) => {
   const { resultFixture } = await import('./result.fixture');
   const { sourceCareer } = await import('./career-platform.fixture');
   await resultFixture(page, { authenticated: false });
-  await careerPlatformFixture(page, { anonymous: true });
+  const fixture = await careerPlatformFixture(page, { anonymous: true });
   await page.goto('/careers/15-1252.00');
-  await expect(page).toHaveURL(/\/login\?returnTo=%2Fcareers%2F15-1252.00$/);
+  await expect(page).toHaveURL('/careers/15-1252.00');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(sourceCareer.title);
+  await expect(page.getByRole('link', { name: 'AIHN Career · Trang chủ', exact: true })).toHaveAttribute('href', '/');
+  await page.reload();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(sourceCareer.title);
+  await page.getByRole('link', { name: label, exact: true }).click();
+  await expect(page).toHaveURL(`/login?returnTo=${encodeURIComponent(destination)}`);
+  expect(fixture.calls.every(call => call.method === 'GET' && call.path === '/api/v1/careers/15-1252.00')).toBe(true);
   await page.getByLabel('Email trường hoặc cá nhân').fill('student@example.test');
   await page.getByLabel('Mật khẩu', { exact: true }).fill('password123');
   await page.getByRole('button', { name: 'Đăng nhập vào Trang của tôi →' }).click();
-  await expect(page).toHaveURL('/careers/15-1252.00');
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText(sourceCareer.title);
+  await expect(page).toHaveURL(destination);
+});
+
+test('public career detail remains available after logout with a pending source response', async ({ page }) => {
+  const { sourceCareer } = await import('./career-platform.fixture');
+  await careerPlatformFixture(page);
   let release!: () => void;
   const held = new Promise<void>(resolve => { release = resolve; });
   await page.route('**/api/v1/careers/15-1252.00', async route => {
     await held;
     await route.fulfill({ json: { data: sourceCareer } });
   });
-  await page.reload();
+  await page.goto('/careers/15-1252.00');
   await expect(page.getByRole('status')).toContainText('Đang tải');
   await page.getByRole('button', { name: 'Đăng xuất', exact: true }).click();
   release();
-  await expect(page.getByRole('heading', { name: 'Đăng nhập AIHN' })).toBeVisible();
-  await expect(page.locator('[data-ce-photo-frame]')).toHaveCount(0);
-  await expect(page.getByRole('heading', { name: sourceCareer.title })).toHaveCount(0);
+  await expect(page).toHaveURL('/careers/15-1252.00');
+  await expect(page.getByRole('link', { name: 'Đăng nhập', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(sourceCareer.title);
 });

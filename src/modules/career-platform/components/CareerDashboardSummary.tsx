@@ -1,6 +1,8 @@
 import { Link } from 'react-router';
 import { paths } from '@/routes/paths';
 import { Button } from '@/shared/ui/Button';
+import { CountUp } from '@/shared/ui/CountUp';
+import { SpotlightCard } from '@/shared/ui/SpotlightCard';
 import { usePlatformQuery } from '../api/platform.api';
 import { analyticsSchema } from '../model/contracts';
 import styles from './CareerDashboardSummary.module.css';
@@ -15,7 +17,7 @@ export function CareerDashboardSummary({ resultPath, hasResult }: { resultPath: 
   const metrics = [
     { title: 'Trắc nghiệm Holland', value: data?.counts.assessments, detail: 'Bài trắc nghiệm hoàn thành', path: resultPath, action: hasResult ? 'Mở kết quả Holland' : 'Mở trắc nghiệm' },
     { title: 'Nghề nghiệp gợi ý', value: data?.counts.runs, detail: 'Bản gợi ý đã tạo', path: paths.recommendations, action: 'Xem trạng thái gợi ý' },
-    { title: 'Lộ trình phát triển', value: data ? `${completed}/${total}` : undefined, detail: 'Nhiệm vụ đã tự xác nhận', path: paths.roadmap, action: 'Xem trạng thái lộ trình' },
+    { title: 'Lộ trình phát triển', value: data ? <CountUp value={completed} suffix={`/${total}`} /> : undefined, detail: 'Nhiệm vụ đã tự xác nhận', path: paths.roadmap, action: 'Xem trạng thái lộ trình' },
     { title: 'Cố vấn AI', value: data?.counts.chats, detail: 'Phiên tư vấn của bạn', path: paths.advisor, action: 'Đi tới Cố vấn' },
   ];
   return <section className={styles.summary} aria-label="Tổng quan hành trình Dashboard">
@@ -30,6 +32,6 @@ export function CareerDashboardSummary({ resultPath, hasResult }: { resultPath: 
         {latest ? <><p>TopCode · Lần làm #{latest.attemptId}</p><div className={styles.codes}>{[...latest.topCode].map((code, index) => <span key={`${code}:${index}`} style={{ color: `var(--ce-${code.toLowerCase()})` }}>{code}</span>)}</div><Link to={paths.assessmentResult(latest.attemptId)}>Xem TopCode đã lưu</Link></> : <p>{query.isPending ? 'Đang đọc dữ liệu…' : query.isError ? 'Chưa tải được TopCode.' : 'Chưa có TopCode đã lưu.'}</p>}
       </div>
     </section>
-    <div className={styles.metrics}>{metrics.map(metric => <section key={metric.title} className={styles.metric} aria-label={metric.title} data-journey-metric=""><h2>{metric.title}</h2><strong>{metric.value ?? '—'}</strong><p>{metric.detail}{!data && (query.isPending ? ' · Đang tải…' : ' · Chưa tải được')}</p><Link to={metric.path}>{metric.action}</Link></section>)}</div>
+    <div className={styles.metrics}>{metrics.map(metric => <SpotlightCard as="section" key={metric.title} className={styles.metric} aria-label={metric.title} data-journey-metric=""><h2>{metric.title}</h2><strong>{typeof metric.value === 'number' ? <CountUp value={metric.value} /> : metric.value ?? '—'}</strong><p>{metric.detail}{!data && (query.isPending ? ' · Đang tải…' : ' · Chưa tải được')}</p><Link to={metric.path}>{metric.action}</Link></SpotlightCard>)}</div>
   </section>;
 }
