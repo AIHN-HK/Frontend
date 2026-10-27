@@ -111,10 +111,11 @@
   --font-size-display: clamp(2rem, 4vw, 2.5rem);
   --font-size-h1: clamp(1.625rem, 3vw, 2rem);
   --font-size-h2: clamp(1.25rem, 2.5vw, 1.5rem);
-  --font-size-h3: 1.125rem;
-  --font-size-body: 1rem;
-  --font-size-body-sm: 0.9375rem;
-  --font-size-caption: 0.875rem;
+  --font-size-h3: 1.1875rem;
+  /* ponytail: base body scaled from 16px to 17px for readability; upgrade to user-controlled font-size slider if needed */
+  --font-size-body: 1.0625rem;
+  --font-size-body-sm: 1rem;
+  --font-size-caption: 0.9375rem;
 
   --line-height-tight: 1.25;
   --line-height-normal: 1.5;
@@ -182,8 +183,16 @@
 
   /* Text */
   --ce-text-primary: #ffffff;
-  --ce-text-secondary: #9e9ea7;
-  --ce-text-muted: #6e6e76;
+  --ce-text-secondary: #b8b8c2;
+  --ce-text-muted: #94949e;
+
+  /* Typography Scale */
+  --text-xs: clamp(0.75rem, 0.72rem + 0.15vw, 0.8125rem);    /* 12px -> 13px */
+  --text-sm: clamp(0.875rem, 0.85rem + 0.15vw, 0.9375rem);   /* 14px -> 15px */
+  --text-base: clamp(0.9375rem, 0.9rem + 0.25vw, 1rem);     /* 15px -> 16px */
+  --text-md: clamp(1rem, 0.96rem + 0.25vw, 1.0625rem);       /* 16px -> 17px */
+  --text-lg: clamp(1.125rem, 1.05rem + 0.4vw, 1.25rem);      /* 18px -> 20px */
+  --text-xl: clamp(1.25rem, 1.15rem + 0.6vw, 1.5rem);        /* 20px -> 24px */
 
   /* Showcase Card Gradient (Deep Midnight Purple) */
   --ce-card-gradient-start: #191433;

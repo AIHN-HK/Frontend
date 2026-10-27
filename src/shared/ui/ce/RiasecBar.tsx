@@ -13,7 +13,7 @@ export function RiasecBar({ code, label, percentage, valueLabel, valueContent }:
     const ctx = gsap.context(() => {
       const mm = gsap.matchMedia();
       mm.add('(prefers-reduced-motion: no-preference)', () => {
-        gsap.fromTo(fill.current, { width:0 }, { width:`${target}%`, duration:.85, delay:.4, ease:'power2.out' });
+        gsap.fromTo(fill.current, { scaleX:0 }, { scaleX:1, duration:.45, ease:'power2.out', clearProps:'transform' });
       });
     }, fill);
     return () => ctx.revert();

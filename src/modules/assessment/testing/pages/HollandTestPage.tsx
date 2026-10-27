@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import gsap from 'gsap';
 import { Link, useNavigate } from 'react-router';
 import { paths } from '@/routes/paths';
 import { ApiError } from '@/shared/api/api-error';
@@ -18,10 +17,13 @@ import type {
   RiasecCode,
 } from '../../model/assessment.types';
 import { assessmentDraftStore, isCatalogCompatible } from '../model/assessment.draft';
-import { CareerScreenFrame } from '@/shared/ui/ce/CareerScreenFrame';
-import { TimelineSidebar } from '@/shared/ui/ce/TimelineSidebar';
-import { RadarChart } from '@/shared/ui/ce/RadarChart';
-import type { RadarValues } from '@/shared/ui/ce/radar.model';
+import { SpotlightCard } from '@/shared/ui/SpotlightCard';
+import { HollandWorkspace } from '../components/HollandWorkspace';
+import { HollandProgress } from '../components/HollandProgress';
+import { HollandKeyboard } from '../components/HollandKeyboard';
+import { QuestionTransition } from '../components/QuestionTransition';
+import { AssessmentProcessing } from '../components/AssessmentProcessing';
+import { LiveRiasecSummary } from '../components/LiveRiasecSummary';
 import { HollandShowcase } from '../components/HollandShowcase';
 import styles from './HollandTestPage.module.css';
 
@@ -34,7 +36,6 @@ const groups: Record<RiasecCode, string> = {
   C: 'Nghiệp vụ',
 };
 const dimensions = { PERSONA: 'Tính cách', ABILITY: 'Năng lực', INTEREST: 'Sở thích' };
-const riasecOrder: RiasecCode[] = ['R', 'I', 'A', 'S', 'E', 'C'];
 
 function Arrow({ back = false }: { back?: boolean }) {
   return (
@@ -72,7 +73,6 @@ function HollandTest({ scope }: { scope: AssessmentScope }) {
     initial.kind === 'ready' ? initial.draft : null,
   );
   const [overview, setOverview] = useState(false);
-  const questionCard = useRef<HTMLElement>(null);
   const [incompatible, setIncompatible] = useState(initial.kind === 'incompatible');
   const [startCheckpoint, setStartCheckpoint] = useState(() => assessmentDraftStore.readStart(scope.ownerId));
   const [storageOk, setStorageOk] = useState(initial.kind !== 'unavailable');
@@ -94,13 +94,6 @@ function HollandTest({ scope }: { scope: AssessmentScope }) {
   useEffect(() => {
     if (index === undefined || overview) return;
     heading.current?.focus({ preventScroll: true });
-    const ctx = gsap.context(() => {
-      const media = gsap.matchMedia();
-      media.add('(prefers-reduced-motion: no-preference)', () => {
-        if (questionCard.current) gsap.fromTo(questionCard.current, { y: 10, opacity: .8 }, { y: 0, opacity: 1, duration: .25, ease: 'power2.out' });
-      });
-    }, questionCard);
-    return () => ctx.revert();
   }, [index, overview]);
   const signal = () => controller.current?.signal;
   const current = (active: AbortSignal) => isAssessmentScopeCurrent(scope, active);
@@ -259,28 +252,8 @@ function HollandTest({ scope }: { scope: AssessmentScope }) {
     (startCheckpoint.kind === 'ready' && startCheckpoint.attempt === null);
   const locked = busy !== null;
   const catalog = draft?.questions ?? questions.data ?? [];
-  const values = Object.fromEntries(riasecOrder.map(code => {
-    const answered = draft ? catalog.filter(q => q.type === code && typeof draft.answers[String(q.id)] === 'boolean') : [];
-    return [code, answered.length ? answered.filter(q => draft?.answers[String(q.id)]).length / answered.length * 100 : null];
-  })) as RadarValues;
   const showWelcome = !draft || overview;
-  const steps = [
-    { id: 'start', title: 'START', description: 'Giới thiệu & Chuẩn bị', status: showWelcome ? 'active' as const : 'completed' as const },
-    { id: 'test', title: 'HOLLAND TEST', description: `${catalog.length} câu hỏi Có / Không`, status: showWelcome ? 'pending' as const : 'active' as const },
-    { id: 'code', title: 'TOPCODE', description: 'Nhóm sở thích nổi bật từ kết quả', status: 'pending' as const },
-    { id: 'matches', title: 'CAREER MATCHES', description: 'Khám phá nghề nghiệp phù hợp', status: 'pending' as const },
-    { id: 'results', title: 'RESULTS', description: 'Báo cáo & Lộ trình phát triển', status: 'pending' as const },
-  ];
-
-  return <CareerScreenFrame sidebar={<TimelineSidebar steps={steps} radarTitle="Bản đồ RIASEC trực tiếp" radar={<>
-    <RadarChart values={values} label="Biểu đồ câu trả lời tạm thời, chưa phải kết quả Holland" />
-    <p className={styles.radarNote}>Câu trả lời tạm thời · Chưa phải kết quả Holland.</p>
-    <ul className={styles.legend}>{riasecOrder.map(code => {
-      const group = catalog.filter(q => q.type === code);
-      const answered = group.filter(q => draft && typeof draft.answers[String(q.id)] === 'boolean');
-      return <li key={code}><span style={{ color: `var(--ce-${code.toLowerCase()})` }}>●</span> {code}: {groups[code]}<small>{answered.filter(q => draft?.answers[String(q.id)]).length} Có / {answered.length} đã trả lời · {group.length} câu</small></li>;
-    })}</ul>
-  </>} />}>
+  return <HollandWorkspace started={!showWelcome} stage={busy === 'submit' || busy === 'check' ? 'processing' : 'test'} radar={<LiveRiasecSummary questions={catalog} answers={draft?.answers ?? {}} />}><HollandKeyboard enabled={!showWelcome}>
     <div className={`holland-page ${styles.page}`}>
       <div className={styles.utility} hidden={showWelcome && storageOk}>
         <Link to={paths.dashboard} aria-disabled={locked} onClick={event => { if (locked) event.preventDefault(); }}><Arrow back /> Tạm dừng &amp; Về Bàn làm việc</Link>
@@ -288,6 +261,7 @@ function HollandTest({ scope }: { scope: AssessmentScope }) {
       </div>
       {!storageOk && <p className={styles.notice} role="note">Không truy cập được bộ nhớ thiết bị. Lựa chọn chỉ được giữ trong màn này; tải lại hoặc rời trang có thể mất tiến độ.</p>}
       {message && <p className={styles.error} role="alert">{message}</p>}
+      {(busy === 'submit' || busy === 'check') && <AssessmentProcessing checking={busy === 'check'} />}
       {questions.isPending ? <AsyncState state="loading" title="Đang tải bộ câu hỏi…" /> : questions.isError ? <AsyncState state="error" title="Không tải được bộ câu hỏi." description="Bản nháp hiện có được giữ lại." action={<Button disabled={locked} onClick={() => { void questions.refetch(); }}>Thử lại câu hỏi</Button>} /> : incompatible || incompatibleCatalog ? <section className={styles.notice}>
         <h1>Bản nháp không tương thích</h1><p>Phiên bản, thang đo hoặc bộ câu hỏi đã thay đổi. Bản nháp vẫn được giữ; không tự chuyển đổi đáp án.</p>
         {draft?.needsReview && <Button disabled={locked} onClick={() => { void send('check'); }}>Kiểm tra kết quả đã nộp</Button>}
@@ -301,18 +275,19 @@ function HollandTest({ scope }: { scope: AssessmentScope }) {
         <p className={styles.help}>Hãy trả lời đủ các câu và chọn Có cho ít nhất một hoạt động phù hợp. Bạn có thể tạm dừng và tiếp tục trên cùng thiết bị.</p>
       </section> : draft && question && <>
         <button type="button" className={styles.back} disabled={locked} onClick={() => setOverview(true)}><Arrow back /> Quay lại giới thiệu</button>
+        <header className={styles.testHeading}><p>HIỂU MÌNH · CHỌN HƯỚNG ĐI</p><h2>Khám phá sở thích của bạn</h2></header>
         <div className={styles.questionMeta}><span className={styles.pill}>{question.type} · {groups[question.type]}{question.dimension && ` · ${dimensions[question.dimension]}`}</span><span>Câu {draft.index + 1}/{draft.totalQuestions}</span></div>
-        <div className={styles.progress} role="progressbar" aria-label="Số câu đã trả lời" aria-valuemin={0} aria-valuemax={draft.totalQuestions} aria-valuenow={completed}><span style={{ width: `${completed / draft.totalQuestions * 100}%` }} /></div>
+        <HollandProgress answered={completed} total={draft.totalQuestions} />
         <div className={styles.counts}><span>{completed}/{draft.totalQuestions} đã trả lời</span><span>{Math.round(completed / draft.totalQuestions * 100)}% hoàn thành</span></div>
-        <section ref={questionCard} className={styles.question} aria-busy={locked}>
+        <QuestionTransition questionKey={question.id}><section className={styles.question} aria-busy={locked}>
           <h1 tabIndex={-1} ref={heading}>{question.content}</h1>
           <fieldset className={styles.answers} disabled={locked}><legend>Hoạt động này có phù hợp với sở thích của bạn không?</legend><div className={styles.choices}>
-            {[{ value: true, text: 'Có — Tôi thích', detail: 'Phù hợp với sở thích của tôi', icon: '✓' }, { value: false, text: 'Không — Tôi không thích', detail: 'Không cảm thấy phù hợp', icon: '−' }].map(option => <label key={String(option.value)} className={`holland-choice ${styles.choice} ${selected === option.value ? styles.selected : ''}`}>
+            {[{ value: true, text: 'Có — Tôi thích', detail: 'Phù hợp với sở thích của tôi', icon: '✓' }, { value: false, text: 'Không — Tôi không thích', detail: 'Không cảm thấy phù hợp', icon: '−' }].map(option => <SpotlightCard as="label" data-answer-card="" key={String(option.value)} className={`holland-choice ${styles.choice} ${selected === option.value ? styles.selected : ''}`}>
               <input type="radio" name="holland-answer" aria-label={option.text} checked={selected === option.value} onChange={() => { persist({ ...draft, answers: { ...draft.answers, [String(question.id)]: option.value } }); setMessage(''); }} />
               <span className={styles.choiceIcon} aria-hidden="true">{option.icon}</span><strong>{option.text}</strong><small>{option.detail}</small>
-            </label>)}
+            </SpotlightCard>)}
           </div></fieldset>
-        </section>
+        </section></QuestionTransition>
         <nav className={styles.nav} aria-label="Chuyển câu hỏi"><Button aria-label="Câu trước đó" variant="secondary" disabled={locked || draft.index === 0} onClick={() => { persist({ ...draft, index: draft.index - 1 }); setMessage(''); }}><Arrow back /> Câu trước đó</Button>
           {draft.index < draft.totalQuestions - 1 ? <Button aria-label="Tiếp theo" disabled={locked || typeof selected !== 'boolean'} onClick={() => { persist({ ...draft, index: draft.index + 1 }); setMessage(''); }}>Tiếp theo <Arrow /></Button> : <Button disabled={locked || typeof selected !== 'boolean' || (draft.needsReview && !reviewed)} onClick={() => { void send('submit'); }}>{busy === 'submit' ? 'Đang nộp…' : draft.needsReview ? 'Nộp lại sau khi kiểm tra' : 'Nộp bài'}</Button>}
         </nav>
@@ -320,5 +295,5 @@ function HollandTest({ scope }: { scope: AssessmentScope }) {
       </>}
       {confirmDiscard && <section className={styles.notice} aria-label="Xác nhận bỏ bản nháp"><p>Bỏ bản nháp trên thiết bị để bắt đầu lần mới? Lần làm cũ trên máy chủ sẽ không bị xóa; đáp án chưa nộp không thể khôi phục.</p><div className={styles.nav}><Button variant="secondary" onClick={() => setConfirmDiscard(false)}>Giữ bản nháp</Button><Button disabled={locked} onClick={discard}>Bỏ bản nháp trên thiết bị</Button></div></section>}
     </div>
-  </CareerScreenFrame>;
+  </HollandKeyboard></HollandWorkspace>;
 }

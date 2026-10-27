@@ -13,7 +13,7 @@ function moveLight(event: PointerEvent<HTMLElement>) {
 }
 
 type SpotlightCardProps = HTMLAttributes<HTMLElement> & {
-  as?: 'article' | 'section' | 'div';
+  as?: 'article' | 'section' | 'div' | 'label';
   children: ReactNode;
 };
 

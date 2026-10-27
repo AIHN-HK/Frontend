@@ -5,7 +5,7 @@ import type { LottieIllustrationKind } from '@/shared/ui/lottie/assets';
 import styles from './LottiePreviewPage.module.css';
 
 const examples: { kind: LottieIllustrationKind; title: string; description: string }[] = [
-  { kind: 'advisor', title: 'Cố vấn đang chờ phản hồi', description: 'Robot tím minh họa lúc đợi câu trả lời đầu tiên. Trạng thái và nội dung hội thoại vẫn do hệ thống xác nhận.' },
+  { kind: 'advisor', title: 'Cố vấn đang chờ phản hồi', description: 'Orb abstract theo palette AIHN minh họa lúc đợi phản hồi đầu tiên. Trạng thái và nội dung hội thoại vẫn do hệ thống xác nhận.' },
   { kind: 'empty', title: 'Chưa có nghề phù hợp', description: 'Hộp trống đi cùng thông báo và thao tác đổi bộ lọc; không dùng thay cho thông báo lỗi kết nối.' },
   { kind: 'complete', title: 'Hoàn thành Holland', description: 'Dấu tích chạy một lần khi đã có kết quả. Bài làm của khách vẫn chưa được lưu vào tài khoản.' },
 ];

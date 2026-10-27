@@ -10,6 +10,7 @@ import { Button } from "@/shared/ui/ce/Button";
 import { CountUp } from '@/shared/ui/CountUp';
 import { ShinyText } from '@/shared/ui/ShinyText';
 import { SpotlightCard } from '@/shared/ui/SpotlightCard';
+import { CareerFitReason } from '../components/CareerFitReason';
 import { usePlatformCommand, usePlatformQuery } from "../api/platform.api";
 import { profileSchema, runSchema, componentLabels } from "../model/contracts";
 import type { RecommendationRun } from "../model/contracts";
@@ -160,7 +161,7 @@ function ExplainedRun({
               Tỷ lệ kỹ năng có tự đánh giá:{" "}
               {(item.skillCoverage * 100).toFixed(0)}%
             </p>
-            <ul>
+            <CareerFitReason><p>Những tín hiệu có trong bản gợi ý đã lưu:</p><ul>
               {item.contributions.map((c) => (
                 <li key={c.key}>
                   {componentLabels[c.key]}: {c.value.toFixed(1)} ×{" "}
@@ -168,7 +169,7 @@ function ExplainedRun({
                   điểm
                 </li>
               ))}
-            </ul>
+            </ul></CareerFitReason>
             {item.missing.length > 0 && (
               <p>
                 Chưa dùng:{" "}

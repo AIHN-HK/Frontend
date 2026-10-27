@@ -28,6 +28,7 @@
 .bridge h2,.inlineState h2 { font-size:18px; }
 .bridge p,.inlineState p { font-size:14px; }
 .state { padding:48px 24px; max-width:860px; margin:auto; }
+.confirmed { display:flex; align-items:center; gap:8px; margin-bottom:18px; color:var(--ce-text-secondary); font-size:12px; }
 @media(max-width:1280px) { .analysisGrid { grid-template-columns:minmax(0,1fr); } }
 @media(max-width:1024px) { .mobileRadar { display:block; } }
 @media(max-width:768px) { .ar-topcode-trio { gap:8px; } .ar-topcode-badge { padding:12px; } .ar-archetype-title { font-size:24px; } .actions { align-items:stretch; } .actions>a { flex:1 1 auto; } }

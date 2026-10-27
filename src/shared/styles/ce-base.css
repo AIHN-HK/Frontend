@@ -4,6 +4,7 @@
   background: var(--ce-bg-main);
   color: var(--ce-text-primary);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: var(--font-size-body);
   --bg-app: var(--ce-bg-main);
   --bg-app-deep: var(--ce-bg-sidebar);
   --bg-surface: var(--ce-bg-nav);
@@ -44,6 +45,14 @@
 .ce-app :where(img, svg) { max-width: 100%; }
 .ce-app :where(.async-state) { color: var(--ce-text-secondary); }
 .ce-app :where(.btn) { min-height: 44px; }
+
+/* Reusable Typography Scale Classes */
+.text-xs { font-size: var(--text-xs); line-height: 1.45; }
+.text-sm { font-size: var(--text-sm); line-height: 1.5; }
+.text-base { font-size: var(--text-base); line-height: 1.6; }
+.text-md { font-size: var(--text-md); line-height: 1.6; }
+.text-lg { font-size: var(--text-lg); line-height: 1.35; font-weight: 600; }
+.text-xl { font-size: var(--text-xl); line-height: 1.3; font-weight: 700; }
 @media (prefers-reduced-motion: reduce) {
   .ce-app *, .ce-app *::before, .ce-app *::after {
     animation-duration: .01ms !important;

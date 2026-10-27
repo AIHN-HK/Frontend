@@ -23,8 +23,10 @@
   line-height: normal !important;
 }
 .group :global(.ant-select-input) {
-  min-height: 0 !important;
-  height: 100% !important;
+  min-height: 44px !important;
+  height: 44px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
   background: transparent !important;
   border: none !important;
   box-shadow: none !important;
@@ -63,7 +65,7 @@
 .pageInput {
   width: 58px;
   min-width: 50px;
-  height: 40px;
+  height: 44px;
   padding: 0 6px;
   text-align: center;
   border-radius: 8px;

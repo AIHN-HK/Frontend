@@ -5,6 +5,8 @@ import { z } from "zod";
 import { useSession } from "@/shared/session/session";
 import { Button, Input } from "antd";
 import { TimelineSidebar } from "@/shared/ui/ce/TimelineSidebar";
+import { LottieIllustration } from '@/shared/ui/lottie/LottieIllustration';
+import { useRoadmapMotion } from '../components/useRoadmapMotion';
 import styles from "./CareerRoadmapPage.module.css";
 import { paths } from "@/routes/paths";
 import { usePlatformCommand, usePlatformQuery } from "../api/platform.api";
@@ -136,6 +138,7 @@ export function CareerRoadmapPage() {
                 </Button>
               )}
               <CommandState error={command.error} success={command.isSuccess} />
+              {command.isPending && <RoadmapProcessing />}
             </>
           )}
         </section>
@@ -150,6 +153,7 @@ export function CareerRoadmapPage() {
 function GoalCard({ goal }: { goal: Goal }) {
   const command = usePlatformCommand(),
     complete = goal.tasks.filter((t) => t.done).length;
+  const timeline = useRoadmapMotion();
   return (
     <section className={styles.card}>
       <h2>{goal.title}</h2>
@@ -181,9 +185,12 @@ function GoalCard({ goal }: { goal: Goal }) {
         thành các phase trước để mở phase sau.
       </p>
       <CommandState error={command.error} success={command.isSuccess} />
+      {command.isPending && <RoadmapProcessing />}
       {!goal.tasks.length && <p>Chưa có nhiệm vụ trong lộ trình này.</p>}
-      <div className={styles.timeline}>{phaseLabels.map((phase, index) => (
-        <section key={phase} className={styles.phase} data-ce-enter="" data-phase-state={goal.tasks.filter(t=>t.phase===index).length && goal.tasks.filter(t=>t.phase===index).every(t=>t.done) ? 'done' : goal.tasks.some(t=>t.phase<index&&!t.done) ? 'future' : 'current'}>
+      <div className={styles.timeline} ref={timeline}>{phaseLabels.map((phase, index) => (
+        <section key={phase} className={styles.phase} data-phase-state={goal.tasks.filter(t=>t.phase===index).length && goal.tasks.filter(t=>t.phase===index).every(t=>t.done) ? 'done' : goal.tasks.some(t=>t.phase<index&&!t.done) ? 'future' : 'current'}>
+          <span className={styles.phaseNode} data-roadmap-node="" aria-hidden="true">{goal.tasks.some(t=>t.phase===index) && goal.tasks.filter(t=>t.phase===index).every(t=>t.done) ? '✓' : index + 1}</span>
+          {index < phaseLabels.length - 1 && <svg className={styles.connector} viewBox="0 0 32 100" preserveAspectRatio="none" aria-hidden="true"><path data-roadmap-path="" d="M16 0 C16 24 24 28 24 50 S16 76 16 100" pathLength="1" strokeDasharray="1" strokeDashoffset="0" fill="none" stroke="currentColor" strokeWidth="1.5" vectorEffect="non-scaling-stroke" /></svg>}
           <h3>
             {index + 1}. {phase}
           </h3>
@@ -196,6 +203,9 @@ function GoalCard({ goal }: { goal: Goal }) {
       ))}</div>
     </section>
   );
+}
+function RoadmapProcessing() {
+  return <div className={styles.processing} role="status"><LottieIllustration kind="advisor" size={56} /><p>Đang xây dựng lộ trình từ hồ sơ và nghề mục tiêu…</p></div>;
 }
 function TaskForm({ task, goal }: { task: Goal["tasks"][number]; goal: Goal }) {
   const current = useSession(),

@@ -1,4 +1,5 @@
 import { useSyncExternalStore } from 'react';
+import type { CSSProperties } from 'react';
 import { Link } from 'react-router';
 import { paths } from '@/routes/paths';
 import { CountUp } from '@/shared/ui/CountUp';
@@ -12,21 +13,24 @@ import { riasecCodes } from '../../model/assessment.types';
 import { normalizeAssessmentSnapshot, riasecGroups } from '../../results/model/result.model';
 import { guestAssessmentStore } from '../model/guest-assessment';
 import { useGuestExpiry } from '../model/useGuestExpiry';
+import { useResultEntrance } from '../../results/components/useResultEntrance';
 import styles from '../../results/pages/AssessmentResultPage.module.css';
 
 export function GuestResultPage() {
   const draft = useSyncExternalStore(guestAssessmentStore.subscribe, guestAssessmentStore.read);
   const result = draft?.result;
+  const root = useResultEntrance(result?.id);
   const expired = useGuestExpiry(result?.expiresAt);
   if (!result) return <CareerScreenFrame><div className={styles.content}><h1>Chưa có tổng kết RIASEC trong phiên này</h1><p>Bài chưa được lưu vào tài khoản. Đóng tab hoặc xóa dữ liệu trình duyệt có thể làm mất phiên.</p><Link className="btn btn-primary" to={paths.assessment}>Làm hoặc tiếp tục bài Holland</Link></div></CareerScreenFrame>;
   const normalization = normalizeAssessmentSnapshot(result.scores, result.snapshot);
+  const dominant = riasecCodes.filter(code => result.topCode.includes(code)).sort((a, b) => result.topCode.indexOf(a) - result.topCode.indexOf(b));
   const destination = (target: 'advisor' | 'roadmap') => `${paths.guestAssessmentClaim}?target=${target}`;
-  return <div className={`assessment-result-page ${styles.page}`}><CareerScreenFrame><div className={styles.content}>
-    <LottieIllustration kind="complete" size={72} />
-    <ShowcaseCard media={<img src={student} alt="Sinh viên AIHN Career · hình minh họa" />} badge="Hình minh họa"><p className={styles['ar-topcode-label']}>Tổng kết Holland RIASEC</p><h1 className={styles['ar-archetype-title']}>TopCode: {result.topCode}</h1><p className={styles['ar-archetype-desc']}>{normalization.totalQuestions} câu hỏi · Kết quả chưa lưu vào tài khoản.</p><p>Điểm thể hiện các lựa chọn Có của bạn, là gợi ý khám phá sở thích nghề nghiệp.</p></ShowcaseCard>
-    <section className={styles['ar-scores-section']} aria-label="Điểm 6 nhóm RIASEC"><h2 className={styles['ar-section-title']}>Điểm số 6 nhóm Holland</h2><div className={styles['ar-score-list']}>{riasecCodes.map(code => <RiasecBar key={code} code={code} label={`${code} · ${riasecGroups[code].name}`} percentage={normalization.percentages[code]} valueLabel={`${result.scores[code]}/${normalization.counts[code]} câu Có`} valueContent={<><CountUp value={result.scores[code]} />/{normalization.counts[code]} câu Có</>} />)}</div><RadarChart values={normalization.percentages} /></section>
+  return <div className={`assessment-result-page ${styles.page}`} ref={root}><CareerScreenFrame><div className={styles.content}>
+    <div className={styles.confirmed}><LottieIllustration kind="complete" size={48} /><span>Bài trắc nghiệm đã hoàn thành</span></div>
+    <div data-result-enter=""><ShowcaseCard media={<img src={student} alt="Sinh viên AIHN Career · hình minh họa" />} badge="Hình minh họa"><p className={styles['ar-topcode-label']}>Tổng kết Holland RIASEC</p><div className={styles['ar-topcode-trio']}>{dominant.map(code => <span data-result-item="" className={styles['ar-topcode-badge']} key={code} style={{ '--trait': `var(--ce-${code.toLowerCase()})`, '--trait-surface': `var(--ce-${code.toLowerCase()}-subtle)`, '--trait-border': `var(--ce-${code.toLowerCase()}-border)` } as CSSProperties}><strong>{code}</strong><small>{riasecGroups[code].name}</small></span>)}</div><h1 className={styles['ar-archetype-title']}>TopCode: {result.topCode}</h1><p className={styles['ar-archetype-desc']}>{normalization.totalQuestions} câu hỏi · Kết quả chưa lưu vào tài khoản.</p><p>Điểm thể hiện các lựa chọn Có của bạn, là gợi ý khám phá sở thích nghề nghiệp.</p></ShowcaseCard></div>
+    <section className={styles['ar-scores-section']} aria-label="Điểm 6 nhóm RIASEC" data-result-enter=""><h2 className={styles['ar-section-title']}>Điểm số 6 nhóm Holland</h2><div className={styles['ar-score-list']}>{riasecCodes.map(code => <RiasecBar key={code} code={code} label={`${code} · ${riasecGroups[code].name}`} percentage={normalization.percentages[code]} valueLabel={`${result.scores[code]}/${normalization.counts[code]} câu Có`} valueContent={<><CountUp value={result.scores[code]} />/{normalization.counts[code]} câu Có</>} />)}</div><RadarChart values={normalization.percentages} /></section>
     <section className={styles.analysis}><h2>Hiểu kết quả của bạn</h2>{result.analysis.length ? <div className={styles.analysisGrid} style={result.analysis.length === 1 ? { gridTemplateColumns: 'minmax(0, 1fr)' } : undefined}>{result.analysis.map(item => <article className={styles.analysisCard} key={item.code}><h3>{item.title}</h3>{item.description && <p>{item.description}</p>}{([{ key: 'personality', label: 'Đặc điểm' }, { key: 'strengths', label: 'Thế mạnh' }, { key: 'weaknesses', label: 'Điểm cần lưu ý' }, { key: 'careers', label: 'Nghề tham khảo' }] as const).map(section => <section key={section.key}><h4>{section.label}</h4>{item[section.key].length ? <ul>{item[section.key].map((value, index) => <li key={index}>{value}</li>)}</ul> : <p>Chưa có nội dung.</p>}</section>)}</article>)}</div> : <p>Chưa có nội dung phân tích từ hệ thống cho kết quả này. Bạn vẫn có thể xem điểm của cả sáu nhóm.</p>}</section>
-    <section className={styles.bridge}><h2>Lưu kết quả và tiếp tục hành trình</h2><p>Đăng ký hoặc đăng nhập để lưu bài vừa làm vào tài khoản, trao đổi với AI và xây dựng lộ trình. Bạn sẽ tiếp tục đúng tính năng đã chọn.</p><div className={styles.actions}><Link className={styles.primaryLink} to={destination('advisor')}>Tư vấn với AI</Link><Link className={styles.link} to={destination('roadmap')}>Xây dựng lộ trình</Link><Link className={styles.link} to={paths.assessment}>Quay lại bài Holland</Link></div></section>
+    <section className={styles.bridge} data-result-enter=""><h2>Lưu kết quả và tiếp tục hành trình</h2><p>Đăng ký hoặc đăng nhập để lưu bài vừa làm vào tài khoản, trao đổi với AI và xây dựng lộ trình. Bạn sẽ tiếp tục đúng tính năng đã chọn.</p><div className={styles.actions}><Link className={styles.primaryLink} to={destination('advisor')}>Tư vấn với AI</Link><Link className={styles.link} to={destination('roadmap')}>Xây dựng lộ trình</Link><Link className={styles.link} to={paths.assessment}>Quay lại bài Holland</Link></div></section>
     <p>Phiên chưa lưu chỉ có trong tab này. Đóng tab có thể mất bài. {expired ? 'Phiên đã hết hạn lưu; bạn vẫn có thể đọc kết quả trên màn này.' : 'Hãy lưu vào tài khoản trong vòng 24 giờ kể từ khi bắt đầu.'}</p>
   </div></CareerScreenFrame></div>;
 }

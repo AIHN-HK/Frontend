@@ -13,8 +13,8 @@ test('real detail never fetches preview records or claims a verified career', as
     if (/catalog-preview|\/api\/.*career/.test(r.url())) requests.push(r.url());
   });
   await page.goto('/careers/preview-software');
-  await expect(page).toHaveURL(/\/login\?returnTo=%2Fcareers%2Fpreview-software$/);
-  await expect(page.getByRole('heading', { name: 'Đăng nhập AIHN' })).toBeVisible();
+  await expect(page).toHaveURL('/careers/preview-software');
+  await expect(page.getByText('Mã nghề không hợp lệ.')).toBeVisible();
   expect(requests).toEqual([]);
   await careerPlatformFixture(page);
   await page.goto('/careers/preview-software');

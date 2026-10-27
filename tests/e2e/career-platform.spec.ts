@@ -48,6 +48,8 @@ test("profile saves explicit zero ratings and target with revision, then generat
     page.getByRole("heading", { name: "1. Software Developers" }),
   ).toBeVisible();
   await expect(page.getByText("80.0 / 100", { exact: true })).toBeVisible();
+  await page.locator('summary').filter({ hasText: 'Vì sao phù hợp' }).focus();
+  await page.keyboard.press('Enter');
   await expect(
     page.getByText("Hình dạng RIASEC: 80.0 × 100.0% = 80.0 điểm", {
       exact: true,

@@ -1,35 +1,37 @@
 [
   {
     "key": "advisor",
-    "page": "https://lottiefiles.com/free-animation/chatbot-jxCXfeBs3a",
-    "source": "https://assets-v2.lottiefiles.com/a/0cc7c41c-1186-11ee-b39c-27fc11f6b6dd/gT7kWqbOZ9.lottie",
-    "jsonBytes": 31256,
-    "sha256": "fc2bd3e824b4e0fd77d3b726db6e51e740f972a2603e233d6ac53fe8ed0029ca",
+    "page": "https://lottiefiles.com/free-animation/orb-ai-assistant-aibaa-B9u3qlIbwH",
+    "source": "https://assets-v2.lottiefiles.com/a/dcd9b2e5-78fe-41d7-bad4-2d26a18bf25b/B9u3qlIbwH.lottie",
+    "jsonBytes": 23203,
+    "sha256": "30ab941086afe3822f9bbbae13f33d1d5fcd81bdaa3084dbdcce8c132beee51a",
     "size": [
-      1000,
-      1000
+      700,
+      700
     ],
-    "fps": 60,
-    "duration": 4.016666666666667,
+    "fps": 29.9700012207031,
+    "duration": 7.7077,
     "layers": 6,
-    "assets": [],
-    "title": "Chatbot",
-    "author": "Ali Azgar",
+    "title": "Orb Ai Assistant",
+    "author": "AsadShiekh",
     "license": "Lottie Simple License",
     "licenseUrl": "https://lottiefiles.com/page/license",
     "retrievedAt": "2026-10-26",
     "localFile": "advisor.json",
-    "localBytes": 31256,
-    "gzipBytes": 3808,
-    "localSha256": "fc2bd3e824b4e0fd77d3b726db6e51e740f972a2603e233d6ac53fe8ed0029ca",
-    "changes": [],
+    "localBytes": 22538,
+    "gzipBytes": 2439,
+    "localSha256": "348ca15d1f0634448a0d7aea6efd3f36703fd96b7eb386b181ab376461c3822e",
+    "changes": [
+      "Remapped saturated blue/cyan fills and gradient stops to AIHN violet.",
+      "Removed two unsupported After Effects Tint effects.",
+      "Replaced previous cartoon robot illustration."
+    ],
     "poster": {
       "file": "advisor.svg",
-      "frame": 70,
-      "renderer": "lottie-web SVG light 5.13.0",
-      "bytes": 20796,
-      "gzipBytes": 3525,
-      "sha256": "9adaec2b01aeee9254ef63b49ac22dda0288518316b1488060c172558aa9b842"
+      "renderer": "AIHN compact static SVG approximation of the recolored orb",
+      "bytes": 940,
+      "gzipBytes": 444,
+      "sha256": "0d1ad5bfe75ca84258ca5a6f3b2f9a5a565d877a58d2adc545dbdc1d4b018e9c"
     }
   },
   {

@@ -1,0 +1,19 @@
+# Third-party LottieFiles assets
+
+These animations retain their authors' rights and are provided under the
+[Lottie Simple License](https://lottiefiles.com/page/license), separately from the application's license.
+
+| Local asset | Author | Original page |
+| --- | --- | --- |
+| advisor.json / advisor.svg | AsadShiekh (motion); AIHN (static SVG approximation) | https://lottiefiles.com/free-animation/orb-ai-assistant-aibaa-B9u3qlIbwH |
+| empty.json / empty.svg | Aadesh Kulkarni | https://lottiefiles.com/free-animation/empty-box-animation-EfC20FO7YI |
+| complete.json / complete.svg | Pranav Patil | https://lottiefiles.com/free-animation/success-check-zSLSFlcAJq |
+
+Retrieved 2026-10-26. `sources.json` records the source files, original and local
+SHA-256 hashes, byte sizes and modifications. SVG posters are selected frames
+rendered from these local animations, except the compact AIHN-authored orb poster
+(see THINKING-SOURCE.md). The abstract orb replaces the former Ali Azgar chatbot
+trial; saturated blue/cyan colors were remapped to violet and unsupported Tint
+effects removed. The empty box embeds its three original
+tiny PNG layers; the completion animation's white background is removed for the
+dark UI. The authors' animation sequences and other colors are retained.

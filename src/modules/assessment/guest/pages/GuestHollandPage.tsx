@@ -6,9 +6,14 @@ import { ApiError } from '@/shared/api/api-error';
 import { session } from '@/shared/session/session';
 import { Button } from '@/shared/ui/Button';
 import { AsyncState } from '@/shared/ui/AsyncState';
-import { CareerScreenFrame } from '@/shared/ui/ce/CareerScreenFrame';
-import { TimelineSidebar } from '@/shared/ui/ce/TimelineSidebar';
+import { SpotlightCard } from '@/shared/ui/SpotlightCard';
+import { HollandWorkspace } from '../../testing/components/HollandWorkspace';
+import { HollandProgress } from '../../testing/components/HollandProgress';
+import { HollandKeyboard } from '../../testing/components/HollandKeyboard';
+import { QuestionTransition } from '../../testing/components/QuestionTransition';
+import { AssessmentProcessing } from '../../testing/components/AssessmentProcessing';
 import { HollandShowcase } from '../../testing/components/HollandShowcase';
+import { LiveRiasecSummary } from '../../testing/components/LiveRiasecSummary';
 import { useAssessmentQuestionsQuery } from '../../queries/assessment.queries';
 import { guestAssessmentStore } from '../model/guest-assessment';
 import type { GuestDraft } from '../model/guest-assessment';
@@ -24,6 +29,7 @@ export function GuestHollandPage() {
   const expired = useGuestExpiry(draft?.catalog.expiresAt);
   const [overview, setOverview] = useState(false), [busy, setBusy] = useState(false), [error, setError] = useState(''), [discard, setDiscard] = useState(false);
   const request = useRef<AbortController | null>(null), pending = useRef(false), heading = useRef<HTMLHeadingElement>(null);
+  const [submitting, setSubmitting] = useState(false);
   useEffect(() => () => { request.current?.abort(); }, []);
   const focusKey = draft && !overview ? `${draft.catalog.id}:${draft.index}` : null;
   useEffect(() => { if (focusKey) heading.current?.focus({ preventScroll: true }); }, [focusKey]);
@@ -42,26 +48,23 @@ export function GuestHollandPage() {
   const submit = async () => {
     if (!draft || pending.current) return;
     const controller = new AbortController(); request.current = controller; pending.current = true; setBusy(true); setError('');
+    setSubmitting(true);
     const revision = session.read().revision;
     try {
       const result = await previewGuestAssessment(http, draft, controller.signal);
       if (controller.signal.aborted || session.read().revision !== revision) return;
       save({ ...draft, result }); void navigate(paths.guestAssessmentResult);
     } catch (failure) { if (!controller.signal.aborted) setError(failure instanceof ApiError ? failure.message : 'Chưa xem được kết quả. Đáp án vẫn được giữ.'); }
-    finally { pending.current = false; if (!controller.signal.aborted) setBusy(false); }
+    finally { pending.current = false; if (!controller.signal.aborted) { setBusy(false); setSubmitting(false); } }
   };
   const question = draft?.catalog.questions[draft.index];
   const total = draft?.catalog.questions.length ?? questions.data?.length;
   const answered = Object.keys(draft?.answers ?? {}).length;
   const welcome = !draft || overview;
-  return <CareerScreenFrame sidebar={<TimelineSidebar steps={[
-    { id: 'start', title: 'START', description: 'Làm bài trước, đăng ký sau', status: welcome ? 'active' : 'completed' },
-    { id: 'test', title: 'HOLLAND TEST', description: `${total ?? '…'} câu hỏi Có / Không`, status: welcome ? 'pending' : 'active' },
-    { id: 'result', title: 'RIASEC', description: 'Xem tổng kết ngay sau bài làm', status: 'pending' },
-    { id: 'account', title: 'TÀI KHOẢN', description: 'Lưu kết quả, tư vấn AI và lộ trình', status: 'pending' },
-  ]} />}>
+  return <HollandWorkspace started={!welcome} stage={submitting ? 'processing' : draft?.result ? 'complete' : 'test'} radar={draft ? <LiveRiasecSummary questions={draft.catalog.questions} answers={draft.answers} /> : undefined}><HollandKeyboard enabled={!welcome && !draft?.result}>
     <div className={`holland-page ${styles.page}`}>
       {error && <p className={styles.error} role="alert">{error}</p>}
+      {submitting && <AssessmentProcessing />}
       {!guestAssessmentStore.available() && <p className={styles.notice} role="note">Chưa lưu được trên trình duyệt. Đáp án chỉ còn trong màn này; tải lại hoặc rời trang có thể mất bài.</p>}
       {guestAssessmentStore.invalid() && <p className={styles.notice}>Bản nháp trước không hợp lệ. Bạn có thể chủ động bắt đầu bài mới.</p>}
       {draft?.result ? <section className={styles.welcome}><h1>Bạn đã hoàn thành Holland</h1><p>Kết quả đang được giữ trong phiên trình duyệt này.</p><Link className="btn btn-primary" to={paths.guestAssessmentResult}>Xem tổng kết RIASEC</Link><Button variant="secondary" onClick={() => setDiscard(true)}>Làm bài mới</Button></section> : welcome ? <section className={styles.welcome}>
@@ -72,12 +75,14 @@ export function GuestHollandPage() {
       </section> : draft && question && <>
         <div className={styles.utility}><button className={styles.back} disabled={busy} onClick={() => setOverview(true)}>← Quay lại giới thiệu</button><span role="status">{guestAssessmentStore.available() ? 'Đã lưu trong phiên trình duyệt' : 'Chưa lưu trên thiết bị'}</span></div>
         {expired && <p className={styles.notice}>Phiên làm bài đã hết hạn. Đáp án vẫn được giữ để xem lại. <Button onClick={() => setDiscard(true)}>Bắt đầu bài mới</Button></p>}
+        <header className={styles.testHeading}><p>HIỂU MÌNH · CHỌN HƯỚNG ĐI</p><h2>Khám phá sở thích của bạn</h2></header>
         <div className={styles.questionMeta}><span className={styles.pill}>Nhóm {question.type}</span><span>Câu {draft.index + 1}/{total}</span></div>
-        <div className={styles.progress} role="progressbar" aria-label="Số câu đã trả lời" aria-valuemin={0} aria-valuemax={total} aria-valuenow={answered}><span style={{ width: `${answered / total! * 100}%` }} /></div>
-        <section className={styles.question}><h1 ref={heading} tabIndex={-1}>{question.content}</h1><fieldset className={styles.answers} disabled={busy}><legend>Hoạt động này có phù hợp với sở thích của bạn không?</legend><div className={styles.choices}>{[{ check: true, label: 'Có — Tôi thích' }, { check: false, label: 'Không — Tôi không thích' }].map(option => <label key={option.label} className={`holland-choice ${styles.choice} ${draft.answers[String(question.id)] === option.check ? styles.selected : ''}`}><input type="radio" name="guest-answer" aria-label={option.label} checked={draft.answers[String(question.id)] === option.check} onChange={() => save({ ...draft, answers: { ...draft.answers, [String(question.id)]: option.check } })} /><span className={styles.choiceIcon} aria-hidden="true">{option.check ? '✓' : '−'}</span><strong>{option.label}</strong></label>)}</div></fieldset></section>
+        <HollandProgress answered={answered} total={total!} />
+        <div className={styles.counts}><span>{answered}/{total} đã trả lời</span><span>{Math.round(answered / total! * 100)}% hoàn thành</span></div>
+        <QuestionTransition questionKey={question.id}><section className={styles.question}><h1 ref={heading} tabIndex={-1}>{question.content}</h1><fieldset className={styles.answers} disabled={busy}><legend>Hoạt động này có phù hợp với sở thích của bạn không?</legend><div className={styles.choices}>{[{ check: true, label: 'Có — Tôi thích' }, { check: false, label: 'Không — Tôi không thích' }].map(option => <SpotlightCard as="label" data-answer-card="" key={option.label} className={`holland-choice ${styles.choice} ${draft.answers[String(question.id)] === option.check ? styles.selected : ''}`}><input type="radio" name="guest-answer" aria-label={option.label} checked={draft.answers[String(question.id)] === option.check} onChange={() => save({ ...draft, answers: { ...draft.answers, [String(question.id)]: option.check } })} /><span className={styles.choiceIcon} aria-hidden="true">{option.check ? '✓' : '−'}</span><strong>{option.label}</strong><small>{option.check ? 'Phù hợp với sở thích của tôi' : 'Không cảm thấy phù hợp'}</small></SpotlightCard>)}</div></fieldset></section></QuestionTransition>
         <nav className={styles.nav} aria-label="Chuyển câu hỏi"><Button variant="secondary" disabled={busy || draft.index === 0} onClick={() => save({ ...draft, index: draft.index - 1 })}>Câu trước đó</Button>{draft.index < total! - 1 ? <Button disabled={busy || typeof draft.answers[String(question.id)] !== 'boolean'} onClick={() => save({ ...draft, index: draft.index + 1 })}>Tiếp theo</Button> : <Button disabled={busy || typeof draft.answers[String(question.id)] !== 'boolean'} onClick={() => { void submit(); }}>{busy ? 'Đang tổng kết…' : 'Xem tổng kết RIASEC'}</Button>}</nav>
       </>}
       {discard && <section className={styles.notice} aria-label="Xác nhận làm bài mới"><p>Bắt đầu bài mới sẽ thay bài và kết quả tạm trong tab này.</p><Button variant="secondary" onClick={() => setDiscard(false)}>Giữ bài hiện tại</Button><Button disabled={busy} onClick={() => { setDiscard(false); void start(); }}>Xác nhận làm bài mới</Button></section>}
     </div>
-  </CareerScreenFrame>;
+  </HollandKeyboard></HollandWorkspace>;
 }

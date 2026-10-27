@@ -24,3 +24,11 @@ test('bar target is readable before effects and missing data does not manufactur
   expect(renderToStaticMarkup(createElement(RiasecBar,props))).toContain('width:50%');
   expect(renderToStaticMarkup(createElement(RiasecBar,{...props,percentage:null}))).not.toContain('data-ce-score-fill');
 });
+test('live partial radar marks answered axes without a fabricated full polygon', () => {
+  const markup = renderToStaticMarkup(createElement(RadarChart, { values: { R: null, I: 100, A: null, S: 0, E: null, C: null }, showPartial: true }));
+  expect(markup).not.toContain('data-radar-values');
+  expect(markup).toContain('data-radar-observed="I"');
+  expect(markup).toContain('data-radar-observed="S"');
+  expect(markup).not.toContain('data-radar-observed="R"');
+  expect(markup).toContain('Nhóm chưa trả lời được để trống');
+});

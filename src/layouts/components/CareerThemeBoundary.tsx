@@ -14,7 +14,7 @@ const careerTheme: ThemeConfig = {
     colorPrimary: '#8b5cf6',
     borderRadius: 10,
     controlHeight: 44,
-    fontSize: 14,
+    fontSize: 16,
   },
 };
 

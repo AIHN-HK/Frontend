@@ -1,13 +1,18 @@
 import { expect, test } from '@playwright/test';
 import { resultFixture } from './result.fixture';
 import { adminFixture } from './admin.fixture';
+import { careerPlatformFixture } from './career-platform.fixture';
 
-test('Home stays public for guests and students while catalog preserves the protected return URL', async ({ page }) => {
+test('Home and careers stay public while the personal target preserves its login return URL', async ({ page }) => {
+  await careerPlatformFixture(page, { anonymous: true });
   await page.goto('/');
   await expect(page).toHaveURL('/');
   await expect(page.getByRole('heading', { level: 1 })).toContainText('Khám phá con đường');
   await page.goto('/careers/15-1252.00');
-  await expect(page).toHaveURL(/\/login\?returnTo=%2Fcareers%2F15-1252.00$/);
+  await expect(page).toHaveURL('/careers/15-1252.00');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Software Developers');
+  await page.getByRole('link', { name: 'Chọn làm mục tiêu trong hồ sơ', exact: true }).click();
+  await expect(page).toHaveURL(/\/login\?returnTo=%2Fcareer-profile%3Ftarget%3D15-1252\.00$/);
   await resultFixture(page);
   await page.goto('/');
   await expect(page).toHaveURL('/');

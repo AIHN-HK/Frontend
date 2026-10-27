@@ -13,11 +13,13 @@
 .timeline { display:grid; }
 .phase { position:relative; display:grid; gap:16px; padding:0 0 32px 54px; min-width:0; }
 .phase:last-child { padding-bottom:0; }
-.phase:before { content:''; position:absolute; top:0; left:0; width:32px; height:32px; border:2px solid var(--ce-node-border); border-radius:50%; background:var(--ce-bg-main); }
-.phase:not(:last-child):after { content:''; position:absolute; top:36px; bottom:4px; left:15px; width:2px; background:var(--ce-c-border); }
-.phase[data-phase-state=current]:before { border-color:var(--ce-c); background:var(--ce-c-subtle); box-shadow:0 0 18px var(--ce-card-glow); }
-.phase[data-phase-state=done]:before { content:'✓'; display:grid; place-items:center; background:var(--ce-btn-white); color:var(--ce-btn-text); }
+.phaseNode { position:absolute; top:0; left:0; width:32px; height:32px; display:grid; place-items:center; border:1px solid var(--ce-node-border); border-radius:50%; background:var(--ce-bg-main); color:var(--ce-text-secondary); font-size:12px; }
+.connector { position:absolute; top:38px; left:0; width:32px; height:calc(100% - 44px); color:var(--ce-c-border); pointer-events:none; }
+.phase[data-phase-state=current]>.phaseNode { border-color:var(--ce-violet); color:var(--ce-violet); background:var(--ce-c-subtle); box-shadow:0 0 18px var(--ce-card-glow); }
+.phase[data-phase-state=done]>.phaseNode { background:var(--ce-btn-white); color:var(--ce-btn-text); }
+.phase[data-phase-state=done]>.connector { color:var(--ce-violet); }
+.processing { display:flex; align-items:center; gap:12px; min-height:56px; }.processing>div:first-child { flex-shrink:0; }.processing p { font-size:12px; }
 .tableWrap { min-width:0; overflow-x:auto; }
 .table { width:100%; border-collapse:collapse; font-size:12px; text-align:left; }
 .table th,.table td { padding:10px 6px; border-bottom:1px solid var(--ce-border); overflow-wrap:anywhere; }
-@media(max-width:768px) { .page>h1 { font-size:28px; } .card { padding:16px; } .phase { padding-left:38px; } .phase .card { padding:12px; } .phase:before { width:26px; height:26px; } .phase:not(:last-child):after { left:12px; top:30px; } }
+@media(max-width:768px) { .page>h1 { font-size:28px; } .card { padding:16px; } .phase { padding-left:38px; } .phase .card { padding:12px; } .phaseNode { width:26px; height:26px; }.connector { width:26px; top:32px; height:calc(100% - 38px); } }
