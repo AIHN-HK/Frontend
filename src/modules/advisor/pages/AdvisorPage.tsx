@@ -14,6 +14,7 @@ import { isBusy, parseSessionId } from '../model/message.types';
 import { advisorMessagesKey, useAdvisorQueries } from '../queries/advisor.queries';
 import { AdvisorComposer } from '../components/AdvisorComposer';
 import { AdvisorReplySkeleton } from '../components/AdvisorReplySkeleton';
+import { isAdvisorSoundEnabled, playAdvisorReplySound, setAdvisorSoundEnabled } from '../model/advisor-sound';
 import styles from './AdvisorPage.module.css';
 
 export function AdvisorPage() {
@@ -24,6 +25,7 @@ export function AdvisorPage() {
 function AdvisorWorkspace({ ownerId, revision }: { ownerId: number; revision: number }) {
   const [params] = useSearchParams(), rawId = params.get('sessionId'), selectedId = parseSessionId(rawId), invalidId = rawId !== null && selectedId === null;
   const [contextOpen, setContextOpen] = useState(() => window.matchMedia('(min-width: 901px)').matches);
+  const [soundOn, setSoundOn] = useState(() => isAdvisorSoundEnabled());
   const navigate = useNavigate(), queryClient = useQueryClient(), auth = useAuth(), history = useAssessmentHistoryQuery();
   const { sessions, messages } = useAdvisorQueries(invalidId ? null : selectedId), log = useRef<HTMLDivElement>(null), atEnd = useRef(true);
   const controller = useMemo(() => createAdvisorController({
@@ -40,6 +42,7 @@ function AdvisorWorkspace({ ownerId, revision }: { ownerId: number; revision: nu
       if (phase === 'completed') {
         if (draft.read().content === question) draft.write('', false);
         void queryClient.invalidateQueries({ queryKey: advisorMessagesKey(ownerId, revision, sessionId) });
+        playAdvisorReplySound();
       }
       if (phase !== 'awaiting') void queryClient.invalidateQueries({ queryKey: ['history', 'chats', ownerId, revision] });
     },
@@ -74,10 +77,26 @@ function AdvisorWorkspace({ ownerId, revision }: { ownerId: number; revision: nu
     </aside>
     <section className="advisor-chat" aria-label="Hội thoại với Cố vấn AIHN">
       <header className="advisor-chat-header"><div><h2 className="text-lg">{selectedId === null ? 'Hội thoại mới' : selected?.title?.trim() || `Phiên tư vấn #${selectedId}`}</h2><p className="advisor-caption text-xs" role="status">{status}</p></div>
-        {selectedId === null && !invalidId && <>
-          {history.isPending ? <p role="status" className="text-sm">Đang kiểm tra kết quả Holland…</p> : history.isError ? <div role="alert"><p className="text-sm">Chưa kiểm tra được điều kiện mở hội thoại.</p><Button className="text-sm" disabled={history.isFetching} onClick={() => { void history.refetch(); }}>Kiểm tra lại kết quả Holland</Button></div> : !history.data.length ? <div><p className="text-sm">Hoàn thành trắc nghiệm Holland để bắt đầu hội thoại mới.</p><Link className="btn btn-secondary text-sm" to={paths.assessment}>Làm bài trắc nghiệm</Link></div> : view.connection === 'connecting' ? <p role="status" className="text-sm">Đang kết nối hội thoại…</p> : <Button type="primary" className="text-base" onClick={controller.begin}>Kết nối hội thoại mới</Button>}
-        </>}
-        {live && ['queued', 'streaming', 'stopping'].includes(view.phase) && <Button className="text-sm" disabled={view.phase === 'stopping' || view.authPending} onClick={controller.stop}>Dừng trả lời</Button>}
+        <div className={styles.chatHeaderControls}>
+          <button
+            type="button"
+            className={styles.soundButton}
+            onClick={() => {
+              const next = !soundOn;
+              setSoundOn(next);
+              setAdvisorSoundEnabled(next);
+            }}
+            title={soundOn ? 'Tắt âm thanh thông báo' : 'Bật âm thanh thông báo'}
+            aria-label={soundOn ? 'Tắt âm thanh thông báo' : 'Bật âm thanh thông báo'}
+          >
+            <span aria-hidden="true">{soundOn ? '🔊' : '🔇'}</span>
+            <span>{soundOn ? 'Âm thanh bật' : 'Tắt âm'}</span>
+          </button>
+          {selectedId === null && !invalidId && <>
+            {history.isPending ? <p role="status" className="text-sm">Đang kiểm tra kết quả Holland…</p> : history.isError ? <div role="alert"><p className="text-sm">Chưa kiểm tra được điều kiện mở hội thoại.</p><Button className="text-sm" disabled={history.isFetching} onClick={() => { void history.refetch(); }}>Kiểm tra lại kết quả Holland</Button></div> : !history.data.length ? <div><p className="text-sm">Hoàn thành trắc nghiệm Holland để bắt đầu hội thoại mới.</p><Link className="btn btn-secondary text-sm" to={paths.assessment}>Làm bài trắc nghiệm</Link></div> : view.connection === 'connecting' ? <p role="status" className="text-sm">Đang kết nối hội thoại…</p> : <Button type="primary" className="text-base" onClick={controller.begin}>Kết nối hội thoại mới</Button>}
+          </>}
+          {live && ['queued', 'streaming', 'stopping'].includes(view.phase) && <Button className="text-sm" disabled={view.phase === 'stopping' || view.authPending} onClick={controller.stop}>Dừng trả lời</Button>}
+        </div>
       </header>
       {selectedId !== null && !live && <p className="advisor-readonly text-sm">Phiên đã lưu được mở để đọc lại.</p>}
       {view.notice && <div className="advisor-notice text-sm" role="alert"><p>{view.notice}</p>{view.connection === 'auth' && <Button className="text-sm" disabled={view.authPending} onClick={async () => { if (await auth.refresh(revision)) controller.authenticationRenewed(); }}>Làm mới xác thực</Button>}</div>}

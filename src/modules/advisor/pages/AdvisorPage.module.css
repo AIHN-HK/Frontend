@@ -153,6 +153,33 @@
   font-size: var(--text-sm, 14.5px);
   font-weight: 500;
 }
+.chatHeaderControls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.soundButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 44px !important;
+  padding: 0 14px !important;
+  border-radius: 10px !important;
+  background: var(--ce-glass-subtle) !important;
+  border: 1px solid var(--ce-border) !important;
+  color: var(--ce-text-secondary) !important;
+  font-size: var(--text-xs, 13.5px) !important;
+  font-weight: 500 !important;
+  cursor: pointer;
+  transition: all 0.2s var(--ce-ease);
+}
+.soundButton:hover {
+  color: var(--ce-text-primary) !important;
+  border-color: var(--ce-border-strong) !important;
+  background: var(--ce-bg-elevated) !important;
+}
 .page :global(.advisor-readonly) {
   padding: 10px 32px;
   background: var(--ce-glass-subtle);
@@ -317,7 +344,7 @@
   min-height: 72px;
   max-height: 180px;
   resize: vertical;
-  font-size: 16px !important;
+  font-size: var(--text-base) !important;
   line-height: 1.55;
   padding: 12px 14px;
   border-radius: 12px;
@@ -397,5 +424,5 @@
   .page :global(.advisor-message.user) {
     max-width: 92%;
   }
-  .page textarea { font-size: 16px; }
+  .page textarea { font-size: var(--text-base); }
 }
