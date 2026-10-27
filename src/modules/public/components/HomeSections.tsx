@@ -13,9 +13,9 @@ export function HomeHero() {
             </span>
           </div>
           <h1 className={styles["aihn-hero__title"]}>
-            {"Khám phá con đường"}
+            <span data-home-title-line="">{"Khám phá con đường"}</span>
             <br />
-            <em>
+            <em data-home-title-line="">
               {"phù hợp với bạn."}
             </em>
           </h1>
