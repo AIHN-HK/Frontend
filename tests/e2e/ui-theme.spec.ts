@@ -3,6 +3,27 @@ import { resultFixture } from './result.fixture';
 import { adminFixture } from './admin.fixture';
 import { careerPlatformFixture } from './career-platform.fixture';
 
+test('one shared body size reaches Home, lazy career content and auth controls', async ({ page }) => {
+  await careerPlatformFixture(page, { anonymous: true });
+  const setBodySize = () => page.evaluate(() => document.documentElement.style.setProperty('--text-base', '20px'));
+  await page.goto('/');
+  await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+  await setBodySize();
+  await expect(page.getByRole('banner').getByRole('link', { name: 'Đăng nhập', exact: true })).toHaveCSS('font-size', '20px');
+
+  await page.goto('/careers');
+  await expect(page.getByRole('heading', { name: 'Software Developers', exact: true })).toBeVisible();
+  await setBodySize();
+  await expect(page.getByText('Sourced occupation description for this browser fixture.', { exact: true })).toHaveCSS('font-size', '20px');
+  await expect(page.getByRole('searchbox', { name: 'Tìm nghề theo tên hoặc mô tả', exact: true })).toHaveCSS('font-size', '20px');
+
+  await page.goto('/login');
+  await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+  await setBodySize();
+  await expect(page.getByRole('textbox', { name: 'Email trường hoặc cá nhân', exact: true })).toHaveCSS('font-size', '20px');
+  await expect(page.getByRole('button', { name: 'Đăng nhập vào Trang của tôi →', exact: true })).toHaveCSS('font-size', '20px');
+});
+
 test('Home and careers stay public while the personal target preserves its login return URL', async ({ page }) => {
   await careerPlatformFixture(page, { anonymous: true });
   await page.goto('/');

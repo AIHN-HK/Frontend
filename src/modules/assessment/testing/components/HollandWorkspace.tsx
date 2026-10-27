@@ -29,7 +29,7 @@ function RiasecCompass() {
   return <><svg viewBox="0 0 200 200" role="img" aria-label="Sáu nhóm sở thích RIASEC, hình minh họa không phải điểm số">
     <circle cx="100" cy="100" r="68" fill="none" stroke="var(--ce-border)" />
     <path d="M100 32 159 66 159 134 100 168 41 134 41 66Z" fill="var(--ce-c-subtle)" stroke="var(--ce-c-border)" />
-    {['R', 'I', 'A', 'S', 'E', 'C'].map((code, index) => <g key={code}><line x1="100" y1="100" x2={points[index]![0]} y2={points[index]![1]} stroke="var(--ce-border)" /><circle cx={points[index]![0]} cy={points[index]![1]} r="15" fill="var(--ce-card-gradient-start)" stroke={`var(--ce-${code.toLowerCase()}-border)`} /><text x={points[index]![0]} y={points[index]![1] + 4} textAnchor="middle" fill={`var(--ce-${code.toLowerCase()})`} fontSize="12" fontWeight="600">{code}</text></g>)}
+    {['R', 'I', 'A', 'S', 'E', 'C'].map((code, index) => <g key={code}><line x1="100" y1="100" x2={points[index]![0]} y2={points[index]![1]} stroke="var(--ce-border)" /><circle cx={points[index]![0]} cy={points[index]![1]} r="15" fill="var(--ce-card-gradient-start)" stroke={`var(--ce-${code.toLowerCase()}-border)`} /><text x={points[index]![0]} y={points[index]![1] + 4} textAnchor="middle" fill={`var(--ce-${code.toLowerCase()})`} fontSize="var(--text-chart-compass)" fontWeight="600">{code}</text></g>)}
     <circle cx="100" cy="100" r="5" fill="var(--ce-violet)" />
   </svg><p className={styles.caption}>Mỗi lựa chọn giúp bạn hiểu thêm điều mình yêu thích.</p></>;
 }

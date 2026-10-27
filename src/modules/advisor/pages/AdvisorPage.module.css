@@ -10,7 +10,7 @@
 
 /* Default body text: 15–16px */
 .page p {
-  font-size: var(--text-base, 15.5px);
+
   line-height: 1.6;
   color: var(--ce-text-secondary);
 }
@@ -27,7 +27,7 @@
   min-width: 0;
 }
 .page :global(.advisor-context) p {
-  font-size: var(--text-sm, 14.5px);
+  font-size: var(--text-sm);
   line-height: 1.55;
   color: var(--ce-text-secondary);
 }
@@ -40,13 +40,13 @@
 
 /* Sidebar title & section titles: 18–20px */
 .page h1 {
-  font-size: var(--text-lg, 20px);
+  font-size: var(--text-lg);
   font-weight: 700;
   letter-spacing: -0.02em;
   color: var(--ce-text-primary);
 }
 .page h2 {
-  font-size: var(--text-lg, 18.5px);
+  font-size: var(--text-lg);
   font-weight: 600;
   letter-spacing: -0.015em;
   color: var(--ce-text-primary);
@@ -54,7 +54,7 @@
 
 /* Secondary captions & metadata: increased contrast (13.5–14px) */
 .page :global(.advisor-caption) {
-  font-size: var(--text-xs, 13.5px);
+  font-size: var(--text-xs);
   color: var(--ce-text-secondary);
   line-height: 1.5;
 }
@@ -68,7 +68,7 @@
   min-height: 44px;
   padding-block: 10px;
   cursor: pointer;
-  font-size: var(--text-sm, 14.5px);
+  font-size: var(--text-sm);
   font-weight: 600;
   color: var(--ce-violet);
 }
@@ -81,7 +81,7 @@
   gap: 10px;
 }
 .page :global(.advisor-context-block) p {
-  font-size: var(--text-sm, 14.5px);
+  font-size: var(--text-sm);
   line-height: 1.55;
 }
 
@@ -92,7 +92,7 @@
   min-width: 0;
 }
 .page label {
-  font-size: var(--text-sm, 14px);
+
   font-weight: 600;
   color: var(--ce-text-secondary);
 }
@@ -106,19 +106,19 @@
   color: var(--ce-text-primary);
   background: var(--ce-bg-nav);
   font: inherit;
-  font-size: var(--text-sm, 14.5px);
+  font-size: var(--text-sm);
 }
 .page a {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
-  font-size: var(--text-sm, 14px);
+  font-size: var(--text-sm);
   font-weight: 500;
   color: var(--ce-violet);
 }
 .page :global(.advisor-session-controls) button {
   min-height: 44px;
-  font-size: var(--text-sm, 14.5px);
+  font-size: var(--text-sm);
   font-weight: 500;
 }
 
@@ -142,7 +142,7 @@
   background: var(--ce-bg-main);
 }
 .page :global(.advisor-chat-header) h2 {
-  font-size: var(--text-lg, 19px);
+  font-size: var(--text-lg);
   font-weight: 600;
   letter-spacing: -0.015em;
   margin-bottom: 3px;
@@ -150,7 +150,7 @@
 .page :global(.advisor-chat-header button) {
   min-height: 44px;
   padding: 0 18px;
-  font-size: var(--text-sm, 14.5px);
+  font-size: var(--text-sm);
   font-weight: 500;
 }
 .chatHeaderControls {
@@ -170,7 +170,7 @@
   background: var(--ce-glass-subtle) !important;
   border: 1px solid var(--ce-border) !important;
   color: var(--ce-text-secondary) !important;
-  font-size: var(--text-xs, 13.5px) !important;
+  font-size: var(--text-xs) !important;
   font-weight: 500 !important;
   cursor: pointer;
   transition: all 0.2s var(--ce-ease);
@@ -183,7 +183,7 @@
 .page :global(.advisor-readonly) {
   padding: 10px 32px;
   background: var(--ce-glass-subtle);
-  font-size: var(--text-sm, 14px);
+  font-size: var(--text-sm);
   color: var(--ce-text-secondary);
   border-bottom: 1px solid var(--ce-border);
 }
@@ -217,7 +217,7 @@
 .page :global(.advisor-message p) {
   white-space: pre-wrap;
   color: var(--ce-text-primary);
-  font-size: var(--text-md, 16.5px);
+  font-size: var(--text-md);
   line-height: 1.62;
   letter-spacing: -0.005em;
   margin: 0;
@@ -231,11 +231,11 @@
 }
 .page :global(.advisor-message.user p) {
   color: var(--ce-text-primary);
-  font-size: var(--text-md, 16.5px);
+  font-size: var(--text-md);
   line-height: 1.6;
 }
 .page :global(.advisor-message .advisor-caption) {
-  font-size: var(--text-xs, 13px);
+  font-size: var(--text-xs);
   color: var(--ce-text-muted);
   margin-top: 8px;
   display: inline-block;
@@ -255,13 +255,13 @@
 }
 .page :global(.advisor-empty)>div:first-child { justify-self: center; }
 .page :global(.advisor-empty h2) {
-  font-size: var(--text-xl, 22px);
+  font-size: var(--text-xl);
   font-weight: 700;
   letter-spacing: -0.02em;
   color: var(--ce-text-primary);
 }
 .page :global(.advisor-empty p) {
-  font-size: var(--text-base, 15.5px);
+
   line-height: 1.65;
   color: var(--ce-text-secondary);
 }
@@ -295,7 +295,7 @@
 }
 /* Suggested prompt buttons/chips: 14–15px */
 .page :global(.advisor-prompts button) {
-  font-size: var(--text-sm, 14.5px);
+  font-size: var(--text-sm);
   font-weight: 500;
   line-height: 1.45;
   flex: 1 1 200px;
@@ -325,12 +325,12 @@
 .page :global(.advisor-composer-actions) button {
   min-height: 44px;
   padding: 0 24px;
-  font-size: var(--text-base, 15px);
+  font-size: var(--text-base);
   font-weight: 600;
   border-radius: 10px;
 }
 .page :global(.advisor-composer-actions .advisor-caption) {
-  font-size: var(--text-xs, 13px);
+  font-size: var(--text-xs);
   color: var(--ce-text-muted);
 }
 
@@ -364,11 +364,11 @@
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  font-size: var(--text-sm, 14.5px);
+  font-size: var(--text-sm);
 }
 .page :global(.advisor-notice p),
 .page :global(.advisor-review p) {
-  font-size: var(--text-sm, 14.5px);
+  font-size: var(--text-sm);
   line-height: 1.55;
 }
 .page :global(.advisor-chat>.advisor-notice) {

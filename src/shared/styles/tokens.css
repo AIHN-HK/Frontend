@@ -8,7 +8,7 @@
   --bg-surface-subtle: #EFF8FA;   /* Subtle inner utility fills */
   --bg-surface-hover: #E3F2F6;    /* Hover state */
   --bg-surface-active: #D8ECF3;   /* Active pressed state */
-  
+
   /* Semantic Atmospheric Surfaces */
   --bg-surface-blue: #EBF5FA;     /* Soft Blue Surface: Logic & analytical insights */
   --bg-surface-blue-border: #CCE5EF;
@@ -104,28 +104,6 @@
   --riasec-c-subtle: #E0F2FE;
   --riasec-c-border: #BAE6FD;
 
-  /* Typography Scale */
-  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-family-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-
-  --font-size-display: clamp(2rem, 4vw, 2.5rem);
-  --font-size-h1: clamp(1.625rem, 3vw, 2rem);
-  --font-size-h2: clamp(1.25rem, 2.5vw, 1.5rem);
-  --font-size-h3: 1.1875rem;
-  /* Body copy uses 17px; compact UI uses the responsive scale below. */
-  --font-size-body: 1.0625rem;
-  --font-size-body-sm: 1rem;
-  --font-size-caption: 0.9375rem;
-
-  --line-height-tight: 1.25;
-  --line-height-normal: 1.5;
-  --line-height-relaxed: 1.625;
-
-  --font-weight-regular: 400;
-  --font-weight-medium: 500;
-  --font-weight-semibold: 600;
-  --font-weight-bold: 700;
-
   /* Spacing Scale */
   --space-1: 4px;
   --space-2: 8px;
@@ -185,14 +163,6 @@
   --ce-text-primary: #ffffff;
   --ce-text-secondary: #b8b8c2;
   --ce-text-muted: #94949e;
-
-  /* Typography Scale */
-  --text-xs: clamp(0.8125rem, 0.79rem + 0.1vw, 0.875rem);  /* 13px -> 14px: metadata */
-  --text-sm: clamp(0.875rem, 0.85rem + 0.15vw, 0.9375rem);  /* 14px -> 15px: labels */
-  --text-base: clamp(1rem, 0.975rem + 0.15vw, 1.0625rem);   /* 16px -> 17px: body and controls */
-  --text-md: clamp(1.0625rem, 1.025rem + 0.2vw, 1.125rem);  /* 17px -> 18px: emphasis */
-  --text-lg: clamp(1.1875rem, 1.1rem + 0.4vw, 1.375rem);    /* 19px -> 22px: card headings */
-  --text-xl: clamp(1.375rem, 1.25rem + 0.6vw, 1.625rem);    /* 22px -> 26px: section headings */
 
   /* Showcase Card Gradient (Deep Midnight Purple) */
   --ce-card-gradient-start: #191433;

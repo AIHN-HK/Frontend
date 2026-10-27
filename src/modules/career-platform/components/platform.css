@@ -60,7 +60,6 @@
   padding: 10px;
   background: var(--bg-surface);
   color: var(--text-primary);
-  font: inherit;
 }
 .career-platform textarea {
   width: 100%;

@@ -1,0 +1,73 @@
+/* Change type sizes here. Component CSS selects a role; layout stays local. */
+:root {
+  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-family-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-family-editorial: 'AIHN Home Newsreader', Georgia, serif;
+  --font-family-editorial-sans: 'AIHN Home Plus Jakarta Sans', var(--font-family);
+
+  --text-xs: clamp(0.8125rem, 0.79rem + 0.1vw, 0.875rem); /* Metadata: 13–14px */
+  --text-sm: clamp(0.875rem, 0.85rem + 0.15vw, 0.9375rem); /* Labels: 14–15px */
+  --text-base: clamp(1rem, 0.975rem + 0.15vw, 1.0625rem); /* Body and controls: 16–17px */
+  --text-md: clamp(1.0625rem, 1.025rem + 0.2vw, 1.125rem); /* Subheadings: 17–18px */
+  --text-lg: clamp(1.1875rem, 1.1rem + 0.4vw, 1.375rem); /* Card titles: 19–22px */
+  --text-xl: clamp(1.375rem, 1.25rem + 0.6vw, 1.625rem); /* Section titles: 22–26px */
+  --text-page-title: clamp(1.75rem, 3vw, 2.375rem);
+  --text-intro-title: clamp(1.875rem, 3vw, 2.5rem);
+  --text-question: clamp(1.5rem, 2.1vw, 1.875rem);
+  --text-stat: clamp(1.5rem, 2vw, 2rem);
+  --text-brand: clamp(1.0625rem, 1.5vw, 1.1875rem);
+
+  /* Editorial Home uses the same body scale and larger display roles. */
+  --text-editorial-title: clamp(2.375rem, 4.8vw, 3.875rem);
+  --text-hero: clamp(2.75rem, 5.5vw, 4.5rem);
+  --text-lead: clamp(1.0625rem, 1.8vw, 1.25rem);
+  --text-statement: clamp(2.25rem, 4vw, 2.75rem);
+  --text-cta-title: clamp(2.625rem, 5.5vw, 4.25rem);
+  --text-editorial-brand: clamp(1.1875rem, 1.5vw, 1.3125rem);
+  --text-chart-label: 0.625rem;
+  --text-chart-label-compact: 0.875rem;
+  --text-chart-compass: 1rem;
+
+  /* Existing shared/admin styles retain their public token names. */
+  --font-size-display: clamp(2rem, 4vw, 2.5rem);
+  --font-size-h1: clamp(1.625rem, 3vw, 2rem);
+  --font-size-h2: clamp(1.25rem, 2.5vw, 1.5rem);
+  --font-size-h3: 1.1875rem;
+  --font-size-body: var(--text-base);
+  --font-size-body-sm: var(--text-base);
+  --font-size-caption: var(--text-sm);
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.625;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+}
+
+html { font-size: 100%; }
+body { font-family: var(--font-family); font-size: var(--font-size-body); line-height: var(--line-height-normal); -webkit-font-smoothing: antialiased; }
+button, input, select, textarea { font: inherit; }
+h1, h2, h3 { line-height: var(--line-height-tight); font-weight: var(--font-weight-semibold); }
+h1 { font-size: var(--font-size-h1); }
+h2 { font-size: var(--font-size-h2); }
+h3 { font-size: var(--font-size-h3); }
+p { line-height: var(--line-height-relaxed); }
+
+.ce-app { font-family: var(--font-family); font-size: var(--text-base); line-height: 1.6; }
+[data-home-editorial] { font-size: var(--text-base); }
+.ce-app :where(h1) { font-size: var(--text-page-title); }
+.ce-app :where(h2, h3) { font-size: var(--text-md); }
+.ce-app :where(h4) { font-size: var(--text-base); }
+:where(.ce-app, [data-home-editorial]) :where(p) { font-size: var(--text-base); }
+:where(.ce-app, [data-home-editorial]) :where(label, legend) { font-size: var(--text-sm); }
+:where(.ce-app, [data-home-editorial]) :where(small, figcaption) { font-size: var(--text-xs); }
+.ce-app :where(button, input, select, textarea) { font: inherit; font-size: var(--text-base); }
+.ce-app :is(.ant-btn, .ant-input, .ant-select, .ant-select-item) { font-size: var(--text-base); }
+
+.text-xs { font-size: var(--text-xs); line-height: 1.45; }
+.text-sm { font-size: var(--text-sm); line-height: 1.5; }
+.text-base { font-size: var(--text-base); line-height: 1.6; }
+.text-md { font-size: var(--text-md); line-height: 1.6; }
+.text-lg { font-size: var(--text-lg); line-height: 1.35; font-weight: 600; }
+.text-xl { font-size: var(--text-xl); line-height: 1.3; font-weight: 700; }

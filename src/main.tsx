@@ -6,6 +6,7 @@ import { session } from './shared/session/session';
 import { AsyncState } from './shared/ui/AsyncState';
 import { browserAuthPersistence } from './modules/auth';
 import './shared/styles/tokens.css';
+import './shared/styles/typography.css';
 import './shared/styles/global.css';
 import './shared/styles/components.css';
 

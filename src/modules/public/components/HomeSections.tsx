@@ -328,7 +328,7 @@ export function HomeRiasec() {
                   {"I • A • S"}
                 </div>
               </div>
-              <div style={{"fontSize": "13px", "color": "#575269", "textAlign": "right"}}>
+              <div style={{"fontSize": "var(--text-sm)", "color": "#575269", "textAlign": "right"}}>
                 {"Người tư duy sáng tạo"}
                 <br />
                 {"định hướng con người"}
@@ -585,7 +585,7 @@ export function HomeSkillGap() {
             </div>
             <div className={styles["bridge-connector-line"]}>
             </div>
-            <span style={{"fontSize": "11px", "fontWeight": "700", "color": "#858099", "textTransform": "uppercase"}}>
+            <span style={{"fontSize": "var(--text-xs)", "fontWeight": "700", "color": "#858099", "textTransform": "uppercase"}}>
               {"LỘ TRÌNH"}
             </span>
           </div>
@@ -881,7 +881,7 @@ export function HomeFinalCta() {
           {"Bắt đầu với bài đánh giá Holland RIASEC với câu trả lời Có / Không hoàn toàn miễn phí."}
         </p>
         <div>
-          <Link className={styles["btn-editorial-primary"]} to={paths.assessment} style={{"fontSize": "18px", "padding": "18px 48px"}}>
+          <Link className={styles["btn-editorial-primary"]} to={paths.assessment} style={{"fontSize": "var(--text-md)", "padding": "18px 48px"}}>
             <span>
               {"Khám phá ngay"}
             </span>
@@ -900,10 +900,10 @@ export function HomeFooter() {
     <footer className={styles["aihn-footer"]}>
       <div className={styles["aihn-footer__container"]}>
         <div style={{"display": "flex", "alignItems": "center", "gap": "12px"}}>
-          <div className={styles["nav-brand-mark"]} style={{"width": "30px", "height": "30px", "fontSize": "12px"}}>
+          <div className={styles["nav-brand-mark"]} style={{"width": "30px", "height": "30px", "fontSize": "var(--text-sm)"}}>
             {"AI"}
           </div>
-          <span style={{"fontFamily": "var(--font-family-serif)", "fontSize": "18px", "color": "#ffffff"}}>
+          <span style={{"fontFamily": "var(--font-family-serif)", "fontSize": "var(--text-md)", "color": "#ffffff"}}>
             {"AIHN Career"}
           </span>
         </div>

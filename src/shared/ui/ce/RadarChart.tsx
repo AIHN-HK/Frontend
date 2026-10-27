@@ -48,7 +48,7 @@ export function RadarChart({ values, label = 'Biểu đồ tỷ lệ Có theo 6 
           <circle data-radar-observed={code} cx={cx} cy={cy} r="2.5" strokeWidth="1" />
         </g>;
       })}
-      {radarCodes.map((code, index) => <text key={code} x={labels[index]![0]} y={labels[index]![1]} textAnchor="middle" dominantBaseline="middle" fill={`var(--ce-${code.toLowerCase()})`} fontSize="8" fontWeight="700">{code}</text>)}
+      {radarCodes.map((code, index) => <text key={code} x={labels[index]![0]} y={labels[index]![1]} textAnchor="middle" dominantBaseline="middle" fill={`var(--ce-${code.toLowerCase()})`} fontSize="var(--text-chart-label)" fontWeight="700">{code}</text>)}
     </svg>
     <figcaption>{complete ? 'Tỷ lệ Có theo từng nhóm' : showPartial ? hasAnswers ? 'Nhóm chưa trả lời được để trống' : 'Trả lời câu hỏi để cập nhật biểu đồ' : 'Chưa đủ dữ liệu để vẽ toàn bộ biểu đồ'}</figcaption>
   </figure>;

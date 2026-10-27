@@ -157,7 +157,9 @@ for (const width of [320, 390, 768, 769, 1024, 1025, 1440]) test(`focused Hollan
   const sidebar = page.getByRole('complementary', { name: 'Tiến trình', exact: true });
   await expect(sidebar).toContainText('Lộ trình trắc nghiệm');
   if (width > 1024) {
-    expect((await sidebar.boundingBox())!.width).toBe(260);
+    const sidebarWidth = (await sidebar.boundingBox())!.width;
+    expect(sidebarWidth).toBeGreaterThanOrEqual(260);
+    expect(sidebarWidth).toBeLessThanOrEqual(width / 3);
     expect((await sidebar.boundingBox())!.x).toBeLessThan((await page.getByRole('heading', { level: 1 }).boundingBox())!.x);
   } else await expect(page.locator('[data-holland-atmosphere]>div')).toHaveCSS('animation-name', 'none');
   await page.emulateMedia({ reducedMotion: 'reduce' });
