@@ -82,7 +82,7 @@ test('tabs support arrows/Home/End and Advisor never generates fake chat', async
   await tabs.nth(1).press('End'); await expect(page.getByRole('tabpanel')).toContainText('Xem kỹ năng cần rèn thêm cho nghề bạn chọn.');
   await tabs.nth(2).press('Home'); await expect(tabs.nth(0)).toBeFocused();
   await expect(page.getByRole('textbox')).toHaveCount(0);
-  await page.getByRole('main').getByRole('link', { name: 'Hỏi AIHN', exact: true }).click(); await expect(page).toHaveURL(/\/advisor$/);
+  await page.getByRole('region', { name: 'Hỏi AIHN', exact: true }).getByRole('link', { name: 'Hỏi AIHN', exact: true }).click(); await expect(page).toHaveURL(/\/advisor$/);
 });
 
 test('pending reads are discarded on cross-tab logout', async ({ page }) => {

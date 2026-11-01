@@ -53,8 +53,10 @@ test('processing lasts only for the real request and success never claims a gues
   let release!: () => void;
   const held = new Promise<void>(resolve => { release = resolve; });
   await page.route('**/guest-assessment/preview', async route => { await held; await route.fallback(); });
+  const submitted = page.waitForRequest(request => new URL(request.url()).pathname.endsWith('/guest-assessment/preview'));
   const completion = completeGuest(page);
   try {
+    await submitted;
     await expect(page.getByRole('status', { name: 'AIHN đang xử lý bài làm', exact: true })).toContainText('đang tổng hợp kết quả');
     await expect(page.getByRole('status', { name: 'AIHN đang xử lý bài làm', exact: true })).toBeInViewport();
     await expect(page.getByRole('complementary', { name: 'Tiến trình', exact: true }).getByRole('listitem').filter({ hasText: 'Hoàn thành' })).toHaveAttribute('aria-current', 'step');
