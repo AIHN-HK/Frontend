@@ -16,7 +16,7 @@ test('guest runtime requires login; authenticated runtime has no fixture ranking
     if (/recommendations-preview|catalog-preview/.test(r.url())) fixtureReads.push(r.url());
   });
   await page.goto('/recommendations');
-  await expect(page.getByRole('heading', { name: 'Gợi ý nghề nghiệp có giải thích' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Những nghề nên tìm hiểu thêm' })).toBeVisible();
   await page.reload();
   await expect(page.getByRole('article')).toHaveCount(0);
   expect(fixtureReads).toEqual([]);
@@ -36,7 +36,7 @@ test('preview explicitly labels context, ranks, match scores and skills as mock 
   await expect(page.getByText('Holland mẫu: ISC', { exact: true })).toBeVisible();
   await expect(page.getByRole('article').first()).toContainText('92% · Điểm minh họa');
   await expect(
-    page.getByText('Đặt mục tiêu chưa sẵn sàng. Nghề mẫu không được lưu vào hồ sơ.', { exact: true }),
+    page.getByText('Chưa thể chọn mục tiêu. Nghề mẫu không được lưu vào hồ sơ.', { exact: true }),
   ).toBeVisible();
   expect(privateReads).toEqual([]);
 });
@@ -85,7 +85,7 @@ test('generating preview uses Ant Design Skeleton and stops when another scenari
   await expect(page.getByRole('status', { name: 'Đang tạo gợi ý · Minh họa' })).toBeVisible();
   await expect(page.locator('.recommendations-skeleton .ant-skeleton')).toHaveCount(3);
   await expect(page.getByRole('article')).toHaveCount(0);
-  await page.getByLabel('Tình huống preview').selectOption('empty');
+  await page.getByLabel('Trạng thái minh họa').selectOption('empty');
   await expect(page.locator('.recommendations-skeleton')).toHaveCount(0);
   expect(requests).toEqual([]);
 });
@@ -94,7 +94,7 @@ test('stale profile fixture is explicitly read-only, never treated as current pe
   page,
 }) => {
   await page.goto(`${preview}?scenario=stale`);
-  await expect(page.getByRole('alert')).toContainText('Hồ sơ mẫu đã thay đổi');
+  await expect(page.getByRole('alert')).toContainText('Hồ sơ mẫu đã đổi');
   await expect(page.getByRole('article')).toHaveCount(4);
   await expect(page.getByText('Hồ sơ nguồn: preview-profile-v1', { exact: true })).toBeVisible();
   await expect(page.getByText('Hồ sơ hiện tại (mẫu): preview-profile-v2', { exact: true })).toBeVisible();
@@ -139,7 +139,7 @@ test('late output cannot contaminate the newly selected empty scenario', async (
   });
   await page.goto(preview);
   await expect(page.getByRole('status', { name: 'Đang tải gợi ý mẫu' })).toBeVisible();
-  await page.getByLabel('Tình huống preview').selectOption('empty');
+  await page.getByLabel('Trạng thái minh họa').selectOption('empty');
   release();
   await settled;
   await expect(page.getByRole('heading', { name: 'Không có gợi ý · Tình huống mẫu' })).toBeVisible();
@@ -149,7 +149,7 @@ test('late output cannot contaminate the newly selected empty scenario', async (
 test('analysis uses recommendationId; general career information uses careerId', async ({ page }) => {
   await page.goto(`${preview}?sort=name`);
   const first = page.getByRole('article').first();
-  await expect(first.getByRole('link', { name: 'Xem phân tích mẫu →' })).toHaveAttribute(
+  await expect(first.getByRole('link', { name: 'Xem lý do mẫu' })).toHaveAttribute(
     'href',
     '/preview/recommendations/preview-rec-security?sort=name',
   );
@@ -157,7 +157,7 @@ test('analysis uses recommendationId; general career information uses careerId',
     'href',
     '/preview/careers/preview-security',
   );
-  await first.getByRole('link', { name: 'Xem phân tích mẫu →' }).click();
+  await first.getByRole('link', { name: 'Xem lý do mẫu' }).click();
   await expect(
     page.getByRole('heading', { name: 'Phân tích mẫu: Chuyên viên An toàn Thông tin' }),
   ).toBeVisible();
@@ -172,7 +172,7 @@ test('authenticated preview remains isolated from account data and never saves t
   const backend = await advisorFixture(page, options);
   await page.goto(preview);
   await expect(page.getByRole('article')).toHaveCount(4);
-  await expect(page.getByRole('note')).toContainText('không phải gợi ý cho tài khoản của bạn');
+  await expect(page.getByRole('note')).toContainText('AI chưa tạo gợi ý cho bạn ở đây');
   options.owner = 72;
   await page.evaluate(() =>
     sessionStorage.setItem(
@@ -223,7 +223,7 @@ test('preview controls work with keyboard and skeleton respects reduced motion',
     'animation-name',
     'none',
   );
-  const scenario = page.getByLabel('Tình huống preview');
+  const scenario = page.getByLabel('Trạng thái minh họa');
   await scenario.focus();
   await page.keyboard.press('Home');
   await expect(scenario).toHaveValue('ready');

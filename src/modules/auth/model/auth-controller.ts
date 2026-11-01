@@ -13,11 +13,11 @@ export function createAuthController(options: { api: AuthApi; session: SessionSt
   const notices = new Set<() => void>();
   const notice = (value: string | null) => { message = value; for (const listener of notices) listener(); };
   const guard = (revision: number) => {
-    if (disposed || session.read().revision !== revision) throw new ApiError('session-changed', 'Phiên đã thay đổi. Vui lòng đăng nhập lại.');
+    if (disposed || session.read().revision !== revision) throw new ApiError('session-changed', 'Phiên đăng nhập đã thay đổi. Đăng nhập lại để tiếp tục.');
   };
   const saved = (userId: number, tokens: { accessToken: string; refreshToken: string }, rememberMe: boolean) => {
     if (!persistence.save({ version: 1, ownerId: userId, tokens, rememberMe })) {
-      throw new ApiError('configuration', 'Trình duyệt không thể lưu phiên đăng nhập. Vui lòng kiểm tra quyền lưu trữ rồi thử lại.');
+      throw new ApiError('configuration', 'Chưa lưu được phiên đăng nhập. Kiểm tra quyền lưu trữ rồi thử lại.');
     }
   };
   const invalidate = (revision: number) => {
@@ -52,7 +52,7 @@ export function createAuthController(options: { api: AuthApi; session: SessionSt
         guard(revision);
         const stillSaved = persistence.read();
         if (!stillSaved || stillSaved.ownerId !== latest.ownerId || stillSaved.tokens.refreshToken !== latest.tokens.refreshToken) throw new ApiError('session-changed', 'Phiên lưu trên thiết bị đã thay đổi.');
-        if (user.id !== latest.ownerId) throw new ApiError('configuration', 'Không thể xác minh chủ sở hữu phiên đăng nhập.');
+        if (user.id !== latest.ownerId) throw new ApiError('configuration', 'Chưa xác minh được tài khoản của phiên đăng nhập.');
         saved(user.id, tokens, latest.rememberMe);
         session.establish(user, tokens);
         notice(null);
@@ -60,7 +60,7 @@ export function createAuthController(options: { api: AuthApi; session: SessionSt
         if (disposed || session.read().revision !== revision) return;
         persistence.clear(verifyingRecord.tokens.refreshToken);
         session.clear(revision);
-        notice(error instanceof ApiError && error.kind === 'session-changed' ? error.message : 'Không thể khôi phục phiên. Vui lòng đăng nhập lại.');
+        notice(error instanceof ApiError && error.kind === 'session-changed' ? error.message : 'Chưa mở lại được phiên. Đăng nhập lại để tiếp tục.');
       }
     });
     restoreTask = operation;
@@ -73,7 +73,7 @@ export function createAuthController(options: { api: AuthApi; session: SessionSt
     notice: () => message,
     subscribeNotice: listener => { notices.add(listener); return () => { notices.delete(listener); }; },
     login: (input, loginOptions) => {
-      if (loginTask || restoreTask) return Promise.reject(new ApiError('configuration', 'Đang xử lý đăng nhập. Vui lòng chờ.'));
+      if (loginTask || restoreTask) return Promise.reject(new ApiError('configuration', 'Đang đăng nhập, bạn chờ một chút nhé.'));
       if (session.read().status !== 'anonymous') invalidate(session.read().revision);
       const revision = session.read().revision;
       notice(null);
@@ -83,7 +83,7 @@ export function createAuthController(options: { api: AuthApi; session: SessionSt
           guard(revision);
           const user = result.user.role === null ? await api.identity(result.tokens.accessToken) : result.user;
           guard(revision);
-          if (user.id !== result.user.id) throw new ApiError('configuration', 'Không thể xác minh tài khoản.');
+          if (user.id !== result.user.id) throw new ApiError('configuration', 'Chưa xác minh được tài khoản.');
           saved(user.id, result.tokens, loginOptions.rememberMe);
           session.establish(user, result.tokens);
         } catch (error) { throw normalizeApiError(error, true); }
@@ -101,9 +101,9 @@ export function createAuthController(options: { api: AuthApi; session: SessionSt
       notice(null);
       try {
         if (current.tokens) await api.logout(current.tokens.accessToken);
-        if (!removed) throw new ApiError('configuration', 'Không thể xóa phiên đã lưu trên trình duyệt. Vui lòng kiểm tra quyền lưu trữ.');
+        if (!removed) throw new ApiError('configuration', 'Chưa xóa được phiên trên trình duyệt. Kiểm tra quyền lưu trữ.');
       } catch (error) {
-        if (!disposed && session.read().revision === revision) notice(error instanceof ApiError && error.kind === 'configuration' ? error.message : 'Đã đăng xuất trên thiết bị này. Chưa xác nhận được việc thu hồi phiên trên máy chủ.');
+        if (!disposed && session.read().revision === revision) notice(error instanceof ApiError && error.kind === 'configuration' ? error.message : 'Đã đăng xuất trên thiết bị này. Chưa xác nhận phiên trên hệ thống đã kết thúc.');
         throw normalizeApiError(error, true);
       }
     },
@@ -125,11 +125,11 @@ export function createAuthController(options: { api: AuthApi; session: SessionSt
           guard(revision);
           if (user.id !== current.user!.id) throw new ApiError('session-changed', 'Tài khoản đã thay đổi.');
           const latest = persistence.read();
-          if ((record && !latest) || (latest && (latest.ownerId !== current.user!.id || latest.tokens.refreshToken !== previous.refreshToken))) throw new ApiError('session-changed', 'Phiên đã thay đổi.');
+          if ((record && !latest) || (latest && (latest.ownerId !== current.user!.id || latest.tokens.refreshToken !== previous.refreshToken))) throw new ApiError('session-changed', 'Phiên đăng nhập đã thay đổi.');
           saved(user.id, tokens, record?.rememberMe ?? false);
           return session.rotate(tokens, revision, user);
         } catch {
-          if (!disposed && session.read().revision === revision) { invalidate(revision); notice('Phiên đăng nhập đã kết thúc. Vui lòng đăng nhập lại.'); }
+          if (!disposed && session.read().revision === revision) { invalidate(revision); notice('Phiên đã kết thúc. Đăng nhập lại để tiếp tục.'); }
           return false;
         }
       });
@@ -139,7 +139,7 @@ export function createAuthController(options: { api: AuthApi; session: SessionSt
     },
     unauthorized: revision => {
       if (disposed || session.read().revision !== revision) return;
-      invalidate(revision); notice('Phiên đăng nhập đã kết thúc. Vui lòng đăng nhập lại.');
+      invalidate(revision); notice('Phiên đã kết thúc. Đăng nhập lại để tiếp tục.');
     },
     synchronize: async () => {
       if (disposed || persistence.read()?.rememberMe === false) return;

@@ -12,7 +12,7 @@ export function AdminDataState<T>({
     return (
       <AsyncState
         state={query.isError ? 'error' : 'loading'}
-        title={query.isError ? 'Không thể tải dữ liệu quản trị' : 'Đang tải dữ liệu…'}
+        title={query.isError ? 'Chưa tải được dữ liệu quản trị' : 'Đang tải dữ liệu…'}
         action={
           query.isError ? (
             <button className="btn btn-secondary" onClick={() => void query.refetch()}>
@@ -24,7 +24,7 @@ export function AdminDataState<T>({
     );
   return (
     <>
-      {query.isError && <p role="alert">Không thể làm mới. Đang hiển thị dữ liệu lần tải trước.</p>}
+      {query.isError && <p role="alert">Chưa làm mới được. Bạn đang xem dữ liệu lần tải trước.</p>}
       {children(query.data)}
     </>
   );

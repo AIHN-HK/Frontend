@@ -23,7 +23,7 @@ export function HomeStoryViews({active,id}:{active:number;id:string}) {
               <div>
                 <div style={{"display": "flex", "justifyContent": "space-between", "fontSize": "var(--text-sm)", "marginBottom": "4px", "color": "#c2bdd8"}}>
                   <span>
-                    {"Investigative (Nghiên cứu)"}
+                    {"Nghiên cứu (I)"}
                   </span>
                   <strong>
                     {"92%"}
@@ -37,7 +37,7 @@ export function HomeStoryViews({active,id}:{active:number;id:string}) {
               <div>
                 <div style={{"display": "flex", "justifyContent": "space-between", "fontSize": "var(--text-sm)", "marginBottom": "4px", "color": "#c2bdd8"}}>
                   <span>
-                    {"Artistic (Nghệ thuật)"}
+                    {"Nghệ thuật (A)"}
                   </span>
                   <strong>
                     {"84%"}
@@ -51,7 +51,7 @@ export function HomeStoryViews({active,id}:{active:number;id:string}) {
               <div>
                 <div style={{"display": "flex", "justifyContent": "space-between", "fontSize": "var(--text-sm)", "marginBottom": "4px", "color": "#c2bdd8"}}>
                   <span>
-                    {"Social (Xã hội)"}
+                    {"Xã hội (S)"}
                   </span>
                   <strong>
                     {"73%"}
@@ -69,52 +69,52 @@ export function HomeStoryViews({active,id}:{active:number;id:string}) {
           <div className={styles["career-match-mock"]}>
             <div style={{"display": "flex", "justifyContent": "space-between", "alignItems": "center", "marginBottom": "12px"}}>
               <span style={{"fontSize": "var(--text-sm)", "color": "#7a74cb", "fontWeight": "700", "textTransform": "uppercase"}}>
-                {"Khớp nối hàng đầu"}
+                {"Nghề được gợi ý"}
               </span>
               <span style={{"fontSize": "var(--text-sm)", "fontWeight": "800", "color": "#34d399", "background": "rgba(16, 185, 129, 0.2)", "padding": "4px 10px", "borderRadius": "99px"}}>
                 {"94 / 100 · ví dụ"}
               </span>
             </div>
             <h4 style={{"fontFamily": "var(--font-family-serif)", "fontSize": "var(--text-xl)", "color": "#ffffff", "marginBottom": "10px"}}>
-              {"Software Engineer"}
+              {"Kỹ sư phần mềm"}
             </h4>
             <p style={{"fontSize": "var(--text-base)", "color": "#c2bdd8", "lineHeight": "1.5", "marginBottom": "16px"}}>
-              {"Phù hợp xuất sắc với tư duy trừu tượng, đam mê giải quyết bài toán phức tạp và tính cách độc lập."}
+              {"Trong ví dụ này, nghề được gợi ý từ sở thích nghiên cứu và giải quyết vấn đề."}
             </p>
             <div style={{"background": "rgba(255,255,255,0.05)", "padding": "12px 16px", "borderRadius": "12px", "fontSize": "var(--text-sm)", "color": "#ffffff"}}>
-              {"Xem mô tả công việc, kỹ năng và nguồn nghề trong danh mục."}
+              {"Xem công việc, kỹ năng và nguồn tham khảo."}
             </div>
           </div>
         </div>
         <div hidden={active !== 3} id={`${id}-view-3`} role="region" aria-label="Minh họa bước 4" className={styles["product-story-view"] + " " + (active === 3 ? styles.active : "")} data-step="3">
           <div className={styles["skill-gap-mock"]}>
             <div style={{"fontSize": "var(--text-sm)", "color": "#7a74cb", "fontWeight": "700", "textTransform": "uppercase", "marginBottom": "12px"}}>
-              {"Phân tích khoảng trống"}
+              {"Kỹ năng cần rèn thêm"}
             </div>
             <h4 style={{"fontFamily": "var(--font-family-serif)", "fontSize": "var(--text-lg)", "color": "#ffffff", "marginBottom": "16px"}}>
-              {"Software Engineer Skill Matrix"}
+              {"Kỹ năng nghề kỹ sư phần mềm"}
             </h4>
             <div style={{"display": "grid", "gridTemplateColumns": "1fr 1fr", "gap": "12px"}}>
               <div style={{"background": "rgba(16, 185, 129, 0.1)", "border": "1px solid rgba(16, 185, 129, 0.25)", "padding": "12px", "borderRadius": "12px"}}>
                 <div style={{"fontSize": "var(--text-xs)", "fontWeight": "700", "color": "#34d399", "marginBottom": "6px"}}>
-                  {"ĐÃ CÓ (HAVE)"}
+                  {"ĐÃ CÓ"}
                 </div>
                 <div style={{"fontSize": "var(--text-sm)", "color": "#ffffff"}}>
-                  {"✓ Problem Solving"}
+                  {"✓ Giải quyết vấn đề"}
                 </div>
                 <div style={{"fontSize": "var(--text-sm)", "color": "#ffffff"}}>
-                  {"✓ Basic Programming"}
+                  {"✓ Lập trình cơ bản"}
                 </div>
               </div>
               <div style={{"background": "rgba(217, 70, 239, 0.1)", "border": "1px solid rgba(217, 70, 239, 0.25)", "padding": "12px", "borderRadius": "12px"}}>
                 <div style={{"fontSize": "var(--text-xs)", "fontWeight": "700", "color": "#f0abfc", "marginBottom": "6px"}}>
-                  {"CẦN BỔ SUNG (GAP)"}
+                  {"CẦN RÈN THÊM"}
                 </div>
                 <div style={{"fontSize": "var(--text-sm)", "color": "#ffffff"}}>
-                  {"○ Data Structures"}
+                  {"○ Cấu trúc dữ liệu"}
                 </div>
                 <div style={{"fontSize": "var(--text-sm)", "color": "#ffffff"}}>
-                  {"○ System Design"}
+                  {"○ Thiết kế hệ thống"}
                 </div>
               </div>
             </div>
@@ -126,7 +126,7 @@ export function HomeStoryViews({active,id}:{active:number;id:string}) {
               {"Lộ trình cá nhân"}
             </div>
             <h4 style={{"fontFamily": "var(--font-family-serif)", "fontSize": "var(--text-lg)", "color": "#ffffff", "marginBottom": "16px"}}>
-              {"Target: Backend Developer"}
+              {"Mục tiêu: lập trình backend"}
             </h4>
             <div style={{"display": "flex", "flexDirection": "column", "gap": "10px", "fontSize": "var(--text-sm)"}}>
               <div style={{"display": "flex", "alignItems": "center", "gap": "10px", "color": "#34d399"}}>
@@ -135,7 +135,7 @@ export function HomeStoryViews({active,id}:{active:number;id:string}) {
                 <strong>
                   {"Hiện tại:"}
                 </strong>
-                {"Nền tảng Java & Cấu trúc Dữ liệu"}
+                {"Java và cấu trúc dữ liệu"}
               </div>
               <div style={{"display": "flex", "alignItems": "center", "gap": "10px", "color": "#ffffff"}}>
                 <span style={{"width": "8px", "height": "8px", "borderRadius": "50%", "background": "#7a74cb"}}>
@@ -143,7 +143,7 @@ export function HomeStoryViews({active,id}:{active:number;id:string}) {
                 <strong>
                   {"Học kỳ tới:"}
                 </strong>
-                {"Database & Xây dựng RESTful API"}
+                {"Cơ sở dữ liệu và RESTful API"}
               </div>
               <div style={{"display": "flex", "alignItems": "center", "gap": "10px", "opacity": "0.6"}}>
                 <span style={{"width": "8px", "height": "8px", "borderRadius": "50%", "background": "#666"}}>
@@ -151,7 +151,7 @@ export function HomeStoryViews({active,id}:{active:number;id:string}) {
                 <strong>
                   {"Mục tiêu năm 3:"}
                 </strong>
-                {"Spring Boot & Thực tập doanh nghiệp"}
+                {"Spring Boot và thực tập"}
               </div>
             </div>
           </div>
@@ -159,13 +159,13 @@ export function HomeStoryViews({active,id}:{active:number;id:string}) {
         <div hidden={active !== 5} id={`${id}-view-5`} role="region" aria-label="Minh họa bước 6" className={styles["product-story-view"] + " " + (active === 5 ? styles.active : "")} data-step="5">
           <div className={styles["ai-chat-mock"]}>
             <div style={{"fontSize": "var(--text-sm)", "color": "#7a74cb", "fontWeight": "700", "textTransform": "uppercase", "marginBottom": "12px"}}>
-              {"Cố vấn AI theo ngữ cảnh"}
+              {"Hỏi AIHN từ hồ sơ đã lưu"}
             </div>
             <div style={{"background": "rgba(255,255,255,0.06)", "padding": "12px 16px", "borderRadius": "14px", "fontSize": "var(--text-sm)", "color": "#ffffff", "marginBottom": "10px"}}>
-              {"“Tại sao Software Engineer lại phù hợp nhất với hồ sơ của mình?”"}
+              {"“Vì sao nghề kỹ sư phần mềm được gợi ý?”"}
             </div>
             <div style={{"background": "rgba(81, 77, 140, 0.25)", "border": "1px solid rgba(122, 116, 203, 0.3)", "padding": "14px 16px", "borderRadius": "14px", "fontSize": "var(--text-sm)", "lineHeight": "1.5", "color": "#e2dff0"}}>
-              {"Cố vấn sử dụng kết quả và hồ sơ đã lưu để bổ sung ngữ cảnh. Mở trang Cố vấn để bắt đầu hội thoại thật."}
+              {"AIHN dựa vào kết quả và hồ sơ đã lưu. Mở Hỏi AIHN để trao đổi."}
             </div>
           </div>
         </div>
@@ -178,10 +178,10 @@ function AssessmentDemo() {
   const [answer,setAnswer] = useState(true);
   return <div className={styles['assessment-mock-card']}>
     <p className={styles['mock-q-meta']}>Câu hỏi minh họa · Nhóm Nghiên cứu (I)</p>
-    <h4 className={styles['mock-q-text']}>Bạn có hứng thú với việc phân tích dữ liệu để tìm ra quy luật trong các hiện tượng phức tạp?</h4>
+    <h4 className={styles['mock-q-text']}>Bạn thích phân tích dữ liệu để tìm quy luật?</h4>
     <div className={styles['mock-options-list']} aria-label="Trả lời minh họa">
-      {[true,false].map(value => <button type="button" key={String(value)} aria-pressed={answer===value} onClick={()=>setAnswer(value)} className={`${styles['mock-opt-pill']} ${answer===value?styles.selected:''}`}>{value?'Có — Hứng thú':'Không — Không hứng thú'}</button>)}
+      {[true,false].map(value => <button type="button" key={String(value)} aria-pressed={answer===value} onClick={()=>setAnswer(value)} className={`${styles['mock-opt-pill']} ${answer===value?styles.selected:''}`}>{value?'Có, mình thích':'Không, mình không thích'}</button>)}
     </div>
-    <p className={styles['demo-note']}>Chỉ thử giao diện · Câu trả lời không được lưu.</p>
+    <p className={styles['demo-note']}>Câu hỏi minh họa · Câu trả lời không được lưu.</p>
   </div>;
 }

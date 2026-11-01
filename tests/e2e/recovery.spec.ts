@@ -25,7 +25,7 @@ async function start(page: Page) {
   await page.getByLabel('Email tài khoản').fill(email);
   await page.getByRole('button', { name: 'Gửi mã OTP', exact: true }).click();
   await expect(page).toHaveURL(/\/otp-verify$/);
-  await expect(page.getByRole('heading', { name: 'Xác thực khôi phục mật khẩu' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Xác thực đặt lại mật khẩu' })).toBeVisible();
 }
 async function verified(page: Page) {
   await start(page);
@@ -47,7 +47,7 @@ test('invalid email prevents requests and login links open forgot', async ({ pag
   await page.goto('/login'); await page.getByRole('link', { name: 'Quên mật khẩu?' }).click();
   await page.getByLabel('Email tài khoản').fill('invalid');
   await page.getByRole('button', { name: 'Gửi mã OTP', exact: true }).click();
-  await expect(page.getByText('Vui lòng nhập email hợp lệ.', { exact: true })).toBeVisible();
+  await expect(page.getByText('Nhập email hợp lệ.', { exact: true })).toBeVisible();
   expect(calls).toEqual([]);
 });
 
@@ -55,7 +55,7 @@ test('full recovery sends exact payloads, rejects mismatch, clears credentials a
   const calls = await fixture(page);
   await verified(page); await fillPassword(page, 'different password');
   await page.getByRole('button', { name: 'Đặt lại mật khẩu', exact: true }).click();
-  await expect(page.getByText('Mật khẩu xác nhận không khớp.', { exact: true })).toBeVisible();
+  await expect(page.getByText('Hai mật khẩu chưa khớp.', { exact: true })).toBeVisible();
   expect(calls).toHaveLength(2);
   await page.getByLabel('Xác nhận mật khẩu mới', { exact: true }).fill(password);
   await page.getByRole('button', { name: 'Hiện mật khẩu mới', exact: true }).click();
@@ -63,7 +63,7 @@ test('full recovery sends exact payloads, rejects mismatch, clears credentials a
   await noSecrets(page);
   await page.getByRole('button', { name: 'Đặt lại mật khẩu', exact: true }).click();
   await expect(page).toHaveURL(/\/login$/);
-  await expect(page.getByRole('status').filter({ hasText: 'Đặt lại mật khẩu thành công' })).toBeVisible();
+  await expect(page.getByRole('status').filter({ hasText: 'Đã đổi mật khẩu' })).toBeVisible();
   expect(calls).toEqual([
     { path: '/api/v1/auth/forgot-password/send-otp', body: { email } },
     { path: '/api/v1/auth/verify-forget-password-otp', body: { email, otp: '123456' } },
@@ -86,7 +86,7 @@ for (const options of [{ sendStatus: 409 }, { sendStatus: 429 }, { sendStatus: 5
     if ('network' in options || 'malformed' in options || options.sendStatus === 503) {
       await expect(page.getByRole('alert')).toContainText('Chưa xác nhận');
       await page.getByRole('link', { name: 'Tôi đã nhận mã OTP' }).click();
-      await expect(page.getByRole('heading', { name: 'Xác thực khôi phục mật khẩu' })).toBeVisible();
+      await expect(page.getByRole('heading', { name: 'Xác thực đặt lại mật khẩu' })).toBeVisible();
     }
   });
 }
@@ -124,7 +124,7 @@ test('expired OTP and local TTL cannot reset; resend uses recovery endpoint', as
   await page.getByRole('button', { name: 'Xác nhận mã', exact: true }).click();
   await expect(page.getByRole('alert')).toContainText('hết hạn');
   await page.clock.fastForward(61_000);
-  await page.getByRole('button', { name: 'Gửi lại mã qua email' }).click();
+  await page.getByRole('button', { name: 'Gửi lại mã' }).click();
   await expect(page.getByRole('status').filter({ hasText: 'gửi lại' })).toBeVisible();
   expect(calls.at(-1)).toEqual({ path: '/api/v1/auth/forgot-password/resend-otp', body: { email } });
   await page.clock.fastForward(601_000);
@@ -143,9 +143,9 @@ for (const phase of ['send', 'reset'] as const) test(`${phase} pending prevents 
   await expect(page.getByRole('button', { name: phase === 'send' ? 'Đang gửi OTP…' : 'Đang đặt lại…' })).toBeDisabled();
   await expect.poll(() => calls.filter(call => call.path.endsWith(phase === 'send' ? '/send-otp' : '/reset-password')).length).toBe(1);
   const failed: string[] = []; page.on('requestfailed', request => { failed.push(request.url()); });
-  await page.getByRole('link', { name: 'Quay lại đăng nhập', exact: true }).click();
+  await page.getByRole('link', { name: 'Đăng nhập', exact: true }).click();
   await expect(page).toHaveURL(/\/login$/); release();
-  await expect(page.getByRole('heading', { name: 'Đăng nhập AIHN' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Đăng nhập' })).toBeVisible();
   await expect.poll(() => failed.length).toBeGreaterThan(0);
 });
 
@@ -182,7 +182,7 @@ test('send unknown retains cooldown and continuation after remount; password bou
   await page.getByLabel('Email tài khoản').fill(email);
   await page.getByRole('button', { name: 'Gửi mã OTP', exact: true }).click();
   await expect(page.getByRole('alert')).toContainText('Chưa xác nhận');
-  await page.getByRole('link', { name: 'Quay lại đăng nhập' }).click();
+  await page.getByRole('link', { name: 'Đăng nhập' }).click();
   await page.getByRole('link', { name: 'Quên mật khẩu?' }).click();
   await expect(page.getByLabel('Email tài khoản')).toHaveValue(email);
   await expect(page.getByRole('button', { name: 'Gửi mã OTP', exact: true })).toBeDisabled();
@@ -202,7 +202,7 @@ test('send unknown retains cooldown and continuation after remount; password bou
 test('forgot and reset cards fit viewports and keep keyboard targets at least 44px', async ({ page }) => {
   await fixture(page); await verified(page);
   for (const route of ['/reset-password', '/forgot-password']) {
-    await page.getByRole('link', { name: route === '/reset-password' ? 'Xác thực lại mã OTP' : 'Quay lại đăng nhập' }).click();
+    await page.getByRole('link', { name: route === '/reset-password' ? 'Xác thực lại mã OTP' : 'Đăng nhập' }).click();
     if (route === '/reset-password') { await page.getByRole('textbox', { name: 'Chữ số 1', exact: true }).fill('123456'); await page.getByRole('button', { name: 'Xác nhận mã', exact: true }).click(); }
     else await page.getByRole('link', { name: 'Quên mật khẩu?' }).click();
     await expect(page).toHaveURL(new RegExp(`${route}$`));

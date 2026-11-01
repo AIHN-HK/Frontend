@@ -14,7 +14,7 @@ export function StudentsPage() {
     <div className="admin-page">
       <header>
         <h1>Quản lý học sinh</h1>
-        <p>Tìm theo tên hoặc email trong dữ liệu hệ thống.</p>
+        <p>Tìm học sinh theo tên hoặc email.</p>
       </header>
       <form
         key={criteria.q}
@@ -80,7 +80,7 @@ export function StudentsPage() {
                 </table>
               </div>
             ) : (
-              <p>Không có học sinh phù hợp.</p>
+              <p>Chưa tìm thấy học sinh. Thử tên hoặc email khác.</p>
             )}
             <Pagination
               page={data.page}
@@ -94,7 +94,7 @@ export function StudentsPage() {
       </AdminDataState>
       <section className="admin-panel">
         <h2>Phạm vi dữ liệu</h2>
-        <p>Chưa hỗ trợ lọc theo cấp học, TopCode, trạng thái làm bài hoặc xuất danh sách.</p>
+        <p>Chưa lọc được theo cấp học, TopCode, trạng thái làm bài hoặc xuất danh sách.</p>
       </section>
     </div>
   );

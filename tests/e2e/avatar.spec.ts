@@ -63,7 +63,7 @@ test('invalid type, empty or oversized file never uploads', async ({ page }) => 
 test('failed upload preserves selected preview and current saved image for explicit retry', async ({ page }) => {
   const options = { saved: true, putError: true }; const calls = await fixture(page, options); await page.goto('/career-profile');
   await choose(page).setInputFiles(file); await upload(page).click();
-  await expect(page.getByRole('region', { name: 'Ảnh đại diện', exact: true }).getByRole('alert')).toContainText('Không thể lưu ảnh');
+  await expect(page.getByRole('region', { name: 'Ảnh đại diện', exact: true }).getByRole('alert')).toContainText('Chưa lưu được ảnh');
   await expect(preview(page)).toBeVisible(); await expect(page.getByRole('img', { name: 'Ảnh đại diện đã lưu', exact: true })).toBeVisible();
   expect(calls.puts).toHaveLength(1); options.putError = false;
   await upload(page).click(); await expect(page.getByText('Đã lưu ảnh đại diện.', { exact: true })).toBeVisible(); expect(calls.puts).toHaveLength(2);
@@ -72,19 +72,19 @@ test('failed upload preserves selected preview and current saved image for expli
 test('unknown save acknowledgement requires a server review before any explicit retry', async ({ page }) => {
   const options = { malformed: true }; const calls = await fixture(page, options); await page.goto('/career-profile');
   await choose(page).setInputFiles(file); await upload(page).click();
-  await expect(page.getByRole('region', { name: 'Ảnh đại diện', exact: true }).getByRole('alert')).toContainText('Chưa xác nhận ảnh');
+  await expect(page.getByRole('region', { name: 'Ảnh đại diện', exact: true }).getByRole('alert')).toContainText('Chưa xác nhận đã lưu ảnh');
   await expect(preview(page)).toBeVisible(); await expect(upload(page)).toBeDisabled();
   await page.getByRole('button', { name: 'Kiểm tra ảnh đã lưu', exact: true }).click();
   await expect(page.getByRole('img', { name: 'Ảnh đại diện đã lưu', exact: true })).toBeVisible();
   expect(calls.puts).toHaveLength(1);
-  await page.getByRole('button', { name: 'Đã kiểm tra, cho phép lưu lại', exact: true }).click();
+  await page.getByRole('button', { name: 'Đã kiểm tra, lưu lại', exact: true }).click();
   options.malformed = false; await upload(page).click();
   await expect(page.getByText('Đã lưu ảnh đại diện.', { exact: true })).toBeVisible(); expect(calls.puts).toHaveLength(2);
 });
 
 test('initial image read failure is retried without losing the selected file or issuing a write', async ({ page }) => {
   const options = { readError: true }; const calls = await fixture(page, options); await page.goto('/career-profile');
-  await expect(page.getByRole('region', { name: 'Ảnh đại diện', exact: true }).getByRole('alert')).toContainText('Không tải được ảnh');
+  await expect(page.getByRole('region', { name: 'Ảnh đại diện', exact: true }).getByRole('alert')).toContainText('Chưa tải được ảnh');
   await choose(page).setInputFiles(file); await expect(upload(page)).toBeDisabled();
   options.readError = false; await page.getByRole('button', { name: 'Kiểm tra ảnh đã lưu', exact: true }).click();
   await expect(upload(page)).toBeEnabled(); await expect(preview(page)).toBeVisible(); expect(calls.puts).toHaveLength(0);

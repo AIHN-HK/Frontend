@@ -40,12 +40,12 @@ export function AvatarEditor({ scope }: { scope: ProfileScope }) {
       if (!owned() || controller.signal.aborted) return;
       const unknown = failure instanceof ApiError && failure.outcomeUnknown;
       setNeedsReview(unknown); setReviewed(false);
-      setError(unknown ? 'Chưa xác nhận ảnh đã được lưu. Ảnh đã chọn được giữ lại; hãy kiểm tra ảnh đã lưu trước khi thử lại.' : 'Không thể lưu ảnh. Ảnh đã chọn được giữ lại; kiểm tra định dạng và thử lại.');
+      setError(unknown ? 'Chưa xác nhận đã lưu ảnh. Ảnh đã chọn vẫn còn. Kiểm tra ảnh đã lưu trước khi thử lại.' : 'Chưa lưu được ảnh. Ảnh đã chọn vẫn còn. Kiểm tra định dạng rồi thử lại.');
     } finally { pending.current = false; if (request.current === controller) request.current = null; }
   };
   const busy = mutation.isPending || leaving;
   return <section className="career-profile-card profile-avatar-card" aria-label="Ảnh đại diện">
-    <header className="career-profile-card-header"><h2>Ảnh đại diện</h2><span>Chỉ lưu khi bạn chọn lưu ảnh</span></header>
+    <header className="career-profile-card-header"><h2>Ảnh đại diện</h2><span>Chọn “Lưu ảnh đại diện” để lưu</span></header>
     <div className="career-profile-card-body">
       <div className="profile-avatar-previews">
         <div>{query.data ? <AvatarImage image={query.data} alt="Ảnh đại diện đã lưu" /> : <span className="profile-avatar-empty" aria-hidden="true">AI</span>}<p>{query.isPending ? 'Đang tải ảnh…' : query.isError ? 'Chưa tải được ảnh đã lưu.' : query.data ? 'Ảnh đã lưu' : 'Chưa có ảnh đại diện'}</p></div>
@@ -56,16 +56,16 @@ export function AvatarEditor({ scope }: { scope: ProfileScope }) {
         const invalid = avatarFileError(selected); setSuccess(false);
         if (invalid) { setError(invalid); event.currentTarget.value = ''; return; }
         setFile(selected); if (!needsReview) setError(null);
-      }} /><p id="profile-avatar-help">JPG, PNG hoặc WebP tĩnh, tối đa 5 MB. Ảnh được căn giữa thành hình vuông.</p></div>
+      }} /><p id="profile-avatar-help">JPG, PNG hoặc WebP tĩnh, tối đa 5 MB. Ảnh sẽ được cắt vuông ở giữa.</p></div>
       {error && <p className="career-profile-error" role="alert">{error}</p>}
       {success && <p className="career-profile-success" role="status">Đã lưu ảnh đại diện.</p>}
-      {query.isError && <p role="alert">Không tải được ảnh đại diện. Hãy thử tải lại trước khi lưu ảnh mới.</p>}
+      {query.isError && <p role="alert">Chưa tải được ảnh đại diện. Tải lại trước khi lưu ảnh mới.</p>}
       <div className="career-profile-actions">
         <Button disabled={busy || query.isFetching}  onClick={async () => {
           const result = await query.refetch();
           if (owned()) setReviewed(result.isSuccess);
         }}>{query.isFetching ? 'Đang tải ảnh…' : 'Kiểm tra ảnh đã lưu'}</Button>
-        {needsReview && reviewed && <Button  disabled={busy} onClick={() => { setNeedsReview(false); setError(null); }}>Đã kiểm tra, cho phép lưu lại</Button>}
+        {needsReview && reviewed && <Button  disabled={busy} onClick={() => { setNeedsReview(false); setError(null); }}>Đã kiểm tra, lưu lại</Button>}
         {file && <Button  disabled={busy} onClick={() => { setFile(null); if (input.current) input.current.value = ''; setSuccess(false); }}>Bỏ ảnh đã chọn</Button>}
         <Button disabled={!file || busy || needsReview || !query.isSuccess || query.isFetching} onClick={() => { void save(); }}>{mutation.isPending ? 'Đang lưu ảnh…' : 'Lưu ảnh đại diện'}</Button>
       </div>

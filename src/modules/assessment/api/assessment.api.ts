@@ -96,7 +96,7 @@ export async function readAssessmentSnapshot(http: AxiosInstance, result: Assess
     const body = record(response.data), data = record(body.data), snapshot = record(data.snapshot), saved = record(snapshot.result);
     if (response.status !== 200 || body.status !== 200 || data.attemptId !== result.attemptId || topCode(saved.topCode) !== result.topCode) throw new Error('Wrong snapshot');
     return normalizeAssessmentSnapshot(result.scores, snapshot);
-  } catch { throw new ApiError('configuration', 'Không có snapshot Có/Không hợp lệ để chuẩn hóa điểm.'); }
+  } catch { throw new ApiError('configuration', 'Chưa có bản ghi Có/Không hợp lệ để tính tỷ lệ.'); }
 }
 
 export async function readAssessmentAnalysis(http: AxiosInstance, attemptId: number, signal: AbortSignal): Promise<AssessmentAnalysis> {

@@ -6,7 +6,7 @@ test('priorities reject duplicate ranks and save one atomic set of six groups', 
   await expect(page.getByRole('heading', { name: 'Thứ tự ưu tiên Holland' })).toBeVisible();
   await page.getByLabel('Ưu tiên R', { exact: true }).selectOption('2');
   await page.getByRole('button', { name: 'Lưu thứ tự ưu tiên' }).click();
-  await expect(page.getByRole('alert')).toContainText('duy nhất');
+  await expect(page.getByRole('alert')).toContainText('không trùng thứ tự');
   expect(writes).toHaveLength(0);
   await page.getByLabel('Ưu tiên I', { exact: true }).selectOption('1');
   await page.getByRole('button', { name: 'Lưu thứ tự ưu tiên' }).click();
@@ -38,7 +38,7 @@ test('Holland content saves arrays and reads them after reload', async ({ page }
   const writes = await scoringFixture(page);
   await page.goto('/admin/holland-content');
   await page.getByLabel('Tiêu đề nhóm').fill('Nhóm thực tế cập nhật');
-  await page.getByLabel('Điểm mạnh').fill('Một dòng\nDòng hai');
+  await page.getByLabel('Thế mạnh').fill('Một dòng\nDòng hai');
   await page.getByRole('button', { name: 'Lưu nội dung Holland' }).click();
   await expect(page.getByRole('status')).toContainText('Đã lưu');
   expect(writes[0]).toMatchObject({
@@ -53,15 +53,15 @@ test('admin can load incomplete Holland content and fill the required sections',
   const writes = await scoringFixture(page, { emptyContent: true });
   await page.goto('/admin/holland-content');
   await expect(page.getByRole('heading', { name: 'Nội dung nhóm R', exact: true })).toBeVisible();
-  await expect(page.getByLabel('Tính cách', { exact: true })).toHaveValue('');
+  await expect(page.getByLabel('Đặc điểm', { exact: true })).toHaveValue('');
   await page.getByRole('button', { name: 'Lưu nội dung Holland' }).click();
   expect(writes).toHaveLength(0);
-  for (const label of ['Tính cách', 'Điểm mạnh', 'Điểm cần cải thiện', 'Nghề tham khảo']) {
+  for (const label of ['Đặc điểm', 'Thế mạnh', 'Điều có thể rèn thêm', 'Nghề tham khảo']) {
     await page.getByLabel(label, { exact: true }).fill('Nội dung đã được biên tập');
   }
   await page.getByRole('button', { name: 'Lưu nội dung Holland' }).click();
   await expect(page.getByRole('status')).toContainText('Đã lưu');
   expect(writes).toHaveLength(1);
   await page.reload();
-  await expect(page.getByRole('textbox', { name: 'Tính cách', exact: true })).toHaveValue('Nội dung đã được biên tập');
+  await expect(page.getByRole('textbox', { name: 'Đặc điểm', exact: true })).toHaveValue('Nội dung đã được biên tập');
 });

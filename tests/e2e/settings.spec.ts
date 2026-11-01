@@ -1,9 +1,11 @@
 import { expect, test } from '@playwright/test';
 import { advisorFixture } from './advisor.fixture';
+import { appearanceCustomizationEnabled } from '../../src/shared/appearance/appearance';
 test.beforeEach(async ({ page }) => {
   await advisorFixture(page);
 });
 test('device appearance persists, resets, isolates admin and email is read only', async ({ page }) => {
+  test.skip(!appearanceCustomizationEnabled, 'Bộ tùy chỉnh giao diện đang tạm ẩn.');
   await page.goto('/settings');
   await expect(page.getByRole('heading', { name: 'Cài đặt tài khoản' })).toBeVisible();
   await page.getByLabel('Giao diện').selectOption('dark');
@@ -23,6 +25,7 @@ test('device appearance persists, resets, isolates admin and email is read only'
   await expect(page.getByLabel('Giao diện')).toHaveValue('blue');
 });
 test('unsupported storage safely uses defaults', async ({ page }) => {
+  test.skip(!appearanceCustomizationEnabled, 'Bộ tùy chỉnh giao diện đang tạm ẩn.');
   await page.addInitScript(() =>
     localStorage.setItem('aihn.appearance.v1', '{"version":99,"preset":"alien"}'),
   );
@@ -37,6 +40,7 @@ for (const width of [320, 390, 768, 769, 1024, 1025, 1440])
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   });
 test('blocked preference storage keeps controls usable and reports temporary changes', async ({ page }) => {
+  test.skip(!appearanceCustomizationEnabled, 'Bộ tùy chỉnh giao diện đang tạm ẩn.');
   await page.addInitScript(() => {
     const original = Storage.prototype.setItem;
     Storage.prototype.setItem = function (key, value) {
@@ -46,14 +50,18 @@ test('blocked preference storage keeps controls usable and reports temporary cha
   });
   await page.goto('/settings');
   await page.getByLabel('Giao diện').selectOption('warm');
-  await expect(page.getByRole('status')).toContainText('Đã áp dụng tạm thời');
+  await expect(page.getByRole('status')).toContainText('Đã áp dụng tạm');
   await page.getByRole('button', { name: 'Đăng xuất', exact: true }).click();
   await expect(page).toHaveURL(/login/);
 });
 
-test('settings explains fixed career colors while retaining honest scoped device preferences', async ({page}) => {
+test('settings keeps account information available and respects appearance visibility', async ({page}) => {
   const {reviewResponsive}=await import('./ui-sync.fixture');
   await page.goto('/settings');
-  await expect(page.getByText(/Giao diện AIHN hiện dùng chủ đề tối cố định/)).toBeVisible();
+  await expect(page.getByLabel('Email')).toHaveAttribute('readonly', '');
+  await expect(page.getByRole('link', {name:'Chỉnh sửa hồ sơ',exact:true})).toBeVisible();
+  await expect(page.getByRole('heading', {name:'Tùy chỉnh giao diện',exact:true})).toHaveCount(appearanceCustomizationEnabled ? 1 : 0);
+  await expect(page.getByLabel('Giao diện', {exact:true})).toHaveCount(appearanceCustomizationEnabled ? 1 : 0);
+  await expect(page.getByRole('button', {name:'Khôi phục mặc định',exact:true})).toHaveCount(appearanceCustomizationEnabled ? 1 : 0);
   await reviewResponsive(page,'P13','.settings-page');
 });

@@ -11,7 +11,7 @@ test('student exact ID reload, completed attempts pagination and back retain lis
   await expect(page.getByText('21 lần làm · Trang 2/2', { exact: true })).toBeVisible();
   await page.reload();
   await expect(page.getByText('21 lần làm · Trang 2/2', { exact: true })).toBeVisible();
-  await page.getByRole('link', { name: 'Quay lại danh sách học sinh' }).click();
+  await page.getByRole('link', { name: 'Danh sách học sinh' }).click();
   await expect(page).toHaveURL(/students\?q=123&page=2&limit=20$/);
 });
 test('invalid and missing IDs do not show a different student', async ({ page }) => {
@@ -26,9 +26,9 @@ test('empty completed history and unavailable AI layers do not invent enrichment
 }) => {
   await studentDetailFixture(page, { empty: true });
   await page.goto('/admin/students/100');
-  await expect(page.getByText('Chưa có lần trắc nghiệm hoàn thành.')).toBeVisible();
+  await expect(page.getByText('Chưa có bài trắc nghiệm hoàn thành.')).toBeVisible();
   await expect(
-    page.getByText('Chưa có dữ liệu gợi ý nghề, hội thoại AI hoặc lộ trình được cung cấp cho quản trị.'),
+    page.getByText('Quản trị chưa xem được gợi ý nghề, hội thoại và lộ trình.'),
   ).toBeVisible();
   await expect(page.getByRole('button', { name: /PDF|Làm lại|Hỗ trợ/ })).toHaveCount(0);
 });

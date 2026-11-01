@@ -27,11 +27,11 @@ export function useProfileMutation() {
     mutationKey: ['profile', 'update'],
     retry: false,
     mutationFn: async (command: { input: ProfilePatch; scope: ProfileScope; signal: AbortSignal }) => {
-      if (!valid(command)) throw new ApiError('session-changed', 'Phiên đã thay đổi.');
+      if (!valid(command)) throw new ApiError('session-changed', 'Phiên đăng nhập đã thay đổi.');
       await queryClient.cancelQueries({ queryKey: profileKey(command.scope), exact: true });
-      if (!valid(command)) throw new ApiError('session-changed', 'Phiên đã thay đổi.');
+      if (!valid(command)) throw new ApiError('session-changed', 'Phiên đăng nhập đã thay đổi.');
       const profile = await updateProfile(http, command.input, command.signal);
-      if (!valid(command)) throw new ApiError('session-changed', 'Phiên đã thay đổi.');
+      if (!valid(command)) throw new ApiError('session-changed', 'Phiên đăng nhập đã thay đổi.');
       return profile;
     },
     onSuccess: (profile, command) => {

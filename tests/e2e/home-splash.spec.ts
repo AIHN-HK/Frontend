@@ -19,7 +19,8 @@ async function instrumentGPU(page: Page) {
 }
 const gpuMetrics = (page: Page) => page.evaluate(() => (window as unknown as { splashGPU: { draws: number; released: number } }).splashGPU);
 
-test('desktop fluid is bounded, low opacity, lazy, and fades away before the story', async ({ page }, info) => {
+test('one lazy canvas follows every Home section with readable dark and light blending', async ({ page }, info) => {
+  test.setTimeout(60000);
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   const errors: string[] = [];
@@ -27,8 +28,9 @@ test('desktop fluid is bounded, low opacity, lazy, and fades away before the sto
   await instrumentGPU(page);
   await page.goto('/');
   await page.evaluate(() => document.fonts.ready);
-  const opening = page.locator('[data-home-opening]'), splash = page.locator('[data-home-splash]');
-  await expect(opening.locator(':scope > section')).toHaveCount(2);
+  const scope = page.locator('[data-home-splash-scope]'), splash = page.locator('[data-home-splash]');
+  const sections = scope.locator('[data-home-surface]');
+  await expect(sections).toHaveCount(10);
   await expect(splash.locator('canvas')).toHaveCount(0);
   await moveThroughOpening(page);
   await expect(splash).toHaveAttribute('data-splash-state', 'ready');
@@ -39,14 +41,31 @@ test('desktop fluid is bounded, low opacity, lazy, and fades away before the sto
   expect(Number(await splash.evaluate(element => getComputedStyle(element).opacity))).toBeLessThanOrEqual(0.4);
   await expect(splash).toHaveCSS('mix-blend-mode', 'screen');
   expect(await splash.locator('canvas').evaluate(element => (element as HTMLCanvasElement).width <= 1440 && (element as HTMLCanvasElement).height <= 900)).toBe(true);
-  const area = (await opening.boundingBox())!, layer = (await splash.boundingBox())!;
+  const area = (await scope.boundingBox())!, layer = (await splash.boundingBox())!;
   expect(layer.y).toBe(area.y); expect(layer.height).toBe(area.height);
   await page.screenshot({ path: info.outputPath('home-splash-desktop.png') });
   const initialOpacity = await splash.evaluate(element => Number(getComputedStyle(element).opacity));
   await page.evaluate(() => window.scrollTo(0, 550));
   await expect.poll(() => splash.evaluate(element => Number(getComputedStyle(element).opacity))).toBeLessThan(initialOpacity);
-  await page.getByRole('region', { name: 'AIHN hoạt động thế nào', exact: true }).scrollIntoViewIfNeeded();
-  await expect(splash).toHaveCSS('opacity', '0');
+  for (let index = 1; index < await sections.count(); index++) {
+    const section = sections.nth(index);
+    await section.evaluate(element => element.scrollIntoView({ block: 'start' }));
+    await page.evaluate(() => new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))));
+    const box = (await section.boundingBox())!;
+    const y = Math.min(800, Math.max(140, box.y + Math.min(280, box.height / 2)));
+    await page.mouse.move(1000, y);
+    await page.mouse.move(1080, y + 20, { steps: 10 });
+    const surface = (await section.getAttribute('data-home-surface'))!;
+    await expect(splash).toHaveAttribute('data-splash-surface', surface);
+    await expect(splash).toHaveAttribute('data-splash-state', 'ready');
+    await expect(splash.locator('canvas')).toHaveCount(1);
+    await expect(splash).toHaveCSS('mix-blend-mode', surface === 'light' ? 'multiply' : 'screen');
+    await expect.poll(() => splash.evaluate(element => Number(getComputedStyle(element).opacity))).toBeGreaterThan(0);
+    const draws = (await gpuMetrics(page)).draws;
+    await expect.poll(async () => (await gpuMetrics(page)).draws).toBeGreaterThan(draws);
+    if (index === 3 || index === 6) await page.screenshot({ path: info.outputPath(`home-splash-${surface}-${index}.png`) });
+  }
+  await page.mouse.move(1000, 40);
   await expect(splash.locator('canvas')).toHaveCount(0);
   expect((await gpuMetrics(page)).released).toBeGreaterThan(0);
   expect(errors).toEqual([]);
@@ -131,6 +150,6 @@ test('WebGL unavailable keeps readable content and a working CTA', async ({ page
   await moveThroughOpening(page);
   await expect(page.locator('[data-home-splash]')).toHaveAttribute('data-splash-state', 'unavailable');
   await expect(page.locator('canvas')).toHaveCount(0);
-  await page.getByRole('region', { name: 'Khám phá con đường phù hợp', exact: true }).getByRole('link', { name: 'Bắt đầu khám phá', exact: true }).click();
+  await page.getByRole('region', { name: 'Tìm hướng đi của bạn', exact: true }).getByRole('link', { name: 'Bắt đầu', exact: true }).click();
   await expect(page).toHaveURL('/assessment');
 });

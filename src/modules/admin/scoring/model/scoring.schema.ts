@@ -6,7 +6,7 @@ export const prioritiesSchema = z
   .length(6)
   .refine(
     (rows) => new Set(rows.map((r) => r.type)).size === 6 && new Set(rows.map((r) => r.priority)).size === 6,
-    'Cần đủ sáu nhóm với thứ tự duy nhất từ 1 đến 6.',
+    'Xếp đủ sáu nhóm từ 1 đến 6, không trùng thứ tự.',
   );
 export const contentSchema = z.object({
   code: riasecSchema,

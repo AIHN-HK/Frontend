@@ -3,7 +3,7 @@ import { Button, Input } from 'antd';
 import { usePageEntrance } from '@/shared/ui/ce/usePageEntrance';
 import { paths } from '@/routes/paths';
 import { useProfileQuery } from '@/modules/profile';
-import { choices, defaultAppearance, setAppearance, useAppearance } from '@/shared/appearance/appearance';
+import { appearanceCustomizationEnabled, choices, defaultAppearance, setAppearance, useAppearance } from '@/shared/appearance/appearance';
 import './settings.css';
 import styles from './SettingsPage.module.css';
 export function SettingsPage() {
@@ -35,7 +35,7 @@ export function SettingsPage() {
     <div ref={root} className={`${styles.page} settings-page`}>
       <header>
         <h1>Cài đặt tài khoản</h1>
-        <p>Quản lý thông tin và tùy chỉnh không gian học tập.</p>
+        <p>Thông tin và cài đặt tài khoản của bạn.</p>
       </header>
       <section data-ce-enter="">
         <h2>Thông tin tài khoản</h2>
@@ -63,12 +63,12 @@ export function SettingsPage() {
             </Link>
           </>
         )}
-        <p>Đăng xuất bằng nút tài khoản trên trang để kết thúc phiên hiện tại.</p>
+        <p>Dùng nút tài khoản trên trang để đăng xuất.</p>
       </section>
-      <section data-ce-enter="">
-        <h2>Giao diện &amp; Cá nhân hóa</h2>
+      {appearanceCustomizationEnabled && <section data-ce-enter="">
+        <h2>Tùy chỉnh giao diện</h2>
         <p>
-          Giao diện AIHN hiện dùng chủ đề tối cố định. Các lựa chọn bên dưới dành cho giao diện xem trước trên thiết bị này; không đồng bộ lên máy chủ.
+          AIHN hiện dùng giao diện tối. Các lựa chọn này chỉ đổi giao diện xem trước trên thiết bị này.
         </p>
         <div className="settings-grid">
           {Object.entries(fields).map(([key, label]) => (
@@ -92,13 +92,13 @@ export function SettingsPage() {
         </Button>
         <p role="status">
           {appearance.persisted
-            ? 'Lựa chọn được lưu cho giao diện xem trước trên thiết bị này.'
-            : 'Đã áp dụng tạm thời cho giao diện xem trước; trình duyệt không cho lưu. Tải lại có thể mất lựa chọn.'}
+            ? 'Đã lưu lựa chọn cho giao diện xem trước trên thiết bị này.'
+            : 'Đã áp dụng tạm cho giao diện xem trước. Trình duyệt chưa cho lưu, tải lại có thể mất lựa chọn.'}
         </p>
-      </section>
+      </section>}
       <section data-ce-enter="">
-        <h2>Bảo mật &amp; Dữ liệu</h2>
-        <p>Đổi mật khẩu, thông báo, xuất PDF và xóa tài khoản chưa được hỗ trợ tại đây.</p>
+        <h2>Bảo mật và dữ liệu</h2>
+        <p>Chưa hỗ trợ đổi mật khẩu, cài thông báo, xuất PDF hay xóa tài khoản ở đây.</p>
       </section>
     </div>
   );

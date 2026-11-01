@@ -1,4 +1,7 @@
 import { useSyncExternalStore } from 'react';
+// Tạm ẩn phần tùy chỉnh giao diện trong Cài đặt, giữ lại code và lựa chọn đã lưu.
+// Khi cần mở lại, đổi thành true; các test dành cho bộ tùy chỉnh cũng sẽ tự bật lại.
+export const appearanceCustomizationEnabled = false;
 export const appearanceKey = 'aihn.appearance.v1';
 export const choices = {
   preset: ['blue', 'teal', 'warm', 'dark', 'ocean'],

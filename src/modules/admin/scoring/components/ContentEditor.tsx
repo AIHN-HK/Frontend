@@ -15,9 +15,9 @@ export function ContentEditor({ record, reload }: { record: ContentRecord; reloa
     [error, setError] = useState(''),
     [notice, setNotice] = useState(''),
     labels = {
-      personality: 'Tính cách',
-      strengths: 'Điểm mạnh',
-      weaknesses: 'Điểm cần cải thiện',
+      personality: 'Đặc điểm',
+      strengths: 'Thế mạnh',
+      weaknesses: 'Điều có thể rèn thêm',
       careers: 'Nghề tham khảo',
     };
   return (
@@ -58,7 +58,7 @@ export function ContentEditor({ record, reload }: { record: ContentRecord; reloa
             setNotice('Đã lưu nội dung Holland.');
             await reload();
           } catch {
-            setError('Chưa xác nhận nội dung đã lưu. Bản nháp được giữ; đọc dữ liệu hiện tại để đối chiếu.');
+            setError('Chưa xác nhận đã lưu nội dung. Bản nháp vẫn còn. Tải dữ liệu mới để đối chiếu.');
           }
         }}
       >
@@ -72,8 +72,7 @@ export function ContentEditor({ record, reload }: { record: ContentRecord; reloa
           />
         </label>
         <p>
-          Mỗi dòng là một mục văn bản. Nghề tham khảo không phải danh mục nghề đã xuất bản hay khuyến nghị cá
-          nhân.
+          Mỗi mục một dòng. Nghề tham khảo ở đây chưa phải nghề đã xuất bản hay gợi ý cho từng người.
         </p>
         {Object.entries(labels).map(([key, label]) => (
           <label key={key}>
@@ -91,7 +90,7 @@ export function ContentEditor({ record, reload }: { record: ContentRecord; reloa
         {draft.review && (
           <>
             <details>
-              <summary>Nội dung máy chủ lần đọc gần nhất</summary>
+              <summary>Nội dung đã lưu gần nhất</summary>
               <pre style={{ whiteSpace: 'pre-wrap', overflowWrap: 'anywhere' }}>
                 {JSON.stringify(record, null, 2)}
               </pre>
@@ -107,7 +106,7 @@ export function ContentEditor({ record, reload }: { record: ContentRecord; reloa
                 }
               }}
             >
-              Đọc dữ liệu hiện tại để đối chiếu
+              Tải dữ liệu để đối chiếu
             </button>
           </>
         )}

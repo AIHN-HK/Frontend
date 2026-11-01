@@ -35,7 +35,7 @@ const groups: Record<RiasecCode, string> = {
   E: 'Quản lý',
   C: 'Nghiệp vụ',
 };
-const dimensions = { PERSONA: 'Tính cách', ABILITY: 'Năng lực', INTEREST: 'Sở thích' };
+const dimensions = { PERSONA: 'Đặc điểm', ABILITY: 'Năng lực', INTEREST: 'Sở thích' };
 
 function Arrow({ back = false }: { back?: boolean }) {
   return (
@@ -155,8 +155,8 @@ function HollandTest({ scope }: { scope: AssessmentScope }) {
       }
       setMessage(
         unknown
-          ? 'Chưa xác nhận lần làm bài đã được tạo. Không tự gửi lại yêu cầu; bạn có thể chọn bắt đầu lần mới sau khi kiểm tra.'
-          : 'Không bắt đầu được bài trắc nghiệm. Hãy thử lại.',
+          ? 'Chưa xác nhận đã mở được bài. Kiểm tra trước khi chọn bắt đầu bài mới.'
+          : 'Chưa mở được bài. Bạn thử lại nhé.',
       );
     } finally {
       mutex.current = false;
@@ -173,17 +173,17 @@ function HollandTest({ scope }: { scope: AssessmentScope }) {
     if (!active || !current(active) || mutex.current || !draft) return;
     if (action === 'submit') {
       if (draft.questions.some((question) => typeof draft.answers[String(question.id)] !== 'boolean')) {
-        setMessage('Vui lòng trả lời đầy đủ các câu hỏi.');
+        setMessage('Trả lời các câu còn lại để xem kết quả.');
         return;
       }
       if (!Object.values(draft.answers).some(Boolean)) {
         setMessage(
-          'Bài trắc nghiệm cần ít nhất một lựa chọn Có. Bạn có thể quay lại xem các hoạt động phù hợp với mình.',
+          'Bài cần ít nhất một lựa chọn Có để tính kết quả. Bạn xem lại có hoạt động nào mình thích nhé.',
         );
         return;
       }
       if (draft.needsReview && !reviewed) {
-        setMessage('Hãy kiểm tra kết quả đã nộp trước khi nộp lại.');
+        setMessage('Kiểm tra kết quả trước khi nộp lại.');
         return;
       }
     }
@@ -206,17 +206,17 @@ function HollandTest({ scope }: { scope: AssessmentScope }) {
         if (error instanceof ApiError && error.status === 404) {
           setReviewed(true);
           setMessage(
-            'Chưa tìm thấy kết quả. Yêu cầu nộp trước có thể còn xử lý; hãy chờ và kiểm tra lại, hoặc chủ động nộp lại sau khi xem xét.',
+            'Chưa thấy kết quả. Bài có thể đang được xử lý. Chờ và kiểm tra trước khi nộp lại.',
           );
         } else
-          setMessage('Không kiểm tra được kết quả. Bản nháp vẫn được giữ; hãy kiểm tra lại trước khi nộp.');
+          setMessage('Chưa kiểm tra được kết quả. Bản nháp vẫn được giữ. Kiểm tra lại trước khi nộp.');
       } else {
         const unknown = !(error instanceof ApiError) || error.outcomeUnknown || error.status === 409;
         if (!unknown) persist({ ...pending, needsReview: false });
         setMessage(
           unknown
-            ? 'Chưa xác nhận bài đã được nộp. Bản nháp được giữ; hãy kiểm tra kết quả trước khi thử lại.'
-            : 'Không nộp được bài. Bản nháp được giữ; bạn có thể kiểm tra đáp án và thử lại.',
+            ? 'Chưa xác nhận đã nộp bài. Bản nháp vẫn được giữ. Kiểm tra kết quả trước khi nộp lại.'
+            : 'Chưa nộp được bài. Bản nháp vẫn còn. Kiểm tra đáp án rồi thử lại.',
         );
       }
     } finally {
@@ -232,7 +232,7 @@ function HollandTest({ scope }: { scope: AssessmentScope }) {
       removedStart = assessmentDraftStore.clearStart(scope.ownerId);
     if (!removed || !removedStart) {
       setStorageOk(false);
-      setMessage('Không xóa được bản nháp trên thiết bị. Hãy kiểm tra quyền lưu trữ rồi thử lại.');
+      setMessage('Chưa xóa được bản nháp. Kiểm tra quyền lưu trữ rồi thử lại.');
       return;
     }
     setDraft(null);
@@ -256,23 +256,23 @@ function HollandTest({ scope }: { scope: AssessmentScope }) {
   return <HollandWorkspace started={!showWelcome} stage={busy === 'submit' || busy === 'check' ? 'processing' : 'test'} radar={<LiveRiasecSummary questions={catalog} answers={draft?.answers ?? {}} />}><HollandKeyboard enabled={!showWelcome}>
     <div className={`holland-page ${styles.page}`}>
       <div className={styles.utility} hidden={showWelcome && storageOk}>
-        <Link to={paths.dashboard} aria-disabled={locked} onClick={event => { if (locked) event.preventDefault(); }}><Arrow back /> Tạm dừng &amp; Về Bàn làm việc</Link>
-        <span role="status">{draft ? (storageOk ? 'Đang tự động lưu tiến độ' : 'Chưa lưu trên thiết bị') : 'Tiến độ lưu trên thiết bị này'}</span>
+        <Link to={paths.dashboard} aria-disabled={locked} onClick={event => { if (locked) event.preventDefault(); }}><Arrow back /> Tạm dừng và về trang của tôi</Link>
+        <span role="status">{draft ? (storageOk ? 'Đang lưu tiến độ…' : 'Chưa lưu trên thiết bị') : 'Đã lưu trên thiết bị này'}</span>
       </div>
-      {!storageOk && <p className={styles.notice} role="note">Không truy cập được bộ nhớ thiết bị. Lựa chọn chỉ được giữ trong màn này; tải lại hoặc rời trang có thể mất tiến độ.</p>}
+      {!storageOk && <p className={styles.notice} role="note">Chưa lưu được trên thiết bị. Giữ trang mở để tránh mất câu trả lời.</p>}
       {message && <p className={styles.error} role="alert">{message}</p>}
       {(busy === 'submit' || busy === 'check') && <AssessmentProcessing checking={busy === 'check'} />}
-      {questions.isPending ? <AsyncState state="loading" title="Đang tải bộ câu hỏi…" /> : questions.isError ? <AsyncState state="error" title="Không tải được bộ câu hỏi." description="Bản nháp hiện có được giữ lại." action={<Button disabled={locked} onClick={() => { void questions.refetch(); }}>Thử lại câu hỏi</Button>} /> : incompatible || incompatibleCatalog ? <section className={styles.notice}>
-        <h1>Bản nháp không tương thích</h1><p>Phiên bản, thang đo hoặc bộ câu hỏi đã thay đổi. Bản nháp vẫn được giữ; không tự chuyển đổi đáp án.</p>
+      {questions.isPending ? <AsyncState state="loading" title="Đang tải bộ câu hỏi…" /> : questions.isError ? <AsyncState state="error" title="Không tải được bộ câu hỏi." description="Bản nháp hiện có được giữ lại." action={<Button disabled={locked} onClick={() => { void questions.refetch(); }}>Tải lại câu hỏi</Button>} /> : incompatible || incompatibleCatalog ? <section className={styles.notice}>
+        <h1>Bản nháp cần kiểm tra lại</h1><p>Bộ đề hoặc thang trả lời đã thay đổi. Bản nháp vẫn được giữ, đáp án chưa được chuyển đổi.</p>
         {draft?.needsReview && <Button disabled={locked} onClick={() => { void send('check'); }}>Kiểm tra kết quả đã nộp</Button>}
-        <Button variant="secondary" onClick={() => setConfirmDiscard(true)}>Xem xét bỏ bản nháp</Button>
+        <Button variant="secondary" onClick={() => setConfirmDiscard(true)}>Bỏ bản nháp</Button>
       </section> : !questions.data?.length ? <AsyncState state="empty" title="Bộ đề chưa có câu hỏi." action={<Button onClick={() => { void questions.refetch(); }}>Tải lại câu hỏi</Button>} /> : showWelcome ? <section className={styles.welcome}>
         <h1>Trắc nghiệm Holland RIASEC</h1>
-        <p className={styles.description}>Khám phá sở thích nghề nghiệp cùng AIHN Career. Hiểu 6 nhóm R–I–A–S–E–C và tìm hiểu những nghề nghiệp tương thích với kết quả của bạn.</p>
-        <div className={styles.stats}><div><strong>{catalog.length} câu hỏi</strong><span>BỘ ĐỀ HIỆN TẠI</span></div><div><strong>Có / Không</strong><span>THEO CẢM NHẬN CỦA BẠN</span></div><div><strong>TopCode</strong><span>6 NHÓM SỞ THÍCH</span></div></div>
-        {blockedStart ? <div className={styles.notice}><p>Chưa xác nhận lần làm trước. Máy chủ chưa hỗ trợ tìm lại lần làm chưa hoàn tất khi thiếu mã.</p><Button variant="secondary" onClick={() => setConfirmDiscard(true)}>Xem xét bắt đầu lần mới</Button></div> : <Button className={styles.start} disabled={locked} aria-label={draft ? 'Tiếp tục bài đang làm' : busy === 'start' ? 'Đang bắt đầu…' : startCheckpoint.kind === 'ready' ? `Tiếp tục lần làm #${startCheckpoint.attempt?.id}` : 'Bắt đầu bài trắc nghiệm'} onClick={() => { if (draft) setOverview(false); else void begin(); }}>{draft ? `Tiếp tục bài đang làm (${completed}/${draft.totalQuestions} câu)` : busy === 'start' ? 'Đang bắt đầu…' : startCheckpoint.kind === 'ready' ? `Tiếp tục lần làm #${startCheckpoint.attempt?.id}` : `Bắt đầu làm bài trắc nghiệm (${catalog.length} câu) →`}</Button>}
+        <p className={styles.description}>Trả lời theo cảm nhận của bạn. Kết quả giúp bạn nhìn lại sở thích, không quyết định bạn phải làm nghề gì.</p>
+        <div className={styles.stats}><div><strong>{catalog.length} câu hỏi</strong><span>TRONG BÀI NÀY</span></div><div><strong>Có / Không</strong><span>THEO CẢM NHẬN</span></div><div><strong>TopCode</strong><span>6 NHÓM SỞ THÍCH</span></div></div>
+        {blockedStart ? <div className={styles.notice}><p>Chưa xác nhận lần làm trước. Không có mã nên chưa tìm lại được bài đang làm.</p><Button variant="secondary" onClick={() => setConfirmDiscard(true)}>Bắt đầu bài mới</Button></div> : <Button className={styles.start} disabled={locked} aria-label={draft ? 'Tiếp tục' : busy === 'start' ? 'Đang bắt đầu…' : startCheckpoint.kind === 'ready' ? `Tiếp tục lần làm #${startCheckpoint.attempt?.id}` : 'Bắt đầu'} onClick={() => { if (draft) setOverview(false); else void begin(); }}>{draft ? `Tiếp tục (${completed}/${draft.totalQuestions} câu)` : busy === 'start' ? 'Đang bắt đầu…' : startCheckpoint.kind === 'ready' ? `Tiếp tục lần làm #${startCheckpoint.attempt?.id}` : `Bắt đầu (${catalog.length} câu) →`}</Button>}
         <HollandShowcase />
-        <p className={styles.help}>Hãy trả lời đủ các câu và chọn Có cho ít nhất một hoạt động phù hợp. Bạn có thể tạm dừng và tiếp tục trên cùng thiết bị.</p>
+        <p className={styles.help}>Trả lời đủ các câu, có ít nhất một lựa chọn Có. Bạn có thể tạm dừng rồi tiếp tục trên thiết bị này.</p>
       </section> : draft && question && <>
         <button type="button" className={styles.back} disabled={locked} onClick={() => setOverview(true)}><Arrow back /> Quay lại giới thiệu</button>
         <header className={styles.testHeading}><p>HIỂU MÌNH · CHỌN HƯỚNG ĐI</p><h2>Khám phá sở thích của bạn</h2></header>
@@ -281,8 +281,8 @@ function HollandTest({ scope }: { scope: AssessmentScope }) {
         <div className={styles.counts}><span>{completed}/{draft.totalQuestions} đã trả lời</span><span>{Math.round(completed / draft.totalQuestions * 100)}% hoàn thành</span></div>
         <QuestionTransition questionKey={question.id}><section className={styles.question} aria-busy={locked}>
           <h1 tabIndex={-1} ref={heading}>{question.content}</h1>
-          <fieldset className={styles.answers} disabled={locked}><legend>Hoạt động này có phù hợp với sở thích của bạn không?</legend><div className={styles.choices}>
-            {[{ value: true, text: 'Có — Tôi thích', detail: 'Phù hợp với sở thích của tôi', icon: '✓' }, { value: false, text: 'Không — Tôi không thích', detail: 'Không cảm thấy phù hợp', icon: '−' }].map(option => <SpotlightCard as="label" data-answer-card="" key={String(option.value)} className={`holland-choice ${styles.choice} ${selected === option.value ? styles.selected : ''}`}>
+          <fieldset className={styles.answers} disabled={locked}><legend>Bạn có thích hoạt động này không?</legend><div className={styles.choices}>
+            {[{ value: true, text: 'Có, mình thích', detail: 'Mình thích hoạt động này', icon: '✓' }, { value: false, text: 'Không, mình không thích', detail: 'Mình không thích hoạt động này', icon: '−' }].map(option => <SpotlightCard as="label" data-answer-card="" key={String(option.value)} className={`holland-choice ${styles.choice} ${selected === option.value ? styles.selected : ''}`}>
               <input type="radio" name="holland-answer" aria-label={option.text} checked={selected === option.value} onChange={() => { persist({ ...draft, answers: { ...draft.answers, [String(question.id)]: option.value } }); setMessage(''); }} />
               <span className={styles.choiceIcon} aria-hidden="true">{option.icon}</span><strong>{option.text}</strong><small>{option.detail}</small>
             </SpotlightCard>)}
@@ -293,7 +293,7 @@ function HollandTest({ scope }: { scope: AssessmentScope }) {
         </nav>
         {draft.needsReview && <section className={styles.notice}><p>Lần nộp #{draft.attemptId} chưa được xác nhận. Bản nháp vẫn được giữ, kể cả sau khi tải lại.</p><Button variant="secondary" disabled={locked} onClick={() => { void send('check'); }}>{busy === 'check' ? 'Đang kiểm tra…' : 'Kiểm tra kết quả đã nộp'}</Button></section>}
       </>}
-      {confirmDiscard && <section className={styles.notice} aria-label="Xác nhận bỏ bản nháp"><p>Bỏ bản nháp trên thiết bị để bắt đầu lần mới? Lần làm cũ trên máy chủ sẽ không bị xóa; đáp án chưa nộp không thể khôi phục.</p><div className={styles.nav}><Button variant="secondary" onClick={() => setConfirmDiscard(false)}>Giữ bản nháp</Button><Button disabled={locked} onClick={discard}>Bỏ bản nháp trên thiết bị</Button></div></section>}
+      {confirmDiscard && <section className={styles.notice} aria-label="Xác nhận bỏ bản nháp"><p>Bỏ bản nháp để làm bài mới? Đáp án chưa nộp sẽ mất. Lần làm cũ trên tài khoản vẫn được giữ.</p><div className={styles.nav}><Button variant="secondary" onClick={() => setConfirmDiscard(false)}>Giữ bản nháp</Button><Button disabled={locked} onClick={discard}>Bỏ bản nháp</Button></div></section>}
     </div>
   </HollandKeyboard></HollandWorkspace>;
 }

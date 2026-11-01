@@ -46,9 +46,7 @@ export function SourceNote() {
       >
         CC BY 4.0
       </a>
-      . AIHN chuyển thang kỹ năng 0–7 sang 0–5 và chọn tối đa 8 kỹ năng quan
-      trọng. Các phép biến đổi chưa được USDOL/ETA thẩm định; chưa có lương hay
-      tuyển sinh Việt Nam.
+      . Kỹ năng được đổi từ thang 0–7 sang 0–5, giữ tối đa 8 kỹ năng quan trọng. Cách đổi chưa được USDOL/ETA thẩm định. Chưa có dữ liệu lương hay tuyển sinh Việt Nam.
     </p>
   );
 }
@@ -61,13 +59,13 @@ export function ReadState({
   error: boolean;
   retry(): void;
 }) {
-  if (pending) return <p role="status">Đang tải dữ liệu nghề…</p>;
+  if (pending) return <p role="status">Đang tải thông tin nghề…</p>;
   if (error)
     return (
       <div role="alert">
-        <p>Không tải được dữ liệu nghề. Hãy kiểm tra kết nối và thử lại.</p>
+        <p>Chưa tải được thông tin nghề. Kiểm tra mạng rồi thử lại.</p>
         <Button variant="secondary" onClick={retry}>
-          Thử tải lại dữ liệu nghề
+          Tải lại
         </Button>
       </div>
     );
@@ -82,10 +80,9 @@ export function CommandState({
 }) {
   return error ? (
     <p role="alert">
-      Chưa xác nhận lưu: {error.message} Dữ liệu nhập vẫn được giữ. Đọc lại
-      trạng thái máy chủ trước khi thử lại.
+      Chưa xác nhận lưu: {error.message} Nội dung vẫn được giữ. Kiểm tra bản đã lưu trước khi thử lại.
     </p>
   ) : success ? (
-    <p role="status">Đã lưu trên máy chủ.</p>
+    <p role="status">Đã lưu.</p>
   ) : null;
 }

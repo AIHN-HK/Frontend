@@ -13,9 +13,9 @@ export function CareerAnalyticsPanel() {
   return (
     <section
       className="career-platform"
-      aria-label="Phân tích hành trình hướng nghiệp"
+      aria-label="Nhìn lại các bước đã qua"
     >
-      <h2>Phân tích hành trình của bạn</h2>
+      <h2>Nhìn lại các bước đã qua</h2>
       <ReadState
         pending={result.isPending}
         error={result.isError}
@@ -34,13 +34,11 @@ export function CareerAnalyticsPanel() {
               <strong>{result.data.counts.chats}</strong> phiên tư vấn
             </p>
           </div>
-          <Link to={paths.recommendations}>Mở gợi ý nghề có giải thích</Link>
-          <Link to={paths.roadmap}>Mở khoảng cách kỹ năng và lộ trình</Link>
+          <Link to={paths.recommendations}>Xem nghề phù hợp</Link>
+          <Link to={paths.roadmap}>Xem kỹ năng và lộ trình</Link>
           <h3>RIASEC qua các lần làm</h3>
           <p>
-            Tỷ lệ Có theo từng nhóm, dùng số câu trong snapshot của chính lần
-            làm. Hiển thị tối đa {result.data.timelineLimit} lần gần nhất. Thay
-            đổi không đồng nghĩa tốt lên hay kém đi.
+            Tỷ lệ câu Có được tính theo bộ câu hỏi của từng lần làm. Hiển thị tối đa {result.data.timelineLimit} lần gần nhất. Điểm thay đổi không có nghĩa bạn tốt hơn hay kém đi.
           </p>
           {!result.data.timeline.length ? (
             <p>Chưa có kết quả hoàn thành.</p>
@@ -90,7 +88,7 @@ export function CareerAnalyticsPanel() {
             </p>
           ) : (
             <p>
-              Cần hai lần làm có snapshot Có/Không hợp lệ để so sánh thay đổi.
+              Cần hai lần làm có bản ghi Có/Không hợp lệ để so sánh.
             </p>
           )}
           <h3>Tiến độ mục tiêu</h3>
@@ -101,7 +99,7 @@ export function CareerAnalyticsPanel() {
               </p>
             ))
           ) : (
-            <p>Chưa có mục tiêu đã lưu.</p>
+            <p>Bạn chưa chọn mục tiêu.</p>
           )}
         </>
       )}

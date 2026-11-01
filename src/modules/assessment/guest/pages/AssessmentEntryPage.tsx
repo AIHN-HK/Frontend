@@ -13,6 +13,6 @@ export function AssessmentEntryPage() {
     if (current.status === 'authenticated') wasAuthenticated.current = true;
     else if (current.status === 'anonymous' && wasAuthenticated.current) void navigate(`${paths.login}?returnTo=${encodeURIComponent(paths.assessment)}`, { replace: true });
   }, [current.status, navigate]);
-  if (current.status === 'loading') return <AsyncState state="loading" title="Đang khôi phục phiên…" />;
+  if (current.status === 'loading') return <AsyncState state="loading" title="Đang mở tài khoản…" />;
   return current.status === 'authenticated' ? <HollandTestPage /> : <GuestHollandPage />;
 }

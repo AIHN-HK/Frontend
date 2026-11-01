@@ -37,7 +37,7 @@ export function useAssessmentCommand() {
   return useMutation({
     mutationKey: ['assessment', 'command', current.user?.id, current.revision], retry: false,
     mutationFn: async (command: Command) => {
-      const valid = () => { if (!isAssessmentScopeCurrent(command.scope, command.signal)) throw new ApiError('session-changed', 'Phiên đã thay đổi.'); };
+      const valid = () => { if (!isAssessmentScopeCurrent(command.scope, command.signal)) throw new ApiError('session-changed', 'Phiên đăng nhập đã thay đổi.'); };
       valid();
       const result = command.action === 'start' ? await startAssessment(http, command.scope.ownerId, command.signal)
         : command.action === 'submit' ? await submitAssessment(http, command.draft, command.signal)

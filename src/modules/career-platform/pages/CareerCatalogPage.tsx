@@ -73,11 +73,12 @@ function CatalogSearch({ q, code, apply }: {
     }}>
       <label className={styles.keyword}>
         Tìm nghề theo tên hoặc mô tả
-        <Input name="q" type="search" maxLength={120} defaultValue={q} placeholder="Tìm nghề nghiệp…" />
+        <Input name="q" type="search" maxLength={120} defaultValue={q} placeholder="Tìm tên nghề hoặc mô tả…" />
       </label>
       <div className={styles.group}>
         <label htmlFor="catalog-group">Nhóm RIASEC nổi bật</label>
         <Select id="catalog-group" value={group} onChange={setGroup}
+          classNames={{ popup: { root: styles.groupDropdown } }}
           popupClassName={styles.groupDropdown}
           getPopupContainer={(trigger) => trigger.parentElement!}
           options={[{ value: "", label: "Tất cả" }, ...codes.map((c, index) => ({ value: c, label: `${c} · ${groups[index]}` }))]} />
@@ -105,32 +106,32 @@ export function CareerCatalogPage() {
   const data = result.isError ? undefined : result.data;
   const totalPages = data ? Math.max(1, Math.ceil(data.total / data.limit)) : 1;
   return (
-    <PlatformFrame title="Khám phá nghề nghiệp" className={styles.page} showTitle={false}
+    <PlatformFrame title="Tìm hiểu nghề" className={styles.page} showTitle={false}
       animationKey={data ? query.toString() : "pending"}>
       <header data-ce-enter="">
         <p className={styles.eyebrow}>DANH MỤC NGHỀ · O*NET</p>
-        <h1>Khám phá nghề nghiệp</h1>
-        <p>Lọc theo 6 nhóm Holland RIASEC để khám phá đặc điểm và kỹ năng của từng nghề.</p>
+        <h1>Tìm hiểu nghề</h1>
+        <p>Tìm hiểu công việc và kỹ năng. Lọc theo nhóm RIASEC nếu muốn thu hẹp lựa chọn.</p>
       </header>
       <div className={styles.stats} aria-label="Thông tin danh mục">
-        <div><strong>{data ? data.total.toLocaleString("vi-VN") : "—"}</strong><span>Nghề trong kết quả</span></div>
+        <div><strong>{data ? data.total.toLocaleString("vi-VN") : "—"}</strong><span>Nghề tìm thấy</span></div>
         <div><strong>{codes.length}</strong><span>Nhóm RIASEC</span></div>
         <div><strong>O*NET</strong><span>Nguồn nghề tại Mỹ</span></div>
       </div>
       <CatalogSearch key={`${q}:${code}`} q={q} code={code} apply={(keyword, group) => {
         setParams(new URLSearchParams({ q: keyword, code: group, page: "1" }));
       }} />
-      {result.isPending && <p role="status">Đang tải dữ liệu nghề…</p>}
+      {result.isPending && <p role="status">Đang tải thông tin nghề…</p>}
       {result.isError && <div className={styles.state} role="alert">
-        <p>Không tải được dữ liệu nghề. Hãy kiểm tra kết nối và thử lại.</p>
-        <Button onClick={() => void result.refetch()}>Thử tải lại dữ liệu nghề</Button>
+        <p>Chưa tải được thông tin nghề. Kiểm tra mạng rồi thử lại.</p>
+        <Button onClick={() => void result.refetch()}>Tải lại</Button>
       </div>}
       {data && <>
         <p role="status">{data.total.toLocaleString("vi-VN")} nghề có nguồn · Trang {data.page} / {totalPages}</p>
         {!data.items.length ? <section className={styles.state}>
           {data.total === 0 && <LottieIllustration kind="empty" />}
-          <h2>{data.total > 0 ? "Trang này vượt quá kết quả" : q || code ? "Không có nghề phù hợp" : "Danh mục nghề chưa có dữ liệu"}</h2>
-          <p>{data.total > 0 ? "Trở về trang đầu để xem kết quả hiện có." : "Thử lại sau hoặc thay đổi từ khóa và nhóm RIASEC."}</p>
+          <h2>{data.total > 0 ? "Trang này không có kết quả" : q || code ? "Chưa tìm thấy nghề theo tiêu chí này" : "Danh mục đang được bổ sung"}</h2>
+          <p>{data.total > 0 ? "Về trang đầu để xem các nghề hiện có." : "Thử từ khóa khác hoặc mở rộng nhóm RIASEC."}</p>
           <Button onClick={() => data.total > 0 ? change(1) : setParams({})}>
             {data.total > 0 ? "Về trang đầu" : "Đặt lại bộ lọc"}
           </Button>
@@ -141,12 +142,12 @@ export function CareerCatalogPage() {
               <span className={styles.id}>{career.id}</span>
             </div>
             <h2><Link to={`/careers/${encodeURIComponent(career.id)}`}>{career.title}</Link></h2>
-            <p className={styles.description}>{career.description || "Chưa có mô tả từ nguồn nghề."}</p>
+            <p className={styles.description}>{career.description || "Nguồn tham khảo chưa có mô tả."}</p>
             <div className={styles.cardFooter}>
               <span>{career.sourceVersion}</span>
               <a href={career.sourceUrl} target="_blank" rel="noreferrer" aria-label={`Nguồn O*NET: ${career.title}`}>Nguồn O*NET ↗</a>
             </div>
-            <Link className={styles.detail} to={`/careers/${encodeURIComponent(career.id)}`}>Xem chi tiết nghề <span aria-hidden="true">→</span></Link>
+            <Link className={styles.detail} to={`/careers/${encodeURIComponent(career.id)}`}>Tìm hiểu thêm <span aria-hidden="true">→</span></Link>
           </SpotlightCard>)}
         </div>}
         {data.items.length > 0 && <nav className={styles.pagination} aria-label="Phân trang nghề">

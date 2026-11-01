@@ -20,24 +20,24 @@ test('one shared body size reaches Home, lazy career content and auth controls',
   await page.goto('/login');
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
   await setBodySize();
-  await expect(page.getByRole('textbox', { name: 'Email trường hoặc cá nhân', exact: true })).toHaveCSS('font-size', '20px');
-  await expect(page.getByRole('button', { name: 'Đăng nhập vào Trang của tôi →', exact: true })).toHaveCSS('font-size', '20px');
+  await expect(page.getByRole('textbox', { name: 'Email', exact: true })).toHaveCSS('font-size', '20px');
+  await expect(page.getByRole('button', { name: 'Đăng nhập', exact: true })).toHaveCSS('font-size', '20px');
 });
 
 test('Home and careers stay public while the personal target preserves its login return URL', async ({ page }) => {
   await careerPlatformFixture(page, { anonymous: true });
   await page.goto('/');
   await expect(page).toHaveURL('/');
-  await expect(page.getByRole('heading', { level: 1 })).toContainText('Khám phá con đường');
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Hiểu mình trước');
   await page.goto('/careers/15-1252.00');
   await expect(page).toHaveURL('/careers/15-1252.00');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Software Developers');
-  await page.getByRole('link', { name: 'Chọn làm mục tiêu trong hồ sơ', exact: true }).click();
+  await page.getByRole('link', { name: 'Chọn làm mục tiêu', exact: true }).click();
   await expect(page).toHaveURL(/\/login\?returnTo=%2Fcareer-profile%3Ftarget%3D15-1252\.00$/);
   await resultFixture(page);
   await page.goto('/');
   await expect(page).toHaveURL('/');
-  await expect(page.getByRole('heading', { level: 1 })).toContainText('Khám phá con đường');
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Hiểu mình trước');
   await page.reload();
   await expect(page).toHaveURL('/');
   await page.getByRole('banner').getByRole('link', {name:'Đăng nhập',exact:true}).click();
@@ -48,7 +48,7 @@ test('Home stays public for admins and login still opens their admin destination
   await adminFixture(page);
   await page.goto('/');
   await expect(page).toHaveURL('/');
-  await expect(page.getByRole('heading', { level: 1 })).toContainText('Khám phá con đường');
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Hiểu mình trước');
   await page.reload();
   await expect(page).toHaveURL('/');
   await page.getByRole('banner').getByRole('link', {name:'Đăng nhập',exact:true}).click();

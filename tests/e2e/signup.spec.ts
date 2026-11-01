@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 import type { Page } from '@playwright/test';
 
 const password = ' exact signup password ';
-const submitName = 'Tiếp tục xác thực OTP →';
+const submitName = 'Tiếp tục';
 async function fixture(page: Page, options: { status?: number; network?: boolean; malformed?: boolean; emptyData?: boolean; delay?: Promise<void> } = {}) {
   const calls: { path: string; body: unknown }[] = [];
   await page.route('http://localhost:3000/api/v1/**', async route => {
@@ -20,8 +20,8 @@ async function fixture(page: Page, options: { status?: number; network?: boolean
   return calls;
 }
 async function fill(page: Page) {
-  await page.getByLabel('Họ và tên của bạn').fill('  Nguyễn Hoàng Nam  ');
-  await page.getByLabel('Địa chỉ Email').fill('  student@example.test  ');
+  await page.getByLabel('Họ và tên').fill('  Nguyễn Hoàng Nam  ');
+  await page.getByLabel('Email').fill('  student@example.test  ');
   await page.getByLabel('Ngày sinh').fill('2008-02-29');
   await page.getByLabel('Số điện thoại').fill(' 0901234567 ');
   await page.getByLabel('Tạo mật khẩu').fill(password);
@@ -38,10 +38,10 @@ test('invalid email focuses the field and never sends OTP', async ({ page }) => 
   const calls = await fixture(page);
   await page.goto('/signup');
   await fill(page);
-  await page.getByLabel('Địa chỉ Email').fill('invalid-email');
+  await page.getByLabel('Email').fill('invalid-email');
   await page.getByRole('button', { name: submitName }).click();
-  await expect(page.getByLabel('Địa chỉ Email')).toBeFocused();
-  await expect(page.getByLabel('Địa chỉ Email')).toHaveAttribute('aria-invalid', 'true');
+  await expect(page.getByLabel('Email')).toBeFocused();
+  await expect(page.getByLabel('Email')).toHaveAttribute('aria-invalid', 'true');
   expect(calls).toEqual([]);
 });
 
@@ -62,14 +62,14 @@ test('required birth date, phone and backend password bounds block submission', 
 test('sends only trimmed email, hands off without creating an account and keeps secrets only in memory', async ({ page }) => {
   const calls = await fixture(page);
   await page.goto('/login');
-  await page.getByRole('link', { name: 'Đăng ký miễn phí' }).click();
+  await page.getByRole('link', { name: 'Đăng ký' }).click();
   await fill(page);
   await page.getByRole('button', { name: 'Hiện mật khẩu' }).click();
   await expect(page.getByLabel('Tạo mật khẩu')).toHaveAttribute('type', 'text');
   await page.getByRole('button', { name: 'Ẩn mật khẩu' }).click();
   await page.getByRole('button', { name: submitName }).click();
   await expect(page).toHaveURL(/\/otp-verify$/);
-  await expect(page.getByText('Tài khoản chưa được tạo.', { exact: false })).toBeVisible();
+  await expect(page.getByText('Tài khoản sẽ được tạo sau khi xác thực.', { exact: false })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Xác thực tài khoản' })).toBeVisible();
   expect(calls).toEqual([{ path: '/api/v1/auth/register/send-otp', body: { email: 'student@example.test' } }]);
   await noSecrets(page);
@@ -91,7 +91,7 @@ for (const [name, options] of [['network', { network: true }], ['server', { stat
     await expect(page.getByRole('alert')).toBeVisible();
     await expect(page).toHaveURL(/\/signup$/);
     await expect(page.getByLabel('Tạo mật khẩu')).toHaveValue(password);
-    await expect(page.getByLabel('Họ và tên của bạn')).toHaveValue('  Nguyễn Hoàng Nam  ');
+    await expect(page.getByLabel('Họ và tên')).toHaveValue('  Nguyễn Hoàng Nam  ');
     await expect(page.getByLabel('Ngày sinh')).toHaveValue('2008-02-29');
     await expect(page.getByLabel('Số điện thoại')).toHaveValue(' 0901234567 ');
     await expect(page.getByRole('button', { name: submitName })).toBeEnabled();
@@ -115,17 +115,17 @@ test('rapid click and Enter cannot submit twice; navigation discards delayed com
   await expect(page.getByRole('button', { name: 'Đang gửi OTP…' })).toBeDisabled();
   await page.keyboard.press('Enter');
   await expect.poll(() => calls.length).toBe(1);
-  await expect(page.getByLabel('Địa chỉ Email')).toBeDisabled();
-  await page.getByRole('link', { name: 'Đăng nhập ngay' }).click();
+  await expect(page.getByLabel('Email')).toBeDisabled();
+  await page.getByRole('link', { name: 'Đăng nhập' }).click();
   await expect(page.getByRole('status')).toHaveText('Đang tải…');
   release();
   // The command must stop while Signup is still mounted during lazy navigation.
   await expect(page.locator('form')).toHaveAttribute('aria-busy', 'false');
   await expect(page.getByRole('button', { name: submitName })).toBeDisabled();
   loadLogin();
-  await expect(page.getByRole('heading', { name: 'Đăng nhập AIHN' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Đăng nhập' })).toBeVisible();
   await expect(page).toHaveURL(/\/login$/);
-  await page.getByRole('link', { name: 'Đăng ký miễn phí' }).click();
+  await page.getByRole('link', { name: 'Đăng ký' }).click();
   await expect(page.getByLabel('Tạo mật khẩu')).toHaveValue(password);
   await noSecrets(page);
 });
@@ -134,7 +134,7 @@ test('direct/reloaded OTP without a draft offers signup without inventing succes
   const calls = await fixture(page);
   await page.goto('/verify-otp');
   await page.reload();
-  await expect(page.getByText('Không có thông tin đăng ký trong tab này.', { exact: false })).toBeVisible();
+  await expect(page.getByText('Chưa có thông tin đăng ký trong tab này.', { exact: false })).toBeVisible();
   await page.getByRole('link', { name: 'Trở lại đăng ký' }).click();
   await expect(page.getByLabel('Tạo mật khẩu')).toHaveValue('');
   expect(calls).toEqual([]);
@@ -145,7 +145,7 @@ test('an empty success envelope reports an unknown OTP outcome and preserves the
   await page.goto('/signup');
   await fill(page);
   await page.getByRole('button', { name: submitName }).click();
-  await expect(page.getByRole('alert')).toContainText('Chưa xác nhận OTP đã được gửi');
+  await expect(page.getByRole('alert')).toContainText('Chưa xác nhận đã gửi mã OTP');
   await expect(page.getByLabel('Tạo mật khẩu')).toHaveValue(password);
   await expect(page).toHaveURL(/\/signup$/);
   expect(calls).toHaveLength(1);
@@ -163,7 +163,7 @@ test('returning to the handoff after a failed retry preserves the draft without 
   await page.getByRole('button', { name: submitName }).click();
   await expect(page.getByRole('alert')).toBeVisible();
   await page.goForward();
-  await expect(page.getByRole('status')).toContainText('Chưa xác nhận yêu cầu gửi OTP');
+  await expect(page.getByRole('status')).toContainText('Chưa xác nhận đã gửi mã OTP');
   await page.getByRole('link', { name: 'Trở lại đăng ký' }).click();
   await expect(page.getByLabel('Tạo mật khẩu')).toHaveValue(password);
 });
@@ -172,19 +172,19 @@ for (const [width, height] of [[320, 844], [390, 844], [768, 1024], [769, 1024],
   test(`signup keyboard/scroll and touch targets fit ${width}px`, async ({ page }, info) => {
     await page.setViewportSize({ width: width!, height: height! });
     await page.goto('/signup');
-    await expect(page.getByRole('heading', { name: 'Tạo tài khoản mới' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Tạo tài khoản' })).toBeVisible();
     await expect(page.getByLabel('Hiện tại bạn đang là')).toHaveCount(0);
     await fill(page);
-    await page.getByLabel('Họ và tên của bạn').fill('Tên rất dài '.repeat(20));
+    await page.getByLabel('Họ và tên').fill('Tên rất dài '.repeat(20));
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     for (const target of await page.locator('main input, main button, main a').all()) {
       const box = (await target.boundingBox())!;
       expect(box.height).toBeGreaterThanOrEqual(44);
       expect(box.width).toBeGreaterThanOrEqual(44);
     }
-    await page.getByLabel('Họ và tên của bạn').focus();
+    await page.getByLabel('Họ và tên').focus();
     await page.keyboard.press('Tab');
-    await expect(page.getByLabel('Địa chỉ Email')).toBeFocused();
+    await expect(page.getByLabel('Email')).toBeFocused();
     await page.getByRole('link', { name: '← Về trang chủ' }).scrollIntoViewIfNeeded();
     await expect(page.getByRole('link', { name: '← Về trang chủ' })).toBeInViewport();
     const screenshot = info.outputPath(`signup-${width}.png`);

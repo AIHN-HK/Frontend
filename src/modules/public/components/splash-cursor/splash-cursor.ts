@@ -1,5 +1,5 @@
 /**
- * React Bits Splash Cursor by David Haz, adapted for AIHN's bounded homepage opening.
+ * React Bits Splash Cursor by David Haz, adapted for AIHN's bounded homepage sections.
  * Source: https://github.com/DavidHDev/react-bits/tree/main/src/ts-default/Animations/SplashCursor
  * License: public/licenses/react-bits.txt (MIT + Commons Clause).
  * AIHN: low resolution, 30 fps, slow simulation, mouse-only scoped events, no bursts.

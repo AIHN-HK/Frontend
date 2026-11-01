@@ -26,7 +26,7 @@ const gapsSchema = z.object({
   gaps: z.array(gapSchema.extend({ name: z.string() })),
 });
 const phaseLabels = [
-  "Khám phá nghề",
+  "Tìm hiểu nghề",
   "Tự đánh giá và thực hành",
   "Dự án minh chứng",
   "Nhận xét và điều chỉnh",
@@ -54,15 +54,13 @@ export function CareerRoadmapPage() {
     Boolean(target),
   );
   return (
-    <PlatformFrame title="Lộ trình và tiến độ cá nhân" className={styles.page} animationKey={goals.data?.map(goal => `${goal.id}:${goal.revision}`).join(',') ?? 'loading'} sidebar={<TimelineSidebar steps={[
+    <PlatformFrame title="Con đường phía trước" className={styles.page} animationKey={goals.data?.map(goal => `${goal.id}:${goal.revision}`).join(',') ?? 'loading'} sidebar={<TimelineSidebar steps={[
       {id:'target',title:'Nghề mục tiêu',description:target ?? 'Chọn nghề trong hồ sơ',status:target?'completed':'pending'},
-      {id:'profile',title:'Hồ sơ kỹ năng',description:'Tự đánh giá và đọc khoảng cách',status:profile.data?.skills.length?'completed':'pending'},
-      {id:'roadmap',title:'Lộ trình',description:'Tiến độ có minh chứng do bạn xác nhận',status:'active'},
+      {id:'profile',title:'Hồ sơ kỹ năng',description:'Nhìn lại kỹ năng cần rèn',status:profile.data?.skills.length?'completed':'pending'},
+      {id:'roadmap',title:'Lộ trình',description:'Bạn xác nhận tiến độ và ghi lại việc đã làm',status:'active'},
     ]} radar={<LatestRiasecSummary compact />} />}>
       <p>
-        Lộ trình được tạo từ nghề mục tiêu và khoảng cách kỹ năng tại thời điểm
-        tạo. Tiến độ là việc bạn tự xác nhận có minh chứng, chưa phải chứng nhận
-        năng lực.
+        Lộ trình dựa trên mục tiêu và kỹ năng lúc tạo. Bạn tự xác nhận tiến độ, kèm minh chứng. Đây chưa phải chứng nhận năng lực.
       </p>
       <SourceNote />
       <ReadState
@@ -75,15 +73,15 @@ export function CareerRoadmapPage() {
       />
       {profile.data && !target && (
         <section className={styles.card}>
-          <h2>Chọn nghề mục tiêu trước</h2>
-          <p>Cập nhật kỹ năng và chọn nghề trong hồ sơ để tạo lộ trình.</p>
-          <Link to={paths.careerProfile}>Mở hồ sơ định hướng</Link>
-          <Link to={paths.careers}>Khám phá nghề</Link>
+          <h2>Bạn muốn thử sức với nghề nào?</h2>
+          <p>Chọn nghề và cập nhật kỹ năng trong hồ sơ để bắt đầu.</p>
+          <Link to={paths.careerProfile}>Cập nhật hồ sơ</Link>
+          <Link to={paths.careers}>Tìm hiểu nghề</Link>
         </section>
       )}
       {target && (
         <section className={styles.card}>
-          <h2>Khoảng cách kỹ năng · {target}</h2>
+          <h2>Kỹ năng cần rèn · {target}</h2>
           <ReadState
             pending={gaps.isPending}
             error={gaps.isError}
@@ -113,7 +111,7 @@ export function CareerRoadmapPage() {
                         <td>{g.level.toFixed(2)}</td>
                         <td>
                           {g.gap === null
-                            ? "Cần tự đánh giá"
+                            ? "Chưa tự đánh giá"
                             : g.gap.toFixed(2)}
                         </td>
                       </tr>
@@ -121,7 +119,7 @@ export function CareerRoadmapPage() {
                   </tbody>
                 </table>
               </div>
-              <Link to={paths.careerProfile}>Cập nhật tự đánh giá</Link>
+              <Link to={paths.careerProfile}>Cập nhật kỹ năng</Link>
               {goals.data && !goals.data.some((g) => g.careerId === target) && (
                 <Button
                   disabled={command.isPending}
@@ -134,7 +132,7 @@ export function CareerRoadmapPage() {
                     })
                   }
                 >
-                  Tạo lộ trình từ mục tiêu
+                  Tạo lộ trình
                 </Button>
               )}
               <CommandState error={command.error} success={command.isSuccess} />
@@ -146,7 +144,7 @@ export function CareerRoadmapPage() {
       {goals.data?.map((goal) => (
         <GoalCard key={`${goal.id}:${goal.revision}`} goal={goal} />
       ))}
-      {goals.isSuccess && !goals.data.length && <p>Chưa có lộ trình đã lưu.</p>}
+      {goals.isSuccess && !goals.data.length && <p>Chưa có lộ trình. Chọn mục tiêu để bắt đầu.</p>}
     </PlatformFrame>
   );
 }
@@ -178,15 +176,14 @@ function GoalCard({ goal }: { goal: Goal }) {
           })
         }
       >
-        Cập nhật lộ trình từ hồ sơ hiện tại
+        Cập nhật lộ trình
       </Button>
       <p className="platform-evidence">
-        Cập nhật sẽ giữ nhiệm vụ đã hoàn thành và nội dung minh chứng. Hoàn
-        thành các phase trước để mở phase sau.
+        Nhiệm vụ đã hoàn thành và minh chứng vẫn được giữ. Hoàn thành giai đoạn trước để mở giai đoạn sau.
       </p>
       <CommandState error={command.error} success={command.isSuccess} />
       {command.isPending && <RoadmapProcessing />}
-      {!goal.tasks.length && <p>Chưa có nhiệm vụ trong lộ trình này.</p>}
+      {!goal.tasks.length && <p>Lộ trình này chưa có việc cần làm.</p>}
       <div className={styles.timeline} ref={timeline}>{phaseLabels.map((phase, index) => (
         <section key={phase} className={styles.phase} data-phase-state={goal.tasks.filter(t=>t.phase===index).length && goal.tasks.filter(t=>t.phase===index).every(t=>t.done) ? 'done' : goal.tasks.some(t=>t.phase<index&&!t.done) ? 'future' : 'current'}>
           <span className={styles.phaseNode} data-roadmap-node="" aria-hidden="true">{goal.tasks.some(t=>t.phase===index) && goal.tasks.filter(t=>t.phase===index).every(t=>t.done) ? '✓' : index + 1}</span>
@@ -252,12 +249,12 @@ function TaskForm({ task, goal }: { task: Goal["tasks"][number]; goal: Goal }) {
         {task.done ? "✓ Đã hoàn thành" : "Chưa hoàn thành"} · {task.title}
       </p>
       <label>
-        Minh chứng — {task.title}
+        Minh chứng cho {task.title}
         <Input.TextArea
           maxLength={1000}
           value={evidence}
           onChange={(e) => setEvidence(e.target.value)}
-          placeholder="Mô tả việc đã làm hoặc đường dẫn sản phẩm…"
+          placeholder="Ghi việc đã làm hoặc thêm liên kết sản phẩm…"
         />
       </label>
       <Button
@@ -269,7 +266,7 @@ function TaskForm({ task, goal }: { task: Goal["tasks"][number]; goal: Goal }) {
       >
         {task.done ? "Mở lại nhiệm vụ" : "Xác nhận hoàn thành"}
       </Button>
-      {blocked && !task.done && <p>Hoàn thành các phase trước.</p>}
+      {blocked && !task.done && <p>Hoàn thành giai đoạn trước để tiếp tục.</p>}
       <CommandState error={command.error} success={command.isSuccess} />
     </form>
   );

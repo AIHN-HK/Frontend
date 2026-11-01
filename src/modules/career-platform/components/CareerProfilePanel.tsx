@@ -21,12 +21,10 @@ export function CareerProfilePanel() {
       z.array(skillSchema),
     );
   return (
-    <section className="career-platform" aria-label="Hồ sơ kỹ năng và mục tiêu">
-      <h2>Kỹ năng, sở thích và nghề mục tiêu</h2>
+    <section className="career-platform" aria-label="Kỹ năng và mục tiêu">
+      <h2>Điều bạn đang có và muốn thử</h2>
       <p>
-        Tự đánh giá 0–5: 0 chưa thực hiện; 5 thực hiện độc lập và có thể hướng
-        dẫn. Bỏ trống khi chưa biết. Đây là tự báo cáo, chưa phải bài đo năng
-        lực.
+        Tự đánh giá từ 0 đến 5: 0 là chưa làm, 5 là tự làm và hướng dẫn được. Chưa rõ thì để trống. Đây là góc nhìn của bạn, chưa phải bài đo năng lực.
       </p>
       <ReadState
         pending={profile.isPending || skills.isPending}
@@ -121,11 +119,10 @@ function ProfileForm({
       {stale && (
         <div role="alert">
           <p>
-            Bản nháp thuộc phiên bản hồ sơ cũ. So sánh dữ liệu máy chủ trước khi
-            lưu lại.
+            Hồ sơ đã thay đổi từ lúc tạo bản nháp. Đối chiếu bản đã lưu trước khi lưu tiếp.
           </p>
           <Button  onClick={() => setDraft(saved)}>
-            Dùng hồ sơ máy chủ
+            Dùng hồ sơ đã lưu
           </Button>
         </div>
       )}
@@ -141,7 +138,7 @@ function ProfileForm({
           }
         />
       </label>
-      <Link to={paths.careers}>Khám phá và chọn nghề mục tiêu</Link>
+      <Link to={paths.careers}>Tìm và chọn nghề</Link>
       <div className="platform-profile-grid">
         {skills.map((skill) => (
           <label key={skill.id}>
@@ -189,7 +186,7 @@ function ProfileForm({
             });
           }}
         />{" "}
-        Bổ sung mức quan tâm RIASEC (0–5)
+        Mức quan tâm RIASEC (0–5)
       </label>
       {enabled && (
         <div className="platform-profile-grid">
@@ -225,15 +222,14 @@ function ProfileForm({
         </div>
       )}
       <p className="platform-evidence">
-        Phiên bản máy chủ: {saved.revision}. Thông tin tài khoản như tuổi, giới
-        tính và địa chỉ không được dùng để xếp hạng nghề.
+        Phiên bản đã lưu: {saved.revision}. Tuổi, giới tính và địa chỉ không được dùng để xếp hạng nghề.
       </p>
       <Button htmlType="submit" disabled={command.isPending || stale}>
-        Lưu hồ sơ định hướng
+        Lưu kỹ năng và mục tiêu
       </Button>
       <CommandState error={command.error} success={command.isSuccess} />
       <Button  onClick={() => window.location.reload()}>
-        Đọc lại hồ sơ máy chủ
+        Kiểm tra hồ sơ đã lưu
       </Button>
     </form>
   );

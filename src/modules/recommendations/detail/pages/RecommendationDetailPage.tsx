@@ -34,7 +34,7 @@ export function RecommendationDetailPage() {
       </Link>
       <div className="recommendations-preview-note" role="note">
         <strong>Dữ liệu mẫu · Phân tích gợi ý</strong>
-        <p>Đây là giải thích minh họa từ T14, không phải phân tích cho tài khoản của bạn.</p>
+        <p>Đây là lý do minh họa, không phải phân tích cho bạn.</p>
       </div>
       {title ? (
         <section className="recommendations-state">
@@ -50,7 +50,7 @@ export function RecommendationDetailPage() {
           <>
             {view.scenario === 'stale' && (
               <p className="recommendations-stale" role="alert">
-                Hồ sơ mẫu đã thay đổi. Kết quả này chỉ để đọc lại.
+                Hồ sơ mẫu đã đổi. Kết quả này chỉ để đọc lại.
               </p>
             )}
             <header className="recommendations-header">
@@ -81,21 +81,21 @@ export function RecommendationDetailPage() {
                     </section>
                     <section>
                       <h3>Sở thích cá nhân</h3>
-                      <p>Chưa có bằng chứng sở thích được xác nhận.</p>
+                      <p>Chưa có thông tin sở thích được xác minh.</p>
                     </section>
                     <section>
                       <h3>Kỹ năng</h3>
-                      <p>Các nhãn bên dưới chỉ là tình huống minh họa.</p>
+                      <p>Các nhãn kỹ năng chỉ để minh họa.</p>
                     </section>
                   </div>
                 </section>
                 <section className="recommendations-card">
                   <h2>Đóng góp của từng nhóm RIASEC</h2>
-                  <p>Chưa có dữ liệu đóng góp RIASEC được xác nhận.</p>
-                  <p>Không suy ra phần trăm đóng góp từ mã Holland hay thông tin nghề chung.</p>
+                  <p>Chưa xác minh được mức đóng góp của từng nhóm RIASEC.</p>
+                  <p>Mã Holland và thông tin nghề chung chưa đủ để tính phần trăm đóng góp.</p>
                 </section>
                 <section className="recommendations-card">
-                  <h2>Đối sánh kỹ năng · Minh họa</h2>
+                  <h2>So sánh kỹ năng · Minh họa</h2>
                   <div className="recommendation-evidence">
                     {(['have', 'develop'] as const).map((state) => (
                       <section key={state}>
@@ -120,16 +120,15 @@ export function RecommendationDetailPage() {
                   <Link className="btn btn-secondary" to={paths.previewCareer(item.careerId)}>
                     Xem hồ sơ nghề mẫu
                   </Link>
-                  <h3>Đào tạo &amp; Tuyển sinh THPT</h3>
+                  <h3>Ngành học và tuyển sinh</h3>
                   <p>Chưa có dữ liệu tuyển sinh được xác nhận.</p>
                 </section>
                 <section className="recommendations-card">
-                  <h2>Nguồn &amp; Bằng chứng</h2>
+                  <h2>Nguồn tham khảo</h2>
                   <p>
-                    Nguồn giải thích: dữ liệu minh họa nội bộ, {result.data?.createdAt}. Chưa có bằng chứng cá
-                    nhân được xác nhận.
+                    Lý do từ dữ liệu mẫu nội bộ, {result.data?.createdAt}. Chưa dùng thông tin cá nhân đã xác minh.
                   </p>
-                  <p>Tài liệu nghề chung, không phải bằng chứng độ phù hợp cá nhân.</p>
+                  <p>Tài liệu về nghề, không xác nhận mức phù hợp của bạn.</p>
                   {item.career.detail?.references?.length ? (
                     item.career.detail.references.map((ref) => (
                       <a
@@ -149,13 +148,13 @@ export function RecommendationDetailPage() {
               </div>
               <aside className="recommendations-card recommendation-detail-sidebar">
                 <h2>Bước tiếp theo</h2>
-                <p>Đặt mục tiêu và lộ trình cá nhân chưa sẵn sàng. Không lưu nghề mẫu vào hồ sơ.</p>
+                <p>Chưa thể tạo mục tiêu hay lộ trình từ nghề mẫu. Hồ sơ của bạn không thay đổi.</p>
                 <Link className="btn btn-secondary" to={paths.advisor}>
-                  Mở cuộc trò chuyện chung với Cố vấn AI
+                  Hỏi AIHN
                 </Link>
-                <p>Ngữ cảnh nghề mẫu chưa được gửi cho AI.</p>
+                <p>Thông tin nghề mẫu chưa được gửi cho AIHN.</p>
                 <Link className="btn btn-secondary" to={paths.previewRoadmap}>
-                  Xem mẫu lộ trình chỉ đọc
+                  Xem lộ trình mẫu
                 </Link>
               </aside>
             </div>

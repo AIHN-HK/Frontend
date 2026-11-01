@@ -27,7 +27,7 @@ test('unknown save retains draft across reload and requires reading current data
   await expect(page.getByLabel('Nội dung câu hỏi')).toHaveValue('Bản nháp không mất');
   await expect(page.getByRole('button', { name: 'Lưu câu hỏi', exact: true })).toBeDisabled();
   expect(writes).toHaveLength(1);
-  await page.getByRole('button', { name: 'Đọc dữ liệu hiện tại để đối chiếu' }).click();
+  await page.getByRole('button', { name: 'Tải dữ liệu để đối chiếu' }).click();
   await expect(page.getByRole('button', { name: 'Lưu câu hỏi', exact: true })).toBeEnabled();
 });
 test('used questions and active attempts remain locked with no editable weights or delete', async ({
@@ -43,10 +43,10 @@ test('search and group filters are composed and empty is explicit', async ({ pag
   await questionsFixture(page);
   await page.goto('/admin/questions');
   await page.getByLabel('Tìm câu hỏi').fill('không có');
-  await expect(page.getByText('Không có câu hỏi phù hợp.')).toBeVisible();
+  await expect(page.getByText('Chưa tìm thấy câu hỏi. Thử đổi bộ lọc.')).toBeVisible();
   await page.getByLabel('Tìm câu hỏi').fill('máy móc');
   await page.getByLabel('Nhóm Holland').selectOption('I');
-  await expect(page.getByText('Không có câu hỏi phù hợp.')).toBeVisible();
+  await expect(page.getByText('Chưa tìm thấy câu hỏi. Thử đổi bộ lọc.')).toBeVisible();
 });
 test('409 keeps the edit draft and blocks blind resubmission', async ({ page }) => {
   const writes = await questionsFixture(page, { status: 409 });
@@ -54,7 +54,7 @@ test('409 keeps the edit draft and blocks blind resubmission', async ({ page }) 
   await page.getByRole('button', { name: 'Sửa câu hỏi 1' }).click();
   await page.getByLabel('Nội dung câu hỏi').fill('Nội dung đang sửa');
   await page.getByRole('button', { name: 'Lưu câu hỏi', exact: true }).click();
-  await expect(page.getByRole('alert')).toContainText('Dữ liệu bị khóa');
+  await expect(page.getByRole('alert')).toContainText('Câu hỏi bị khóa');
   await expect(page.getByLabel('Nội dung câu hỏi')).toHaveValue('Nội dung đang sửa');
   expect(writes).toHaveLength(1);
 });

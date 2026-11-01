@@ -31,6 +31,6 @@ test('old search response cannot replace new results', async ({ page }) => {
 test('empty list does not invent totals or unsupported filters', async ({ page }) => {
   await studentsFixture(page, { empty: true });
   await page.goto('/admin/students');
-  await expect(page.getByText('Không có học sinh phù hợp.')).toBeVisible();
+  await expect(page.getByText('Chưa tìm thấy học sinh. Thử tên hoặc email khác.')).toBeVisible();
   await expect(page.getByRole('button', { name: /Xuất|Khảo sát/ })).toHaveCount(0);
 });

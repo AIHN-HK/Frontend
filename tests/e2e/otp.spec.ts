@@ -22,12 +22,12 @@ async function fixture(page: Page, options: Options = {}) {
 }
 async function signup(page: Page) {
   await page.goto('/signup');
-  await page.getByLabel('Họ và tên của bạn').fill(fields.fullname);
-  await page.getByLabel('Địa chỉ Email').fill(fields.email);
+  await page.getByLabel('Họ và tên').fill(fields.fullname);
+  await page.getByLabel('Email').fill(fields.email);
   await page.getByLabel('Ngày sinh').fill(fields.yob);
   await page.getByLabel('Số điện thoại').fill(fields.phone);
   await page.getByLabel('Tạo mật khẩu').fill(fields.password);
-  await page.getByRole('button', { name: 'Tiếp tục xác thực OTP →' }).click();
+  await page.getByRole('button', { name: 'Tiếp tục' }).click();
   await expect(page).toHaveURL(/\/otp-verify$/);
   await expect(page.getByRole('heading', { name: 'Xác thực tài khoản' })).toBeVisible();
 }
@@ -74,13 +74,13 @@ test('registration sends the exact draft once, clears it and returns to login wi
   await signup(page); await code(page);
   await page.keyboard.press('Enter');
   await expect(page).toHaveURL(/\/login$/);
-  await expect(page.getByRole('status').filter({ hasText: 'Đăng ký thành công' })).toBeVisible();
+  await expect(page.getByRole('status').filter({ hasText: 'Đã tạo tài khoản' })).toBeVisible();
   expect(calls).toEqual([
     { path: '/api/v1/auth/register/send-otp', body: { email: fields.email } },
     { path: '/api/v1/auth/register', body: { ...fields, otpCode: '123456' } },
   ]);
   await noSecrets(page);
-  await page.getByRole('link', { name: 'Đăng ký miễn phí' }).click();
+  await page.getByRole('link', { name: 'Đăng ký' }).click();
   await expect(page.getByLabel('Tạo mật khẩu')).toHaveValue('');
 });
 
@@ -90,7 +90,7 @@ for (const [name, options] of [['invalid/expired', { status: 401 }], ['conflict'
     await signup(page); await code(page);
     await page.getByRole('button', { name: 'Xác nhận đăng ký' }).click();
     await expect(page.getByRole('alert')).toBeVisible();
-    if ('status' in options && options.status === 401) await expect(page.getByRole('alert')).toContainText('không đúng hoặc đã hết hạn');
+    if ('status' in options && options.status === 401) await expect(page.getByRole('alert')).toContainText('chưa đúng hoặc đã hết hạn');
     if (name === 'server' || name === 'network' || name === 'malformed') await expect(page.getByRole('alert')).toContainText('Chưa xác nhận');
     await expect(page).toHaveURL(/\/otp-verify$/);
     await expect(page.getByRole('button', { name: 'Xác nhận đăng ký' })).toBeEnabled();
@@ -109,7 +109,7 @@ test('resend waits 60 seconds, survives remount and prevents duplicate/pending r
   const calls = await fixture(page, { delay: new Promise<void>(resolve => { release = resolve; }) });
   await page.clock.install();
   await signup(page);
-  const resend = page.getByRole('button', { name: 'Gửi lại mã qua email', exact: true });
+  const resend = page.getByRole('button', { name: 'Gửi lại mã', exact: true });
   await expect(resend).toBeDisabled();
   await page.clock.fastForward(30_000);
   await page.goBack();
@@ -127,7 +127,7 @@ test('resend waits 60 seconds, survives remount and prevents duplicate/pending r
     { path: '/api/v1/auth/register/resend-otp', body: { email: fields.email } },
   ]);
   release();
-  await expect(page.getByRole('status').filter({ hasText: 'Máy chủ đã xác nhận yêu cầu gửi lại' })).toBeVisible();
+  await expect(page.getByRole('status').filter({ hasText: 'Đã nhận yêu cầu gửi lại mã' })).toBeVisible();
   await expect(digits(page).first()).toHaveValue('');
   await expect(digits(page).first()).toBeFocused();
   await expect(resend).toBeDisabled();
@@ -138,9 +138,9 @@ for (const status of [429, 503]) test(`resend ${status} retains draft and never 
   const calls = await fixture(page, { resendStatus: status });
   await page.clock.install(); await signup(page);
   await page.clock.fastForward(61_000);
-  await page.getByRole('button', { name: 'Gửi lại mã qua email', exact: true }).click();
+  await page.getByRole('button', { name: 'Gửi lại mã', exact: true }).click();
   await expect(page.getByRole('alert')).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Gửi lại mã qua email', exact: true })).toBeDisabled();
+  await expect(page.getByRole('button', { name: 'Gửi lại mã', exact: true })).toBeDisabled();
   expect(calls).toHaveLength(2);
   await page.getByRole('link', { name: 'Trở lại đăng ký' }).click();
   await expect(page.getByLabel('Tạo mật khẩu')).toHaveValue(fields.password);
@@ -160,20 +160,20 @@ test('rapid register clicks and Enter send one command; outgoing lazy navigation
   await expect(page.locator('form')).toHaveAttribute('aria-busy', 'false');
   release(); loadLogin();
   await expect(page).toHaveURL(/\/login$/);
-  await expect(page.getByText('Đăng ký thành công', { exact: false })).toHaveCount(0);
+  await expect(page.getByText('Đã tạo tài khoản', { exact: false })).toHaveCount(0);
   expect(calls).toHaveLength(2);
-  await page.getByRole('link', { name: 'Đăng ký miễn phí' }).click();
+  await page.getByRole('link', { name: 'Đăng ký' }).click();
   await expect(page.getByLabel('Tạo mật khẩu')).toHaveValue(fields.password);
 });
 
 test('direct link and reload lose memory draft and never request registration', async ({ page }) => {
   const calls = await fixture(page);
   await page.goto('/verify-otp?purpose=registration&email=fake@example.test');
-  await expect(page.getByText('Không có thông tin đăng ký trong tab này.', { exact: false })).toBeVisible();
+  await expect(page.getByText('Chưa có thông tin đăng ký trong tab này.', { exact: false })).toBeVisible();
   await expect(digits(page)).toHaveCount(0);
   expect(calls).toEqual([]);
   await signup(page); await code(page); await page.reload();
-  await expect(page.getByText('Không có thông tin đăng ký trong tab này.', { exact: false })).toBeVisible();
+  await expect(page.getByText('Chưa có thông tin đăng ký trong tab này.', { exact: false })).toBeVisible();
   await expect(digits(page)).toHaveCount(0);
   expect(calls).toHaveLength(1);
 });

@@ -22,7 +22,7 @@ test('Holland intro settles immediately when motion preference changes and survi
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await expect(intro).toHaveCSS('opacity', '1');
   await expect(intro).toHaveCSS('animation-name', 'none');
-  await page.getByRole('button', { name: 'Bắt đầu bài trắc nghiệm', exact: true }).focus();
+  await page.getByRole('button', { name: 'Bắt đầu', exact: true }).focus();
   await page.keyboard.press('Enter');
   await expect(title).toHaveCount(0);
   const back = page.getByRole('button', { name: '← Quay lại giới thiệu', exact: true });
@@ -59,7 +59,7 @@ test('catalog spotlight follows mouse, keeps keyboard links and stops on live re
   await page.mouse.move(0, 0);
   await expect(card).not.toHaveAttribute('style', /spotlight-x/);
   await page.keyboard.press('Tab');
-  const detail = card.getByRole('link', { name: 'Xem chi tiết nghề', exact: true });
+  const detail = card.getByRole('link', { name: 'Tìm hiểu thêm', exact: true });
   await detail.focus();
   await expect(detail).toBeFocused();
   await expect(detail).toHaveCSS('outline-style', 'solid');
@@ -81,7 +81,7 @@ test('catalog touch fallback opens the real detail without a decorative hit targ
     await page.goto('/careers');
     const card = page.getByRole('article').first();
     await expect(card.locator(':scope > span[aria-hidden="true"]')).toHaveCSS('opacity', '0');
-    await card.getByRole('link', { name: 'Xem chi tiết nghề', exact: true }).tap();
+    await card.getByRole('link', { name: 'Tìm hiểu thêm', exact: true }).tap();
     await expect(page).toHaveURL('/careers/15-1252.00');
     await expect(page.getByRole('heading', { level: 1 })).toHaveText('Software Developers');
   } finally { await context.close(); }
@@ -100,10 +100,10 @@ test('catalog keeps honest loading, error, retry and empty states', async ({ pag
   await expect(page.getByRole('status')).toContainText('Đang tải');
   await expect(page.getByRole('article')).toHaveCount(0);
   release();
-  await expect(page.getByRole('alert')).toContainText('Không tải được dữ liệu nghề');
+  await expect(page.getByRole('alert')).toContainText('Chưa tải được thông tin nghề');
   empty = true;
-  await page.getByRole('button', { name: 'Thử tải lại dữ liệu nghề' }).click();
-  await expect(page.getByRole('heading', { name: 'Danh mục nghề chưa có dữ liệu' })).toBeVisible();
+  await page.getByRole('button', { name: 'Tải lại' }).click();
+  await expect(page.getByRole('heading', { name: 'Danh mục đang được bổ sung' })).toBeVisible();
   await expect(page.getByRole('article')).toHaveCount(0);
 });
 

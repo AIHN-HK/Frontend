@@ -69,7 +69,7 @@ export function usePlatformCommand() {
         !before.user ||
         `${before.user?.id}:${before.revision}` !== scope
       )
-        throw new ApiError("session-changed", "Phiên đã thay đổi.");
+        throw new ApiError("session-changed", "Phiên đăng nhập đã thay đổi.");
       locked.current = true;
       controller.current = new AbortController();
       try {
@@ -84,7 +84,7 @@ export function usePlatformCommand() {
           after.revision !== before.revision ||
           after.user?.id !== before.user?.id
         )
-          throw new ApiError("session-changed", "Phiên đã thay đổi.");
+          throw new ApiError("session-changed", "Phiên đăng nhập đã thay đổi.");
         const envelope = response.data as { data?: unknown };
         const parsed = input.schema.safeParse(envelope?.data);
         if (!parsed.success)

@@ -10,10 +10,10 @@ export function RoadmapPage() {
     <div className="roadmap-preview">
       <header>
         <p className="roadmap-note" role="note">
-          Bản mẫu chỉ đọc · Không phải lộ trình hay tiến độ đã lưu của bạn.
+          Lộ trình mẫu · Chỉ để xem, không phải tiến độ của bạn.
         </p>
         <h1>{template ? `Lộ trình mẫu: ${template.name}` : 'Chọn lộ trình mẫu'}</h1>
-        <p>Mẫu THPT → Đại học để tham khảo giao diện. Các bước có thể không phù hợp với hoàn cảnh của bạn.</p>
+        <p>Ví dụ các bước từ THPT đến đại học. Bạn có thể cần cách đi khác.</p>
         <label className="roadmap-selector">
           Mục tiêu mẫu
           <select
@@ -39,7 +39,7 @@ export function RoadmapPage() {
                 </span>
                 <h2>{stage}</h2>
                 <p>{template.tasks[i]}</p>
-                <small>Gợi ý mẫu · Chưa theo dõi hoàn thành</small>
+                <small>Gợi ý mẫu · Chưa lưu tiến độ</small>
               </section>
             ))}
           </div>
@@ -50,19 +50,19 @@ export function RoadmapPage() {
       ) : (
         <section className="roadmap-stage">
           <h2>Chưa chọn mục tiêu mẫu</h2>
-          <p>Chọn một mẫu bên trên để xem các giai đoạn.</p>
+          <p>Chọn một mẫu để xem từng giai đoạn.</p>
           <Link className="btn btn-secondary" to={paths.previewRecommendations}>
-            Khám phá gợi ý mẫu
+            Xem gợi ý mẫu
           </Link>
         </section>
       )}
       <aside className="roadmap-stage">
         <h2>Tiến độ cá nhân chưa sẵn sàng</h2>
         <p>
-          Chưa hỗ trợ đặt mục tiêu, đánh dấu hoàn thành hay lưu tiến độ. Đổi mẫu chỉ đổi nội dung hiển thị.
+          Bản mẫu chưa lưu mục tiêu hay tiến độ. Đổi mẫu để xem ví dụ khác.
         </p>
         <Link className="btn btn-secondary" to={paths.advisor}>
-          Trao đổi chung với Cố vấn AI
+          Hỏi AIHN
         </Link>
       </aside>
     </div>

@@ -31,7 +31,7 @@ export function GuestClaimPage() {
       const valid = () => !controller.signal.aborted && session.read().revision === revision && session.read().user?.id === ownerId;
       pending.current = true; setBusy(true); setMessage('');
       guestAssessmentStore.write({ ...fresh, claim: { ownerId, needsReview: true } });
-      if (!guestAssessmentStore.available()) { setMessage('Chưa giữ được trạng thái lưu trong trình duyệt. Hãy kiểm tra quyền lưu trữ rồi kiểm tra bài đã lưu trước khi thử tiếp.'); pending.current = false; setBusy(false); return; }
+      if (!guestAssessmentStore.available()) { setMessage('Chưa giữ được trạng thái lưu. Kiểm tra quyền lưu trữ và bài đã lưu trước khi tiếp tục.'); pending.current = false; setBusy(false); return; }
       void claimGuestAssessment(http, fresh.result.receipt, controller.signal).then(() => {
         if (!valid()) return;
         guestAssessmentStore.clear(id);
@@ -39,7 +39,7 @@ export function GuestClaimPage() {
         void queries.invalidateQueries({ queryKey: ['career-platform', ownerId, revision] });
         void navigate(target, { replace: true });
       }).catch(failure => {
-        if (valid()) setMessage(failure instanceof ApiError && failure.status === 400 ? 'Phiên làm bài đã hết hạn hoặc không còn hợp lệ để lưu. Kết quả tạm vẫn được giữ; hãy kiểm tra bài đã lưu hoặc chủ động làm bài mới.' : 'Chưa xác nhận bài đã lưu. Kết quả tạm được giữ; hãy kiểm tra trước khi thử lưu lại.');
+        if (valid()) setMessage(failure instanceof ApiError && failure.status === 400 ? 'Bài đã hết hạn hoặc không còn hợp lệ để lưu. Kết quả tạm vẫn còn. Kiểm tra bài đã lưu hoặc chọn làm bài mới.' : 'Chưa xác nhận đã lưu bài. Kết quả tạm vẫn còn. Kiểm tra trước khi lưu lại.');
       }).finally(() => { pending.current = false; if (valid()) setBusy(false); });
     });
     return () => { cancelled = true; request.current?.abort(); };
@@ -64,18 +64,18 @@ export function GuestClaimPage() {
       void navigate(target, { replace: true });
     } catch (failure) {
       if (!valid()) return;
-      if (action === 'check' && failure instanceof ApiError && failure.status === 404) { setReviewed(true); setMessage('Chưa thấy bài đã lưu trong tài khoản này. Yêu cầu trước có thể còn xử lý; bạn có thể kiểm tra lại hoặc chủ động thử lưu lại.'); }
-      else setMessage('Chưa xác nhận bài đã lưu. Kết quả tạm vẫn được giữ; hãy kiểm tra lại trước khi thử lưu.');
+      if (action === 'check' && failure instanceof ApiError && failure.status === 404) { setReviewed(true); setMessage('Chưa thấy bài trong tài khoản. Yêu cầu trước có thể đang được xử lý. Kiểm tra lại trước khi chọn lưu lại.'); }
+      else setMessage('Chưa xác nhận đã lưu bài. Kết quả tạm vẫn còn. Kiểm tra lại trước khi lưu.');
     } finally { pending.current = false; if (valid()) setBusy(false); }
   };
   return <CareerScreenFrame><div className={styles.page}>
-    <h1>Lưu kết quả Holland vào tài khoản</h1>
-    {!draft?.result ? <><p>Không có bài Holland chưa lưu trong phiên này.</p><Link className="btn btn-primary" to={target}>Tiếp tục tới tính năng đã chọn</Link><Link className="btn btn-secondary" to={paths.assessment}>Làm bài Holland</Link></> : <>
+    <h1>Lưu kết quả Holland</h1>
+    {!draft?.result ? <><p>Không có bài Holland nào cần lưu trong tab này.</p><Link className="btn btn-primary" to={target}>Tiếp tục</Link><Link className="btn btn-secondary" to={paths.assessment}>Làm trắc nghiệm</Link></> : <>
       <p>Kết quả {draft.result.topCode} sẽ được lưu vào tài khoản {current.user?.fullname} trước khi tiếp tục.</p>
-      {wrongOwner ? <p className={styles.notice} role="alert">Bài này đang chờ xác nhận lưu với tài khoản khác. Hãy đăng nhập lại đúng tài khoản đó để kiểm tra; bài sẽ không tự chuyển sang tài khoản hiện tại.</p> : busy ? <p role="status">Đang xác nhận và lưu bài…</p> : <p>Bài đang chờ xác nhận lưu. Tải lại trang sẽ giữ kết quả tạm để bạn kiểm tra tiếp.</p>}
+      {wrongOwner ? <p className={styles.notice} role="alert">Bài đang chờ xác nhận lưu ở tài khoản khác. Đăng nhập tài khoản đó để kiểm tra. Bài chưa được chuyển sang tài khoản này.</p> : busy ? <p role="status">Đang lưu kết quả…</p> : <p>Chưa xác nhận đã lưu bài. Kết quả tạm vẫn được giữ khi tải lại trang.</p>}
       {message && <p className={styles.notice} role="alert">{message}</p>}
       {!wrongOwner && <div className={styles.nav}><Button disabled={busy} variant="secondary" onClick={() => { void act('check'); }}>Kiểm tra bài đã lưu</Button><Button disabled={busy || !reviewed} onClick={() => { void act('retry'); }}>Thử lưu lại</Button></div>}
-      <Link className="btn btn-secondary" to={paths.guestAssessmentResult}>Xem lại tổng kết RIASEC</Link>
+      <Link className="btn btn-secondary" to={paths.guestAssessmentResult}>Xem lại kết quả</Link>
     </>}
   </div></CareerScreenFrame>;
 }

@@ -17,7 +17,7 @@ test('RIASEC counters animate to saved values while exposing only the final acce
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   await resultFixture(page);
   await page.goto('/assessment/results/812');
-  const scores = page.getByRole('region', { name: 'Điểm 6 nhóm RIASEC' });
+  const scores = page.getByRole('region', { name: 'Sáu nhóm sở thích' });
   const counter = scores.getByRole('img', { name: '50%', exact: true }).first();
   await counter.scrollIntoViewIfNeeded();
   await expect.poll(() => page.evaluate(() => {
@@ -40,13 +40,13 @@ test('reduced motion counters update to the next attempt and leave no old score 
   await resultFixture(page, options);
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/assessment/results/812');
-  await expect(page.getByRole('region', { name: 'Điểm 6 nhóm RIASEC' })).toContainText('50% · 4/8 câu Có');
+  await expect(page.getByRole('region', { name: 'Sáu nhóm sở thích' })).toContainText('50% · 4/8 câu Có');
   const values = { R: 2, I: 0, A: 3, S: 0, E: 1, C: 0 };
   options.result = resultData(813, values, 'ARE');
   options.snapshot = snapshotData(813, values, { R: 2, I: 8, A: 4, S: 6, E: 2, C: 4 }, 'ARE');
   await page.evaluate(() => { history.pushState({}, '', '/assessment/results/813'); window.dispatchEvent(new PopStateEvent('popstate')); });
   await expect(page.getByRole('heading', { name: 'TopCode: ARE', exact: true })).toBeVisible();
-  const scores = page.getByRole('region', { name: 'Điểm 6 nhóm RIASEC' });
+  const scores = page.getByRole('region', { name: 'Sáu nhóm sở thích' });
   await expect(scores).toContainText('100% · 2/2 câu Có');
   await expect(scores).not.toContainText('4/8 câu Có');
   await expect(scores.getByRole('img', { name: '100%', exact: true })).toHaveText('100%');
@@ -56,7 +56,7 @@ test('recommendation cards combine shared glow, exact ranking scores and a finit
   const fixture = await careerPlatformFixture(page);
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   await page.goto('/recommendations');
-  await page.getByRole('button', { name: 'Tạo gợi ý nghề', exact: true }).click();
+  await page.getByRole('button', { name: 'Xem nghề phù hợp', exact: true }).click();
   const card = page.getByRole('article').filter({ has: page.getByRole('heading', { name: '1. Software Developers', exact: true }) });
   await expect(card.locator('[data-shiny-text]')).toHaveCSS('animation-iteration-count', '1');
   await expect(card.getByRole('img', { name: '80.0 / 100', exact: true })).toHaveText('80.0 / 100');
@@ -66,7 +66,7 @@ test('recommendation cards combine shared glow, exact ranking scores and a finit
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await expect(card.locator('[data-shiny-text]')).toHaveCSS('animation-name', 'none');
   await expect(card.locator(':scope > span[aria-hidden="true"]')).toHaveCSS('display', 'none');
-  const detail = card.getByRole('link', { name: 'Xem gợi ý nghề này', exact: true });
+  const detail = card.getByRole('link', { name: 'Xem lý do gợi ý', exact: true });
   await detail.focus();
   await expect(detail).toBeFocused();
   await page.keyboard.press('Enter');
@@ -79,13 +79,13 @@ test('Dashboard metric cards retain their regions, real zero values and working 
   const fixture = await careerPlatformFixture(page);
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/dashboard');
-  const summary = page.getByRole('region', { name: 'Tổng quan hành trình Dashboard', exact: true });
+  const summary = page.getByRole('region', { name: 'Tổng quan của bạn', exact: true });
   await expect(summary.locator('[data-journey-metric][data-spotlight-card]')).toHaveCount(4);
   await expect(summary.getByRole('region', { name: 'Trắc nghiệm Holland', exact: true }).getByRole('img', { name: '2', exact: true })).toHaveText('2');
-  await expect(summary.getByRole('region', { name: 'Nghề nghiệp gợi ý', exact: true }).getByRole('img', { name: '0', exact: true })).toHaveText('0');
-  await expect(summary.getByRole('region', { name: 'Lộ trình phát triển', exact: true }).getByRole('img', { name: '0/0', exact: true })).toHaveText('0/0');
+  await expect(summary.getByRole('region', { name: 'Nghề nên tìm hiểu', exact: true }).getByRole('img', { name: '0', exact: true })).toHaveText('0');
+  await expect(summary.getByRole('region', { name: 'Lộ trình', exact: true }).getByRole('img', { name: '0/0', exact: true })).toHaveText('0/0');
   await expect(page.locator('[data-shiny-text]')).toHaveCSS('animation-name', 'none');
-  const link = summary.getByRole('link', { name: 'Xem trạng thái gợi ý', exact: true });
+  const link = summary.getByRole('link', { name: 'Xem nghề phù hợp', exact: true });
   await link.focus(); await page.keyboard.press('Enter');
   await expect(page).toHaveURL('/recommendations');
   expect(fixture.calls.every(call => call.method === 'GET')).toBe(true);
@@ -95,8 +95,8 @@ test('missing analytics never become animated zeroes', async ({ page }) => {
   await careerPlatformFixture(page);
   await page.route('**/api/v1/career/analytics', route => route.fulfill({ status: 503, json: { message: 'fixture unavailable' } }));
   await page.goto('/dashboard');
-  const summary = page.getByRole('region', { name: 'Tổng quan hành trình Dashboard', exact: true });
-  await expect(summary.getByRole('heading', { name: 'Chưa tải được tổng quan hành trình', exact: true })).toBeVisible();
+  const summary = page.getByRole('region', { name: 'Tổng quan của bạn', exact: true });
+  await expect(summary.getByRole('heading', { name: 'Chưa tải được tổng quan', exact: true })).toBeVisible();
   await expect(summary.locator('[data-count-up]')).toHaveCount(0);
   await expect(summary.locator('[data-journey-metric] strong')).toHaveText(['—', '—', '—', '—']);
 });
@@ -108,7 +108,7 @@ for (const width of [320, 390, 768, 1440]) test(`shared effects retain responsiv
   for (const path of ['/dashboard', '/assessment/results/812', '/recommendations']) {
     await page.goto(path);
     if (path === '/recommendations') {
-      await page.getByRole('button', { name: 'Tạo gợi ý nghề', exact: true }).click();
+      await page.getByRole('button', { name: 'Xem nghề phù hợp', exact: true }).click();
       await expect(page.getByRole('heading', { name: '1. Software Developers', exact: true })).toBeVisible();
     } else await expect(page.locator('[data-count-up]').first()).toBeVisible();
     await page.evaluate(() => document.fonts.ready);

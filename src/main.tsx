@@ -20,5 +20,5 @@ try {
   root.render(<StrictMode><App queryClient={runtime.queryClient} http={runtime.http} auth={runtime.auth} /></StrictMode>);
 } catch (error) {
   console.error(error instanceof Error ? error.message : 'Application could not start');
-  root.render(<main className="route-fallback"><AsyncState state="error" title="Ứng dụng chưa sẵn sàng" description="Vui lòng thử lại sau." /></main>);
+  root.render(<main className="route-fallback"><AsyncState state="error" title="Chưa mở được AIHN" description="Bạn thử lại sau nhé." /></main>);
 }

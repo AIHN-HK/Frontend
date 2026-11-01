@@ -49,9 +49,9 @@
   gap: 6px;
   font-size: var(--font-size-body);
 }
-.career-platform input,
-.career-platform select,
-.career-platform textarea {
+.career-platform input:not([class*="ant-"]),
+.career-platform select:not([class*="ant-"]),
+.career-platform textarea:not([class*="ant-"]) {
   min-height: 45px;
   max-width: 100%;
   min-width: 0;

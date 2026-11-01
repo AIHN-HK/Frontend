@@ -52,15 +52,15 @@ export function SignupPage(): React.JSX.Element {
       if (registrationDraft.save(fields, revision, true)) await navigate(withAuthReturn(paths.verifyOtp, location.search));
     } catch (failure) {
       if (!active.current || controller.signal.aborted || session.read().revision !== revision) return;
-      const message = failure instanceof ApiError ? failure.message : 'Không thể gửi OTP. Vui lòng thử lại.';
-      setError(failure instanceof ApiError && failure.outcomeUnknown ? `${message} Chưa xác nhận OTP đã được gửi. Hãy kiểm tra email trước khi thử lại; tài khoản chưa được tạo.` : message);
+      const message = failure instanceof ApiError ? failure.message : 'Chưa gửi được mã OTP. Bạn thử lại nhé.';
+      setError(failure instanceof ApiError && failure.outcomeUnknown ? 'Chưa xác nhận đã gửi mã OTP. Kiểm tra email trước khi gửi lại. Tài khoản chưa được tạo.' : message);
     } finally { pending.current = false; request.current = null; }
   };
   return <div ref={root} className={`${authStyles.page} ${styles.page}`}>
     <div className="signup-intro" data-ce-enter="">
       <span className="brand-badge" aria-hidden="true">AI</span>
-      <h1>Tạo tài khoản mới</h1>
-      <p>Bắt đầu xác định hướng đi tương lai cùng AIHN</p>
+      <h1>Tạo tài khoản</h1>
+      <p>Lưu kết quả để tiếp tục tìm hiểu.</p>
     </div>
     <form data-ce-enter="" className="signup-form" noValidate aria-busy={isSubmitting} onSubmit={event => {
       if (pending.current || leaving) { event.preventDefault(); return; }
@@ -69,8 +69,8 @@ export function SignupPage(): React.JSX.Element {
     }}>
       <fieldset disabled={isSubmitting}>
         <legend className="signup-fieldset-label">Thông tin đăng ký</legend>
-        <Field label="Họ và tên của bạn" id="signup-fullname" autoComplete="name" placeholder="Nguyễn Hoàng Nam" error={errors.fullname?.message} control={control} name="fullname" />
-        <Field label="Địa chỉ Email" id="signup-email" type="email" inputMode="email" autoComplete="email" placeholder="name@email.com" error={errors.email?.message} control={control} name="email" />
+        <Field label="Họ và tên" id="signup-fullname" autoComplete="name" placeholder="Nguyễn Hoàng Nam" error={errors.fullname?.message} control={control} name="fullname" />
+        <Field label="Email" id="signup-email" type="email" inputMode="email" autoComplete="email" placeholder="name@email.com" error={errors.email?.message} control={control} name="email" />
         <Field label="Ngày sinh" id="signup-yob" type="date" autoComplete="bday" error={errors.yob?.message} control={control} name="yob" />
         <Field label="Số điện thoại" id="signup-phone" type="tel" inputMode="tel" autoComplete="tel" placeholder="0901234567" error={errors.phone?.message} control={control} name="phone" />
         <div className="field">
@@ -83,9 +83,9 @@ export function SignupPage(): React.JSX.Element {
         </div>
       </fieldset>
       {error && <p className="signup-error" role="alert">{error}</p>}
-      <Button className="btn btn-primary signup-submit" htmlType="submit" disabled={isSubmitting || leaving}>{isSubmitting ? 'Đang gửi OTP…' : 'Tiếp tục xác thực OTP →'}</Button>
+      <Button className="btn btn-primary signup-submit" htmlType="submit" disabled={isSubmitting || leaving}>{isSubmitting ? 'Đang gửi OTP…' : 'Tiếp tục'}</Button>
     </form>
-    <p className="signup-login">Đã có tài khoản AIHN? <Link to={withAuthReturn(paths.login, location.search)}>Đăng nhập ngay</Link></p>
+    <p className="signup-login">Đã có tài khoản? <Link to={withAuthReturn(paths.login, location.search)}>Đăng nhập</Link></p>
     <div className="signup-home"><Link to={paths.home}>← Về trang chủ</Link></div>
   </div>;
 }

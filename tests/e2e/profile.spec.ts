@@ -43,7 +43,7 @@ test('loads owned profile, saves only supported fields and reloads persisted val
   await page.getByLabel('Địa chỉ', { exact: true }).fill('  Đà Nẵng  ');
   await page.getByLabel('Giới tính', { exact: true }).selectOption('OTHER');
   await page.getByLabel('Lớp hiện tại', { exact: true }).selectOption('11');
-  await save(page).click(); await expect(page.getByRole('status').filter({ hasText: 'Đã lưu cập nhật hồ sơ.' })).toBeVisible();
+  await save(page).click(); await expect(page.getByRole('status').filter({ hasText: 'Đã lưu hồ sơ.' })).toBeVisible();
   const patches = calls.filter(call => call.method === 'PATCH'); expect(patches).toHaveLength(1);
   expect(patches[0]?.body).toEqual({ fullname: 'Tên mới', phone: '0987654321', address: 'Đà Nẵng', gender: 'OTHER', class: 11 });
   await expect(page.getByRole('complementary', { name: 'Tài khoản hiện tại' })).toContainText('Tên mới');
@@ -56,7 +56,7 @@ test('loads owned profile, saves only supported fields and reloads persisted val
 test('local field validation focuses errors and never sends PATCH', async ({ page }) => {
   const calls = await fixture(page); await page.goto('/career-profile');
   const name = page.getByLabel('Họ và tên', { exact: true }); await name.fill(' '); await save(page).click();
-  await expect(name).toBeFocused(); await expect(page.getByText('Vui lòng nhập họ và tên.', { exact: true })).toBeVisible();
+  await expect(name).toBeFocused(); await expect(page.getByText('Nhập họ và tên.', { exact: true })).toBeVisible();
   await name.fill('x'.repeat(121)); await save(page).click(); await expect(page.getByText('Họ và tên tối đa 120 ký tự.')).toBeVisible();
   await name.fill('Tên hợp lệ'); await page.getByLabel('Số điện thoại', { exact: true }).fill('12345'); await save(page).click();
   await expect(page.getByText('Số điện thoại cần 10 chữ số, bắt đầu bằng 0.')).toBeVisible();
@@ -67,22 +67,22 @@ test('local field validation focuses errors and never sends PATCH', async ({ pag
 test('blank optional values are sent as null; career fields are unavailable and never pretend to save', async ({ page }) => {
   const calls = await fixture(page); await page.goto('/career-profile');
   await page.getByLabel('Địa chỉ', { exact: true }).fill('   '); await page.getByLabel('Giới tính', { exact: true }).selectOption(''); await page.getByLabel('Lớp hiện tại', { exact: true }).selectOption('');
-  await save(page).click(); await expect(page.getByText('Đã lưu cập nhật hồ sơ.', { exact: true })).toBeVisible();
+  await save(page).click(); await expect(page.getByText('Đã lưu hồ sơ.', { exact: true })).toBeVisible();
   expect(calls.find(call => call.method === 'PATCH')?.body).toEqual({ fullname: 'Học sinh A', phone: '0901234567', address: null, gender: null, class: null });
-  await expect(page.getByText('Trường THPT, tổ hợp môn và nguyện vọng đại học chưa sẵn sàng.')).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Kỹ năng, sở thích và nghề mục tiêu' })).toBeVisible();
-  await expect(page.getByRole('region', { name: 'Hồ sơ kỹ năng và mục tiêu' })).toBeVisible();
+  await expect(page.getByText('Chưa hỗ trợ cập nhật trường, tổ hợp môn và nguyện vọng.')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Điều bạn đang có và muốn thử' })).toBeVisible();
+  await expect(page.getByRole('region', { name: 'Kỹ năng và mục tiêu' })).toBeVisible();
   await expect(page.getByText(/85%|Đã tự động lưu|Python cơ bản|áp dụng ngay vào thuật toán/)).toHaveCount(0);
   expect(calls.filter(call => call.method === 'PATCH')).toHaveLength(1);
 });
 
 test('GET error can be retried and initializes an editable draft', async ({ page }) => {
   const options = { getError: true }; const calls = await fixture(page, options); await page.goto('/career-profile');
-  await expect(page.getByText('Không tải được hồ sơ.')).toBeVisible(); await expect(save(page)).toHaveCount(0);
+  await expect(page.getByText('Chưa tải được hồ sơ.')).toBeVisible(); await expect(save(page)).toHaveCount(0);
   options.getError = false; await page.getByRole('button', { name: 'Thử lại hồ sơ' }).click();
   await expect(page.getByLabel('Họ và tên', { exact: true })).toHaveValue('Học sinh A');
   await page.getByLabel('Họ và tên', { exact: true }).fill('Draft sau retry'); await save(page).click();
-  await expect(page.getByText('Đã lưu cập nhật hồ sơ.', { exact: true })).toBeVisible(); expect(calls.filter(call => call.method === 'PATCH')).toHaveLength(1);
+  await expect(page.getByText('Đã lưu hồ sơ.', { exact: true })).toBeVisible(); expect(calls.filter(call => call.method === 'PATCH')).toHaveLength(1);
 });
 
 for (const failure of ['503', '400', 'network', 'malformed'] as const) {
@@ -92,12 +92,12 @@ for (const failure of ['503', '400', 'network', 'malformed'] as const) {
     await page.getByLabel('Họ và tên', { exact: true }).fill('Draft chưa xác nhận'); await save(page).click();
     await expect(page.locator('form.career-profile-card').getByRole('alert')).toBeVisible(); await expect(page.getByLabel('Họ và tên', { exact: true })).toHaveValue('Draft chưa xác nhận');
     expect(calls.filter(call => call.method === 'PATCH')).toHaveLength(1);
-    await page.getByRole('button', { name: 'Kiểm tra dữ liệu đã lưu' }).click();
-    await expect(page.getByRole('region', { name: 'Dữ liệu đã lưu trên máy chủ' })).toContainText('Học sinh A');
+    await page.getByRole('button', { name: 'Kiểm tra bản đã lưu' }).click();
+    await expect(page.getByRole('region', { name: 'Thông tin đã lưu' })).toContainText('Học sinh A');
     await expect(page.getByLabel('Họ và tên', { exact: true })).toHaveValue('Draft chưa xác nhận');
     expect(calls.filter(call => call.method === 'PATCH')).toHaveLength(1);
     options.patchStatus = 200; options.patchNetwork = false; options.malformed = false;
-    await save(page).click(); await expect(page.getByText('Đã lưu cập nhật hồ sơ.', { exact: true })).toBeVisible(); expect(calls.filter(call => call.method === 'PATCH')).toHaveLength(2);
+    await save(page).click(); await expect(page.getByText('Đã lưu hồ sơ.', { exact: true })).toBeVisible(); expect(calls.filter(call => call.method === 'PATCH')).toHaveLength(2);
   });
 }
 
@@ -120,8 +120,8 @@ test('rapid submit is single-flight; navigation preserves uncertain draft and ig
   await page.getByRole('link', { name: 'Về Trang của tôi' }).click(); await expect(page).toHaveURL(/\/dashboard$/);
   release(); await page.getByRole('link', { name: 'Xem hồ sơ', exact: true }).click();
   await expect(page.getByLabel('Họ và tên', { exact: true })).toHaveValue('Draft sau navigation');
-  await expect(page.locator('form.career-profile-card').getByRole('alert')).toContainText('chưa được xác nhận');
-  await expect(page.getByText('Đã lưu cập nhật hồ sơ.', { exact: true })).toHaveCount(0);
+  await expect(page.locator('form.career-profile-card').getByRole('alert')).toContainText('Chưa xác nhận lần lưu trước');
+  await expect(page.getByText('Đã lưu hồ sơ.', { exact: true })).toHaveCount(0);
 });
 
 test('PATCH 401 logs out without refresh or mutation replay and clears owner draft', async ({ page }) => {
@@ -135,20 +135,20 @@ test('unsaved edits survive route remount and server review does not replace the
   await page.getByLabel('Họ và tên', { exact: true }).fill('Draft chưa gửi');
   await page.getByRole('link', { name: 'Về Trang của tôi' }).click(); await expect(page).toHaveURL(/\/dashboard$/);
   await page.getByRole('link', { name: 'Xem hồ sơ', exact: true }).click(); await expect(page.getByLabel('Họ và tên', { exact: true })).toHaveValue('Draft chưa gửi');
-  await page.getByRole('button', { name: 'Kiểm tra dữ liệu đã lưu' }).click();
-  await expect(page.getByRole('region', { name: 'Dữ liệu đã lưu trên máy chủ' })).toContainText('Học sinh A');
+  await page.getByRole('button', { name: 'Kiểm tra bản đã lưu' }).click();
+  await expect(page.getByRole('region', { name: 'Thông tin đã lưu' })).toContainText('Học sinh A');
   await expect(page.getByLabel('Họ và tên', { exact: true })).toHaveValue('Draft chưa gửi');
-  await page.getByRole('button', { name: 'Thay bản nháp bằng dữ liệu đã lưu' }).click(); await expect(page.getByLabel('Họ và tên', { exact: true })).toHaveValue('Học sinh A');
+  await page.getByRole('button', { name: 'Dùng thông tin đã lưu' }).click(); await expect(page.getByLabel('Họ và tên', { exact: true })).toHaveValue('Học sinh A');
   expect(calls.filter(call => call.method === 'PATCH')).toHaveLength(0);
 });
 
 test('background read failure while reviewing keeps the form and draft available', async ({ page }) => {
   const options: Options = {}; await fixture(page, options); await page.goto('/career-profile');
   await page.getByLabel('Họ và tên', { exact: true }).fill('Draft trong lúc GET lỗi');
-  options.getError = true; await page.getByRole('button', { name: 'Kiểm tra dữ liệu đã lưu' }).click();
-  await expect(page.locator('form.career-profile-card').getByRole('alert')).toContainText('Không tải được dữ liệu đã lưu');
+  options.getError = true; await page.getByRole('button', { name: 'Kiểm tra bản đã lưu' }).click();
+  await expect(page.locator('form.career-profile-card').getByRole('alert')).toContainText('Chưa tải được bản đã lưu');
   await expect(page.getByLabel('Họ và tên', { exact: true })).toHaveValue('Draft trong lúc GET lỗi'); await expect(save(page)).toBeEnabled();
-  options.getError = false; await page.getByRole('button', { name: 'Kiểm tra dữ liệu đã lưu' }).click(); await expect(page.getByRole('region', { name: 'Dữ liệu đã lưu trên máy chủ' })).toBeVisible();
+  options.getError = false; await page.getByRole('button', { name: 'Kiểm tra bản đã lưu' }).click(); await expect(page.getByRole('region', { name: 'Thông tin đã lưu' })).toBeVisible();
 });
 
 test('a stale background GET cannot replace the profile cache after successful PATCH', async ({ page }) => {
@@ -159,7 +159,7 @@ test('a stale background GET cannot replace the profile cache after successful P
   await expect.poll(() => calls.filter(call => call.method === 'GET' && call.path.endsWith('/me')).length).toBe(2);
   const stale = calls.filter(call => call.method === 'GET' && call.path.endsWith('/me'))[1]!;
   options.getDelay = undefined; await page.getByLabel('Họ và tên', { exact: true }).fill('Tên sau PATCH'); await save(page).click();
-  await expect(page.getByText('Đã lưu cập nhật hồ sơ.', { exact: true })).toBeVisible(); release(); await expect.poll(() => stale.finished).toBe(true);
+  await expect(page.getByText('Đã lưu hồ sơ.', { exact: true })).toBeVisible(); release(); await expect.poll(() => stale.finished).toBe(true);
   let releaseDashboard!: () => void; options.getDelay = new Promise<void>(resolve => { releaseDashboard = resolve; });
   await page.getByRole('link', { name: 'Về Trang của tôi' }).click(); await expect(page.getByRole('heading', { level: 1 })).toContainText('Tên sau PATCH'); releaseDashboard();
 });
@@ -184,7 +184,7 @@ test('account switch during PATCH cannot update B profile or carry A draft', asy
   await page.evaluate(() => { localStorage.removeItem('aihn.auth.v1'); window.dispatchEvent(new StorageEvent('storage', { key: 'aihn.auth.v1', storageArea: localStorage })); });
   await expect(page).toHaveURL(/\/login/); release();
   options.ownerId = 72; options.profile = { ...baseProfile, fullname: 'Học sinh B', email: 'b@example.test' }; options.patchDelay = undefined;
-  await page.getByLabel('Email trường hoặc cá nhân').fill('b@example.test'); await page.getByLabel('Mật khẩu', { exact: true }).fill('b-password'); await page.getByRole('button', { name: 'Đăng nhập vào Trang của tôi →' }).click();
+  await page.getByLabel('Email').fill('b@example.test'); await page.getByLabel('Mật khẩu', { exact: true }).fill('b-password'); await page.getByRole('button', { name: 'Đăng nhập', exact: true }).click();
   await expect(page).toHaveURL(/\/career-profile$/); await expect(page.getByLabel('Họ và tên', { exact: true })).toHaveValue('Học sinh B');
   expect(calls.filter(call => call.method === 'PATCH')).toHaveLength(1); await expect(page.getByText('Draft A', { exact: true })).toHaveCount(0);
 });

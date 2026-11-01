@@ -47,9 +47,9 @@ export async function guestFixture(page: Page, options: GuestOptions = {}) {
 }
 
 export async function completeGuest(page: Page) {
-  await page.goto('/assessment'); await page.getByRole('button', { name: 'Bắt đầu bài trắc nghiệm', exact: true }).click();
-  await page.getByRole('radio', { name: 'Có — Tôi thích', exact: true }).check(); await page.getByRole('button', { name: 'Tiếp theo', exact: true }).click();
-  await page.getByRole('radio', { name: 'Không — Tôi không thích', exact: true }).check(); await page.getByRole('button', { name: 'Tiếp theo', exact: true }).click();
-  await page.getByRole('radio', { name: 'Không — Tôi không thích', exact: true }).check(); await page.getByRole('button', { name: 'Xem tổng kết RIASEC', exact: true }).click();
+  await page.goto('/assessment'); await page.getByRole('button', { name: 'Bắt đầu', exact: true }).click();
+  await page.getByRole('radio', { name: 'Có, mình thích', exact: true }).check(); await page.getByRole('button', { name: 'Tiếp theo', exact: true }).click();
+  await page.getByRole('radio', { name: 'Không, mình không thích', exact: true }).check(); await page.getByRole('button', { name: 'Tiếp theo', exact: true }).click();
+  await page.getByRole('radio', { name: 'Không, mình không thích', exact: true }).check(); await page.getByRole('button', { name: 'Xem kết quả', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'TopCode: ISC', exact: true })).toBeVisible();
 }

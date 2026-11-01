@@ -7,12 +7,12 @@ export const studentNavigation: NavigationItem[] = [
   { label: 'Trang của tôi', mobileLabel: 'Trang chủ', path: paths.dashboard, icon: 'home', group: 'Không gian học tập', bottom: true },
   { label: 'Hồ sơ của tôi', mobileLabel: 'Hồ sơ', path: paths.careerProfile, icon: 'user', group: 'Không gian học tập', bottom: true },
   { label: 'Trắc nghiệm Holland', mobileLabel: 'Holland', path: paths.assessment, icon: 'compass', group: 'Không gian học tập', bottom: true },
-  { label: 'Gợi ý nghề nghiệp', path: paths.recommendations, icon: 'check', group: 'Không gian học tập' },
-  { label: 'Khám phá nghề nghiệp', mobileLabel: 'Khám phá', path: paths.careers, icon: 'search', group: 'Khám phá & Phát triển', bottom: true },
-  { label: 'Lộ trình phát triển', path: paths.roadmap, icon: 'roadmap', group: 'Khám phá & Phát triển' },
-  { label: 'Cố vấn AI', mobileLabel: 'Cố vấn AI', path: paths.advisor, icon: 'chat', group: 'Khám phá & Phát triển', bottom: true },
-  { label: 'Lịch sử', path: paths.history, icon: 'history', group: 'Tài khoản & Cài đặt' },
-  { label: 'Cài đặt', path: paths.settings, icon: 'settings', group: 'Tài khoản & Cài đặt' },
+  { label: 'Nghề phù hợp', path: paths.recommendations, icon: 'check', group: 'Không gian học tập' },
+  { label: 'Tìm hiểu nghề', mobileLabel: 'Nghề', path: paths.careers, icon: 'search', group: 'Nghề và kỹ năng', bottom: true },
+  { label: 'Lộ trình', path: paths.roadmap, icon: 'roadmap', group: 'Nghề và kỹ năng' },
+  { label: 'Hỏi AIHN', mobileLabel: 'Hỏi AIHN', path: paths.advisor, icon: 'chat', group: 'Nghề và kỹ năng', bottom: true },
+  { label: 'Lịch sử', path: paths.history, icon: 'history', group: 'Tài khoản' },
+  { label: 'Cài đặt', path: paths.settings, icon: 'settings', group: 'Tài khoản' },
 ];
 
 export const adminNavigation: NavigationItem[] = [

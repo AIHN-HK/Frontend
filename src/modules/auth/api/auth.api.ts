@@ -8,16 +8,16 @@ export type OtpFlow = (RegistrationFields & { purpose: 'registration' }) | { pur
 
 export async function sendRecoveryOtp(http: AxiosInstance, email: string, signal: AbortSignal): Promise<void> {
   const input = { email: email.trim() };
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.email)) throw new ApiError('configuration', 'Vui lòng nhập email hợp lệ.');
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.email)) throw new ApiError('configuration', 'Nhập email hợp lệ.');
   try {
     const response = await http.post('/api/v1/auth/forgot-password/send-otp', input, { signal });
     const envelope = response.data as { status?: unknown; data?: { sent?: unknown } } | null;
     if (response.status !== 201 || envelope?.status !== 201 || envelope.data?.sent !== true) {
-      throw new ApiError('configuration', 'Chưa xác nhận được yêu cầu gửi OTP.', undefined, true);
+      throw new ApiError('configuration', 'Chưa xác nhận đã gửi mã OTP.', undefined, true);
     }
   } catch (error) {
-    if (error instanceof ApiError && error.status === 409) throw new ApiError('http', 'Không thể gửi mã cho email này. Vui lòng kiểm tra email tài khoản.', 409);
-    if (error instanceof ApiError && error.status === 429) throw new ApiError('http', 'Bạn đang yêu cầu mã quá nhanh. Vui lòng chờ rồi thử lại.', 429);
+    if (error instanceof ApiError && error.status === 409) throw new ApiError('http', 'Chưa gửi được mã. Kiểm tra email đã đăng ký.', 409);
+    if (error instanceof ApiError && error.status === 429) throw new ApiError('http', 'Bạn vừa yêu cầu mã. Chờ một chút rồi thử lại.', 429);
     throw error;
   }
 }
@@ -31,18 +31,18 @@ export async function resetPassword(http: AxiosInstance, input: { email: string;
     const response = await http.post('/api/v1/auth/reset-password', { email: input.email, otp: input.otp, newPassword: input.newPassword }, { signal });
     const envelope = response.data as { status?: unknown; data?: { reset?: unknown } } | null;
     if (response.status !== 201 || envelope?.status !== 201 || envelope.data?.reset !== true) {
-      throw new ApiError('configuration', 'Chưa xác nhận được kết quả đặt lại mật khẩu.', undefined, true);
+      throw new ApiError('configuration', 'Chưa xác nhận đã đổi mật khẩu.', undefined, true);
     }
   } catch (error) {
-    if (error instanceof ApiError && error.status === 401) throw new ApiError('http', 'Mã xác thực không đúng hoặc đã hết hạn. Vui lòng xác thực lại.', 401);
-    if (error instanceof ApiError && error.status === 409) throw new ApiError('http', 'Không thể đặt lại mật khẩu cho tài khoản này. Vui lòng bắt đầu khôi phục lại.', 409);
-    if (error instanceof ApiError && error.status === 429) throw new ApiError('http', 'Bạn đã thử quá nhiều lần. Vui lòng chờ trước khi thử lại.', 429);
+    if (error instanceof ApiError && error.status === 401) throw new ApiError('http', 'Mã chưa đúng hoặc đã hết hạn. Xác thực lại để tiếp tục.', 401);
+    if (error instanceof ApiError && error.status === 409) throw new ApiError('http', 'Chưa đặt lại được mật khẩu. Bắt đầu lại bước khôi phục.', 409);
+    if (error instanceof ApiError && error.status === 429) throw new ApiError('http', 'Bạn đã thử nhiều lần. Chờ một chút rồi thử lại.', 429);
     throw error;
   }
 }
 
 export async function verifyOtp(http: AxiosInstance, flow: OtpFlow, otp: string, signal: AbortSignal): Promise<void> {
-  if (!/^\d{6}$/.test(otp)) throw new ApiError('configuration', 'Vui lòng nhập đủ 6 chữ số.');
+  if (!/^\d{6}$/.test(otp)) throw new ApiError('configuration', 'Nhập đủ 6 chữ số.');
   const registration = flow.purpose === 'registration';
   const payload = registration ? { email: flow.email, fullname: flow.fullname, password: flow.password, yob: flow.yob, phone: flow.phone, otpCode: otp } : { email: flow.email, otp };
   try {
@@ -51,12 +51,12 @@ export async function verifyOtp(http: AxiosInstance, flow: OtpFlow, otp: string,
     const user = envelope?.data && typeof envelope.data === 'object' ? envelope.data.user : undefined;
     const valid = registration ? user && Number.isSafeInteger(user.id) && (user.id as number) > 0 && user.email === flow.email && typeof user.fullname === 'string' : envelope?.data === true;
     if (response.status !== 201 || envelope?.status !== response.status || !valid) {
-      throw new ApiError('configuration', 'Chưa xác nhận được kết quả xác thực. Vui lòng kiểm tra trước khi thử lại.', undefined, true);
+      throw new ApiError('configuration', 'Chưa xác nhận đã xác thực xong. Kiểm tra trước khi thử lại.', undefined, true);
     }
   } catch (error) {
-    if (error instanceof ApiError && error.status === 401) throw new ApiError('http', 'Mã xác thực không đúng hoặc đã hết hạn. Hãy kiểm tra mã hoặc yêu cầu gửi lại.', 401);
-    if (error instanceof ApiError && error.status === 409) throw new ApiError('http', 'Email này đã được sử dụng. Bạn có thể đăng nhập hoặc dùng email khác.', 409);
-    if (error instanceof ApiError && error.status === 429) throw new ApiError('http', 'Bạn đã thử quá nhiều lần. Vui lòng chờ trước khi thử lại.', 429);
+    if (error instanceof ApiError && error.status === 401) throw new ApiError('http', 'Mã chưa đúng hoặc đã hết hạn. Kiểm tra mã hoặc yêu cầu mã mới.', 401);
+    if (error instanceof ApiError && error.status === 409) throw new ApiError('http', 'Email đã có tài khoản. Đăng nhập hoặc dùng email khác.', 409);
+    if (error instanceof ApiError && error.status === 429) throw new ApiError('http', 'Bạn đã thử nhiều lần. Chờ một chút rồi thử lại.', 429);
     throw error;
   }
 }
@@ -67,11 +67,11 @@ export async function resendOtp(http: AxiosInstance, flow: OtpFlow, signal: Abor
     const response = await http.post(path, { email: flow.email }, { signal });
     const envelope = response.data as { status?: unknown; data?: { sent?: unknown } } | null;
     if (response.status !== 201 || envelope?.status !== response.status || envelope.data?.sent !== true) {
-      throw new ApiError('configuration', 'Chưa xác nhận được yêu cầu gửi lại mã. Hãy kiểm tra email trước khi thử lại.', undefined, true);
+      throw new ApiError('configuration', 'Chưa xác nhận đã gửi lại mã. Kiểm tra email trước khi gửi tiếp.', undefined, true);
     }
   } catch (error) {
-    if (error instanceof ApiError && error.status === 429) throw new ApiError('http', 'Bạn đang yêu cầu mã quá nhanh. Vui lòng chờ rồi thử lại.', 429);
-    if (error instanceof ApiError && error.status === 409) throw new ApiError('http', flow.purpose === 'registration' ? 'Email này đã được sử dụng. Bạn có thể đăng nhập.' : 'Không thể gửi mã cho email này. Vui lòng kiểm tra lại email.', 409);
+    if (error instanceof ApiError && error.status === 429) throw new ApiError('http', 'Bạn vừa yêu cầu mã. Chờ một chút rồi thử lại.', 429);
+    if (error instanceof ApiError && error.status === 409) throw new ApiError('http', flow.purpose === 'registration' ? 'Email đã có tài khoản. Bạn có thể đăng nhập.' : 'Chưa gửi được mã. Kiểm tra lại email.', 409);
     throw error;
   }
 }
@@ -81,11 +81,11 @@ export async function sendRegistrationOtp(http: AxiosInstance, email: string, si
     const response = await http.post('/api/v1/auth/register/send-otp', { email: email.trim() }, { signal });
     const envelope = response.data as { status?: unknown; data?: { sent?: unknown } } | null;
     if (!envelope || envelope.status !== response.status || envelope.data?.sent !== true) {
-      throw new ApiError('configuration', 'Chưa xác nhận được yêu cầu gửi OTP. Vui lòng kiểm tra email trước khi thử lại.', undefined, true);
+      throw new ApiError('configuration', 'Chưa xác nhận đã gửi mã OTP. Kiểm tra email trước khi gửi lại.', undefined, true);
     }
   } catch (error) {
-    if (error instanceof ApiError && error.status === 409) throw new ApiError('http', 'Email này đã được sử dụng. Bạn có thể đăng nhập hoặc dùng email khác.', 409);
-    if (error instanceof ApiError && error.status === 429) throw new ApiError('http', 'Bạn đã yêu cầu OTP quá nhiều lần. Vui lòng chờ rồi thử lại.', 429);
+    if (error instanceof ApiError && error.status === 409) throw new ApiError('http', 'Email đã có tài khoản. Đăng nhập hoặc dùng email khác.', 409);
+    if (error instanceof ApiError && error.status === 429) throw new ApiError('http', 'Bạn đã yêu cầu nhiều mã OTP. Chờ một chút rồi thử lại.', 429);
     throw error;
   }
 }
@@ -99,7 +99,7 @@ export function createAuthApi(http: AxiosInstance): AuthApi {
         return { user: parseUser(data.user, true), tokens: parseTokens(data) };
       } catch (error) {
         if (error instanceof ApiError && error.status === 401) throw new ApiError('http', 'Email hoặc mật khẩu không đúng.', 401);
-        if (error instanceof ApiError && error.status === 429) throw new ApiError('http', 'Bạn đã thử quá nhiều lần. Vui lòng chờ rồi thử lại.', 429);
+        if (error instanceof ApiError && error.status === 429) throw new ApiError('http', 'Bạn đã thử nhiều lần. Chờ một chút rồi thử lại.', 429);
         throw error;
       }
     },

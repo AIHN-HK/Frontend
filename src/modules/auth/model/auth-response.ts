@@ -1,7 +1,7 @@
 import { ApiError } from '@/shared/api/api-error';
 import type { SessionTokens, SessionUser } from '@/shared/session/session.types';
 
-function invalid(): never { throw new ApiError('configuration', 'Phản hồi đăng nhập không hợp lệ. Vui lòng thử lại.'); }
+function invalid(): never { throw new ApiError('configuration', 'Chưa đọc được thông tin đăng nhập. Bạn thử lại nhé.'); }
 export function object(value: unknown): Record<string, unknown> {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return invalid();
   return value as Record<string, unknown>;

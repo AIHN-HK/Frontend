@@ -21,7 +21,7 @@ export function useAdminCommand() {
     if (pending.current) throw new ApiError('configuration', 'Yêu cầu đang được xử lý.');
     const valid = () =>
       session.read().user?.id === scope.user?.id && session.read().revision === scope.revision;
-    if (!valid()) throw new ApiError('session-changed', 'Phiên đã thay đổi.');
+    if (!valid()) throw new ApiError('session-changed', 'Phiên đăng nhập đã thay đổi.');
     pending.current = true;
     setBusy(true);
     abort.current = new AbortController();
@@ -32,7 +32,7 @@ export function useAdminCommand() {
         data: input,
         signal: abort.current.signal,
       });
-      if (!valid()) throw new ApiError('session-changed', 'Phiên đã thay đổi.', undefined, true);
+      if (!valid()) throw new ApiError('session-changed', 'Phiên đăng nhập đã thay đổi.', undefined, true);
       const envelope = response.data;
       if (
         !envelope ||

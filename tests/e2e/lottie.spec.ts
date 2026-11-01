@@ -74,7 +74,7 @@ test('late animation loading is cancelled on navigation and Home never loads the
   page.on('request', request => requests.push(new URL(request.url()).pathname));
   page.on('pageerror', error => errors.push(error.message));
   await page.goto('/');
-  await expect(page.getByRole('heading', { level: 1 })).toContainText('Khám phá con đường');
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Hiểu mình trước');
   expect(requests.filter(path => /lottie_light|\/animations\/lottie\//.test(path))).toEqual([]);
   let release!: () => void;
   const held = new Promise<void>(resolve => { release = resolve; });
@@ -94,11 +94,11 @@ test('late animation loading is cancelled on navigation and Home never loads the
 test('Advisor waiting animation stops with the first real token and never sends another question', async ({ page }) => {
   const fixture = await advisorFixture(page, { mode: 'waiting' });
   await page.goto('/advisor');
-  await page.getByRole('button', { name: 'Kết nối hội thoại mới', exact: true }).click();
+  await page.getByRole('button', { name: 'Kết nối', exact: true }).click();
   await expect(page).toHaveURL(/sessionId=100/);
   await page.getByLabel('Câu hỏi của bạn', { exact: true }).fill('Em muốn khám phá nghề.');
   await page.getByRole('button', { name: 'Gửi', exact: true }).click();
-  const waiting = page.getByRole('status', { name: 'Đang chờ phản hồi từ AI', exact: true });
+  const waiting = page.getByRole('status', { name: 'AIHN đang suy nghĩ', exact: true });
   await expect(waiting.locator('[data-lottie-kind=advisor]')).toHaveAttribute('data-lottie-status', 'playing');
   fixture.emit('answer_token', { ...fixture.current(), content: 'Nội dung thật từ fixture máy chủ.' });
   await expect(waiting).toHaveCount(0);
@@ -109,7 +109,7 @@ test('Advisor waiting animation stops with the first real token and never sends 
 test('catalog empty illustration appears only after a confirmed empty result', async ({ page }) => {
   await careerPlatformFixture(page, { anonymous: true });
   await page.goto('/careers?q=NoSuchOccupation');
-  await expect(page.getByRole('heading', { name: 'Không có nghề phù hợp', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Chưa tìm thấy nghề theo tiêu chí này', exact: true })).toBeVisible();
   await expect(page.locator('[data-lottie-kind=empty]')).toBeVisible();
   await page.getByRole('button', { name: 'Đặt lại bộ lọc', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Software Developers', exact: true })).toBeVisible();

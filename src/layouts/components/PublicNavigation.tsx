@@ -5,10 +5,10 @@ import { Icon } from '@/shared/ui/Icon';
 
 const links = [
   [paths.home, 'Trang chủ'],
-  [paths.careers, 'Khám phá nghề nghiệp'],
+  [paths.careers, 'Tìm hiểu nghề'],
   [paths.assessment, 'Trắc nghiệm Holland'],
-  [paths.roadmap, 'Lộ trình phát triển'],
-  [paths.advisor, 'Cố vấn AI'],
+  [paths.roadmap, 'Lộ trình'],
+  [paths.advisor, 'Hỏi AIHN'],
 ] as const;
 
 export function PublicNavigation() {
@@ -38,16 +38,16 @@ export function PublicNavigation() {
       </Link>
       <nav className="home-nav-links" aria-label="Điều hướng chính">{navigationLinks}</nav>
       <div className="home-header-tools">
-        <Link to={paths.careers} className="home-search-pill" aria-label="Tìm nghề nghiệp"><Icon name="search" /><span>Tìm nghề nghiệp...</span></Link>
+        <Link to={paths.careers} className="home-search-pill" aria-label="Tìm nghề nghiệp"><Icon name="search" /><span>Tìm tên nghề hoặc mô tả…</span></Link>
         <Link to={paths.login} className="btn-pill-login" onClick={() => setOpen(false)}>Đăng nhập</Link>
-        <Link to={paths.signup} className="btn-pill-cta" onClick={() => setOpen(false)}>Bắt đầu ngay →</Link>
+        <Link to={paths.signup} className="btn-pill-cta" onClick={() => setOpen(false)}>Bắt đầu</Link>
         <button ref={opener} type="button" className="home-menu-trigger" aria-label={open ? 'Đóng menu' : 'Mở menu'}
           aria-expanded={open} aria-controls="home-mobile-navigation" onClick={() => setOpen(value => !value)}><Icon name="menu" /></button>
       </div>
     </div>
     <nav id="home-mobile-navigation" className="home-mobile-navigation" aria-label="Điều hướng di động" hidden={!open}>
       {navigationLinks}
-      <Link className="home-nav-item" to={paths.signup} onClick={() => setOpen(false)}>Tạo tài khoản →</Link>
+      <Link className="home-nav-item" to={paths.signup} onClick={() => setOpen(false)}>Tạo tài khoản</Link>
     </nav>
   </header>;
 }

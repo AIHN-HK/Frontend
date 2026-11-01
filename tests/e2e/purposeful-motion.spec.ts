@@ -9,20 +9,20 @@ test('Holland keyboard choices and interruptible transitions preserve Boolean dr
   page.on('pageerror', error => errors.push(error.message));
   const { calls } = await guestFixture(page);
   await page.goto('/assessment');
-  await page.getByRole('button', { name: 'Bắt đầu bài trắc nghiệm', exact: true }).click();
-  await page.getByRole('radio', { name: 'Có — Tôi thích', exact: true }).focus();
+  await page.getByRole('button', { name: 'Bắt đầu', exact: true }).click();
+  await page.getByRole('radio', { name: 'Có, mình thích', exact: true }).focus();
   await page.keyboard.press('1');
-  await expect(page.getByRole('radio', { name: 'Có — Tôi thích', exact: true })).toBeChecked();
+  await expect(page.getByRole('radio', { name: 'Có, mình thích', exact: true })).toBeChecked();
   await page.keyboard.press('Alt+ArrowRight');
   await expect(page.getByText('Câu 2/3', { exact: true })).toBeVisible();
   await page.keyboard.press('2');
-  await expect(page.getByRole('radio', { name: 'Không — Tôi không thích', exact: true })).toBeChecked();
+  await expect(page.getByRole('radio', { name: 'Không, mình không thích', exact: true })).toBeChecked();
   await expect(page.getByRole('radio')).toHaveCount(2);
   await expect(page.locator('.holland-choice')).toHaveCount(2);
   await page.keyboard.press('Alt+ArrowLeft');
-  await expect(page.getByRole('radio', { name: 'Có — Tôi thích', exact: true })).toBeChecked();
+  await expect(page.getByRole('radio', { name: 'Có, mình thích', exact: true })).toBeChecked();
   await page.reload();
-  await expect(page.getByRole('radio', { name: 'Có — Tôi thích', exact: true })).toBeChecked();
+  await expect(page.getByRole('radio', { name: 'Có, mình thích', exact: true })).toBeChecked();
   expect(calls.filter(call => call.method === 'POST')).toEqual([]);
   expect(errors).toEqual([]);
 });
@@ -35,8 +35,8 @@ test('Holland live reduced motion settles question/progress and hidden tabs paus
   await expect(background).toHaveAttribute('data-paused', 'true');
   await expect(background.locator(':scope>div')).toHaveCSS('animation-play-state', 'paused');
   await page.evaluate(() => { Reflect.deleteProperty(document, 'hidden'); document.dispatchEvent(new Event('visibilitychange')); });
-  await page.getByRole('button', { name: 'Bắt đầu bài trắc nghiệm', exact: true }).click();
-  await page.getByRole('radio', { name: 'Có — Tôi thích', exact: true }).focus();
+  await page.getByRole('button', { name: 'Bắt đầu', exact: true }).click();
+  await page.getByRole('radio', { name: 'Có, mình thích', exact: true }).focus();
   await page.keyboard.press('1'); await page.keyboard.press('Alt+ArrowRight');
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await expect(page.locator('[data-question-transition]>[inert]')).toHaveCount(0);
@@ -81,14 +81,14 @@ test('result SVG uses real coordinates, settles on live reduced motion and suppo
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await expect(polygon).toHaveAttribute('points', final!);
   await expect(page.getByRole('heading', { name: 'TopCode: ISC', exact: true })).toBeVisible();
-  await page.getByRole('link', { name: 'Xem gợi ý nghề nghiệp', exact: true }).scrollIntoViewIfNeeded();
-  await expect(page.getByRole('link', { name: 'Xem gợi ý nghề nghiệp', exact: true })).toBeVisible();
+  await page.getByRole('link', { name: 'Xem nghề phù hợp', exact: true }).scrollIntoViewIfNeeded();
+  await expect(page.getByRole('link', { name: 'Xem nghề phù hợp', exact: true })).toBeVisible();
 });
 
 test('career reasoning is a hover enhancement with persistent keyboard disclosure and real scores', async ({ page }) => {
   const { calls } = await careerPlatformFixture(page);
   await page.goto('/recommendations');
-  await page.getByRole('button', { name: 'Tạo gợi ý nghề', exact: true }).click();
+  await page.getByRole('button', { name: 'Xem nghề phù hợp', exact: true }).click();
   const card = page.getByRole('article').filter({ has: page.getByRole('heading', { name: '1. Software Developers', exact: true }) });
   const summary = card.locator('summary').filter({ hasText: 'Vì sao phù hợp' });
   const disclosure = summary.locator('..');
@@ -108,26 +108,26 @@ test('Advisor welcome is local and streamed tokens do not restart message entran
   await page.goto('/advisor');
   await expect(page.locator('.advisor-empty [data-lottie-kind=advisor]')).toHaveAttribute('data-lottie-status', 'playing');
   expect(fixture.commands).toEqual([]); expect(fixture.sockets).toHaveLength(0);
-  await page.getByRole('button', { name: 'Kết nối hội thoại mới', exact: true }).click();
+  await page.getByRole('button', { name: 'Kết nối', exact: true }).click();
   await expect(page).toHaveURL(/sessionId=100/);
   await page.getByLabel('Câu hỏi của bạn', { exact: true }).fill('Tôi muốn hiểu bản thân.');
   await page.getByRole('button', { name: 'Gửi', exact: true }).click();
-  await expect(page.getByRole('status', { name: 'Đang chờ phản hồi từ AI', exact: true })).toBeVisible();
+  await expect(page.getByRole('status', { name: 'AIHN đang suy nghĩ', exact: true })).toBeVisible();
   fixture.emit('answer_token', { ...fixture.current(), content: 'Nội dung đầu tiên.' });
-  const message = page.getByRole('article', { name: 'Nội dung trả lời nhận tạm', exact: true });
+  const message = page.getByRole('article', { name: 'Câu trả lời chưa xác nhận lưu', exact: true });
   await expect(message).toContainText('Nội dung đầu tiên.');
   await expect.poll(() => message.evaluate(element => element.getAnimations().filter(animation => animation.playState === 'running').length)).toBe(0);
   fixture.emit('answer_token', { ...fixture.current(), content: ' Nội dung tiếp theo.' });
   await expect(message).toContainText('Nội dung tiếp theo.');
   expect(await message.evaluate(element => element.getAnimations().filter(animation => animation.playState === 'running').length)).toBe(0);
-  await expect(page.getByRole('status', { name: 'Đang chờ phản hồi từ AI', exact: true })).toHaveCount(0);
+  await expect(page.getByRole('status', { name: 'AIHN đang suy nghĩ', exact: true })).toHaveCount(0);
   expect(fixture.commands.filter(command => command.event === 'ask')).toHaveLength(1);
 });
 
 test('roadmap SVG reveals keep milestones tied to confirmed evidence and respect reduced motion', async ({ page }) => {
   const { calls } = await careerPlatformFixture(page, { seedProfile: true });
   await page.goto('/roadmap');
-  await page.getByRole('button', { name: 'Tạo lộ trình từ mục tiêu', exact: true }).click();
+  await page.getByRole('button', { name: 'Tạo lộ trình', exact: true }).click();
   await expect(page.locator('[data-roadmap-path]')).toHaveCount(3);
   await expect(page.locator('[data-phase-state=current]')).toHaveCount(1);
   await expect(page.locator('[data-phase-state=future]')).toHaveCount(3);
@@ -137,7 +137,7 @@ test('roadmap SVG reveals keep milestones tied to confirmed evidence and respect
   await expect(first.locator('[data-roadmap-path]')).toHaveCSS('stroke-dashoffset', '0px');
   await expect(first.locator('[data-roadmap-node]')).toHaveCSS('transform', 'none');
   await expect(page.getByRole('button', { name: 'Xác nhận hoàn thành', exact: true }).nth(1)).toBeDisabled();
-  await page.getByRole('textbox', { name: 'Minh chứng — Fixture roadmap explore', exact: true }).fill('Đã đọc nguồn nghề và ghi lại điều cần tìm hiểu.');
+  await page.getByRole('textbox', { name: 'Minh chứng cho Fixture roadmap explore', exact: true }).fill('Đã đọc nguồn nghề và ghi lại điều cần tìm hiểu.');
   await page.getByRole('button', { name: 'Xác nhận hoàn thành', exact: true }).first().click();
   await expect(page.locator('[data-phase-state=done]')).toHaveCount(1);
   await expect(page.locator('[data-phase-state=current]')).toHaveCount(1);
@@ -149,8 +149,8 @@ for (const width of [320, 390, 768, 769, 1024, 1025, 1440]) test(`focused Hollan
   await page.setViewportSize({ width, height: width === 768 ? 1024 : 900 });
   await guestFixture(page);
   await page.goto('/assessment');
-  await page.getByRole('button', { name: 'Bắt đầu bài trắc nghiệm', exact: true }).click();
-  await page.getByRole('radio', { name: 'Có — Tôi thích', exact: true }).check();
+  await page.getByRole('button', { name: 'Bắt đầu', exact: true }).click();
+  await page.getByRole('radio', { name: 'Có, mình thích', exact: true }).check();
   await page.evaluate(() => document.fonts.ready);
   await page.evaluate(() => new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))));
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);

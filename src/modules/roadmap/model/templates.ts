@@ -3,28 +3,28 @@ export const templates = {
     name: 'Kỹ sư Phần mềm',
     careerId: 'preview-software',
     tasks: [
-      'Khám phá môn Toán, Tin học và sở thích cá nhân.',
-      'Tìm hiểu tổ hợp xét tuyển từ thông báo chính thức của trường.',
-      'Thử xây dựng ứng dụng nhỏ và ghi lại điều học được.',
-      'Tìm hiểu yêu cầu thực tập và chuẩn bị hồ sơ dự án.',
+      'Tìm hiểu Toán, Tin học và điều bạn thích.',
+      'Xem tổ hợp xét tuyển trong thông báo của trường.',
+      'Thử làm một ứng dụng nhỏ, ghi lại điều học được.',
+      'Xem yêu cầu thực tập và chuẩn bị dự án để giới thiệu.',
     ],
   },
   data: {
     name: 'Kỹ sư Dữ liệu',
     careerId: 'preview-data-engineer',
     tasks: [
-      'Khám phá môn Toán, Tin học và cách đặt câu hỏi.',
-      'Đối chiếu điều kiện tuyển sinh ở nguồn chính thức.',
-      'Thử xây dựng báo cáo dữ liệu nhỏ.',
-      'Tìm hiểu vị trí thực tập về dữ liệu và chuẩn bị dự án.',
+      'Tìm hiểu Toán, Tin học và tập đặt câu hỏi.',
+      'Kiểm tra điều kiện tuyển sinh từ nguồn chính thức.',
+      'Thử làm một báo cáo dữ liệu nhỏ.',
+      'Xem vị trí thực tập dữ liệu và chuẩn bị một dự án.',
     ],
   },
 } as const;
 export const stages = [
-  'Lớp 10–11 THPT — Định hình Năng khiếu & Tổ hợp môn',
-  'Lớp 12 THPT — Ôn thi Tốt nghiệp & Xét tuyển Đại học',
-  'Năm 1–2 Đại học — Kiến thức Chuyên ngành & Dự án',
-  'Năm 3–4 Đại học — Thực tập Doanh nghiệp & Việc làm',
+  'Lớp 10–11: sở thích và tổ hợp môn',
+  'Lớp 12: ôn thi và xét tuyển',
+  'Năm 1–2: nền tảng và dự án nhỏ',
+  'Năm 3–4: thực tập và tìm việc',
 ];
 export type TemplateId = keyof typeof templates;
 export function templateId(value: string | null): TemplateId | null {
