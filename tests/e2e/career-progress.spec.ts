@@ -9,7 +9,7 @@ test("roadmap requires a target, shows deterministic gaps and tracks evidenced p
     page.getByRole("cell", { name: "Programming", exact: true }),
   ).toBeVisible();
   await page
-    .getByRole("button", { name: "Tạo lộ trình từ mục tiêu", exact: true })
+    .getByRole("button", { name: "Tạo lộ trình", exact: true })
     .click();
   await expect(
     page.getByText("0/4 nhiệm vụ hoàn thành · phiên bản 1", { exact: true }),
@@ -21,7 +21,7 @@ test("roadmap requires a target, shows deterministic gaps and tracks evidenced p
   ).toBeDisabled();
   await page
     .getByRole("textbox", {
-      name: "Minh chứng — Fixture roadmap explore",
+      name: "Minh chứng cho Fixture roadmap explore",
       exact: true,
     })
     .fill("Đã đọc mô tả công việc và ghi nhận lý do quan tâm.");
@@ -33,7 +33,7 @@ test("roadmap requires a target, shows deterministic gaps and tracks evidenced p
     page.getByText("1/4 nhiệm vụ hoàn thành · phiên bản 2", { exact: true }),
   ).toBeVisible();
   await page
-    .getByRole("button", { name: "Cập nhật lộ trình từ hồ sơ hiện tại" })
+    .getByRole("button", { name: "Cập nhật lộ trình" })
     .click();
   await expect(
     page.getByText("1/4 nhiệm vụ hoàn thành · phiên bản 3", { exact: true }),
@@ -41,7 +41,7 @@ test("roadmap requires a target, shows deterministic gaps and tracks evidenced p
   await page.reload();
   await expect(
     page.getByRole("textbox", {
-      name: "Minh chứng — Fixture roadmap explore",
+      name: "Minh chứng cho Fixture roadmap explore",
       exact: true,
     }),
   ).toHaveValue("Đã đọc mô tả công việc và ghi nhận lý do quan tâm.");
@@ -56,10 +56,10 @@ test("unknown progress write keeps evidence across reload and does not replay", 
   });
   await page.goto("/roadmap");
   await page
-    .getByRole("button", { name: "Tạo lộ trình từ mục tiêu", exact: true })
+    .getByRole("button", { name: "Tạo lộ trình", exact: true })
     .click();
   const input = page.getByRole("textbox", {
-    name: "Minh chứng — Fixture roadmap explore",
+    name: "Minh chứng cho Fixture roadmap explore",
     exact: true,
   });
   await input.fill("Evidence draft to review");
@@ -78,7 +78,7 @@ test("dashboard compares snapshot-normalized RIASEC and displays real counts", a
   await careerPlatformFixture(page);
   await page.goto("/dashboard");
   const analytics = page.getByRole("region", {
-    name: "Phân tích hành trình hướng nghiệp",
+    name: "Nhìn lại các bước đã qua",
   });
   await expect(analytics).toContainText("2 bài hoàn thành");
   await expect(analytics).toContainText("I: +10.0");
@@ -92,7 +92,7 @@ test("admin publishes or archives by revision and inspects skill and usage prove
   const fixture = await careerPlatformFixture(page, { admin: true });
   await page.goto("/admin/careers");
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(
-    "Dữ liệu nghề và phân tích hệ thống",
+    "Dữ liệu nghề và thống kê",
   );
   await page.getByRole("button", { name: "Ẩn nghề", exact: true }).click();
   await expect(
@@ -114,7 +114,7 @@ for (const width of [320, 390, 768, 769, 1024, 1025, 1440])
     await careerPlatformFixture(page, { seedProfile: true });
     await page.goto("/roadmap");
     await page
-      .getByRole("button", { name: "Tạo lộ trình từ mục tiêu", exact: true })
+      .getByRole("button", { name: "Tạo lộ trình", exact: true })
       .click();
     await expect(
       page.getByText("0/4 nhiệm vụ hoàn thành · phiên bản 1", { exact: true }),
@@ -136,7 +136,7 @@ test('roadmap timeline uses confirmed tasks and fits responsive source layouts',
   const { reviewResponsive } = await import('./ui-sync.fixture');
   const fixture = await careerPlatformFixture(page, { seedProfile: true });
   await page.goto('/roadmap');
-  await page.getByRole('button', { name: 'Tạo lộ trình từ mục tiêu', exact: true }).click();
+  await page.getByRole('button', { name: 'Tạo lộ trình', exact: true }).click();
   await expect(page.getByText('0/4 nhiệm vụ hoàn thành · phiên bản 1', { exact: true })).toBeVisible();
   await expect(page.locator('[data-phase-state=done]')).toHaveCount(0);
   await reviewResponsive(page, 'P09', '.career-platform');

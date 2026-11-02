@@ -18,8 +18,7 @@ export function PriorityEditor({
     <section className="admin-panel">
       <h2>Ưu tiên khi đồng điểm</h2>
       <p>
-        Máy chủ lưu nguyên bộ sáu nhóm trong một giao dịch. Đối chiếu trước khi lưu; thay đổi ảnh hưởng kết
-        quả mới.
+        Sáu nhóm được lưu cùng lúc. Đối chiếu trước khi lưu. Thay đổi chỉ áp dụng cho kết quả mới.
       </p>
       <form
         onSubmit={async (e) => {
@@ -27,7 +26,7 @@ export function PriorityEditor({
           if (draft.review || command.busy) return;
           const parsed = prioritiesSchema.safeParse(draft.input);
           if (!parsed.success) {
-            setError('Cần đủ sáu nhóm với thứ tự duy nhất từ 1 đến 6.');
+            setError('Xếp đủ sáu nhóm từ 1 đến 6, không trùng thứ tự.');
             return;
           }
           draft.setReview(true);
@@ -51,7 +50,7 @@ export function PriorityEditor({
             await reload();
           } catch {
             setError(
-              'Chưa xác nhận thứ tự ưu tiên đã lưu. Bản nháp được giữ; đọc dữ liệu hiện tại để đối chiếu.',
+              'Chưa xác nhận đã lưu thứ tự. Bản nháp vẫn còn. Tải dữ liệu mới để đối chiếu.',
             );
           }
         }}
@@ -81,17 +80,17 @@ export function PriorityEditor({
         </div>
         {error && <p role="alert">{error}</p>}
         {notice && <p role="status">{notice}</p>}
-        {!draft.stored && <p role="alert">Không lưu được bản nháp trên thiết bị.</p>}
+        {!draft.stored && <p role="alert">Chưa lưu được bản nháp trên thiết bị.</p>}
         {draft.review && (
           <>
             <p>
-              Thứ tự máy chủ đang đọc:{' '}
+              Thứ tự đã lưu:{' '}
               {initial
                 .slice()
                 .sort((a, b) => a.priority - b.priority)
                 .map((r) => r.type)
                 .join(' → ')}
-              . Đối chiếu với lựa chọn của bạn trước khi gửi lại.
+              . Đối chiếu với bản nháp trước khi lưu lại.
             </p>
             <button
               type="button"
@@ -104,7 +103,7 @@ export function PriorityEditor({
                 }
               }}
             >
-              Đọc dữ liệu hiện tại để đối chiếu
+              Tải dữ liệu để đối chiếu
             </button>
           </>
         )}

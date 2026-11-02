@@ -6,6 +6,6 @@ import { AsyncState } from '@/shared/ui/AsyncState';
 export function RequireSession() {
   const current = useSession();
   const location = useLocation();
-  if (current.status === 'loading') return <AsyncState state="loading" title="Đang khôi phục phiên…" />;
+  if (current.status === 'loading') return <AsyncState state="loading" title="Đang mở tài khoản…" />;
   return current.status === 'authenticated' ? <Outlet /> : <Navigate to={`${paths.login}?returnTo=${encodeURIComponent(location.pathname + location.search + location.hash)}`} replace />;
 }

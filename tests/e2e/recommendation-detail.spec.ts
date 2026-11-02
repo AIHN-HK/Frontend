@@ -5,7 +5,7 @@ test('recommendation detail reads exact ID and retains list sort after reload', 
   await page.goto(`${url}?sort=name`);
   await expect(page.getByRole('heading', { level: 1, name: 'Phân tích mẫu: Kỹ sư Phần mềm' })).toBeVisible();
   await expect(page.getByRole('note')).toContainText('Dữ liệu mẫu');
-  await expect(page.getByText('Chưa có dữ liệu đóng góp RIASEC được xác nhận.')).toBeVisible();
+  await expect(page.getByText('Chưa xác minh được mức đóng góp của từng nhóm RIASEC.')).toBeVisible();
   await page.reload();
   await page.getByRole('link', { name: 'Quay lại gợi ý mẫu' }).click();
   await expect(page).toHaveURL(/preview\/recommendations\?sort=name$/);
@@ -24,9 +24,9 @@ test('stale preview is labeled, general sources are not personal evidence and no
     if (/\/api\/|socket.io/.test(r.url())) calls.push(r.url());
   });
   await page.goto(`${url}?scenario=stale`);
-  await expect(page.getByRole('alert')).toContainText('Hồ sơ mẫu đã thay đổi');
+  await expect(page.getByRole('alert')).toContainText('Hồ sơ mẫu đã đổi');
   await expect(
-    page.getByText('Tài liệu nghề chung, không phải bằng chứng độ phù hợp cá nhân.'),
+    page.getByText('Tài liệu về nghề, không xác nhận mức phù hợp của bạn.'),
   ).toBeVisible();
   await expect(page.getByRole('button', { name: /Lưu|Đặt mục tiêu/ })).toHaveCount(0);
   expect(calls).toEqual([]);
@@ -34,7 +34,7 @@ test('stale preview is labeled, general sources are not personal evidence and no
 test('runtime uses an owned API read and never fetches preview data', async ({ page }) => {
   const fixture = await advisorFixture(page);
   await page.goto('/recommendations/71');
-  await expect(page.getByRole('heading', { name: 'Chi tiết gợi ý nghề nghiệp' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Vì sao nghề này được gợi ý?' })).toBeVisible();
   await expect.poll(() => fixture.requests.filter(r => r.path === '/api/v1/career/recommendations/71').length).toBe(1);
   expect(fixture.requests.filter(r => /recommendation/.test(r.path)).every(r => r.method === 'GET')).toBe(true);
   expect(fixture.commands).toEqual([]);

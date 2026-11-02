@@ -5,8 +5,13 @@ export function postLoginPath(user: SessionUser, returnTo: string | null): strin
   const fallback = user.role === 'ADMIN' ? paths.admin : paths.dashboard;
   if (!returnTo || returnTo.length > 2048 || !returnTo.startsWith('/') || returnTo.startsWith('//') || returnTo.includes('\\') || Array.from(returnTo).some(char => char.charCodeAt(0) <= 32)) return fallback;
   const url = new URL(returnTo, 'https://aihn.invalid');
-  const student = /^\/(dashboard|career-profile|assessment(?:\/results\/[^/]+)?|history|advisor|careers(?:\/[^/]+)?|recommendations(?:\/[^/]+)?|roadmap|settings)\/?$/;
+  const student = /^\/(dashboard|career-profile|assessment(?:\/results\/[^/]+|\/claim|\/guest-result)?|history|advisor|careers(?:\/[^/]+)?|recommendations(?:\/[^/]+)?|roadmap|settings)\/?$/;
   const admin = /^\/admin(?:\/(questions|scoring|holland-content|careers|students(?:\/[^/]+)?))?\/?$/;
   if (url.origin !== 'https://aihn.invalid' || !(student.test(url.pathname) || (user.role === 'ADMIN' && admin.test(url.pathname)))) return fallback;
   return url.pathname + url.search + url.hash;
+}
+
+export function withAuthReturn(path: string, search: string): string {
+  const returnTo = new URLSearchParams(search).get('returnTo');
+  return returnTo && returnTo.length <= 2048 ? `${path}?returnTo=${encodeURIComponent(returnTo)}` : path;
 }

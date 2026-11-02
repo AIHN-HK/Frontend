@@ -18,7 +18,7 @@ export function QuestionsPage() {
       <header className="admin-page-heading">
         <div>
           <h1>Ngân hàng câu hỏi Holland</h1>
-          <p>Nội dung, nhóm RIASEC và khía cạnh theo bộ đề hiện tại.</p>
+          <p>Xem và sửa câu hỏi trong bộ đề hiện tại.</p>
         </div>
         <button
           className="btn btn-primary"
@@ -96,7 +96,7 @@ export function QuestionsPage() {
                   </table>
                 </div>
               ) : (
-                <p>Không có câu hỏi phù hợp.</p>
+                <p>Chưa tìm thấy câu hỏi. Thử đổi bộ lọc.</p>
               )}
               {selected !== undefined && (
                 <QuestionForm
@@ -108,7 +108,7 @@ export function QuestionsPage() {
               )}
               <section className="admin-panel">
                 <h2>Chức năng mở rộng</h2>
-                <p>Chưa hỗ trợ trọng số, kích hoạt/ẩn, thao tác hàng loạt, xuất hay xóa tại giao diện này.</p>
+                <p>Chưa chỉnh được trọng số, ẩn, xóa, xuất hoặc sửa hàng loạt ở đây.</p>
               </section>
             </>
           );

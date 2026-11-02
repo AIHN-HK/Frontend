@@ -25,6 +25,6 @@ export function RiasecRadar({ percentages }: { percentages: AssessmentPercentage
         </g>;
       })}
     </svg>
-    <figcaption>Tỷ lệ lựa chọn Có trong từng nhóm. Dấu —: nhóm không có câu hỏi.</figcaption>
+    <figcaption>Tỷ lệ câu Có theo nhóm. Dấu — nghĩa là nhóm chưa có câu hỏi.</figcaption>
   </figure>;
 }

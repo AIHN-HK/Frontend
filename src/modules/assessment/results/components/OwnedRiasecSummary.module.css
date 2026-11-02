@@ -1,4 +1,4 @@
-.summary { display:grid; gap:16px; min-width:0; overflow-wrap:anywhere; font-size:13px; }
+.summary { display:grid; gap:16px; min-width:0; overflow-wrap:anywhere; font-size: var(--text-sm); }
 .code { color:var(--ce-violet); }.code strong { color:var(--ce-violet); }
 .grid { display:grid; grid-template-columns:minmax(0,1fr) 220px; gap:28px; align-items:center; }.bars { display:grid; gap:14px; min-width:0; }
 .summary a { display:inline-flex; align-items:center; min-height:44px; color:var(--ce-violet); font-weight:600; }

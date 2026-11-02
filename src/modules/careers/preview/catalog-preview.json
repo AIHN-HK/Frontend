@@ -10,7 +10,7 @@
         "I",
         "C"
       ],
-      "summary": "Ví dụ giao diện: thiết kế, xây dựng và kiểm tra phần mềm. Mô tả và nhóm RIASEC trong bản này là dữ liệu mẫu.",
+      "summary": "Ví dụ: thiết kế, xây dựng và kiểm tra phần mềm. Mô tả và RIASEC là dữ liệu mẫu.",
       "detail": {
         "kind": "T13 UI fixtures",
         "updatedAt": "2026-10-14",
@@ -47,7 +47,7 @@
         "I",
         "R"
       ],
-      "summary": "Ví dụ giao diện: tổ chức dữ liệu và xây dựng quy trình xử lý thông tin. Nội dung này phục vụ thử tìm kiếm và bộ lọc.",
+      "summary": "Ví dụ: tổ chức dữ liệu và xây dựng quy trình xử lý thông tin. Nội dung minh họa.",
       "detail": {
         "kind": "T13 UI fixtures",
         "updatedAt": "2026-10-14",
@@ -83,7 +83,7 @@
         "C",
         "I"
       ],
-      "summary": "Ví dụ giao diện với tên dài: kết nối phát triển phần mềm và vận hành hệ thống, kiểm tra xuống dòng trên màn hình nhỏ."
+      "summary": "Ví dụ: kết nối việc phát triển phần mềm với vận hành hệ thống. Nội dung minh họa."
     },
     {
       "id": "preview-designer",
@@ -93,7 +93,7 @@
         "A",
         "C"
       ],
-      "summary": "Ví dụ giao diện: xây dựng hình ảnh và sản phẩm truyền thông. Phân loại mẫu chỉ dùng thử các lựa chọn ngành nghề."
+      "summary": "Ví dụ: thiết kế hình ảnh và sản phẩm truyền thông. Nội dung minh họa."
     },
     {
       "id": "preview-analyst",
@@ -103,7 +103,7 @@
         "I",
         "C"
       ],
-      "summary": "Ví dụ giao diện: tìm hiểu thông tin và trình bày các kết quả phân tích. Không phải nội dung tư vấn nghề nghiệp đã xác minh."
+      "summary": "Ví dụ: phân tích dữ liệu và trình bày kết quả. Nội dung minh họa, chưa được xác minh."
     },
     {
       "id": "preview-nurse",
@@ -113,7 +113,7 @@
         "S",
         "R"
       ],
-      "summary": "Ví dụ giao diện: hỗ trợ chăm sóc sức khỏe và phối hợp với người bệnh. Mô tả cùng RIASEC là fixture kiểm tra hiển thị."
+      "summary": "Ví dụ: chăm sóc sức khỏe và hỗ trợ người bệnh. Mô tả và RIASEC chỉ để minh họa."
     },
     {
       "id": "preview-psychology",
@@ -123,7 +123,7 @@
         "S",
         "I"
       ],
-      "summary": "Ví dụ giao diện: tìm hiểu hành vi và lắng nghe nhu cầu của con người. Đây là nội dung mẫu, không phải hướng dẫn hành nghề."
+      "summary": "Ví dụ: tìm hiểu hành vi và nhu cầu con người. Nội dung minh họa, không hướng dẫn hành nghề."
     },
     {
       "id": "preview-marketing",
@@ -133,7 +133,7 @@
         "E",
         "A"
       ],
-      "summary": "Ví dụ giao diện: lên ý tưởng truyền thông và phối hợp thực hiện chiến dịch. Không có mức lương hoặc tỷ lệ phù hợp trong fixture."
+      "summary": "Ví dụ: lên ý tưởng truyền thông và thực hiện chiến dịch. Nội dung minh họa."
     },
     {
       "id": "preview-accountant",
@@ -143,7 +143,7 @@
         "C",
         "E"
       ],
-      "summary": "Ví dụ giao diện: tổ chức chứng từ và theo dõi thông tin tài chính. Phân loại dùng thử giao diện, chưa được xác nhận từ catalog."
+      "summary": "Ví dụ: tổ chức chứng từ và theo dõi tài chính. Nội dung minh họa, chưa được xác minh."
     },
     {
       "id": "preview-animator",
@@ -153,7 +153,7 @@
         "A",
         "R"
       ],
-      "summary": "Ví dụ giao diện: tạo chuyển động và kể chuyện bằng hình ảnh. Tên nghề và nội dung chỉ minh họa trạng thái kết quả."
+      "summary": "Ví dụ: tạo chuyển động và kể chuyện bằng hình ảnh. Nội dung minh họa."
     },
     {
       "id": "preview-security",
@@ -163,7 +163,7 @@
         "I",
         "R"
       ],
-      "summary": "Ví dụ giao diện: kiểm tra hệ thống và tìm hiểu các vấn đề bảo vệ thông tin. Dùng thử tìm kiếm không dấu và phân trang."
+      "summary": "Ví dụ: kiểm tra hệ thống và bảo vệ thông tin. Nội dung minh họa."
     },
     {
       "id": "preview-manager",
@@ -173,7 +173,7 @@
         "E",
         "S"
       ],
-      "summary": "Ví dụ giao diện: phối hợp hoạt động nhóm và tổ chức công việc. Mã preview không phải mã nghề thật và không được lưu vào hồ sơ."
+      "summary": "Ví dụ: tổ chức công việc và phối hợp nhóm. Đây là nghề mẫu, không lưu vào hồ sơ."
     }
   ]
 }

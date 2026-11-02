@@ -8,7 +8,7 @@ export function RequireAdmin() {
   const current = useSession(),
     location = useLocation(),
     identity = useAdminIdentity();
-  if (current.status === 'loading') return <AsyncState state="loading" title="Đang khôi phục phiên…" />;
+  if (current.status === 'loading') return <AsyncState state="loading" title="Đang mở tài khoản…" />;
   if (current.status === 'anonymous')
     return (
       <Navigate

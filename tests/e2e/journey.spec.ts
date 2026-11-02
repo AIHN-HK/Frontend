@@ -55,30 +55,30 @@ test('fixture journey: signup OTP login profile boolean test result history and 
     });
   });
   await page.goto('/signup');
-  await page.getByLabel('Họ và tên của bạn').fill('Học sinh 71');
-  await page.getByLabel('Địa chỉ Email').fill('journey@example.test');
+  await page.getByLabel('Họ và tên').fill('Học sinh 71');
+  await page.getByLabel('Email').fill('journey@example.test');
   await page.getByLabel('Ngày sinh').fill('2008-01-01');
   await page.getByLabel('Số điện thoại').fill('0901234567');
   await page.getByLabel('Tạo mật khẩu').fill('JourneyPassword!');
-  await page.getByRole('button', { name: 'Tiếp tục xác thực OTP →' }).click();
+  await page.getByRole('button', { name: 'Tiếp tục' }).click();
   await page
     .getByRole('textbox', { name: /^Chữ số/ })
     .first()
     .fill('123456');
   await page.getByRole('button', { name: 'Xác nhận đăng ký' }).click();
   await expect(page).toHaveURL(/login$/);
-  await page.getByLabel('Email trường hoặc cá nhân').fill('journey@example.test');
+  await page.getByLabel('Email').fill('journey@example.test');
   await page.getByLabel('Mật khẩu', { exact: true }).fill('JourneyPassword!');
-  await page.getByRole('button', { name: 'Đăng nhập vào Trang của tôi →' }).click();
+  await page.getByRole('button', { name: 'Đăng nhập', exact: true }).click();
   await expect(page).toHaveURL(/dashboard$/);
   await page.goto('/career-profile');
   await page.getByLabel('Họ và tên', { exact: true }).fill('Học sinh hành trình');
   await page.getByRole('button', { name: 'Lưu cập nhật', exact: true }).click();
-  await expect(page.getByRole('status').filter({ hasText: 'Đã lưu cập nhật hồ sơ.' })).toBeVisible();
+  await expect(page.getByRole('status').filter({ hasText: 'Đã lưu hồ sơ.' })).toBeVisible();
   await page.goto('/assessment');
-  await page.getByRole('button', { name: 'Bắt đầu bài trắc nghiệm', exact: true }).click();
+  await page.getByRole('button', { name: 'Bắt đầu', exact: true }).click();
   for (let i = 0; i < 3; i++) {
-    await page.getByRole('radio', { name: 'Có — Tôi thích', exact: true }).check();
+    await page.getByRole('radio', { name: 'Có, mình thích', exact: true }).check();
     if (i < 2) await page.getByRole('button', { name: 'Tiếp theo', exact: true }).click();
   }
   await page.getByRole('button', { name: 'Nộp bài', exact: true }).click();
@@ -89,7 +89,7 @@ test('fixture journey: signup OTP login profile boolean test result history and 
   await page.goto('/advisor');
   await page.getByLabel('Câu hỏi của bạn', { exact: true }).fill('Tôi nên bắt đầu khám phá nghề như thế nào?');
   await page.getByRole('button', { name: 'Gửi', exact: true }).click();
-  await expect(page.getByText('Lượt trả lời đã hoàn tất.', { exact: true })).toBeVisible();
+  await expect(page.getByText('Đã trả lời xong.', { exact: true })).toBeVisible();
   expect(advisor.commands.filter(command => command.event === 'ask')).toHaveLength(1);
 });
 
@@ -167,9 +167,9 @@ test('late admin snapshot from account A cannot appear in account B', async ({ p
   options.owner = 72;
   options.overviewCount = 7;
   options.overviewGate = undefined;
-  await page.getByLabel('Email trường hoặc cá nhân').fill('b@example.test');
+  await page.getByLabel('Email').fill('b@example.test');
   await page.getByLabel('Mật khẩu', { exact: true }).fill('Password123!');
-  await page.getByRole('button', { name: 'Đăng nhập vào Trang của tôi →' }).click();
+  await page.getByRole('button', { name: 'Đăng nhập', exact: true }).click();
   await expect(page.getByTestId('count-students')).toHaveText('7');
   release();
   await expect(page.getByTestId('count-students')).toHaveText('7');
@@ -177,8 +177,8 @@ test('late admin snapshot from account A cannot appear in account B', async ({ p
 
 test('preview recommendation detail leads to a read-only roadmap template', async ({ page }) => {
   await page.goto('/preview/recommendations');
-  await page.getByRole('link', { name: 'Xem phân tích mẫu' }).first().click();
-  await page.getByRole('link', { name: 'Xem mẫu lộ trình chỉ đọc' }).click();
+  await page.getByRole('link', { name: 'Xem lý do mẫu' }).first().click();
+  await page.getByRole('link', { name: 'Xem lộ trình mẫu' }).click();
   await expect(page.getByRole('heading', { name: 'Chọn lộ trình mẫu' })).toBeVisible();
   await page.getByLabel('Mục tiêu mẫu').selectOption('software');
   await page.reload();

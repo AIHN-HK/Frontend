@@ -1,0 +1,8 @@
+.reason { border-top:1px solid var(--ce-border); border-bottom:1px solid var(--ce-border); }
+.reason>summary { display:flex!important; width:100%; justify-content:space-between; gap:16px; list-style:none; font-weight:600; cursor:pointer; }
+.reason>summary::-webkit-details-marker { display:none; }
+.reason>summary span { color:var(--ce-text-secondary); }
+.content { padding:0 0 16px; display:grid; gap:10px; }
+.content p { color:var(--ce-text-secondary); }
+@media(prefers-reduced-motion:no-preference) { .reason[open] .content { animation:reveal .2s ease-out; } }
+@keyframes reveal { from { opacity:.5; transform:translateY(3px); } to { opacity:1; transform:translateY(0); } }

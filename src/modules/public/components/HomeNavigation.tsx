@@ -24,14 +24,14 @@ export function HomeNavigation() {
       </Link>
       <nav aria-label="Điều hướng chính" className={styles.desktopNavigation}>
         <ul className={styles['aihn-nav-links']}>
-          <li><Link to={paths.assessment} className={styles['nav-link']}>Khám phá</Link></li>
+          <li><Link to={paths.assessment} className={styles['nav-link']}>Trắc nghiệm</Link></li>
           <li><Link to={paths.careers} className={styles['nav-link']}>Nghề nghiệp</Link></li>
           <li><a href="#how-it-works" className={styles['nav-link']}>Về AIHN</a></li>
         </ul>
       </nav>
       <div className={styles['aihn-nav-actions']}>
         <Link to={paths.login} className={styles['nav-link-login']} onClick={close}>Đăng nhập</Link>
-        <Link to={paths.assessment} className={styles['btn-nav-cta']}>Bắt đầu khám phá</Link>
+        <Link to={paths.assessment} className={styles['btn-nav-cta']}>Bắt đầu</Link>
         <button ref={opener} type="button" className={styles.menuTrigger} aria-label={open?'Đóng menu':'Mở menu'} aria-expanded={open} aria-controls="home-mobile-navigation" onClick={()=>setOpen(value=>!value)}>
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
         </button>
@@ -39,7 +39,7 @@ export function HomeNavigation() {
     </div>
     <nav id="home-mobile-navigation" className={styles.mobileNavigation} aria-label="Điều hướng di động" hidden={!open} key={location.pathname}>
       <Link to={paths.home} onClick={close}>Trang chủ</Link>
-      <Link to={paths.assessment} onClick={close}>Khám phá</Link>
+      <Link to={paths.assessment} onClick={close}>Trắc nghiệm</Link>
       <Link to={paths.careers} onClick={close}>Nghề nghiệp</Link>
       <a href="#how-it-works" onClick={close}>Về AIHN</a>
     </nav>

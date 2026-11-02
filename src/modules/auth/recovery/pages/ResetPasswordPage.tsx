@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Link, useNavigate, useNavigation } from 'react-router';
+import { Link, useLocation, useNavigate, useNavigation } from 'react-router';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { paths } from '@/routes/paths';
@@ -12,6 +12,7 @@ import { usePageEntrance } from '@/shared/ui/ce/usePageEntrance';
 import { RecoverySteps } from '../components/RecoverySteps';
 import { resetPassword } from '../../api/auth.api';
 import { recoveryState } from '../../model/recovery-state';
+import { withAuthReturn } from '../../model/post-login-path';
 import { resetPasswordSchema } from '../model/reset-password.schema';
 import type { ResetPasswordForm } from '../model/reset-password.schema';
 import { useRecoveryState } from '../model/useRecoveryState';
@@ -21,6 +22,7 @@ import authStyles from '../../components/AuthScreen.module.css';
 export function ResetPasswordPage(): React.JSX.Element {
   const http = useHttpClient();
   const navigate = useNavigate();
+  const location = useLocation();
   const navigation = useNavigation();
   const currentSession = useSession();
   const { flow } = useRecoveryState();
@@ -53,24 +55,24 @@ export function ResetPasswordPage(): React.JSX.Element {
       await resetPassword(http, { email: credential.email, otp: credential.verifiedOtp, newPassword: fields.newPassword }, controller.signal);
       if (!valid()) return;
       setCompleted(true); recoveryState.clear(); reset({ newPassword: '', confirmPassword: '' });
-      await navigate(paths.login, { replace: true, state: { passwordResetComplete: true } });
+      await navigate(withAuthReturn(paths.login, location.search), { replace: true, state: { passwordResetComplete: true } });
     } catch (failure) {
       if (!valid()) return;
-      const message = failure instanceof ApiError ? failure.message : 'Không thể đặt lại mật khẩu.';
-      setError(failure instanceof ApiError && failure.outcomeUnknown ? `${message} Chưa xác nhận kết quả; mật khẩu vẫn được giữ trong tab này. Hãy thử đăng nhập để kiểm tra trước khi gửi lại.` : message);
+      const message = failure instanceof ApiError ? failure.message : 'Chưa đặt lại được mật khẩu.';
+      setError(failure instanceof ApiError && failure.outcomeUnknown ? 'Chưa xác nhận đã đổi mật khẩu. Nội dung vẫn được giữ trong tab này. Thử đăng nhập để kiểm tra trước khi gửi lại.' : message);
     } finally {
       pending.current = false; request.current = null;
     }
   };
 
   const root = usePageEntrance(flow?.verifiedOtp ? 'reset-ready' : 'reset-missing');
-  if (completed) return <p role="status">Mật khẩu đã được đặt lại. Đang chuyển đến đăng nhập…</p>;
+  if (completed) return <p role="status">Đã đổi mật khẩu. Đang mở trang đăng nhập…</p>;
   if (!flow?.verifiedOtp || flow.revision !== currentSession.revision) return <div ref={root} className={`${authStyles.page} ${styles.page} recovery-missing`}>
     <span className="brand-badge" aria-hidden="true">AI</span>
     <h1>Không thể đặt lại mật khẩu</h1>
-    <p role="status">Thông tin khôi phục chưa được xác thực, đã hết hạn hoặc đã mất khi tải lại trang.</p>
-    <Link className="btn btn-primary recovery-submit" to={paths.forgotPassword}>Bắt đầu khôi phục lại</Link>
-    <Link className="recovery-link" to={paths.login}>Quay lại đăng nhập</Link>
+    <p role="status">Thông tin khôi phục chưa xác thực hoặc đã hết hạn. Tải lại trang cũng có thể làm mất thông tin này.</p>
+    <Link className="btn btn-primary recovery-submit" to={withAuthReturn(paths.forgotPassword, location.search)}>Khôi phục lại</Link>
+    <Link className="recovery-link" to={withAuthReturn(paths.login, location.search)}>Đăng nhập</Link>
   </div>;
 
   return <div ref={root} className={`${authStyles.page} ${styles.page}`}>
@@ -93,11 +95,11 @@ export function ResetPasswordPage(): React.JSX.Element {
         </div>
         <Field id="reset-confirm" label="Xác nhận mật khẩu mới" type={visible ? 'text' : 'password'} autoComplete="new-password" error={errors.confirmPassword?.message} control={control} name="confirmPassword" />
       </fieldset>
-      <p className="recovery-hint">Mật khẩu từ 8 đến 72 ký tự. Thông tin khôi phục chỉ được giữ trong tab này; tải lại trang sẽ cần bắt đầu lại.</p>
+      <p className="recovery-hint">Dùng 8–72 ký tự. Giữ tab này mở, tải lại trang sẽ cần khôi phục lại.</p>
       {error && <p className="recovery-error" role="alert">{error}</p>}
       <Button className="btn btn-primary recovery-submit" htmlType="submit" disabled={isSubmitting || leaving}>{isSubmitting ? 'Đang đặt lại…' : 'Đặt lại mật khẩu'}</Button>
       <Link className="recovery-link" to={paths.verifyOtp}>Xác thực lại mã OTP</Link>
     </form>
-    <div className="recovery-footer"><Link to={paths.forgotPassword}>Bắt đầu khôi phục lại</Link><Link to={paths.login}>Quay lại đăng nhập</Link></div>
+    <div className="recovery-footer"><Link to={withAuthReturn(paths.forgotPassword, location.search)}>Khôi phục lại</Link><Link to={withAuthReturn(paths.login, location.search)}>Đăng nhập</Link></div>
   </div>;
 }

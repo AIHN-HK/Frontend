@@ -1,6 +1,7 @@
 export const paths = {
   home: '/',
   previewHome: '/preview/home',
+  previewLottie: '/preview/lottie',
   login: '/login',
   signup: '/signup',
   verifyOtp: '/otp-verify',
@@ -9,6 +10,8 @@ export const paths = {
   dashboard: '/dashboard',
   careerProfile: '/career-profile',
   assessment: '/assessment',
+  guestAssessmentResult: '/assessment/guest-result',
+  guestAssessmentClaim: '/assessment/claim',
   assessmentResults: '/assessment/results',
   assessmentResult: (id: string | number) => `/assessment/results/${encodeURIComponent(id)}`,
   history: '/history',

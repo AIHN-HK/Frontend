@@ -28,8 +28,17 @@ export function useHomeMotion() {
     const media = gsap.matchMedia();
     const context = gsap.context(() => {
       media.add('(prefers-reduced-motion: no-preference)', () => {
-        gsap.from(['hero-pill-badge','aihn-hero__title','aihn-hero__desc','aihn-hero__actions'].map(name=>`.${styles[name]}`), {y:30,opacity:0,duration:.8,stagger:.12,ease:'power3.out',clearProps:'transform,opacity'});
-        gsap.from(`.${styles['journey-card']}`, {y:40,opacity:0,duration:1,stagger:.16,delay:.3,ease:'power3.out',clearProps:'transform,opacity'});
+        const entrance = gsap.timeline({ defaults: { ease:'power3.out', clearProps:'transform,opacity' },
+          scrollTrigger:{trigger:`.${styles['aihn-hero']}`,start:'top 90%',once:true} });
+        entrance.from(`.${styles['hero-pill-badge']}`, {y:12,opacity:0,duration:.65})
+          .from('[data-home-title-line]', {y:18,opacity:0,duration:.95,stagger:.12}, .08)
+          .from(['aihn-hero__desc','aihn-hero__actions'].map(name=>`.${styles[name]}`), {y:14,opacity:0,duration:.75,stagger:.12}, .25)
+          .from(`.${styles['journey-card']}`, {y:24,opacity:0,duration:.9,stagger:.12}, .2);
+        for (const section of sections.slice(1)) {
+          const heading = section.querySelector('h2');
+          if (heading) gsap.from(heading, {y:18,opacity:0,duration:.8,ease:'power2.out',clearProps:'transform,opacity',
+            scrollTrigger:{trigger:section,start:'top 82%',once:true}});
+        }
         for (const [section,items] of [['aihn-intro','intro-column'],['aihn-matches','editorial-career-card'],['aihn-trust','trust-card']]) {
           gsap.from(`.${styles[items!]}`, {y:30,opacity:0,duration:.7,stagger:.12,ease:'power2.out',clearProps:'transform,opacity',scrollTrigger:{trigger:`.${styles[section!]}`,start:'top 80%',once:true}});
         }

@@ -8,13 +8,13 @@ const careerTheme: ThemeConfig = {
   algorithm: theme.darkAlgorithm,
   token: {
     colorBgContainer: '#161618',
-    colorBgElevated: 'rgba(255,255,255,0.06)',
+    colorBgElevated: '#1f1f24',
     colorBorder: 'rgba(255,255,255,0.12)',
     colorText: '#d4d4d8',
     colorPrimary: '#8b5cf6',
     borderRadius: 10,
     controlHeight: 44,
-    fontSize: 14,
+    fontSize: 16,
   },
 };
 

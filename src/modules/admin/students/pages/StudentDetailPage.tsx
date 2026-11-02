@@ -39,7 +39,7 @@ export function StudentDetailPage() {
     );
   const back = (
     <Link className="btn btn-secondary" to={`${paths.adminStudents}?${list}`}>
-      Quay lại danh sách học sinh
+      Danh sách học sinh
     </Link>
   );
   if (id === null)
@@ -72,7 +72,7 @@ export function StudentDetailPage() {
               </p>
             </header>
             <section className="admin-panel">
-              <h2>1. Hồ sơ tài khoản</h2>
+              <h2>Thông tin tài khoản</h2>
               <dl className="admin-form-grid">
                 {[
                   ['Email', data.student.email],
@@ -91,10 +91,10 @@ export function StudentDetailPage() {
                   </div>
                 ))}
               </dl>
-              <p>Không có dữ liệu GPA, kỹ năng, sở thích hoặc tỷ lệ hoàn thiện hồ sơ cho quản trị.</p>
+              <p>Quản trị chưa xem được GPA, kỹ năng, sở thích và mức hoàn thiện hồ sơ.</p>
             </section>
             <section className="admin-panel">
-              <h2>2. Kết quả Holland đã hoàn thành</h2>
+              <h2>Kết quả Holland</h2>
               <p>
                 {data.attempts.total} lần làm · Trang {data.attempts.page}/
                 {Math.max(1, Math.ceil(data.attempts.total / data.attempts.limit))}
@@ -141,7 +141,7 @@ export function StudentDetailPage() {
                   </table>
                 </div>
               ) : (
-                <p>Chưa có lần trắc nghiệm hoàn thành.</p>
+                <p>Chưa có bài trắc nghiệm hoàn thành.</p>
               )}
               <Pagination
                 page={data.attempts.page}
@@ -156,12 +156,12 @@ export function StudentDetailPage() {
               />
             </section>
             <section className="admin-panel">
-              <h2>3. Gợi ý nghề &amp; Tư vấn AI</h2>
-              <p>Chưa có dữ liệu gợi ý nghề, hội thoại AI hoặc lộ trình được cung cấp cho quản trị.</p>
+              <h2>Gợi ý nghề và hội thoại</h2>
+              <p>Quản trị chưa xem được gợi ý nghề, hội thoại và lộ trình.</p>
             </section>
             <section className="admin-panel">
-              <h2>4. Hỗ trợ &amp; Báo cáo</h2>
-              <p>Gửi hỗ trợ, xuất PDF và cấp quyền làm lại trắc nghiệm chưa sẵn sàng.</p>
+              <h2>Hỗ trợ và báo cáo</h2>
+              <p>Chưa hỗ trợ gửi yêu cầu, xuất PDF hoặc cấp quyền làm lại bài.</p>
             </section>
           </>
         )}

@@ -5,11 +5,11 @@ export function CareersPage() {
   return (
     <AsyncState
       state="unavailable"
-      title="Danh mục nghề chưa sẵn sàng"
-      description="Chưa có dữ liệu nghề đã xuất bản và công cụ quản lý danh mục cho hệ thống."
+      title="Danh mục nghề đang được chuẩn bị"
+      description="Chưa có nghề đã xuất bản hoặc công cụ quản lý danh mục ở đây."
       action={
         <Link className="btn btn-secondary" to={paths.previewAdminCareers}>
-          Xem giao diện dữ liệu mẫu · Chỉ đọc
+          Xem danh mục mẫu
         </Link>
       }
     />

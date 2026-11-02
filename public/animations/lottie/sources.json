@@ -1,0 +1,120 @@
+[
+  {
+    "key": "advisor",
+    "page": "https://lottiefiles.com/free-animation/orb-ai-assistant-aibaa-B9u3qlIbwH",
+    "source": "https://assets-v2.lottiefiles.com/a/dcd9b2e5-78fe-41d7-bad4-2d26a18bf25b/B9u3qlIbwH.lottie",
+    "jsonBytes": 23203,
+    "sha256": "30ab941086afe3822f9bbbae13f33d1d5fcd81bdaa3084dbdcce8c132beee51a",
+    "size": [
+      700,
+      700
+    ],
+    "fps": 29.9700012207031,
+    "duration": 7.7077,
+    "layers": 6,
+    "title": "Orb Ai Assistant",
+    "author": "AsadShiekh",
+    "license": "Lottie Simple License",
+    "licenseUrl": "https://lottiefiles.com/page/license",
+    "retrievedAt": "2026-10-26",
+    "localFile": "advisor.json",
+    "localBytes": 22538,
+    "gzipBytes": 2439,
+    "localSha256": "348ca15d1f0634448a0d7aea6efd3f36703fd96b7eb386b181ab376461c3822e",
+    "changes": [
+      "Remapped saturated blue/cyan fills and gradient stops to AIHN violet.",
+      "Removed two unsupported After Effects Tint effects.",
+      "Replaced previous cartoon robot illustration."
+    ],
+    "poster": {
+      "file": "advisor.svg",
+      "renderer": "AIHN compact static SVG approximation of the recolored orb",
+      "bytes": 940,
+      "gzipBytes": 444,
+      "sha256": "0d1ad5bfe75ca84258ca5a6f3b2f9a5a565d877a58d2adc545dbdc1d4b018e9c"
+    }
+  },
+  {
+    "key": "empty",
+    "page": "https://lottiefiles.com/free-animation/empty-box-animation-EfC20FO7YI",
+    "source": "https://assets-v2.lottiefiles.com/a/a134f83a-116e-11ee-9e7f-f7eaf8acce51/IbWMmwxLcS.lottie",
+    "jsonBytes": 4710,
+    "sha256": "89d35edef8fcd330a2c526e5aac99acc0bb70438110762aa00cb74586c3a0cc7",
+    "size": [
+      266,
+      266
+    ],
+    "fps": 29.9700012207031,
+    "duration": 2.5025025025025034,
+    "layers": 4,
+    "assets": [
+      {
+        "id": "image_0",
+        "image": "image_0.png"
+      },
+      {
+        "id": "image_1",
+        "image": "image_1.png"
+      },
+      {
+        "id": "image_2",
+        "image": "image_2.png"
+      }
+    ],
+    "title": "Empty Box Animation",
+    "author": "Aadesh Kulkarni",
+    "license": "Lottie Simple License",
+    "licenseUrl": "https://lottiefiles.com/page/license",
+    "retrievedAt": "2026-10-26",
+    "localFile": "empty.json",
+    "localBytes": 8599,
+    "gzipBytes": 3900,
+    "localSha256": "cbbaca8130f4eec7207bd3885328796c5c8d5cff5523075164b83b35b5774b7d",
+    "changes": [
+      "Embedded the three original PNG layers as data URIs so playback makes no external image requests."
+    ],
+    "poster": {
+      "file": "empty.svg",
+      "frame": 40,
+      "renderer": "lottie-web SVG light 5.13.0",
+      "bytes": 10252,
+      "gzipBytes": 3627,
+      "sha256": "5033965d373b433a7f5b30f576399eb6e141ca2fdd1971fb2d8a5b11cfe115c5"
+    }
+  },
+  {
+    "key": "complete",
+    "page": "https://lottiefiles.com/free-animation/success-check-zSLSFlcAJq",
+    "source": "https://assets-v2.lottiefiles.com/a/20e4a6f2-116f-11ee-b864-bf9e43a0b86d/CEVxgHfxCt.lottie",
+    "jsonBytes": 4926,
+    "sha256": "9a5f27a60fb45f27f2b0ea8d4508b78f582fd33d186052d026ea81a824aac045",
+    "size": [
+      512,
+      512
+    ],
+    "fps": 60,
+    "duration": 2.1666666666666665,
+    "layers": 4,
+    "assets": [],
+    "title": "Success Check",
+    "author": "Pranav Patil",
+    "license": "Lottie Simple License",
+    "licenseUrl": "https://lottiefiles.com/page/license",
+    "retrievedAt": "2026-10-26",
+    "localFile": "complete.json",
+    "localBytes": 4028,
+    "gzipBytes": 932,
+    "localSha256": "f9083550b31eb4cd2d85d4ebd7211adf2461faa35be31361904cb2304c07a15b",
+    "changes": [
+      "Removed the white BG layer for a transparent composition on the AIHN dark theme."
+    ],
+    "poster": {
+      "file": "complete.svg",
+      "frame": 125,
+      "renderer": "lottie-web SVG light 5.13.0",
+      "bytes": 2011,
+      "gzipBytes": 593,
+      "sha256": "09ceae563c6eab08a6c411e2c2e886f3eafd1b57b643afcce84685251cbe852a"
+    }
+  }
+]

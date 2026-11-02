@@ -1,0 +1,15 @@
+# AIHN abstract thinking illustration
+
+Replaces the former cartoon chatbot asset at `advisor.json` / `advisor.svg`.
+
+- Original: Orb Ai Assistant, by AsadShiekh.
+- Page: https://lottiefiles.com/free-animation/orb-ai-assistant-aibaa-B9u3qlIbwH
+- Original dotLottie: https://assets-v2.lottiefiles.com/a/dcd9b2e5-78fe-41d7-bad4-2d26a18bf25b/B9u3qlIbwH.lottie
+- License shown on the asset page: Lottie Simple License, https://lottiefiles.com/page/license
+- Retrieved: 2026-10-26.
+- Original JSON SHA-256: 30ab941086afe3822f9bbbae13f33d1d5fcd81bdaa3084dbdcce8c132beee51a
+- Changes: extracted the vector animation from dotLottie; remapped saturated blue/cyan fills and gradient stops to AIHN violet; removed the After Effects Tint effect unsupported by the existing SVG light player. No timing, scoring, or data visualization is encoded here.
+- Poster: a small AIHN-authored static SVG approximation of the recolored orb, avoiding the 96 KB flattened player frame. The original motion was checked with the SVG light renderer.
+- Playback uses the already-installed lottie-web SVG light runtime and local JSON, without image/font/CDN requests. Kept JSON to avoid adding another WASM/runtime solely for the compressed container.
+
+This third-party asset is governed by its own license, not the repository's 0BSD license. Attribution and other existing assets are documented separately in ATTRIBUTION.md and sources.json.

@@ -22,49 +22,49 @@ export function CareerRuntimeDetailPage() {
   const mismatched = result.isSuccess && !career;
   const status = result.error instanceof ApiError ? result.error.status : undefined;
   return (
-    <PlatformFrame title={career?.title ?? "Chi tiết nghề nghiệp"} className={styles.page}
+    <PlatformFrame title={career?.title ?? "Tìm hiểu nghề"} className={styles.page}
       showTitle={!career} animationKey={career ? careerId : "pending"}>
       <nav className={styles.breadcrumb} aria-label="Đường dẫn">
         <Link to={paths.careers}>Về danh mục nghề</Link>
         <span aria-hidden="true">›</span><span>{career?.title ?? careerId}</span>
       </nav>
-      {!valid ? <p role="alert">Mã nghề không hợp lệ.</p> : <>
-        {result.isPending && <p role="status">Đang tải dữ liệu nghề…</p>}
+      {!valid ? <p role="alert">Đường dẫn nghề chưa đúng.</p> : <>
+        {result.isPending && <p role="status">Đang tải thông tin nghề…</p>}
         {result.isError && <div className={styles.state} role="alert">
-          <p>{status === 404 ? "Không tìm thấy nghề trong danh mục hiện có." : status === 403 ? "Không có quyền xem dữ liệu nghề này." : "Không tải được dữ liệu nghề. Hãy kiểm tra kết nối và thử lại."}</p>
-          <Button onClick={() => void result.refetch()}>Thử tải lại dữ liệu nghề</Button>
+          <p>{status === 404 ? "Chưa tìm thấy nghề này trong danh mục." : status === 403 ? "Tài khoản này chưa có quyền xem nghề." : "Chưa tải được thông tin nghề. Kiểm tra mạng rồi thử lại."}</p>
+          <Button onClick={() => void result.refetch()}>Tải lại</Button>
         </div>}
-        {mismatched && <p role="alert">Dữ liệu trả về không khớp mã nghề được yêu cầu.</p>}
+        {mismatched && <p role="alert">Thông tin tải về không khớp nghề bạn chọn.</p>}
       </>}
       {career && <>
         <section className={styles.hero} data-ce-enter="">
           <div className={styles.heroContent}>
-            <p className={styles.tag}>Khám phá nghề · {career.sourceVersion}</p>
+            <p className={styles.tag}>Tìm hiểu nghề · {career.sourceVersion}</p>
             <h1>{career.title}</h1>
             <p className={styles.subtitle}>Mã nghề O*NET {career.id}</p>
             <div className={styles.sourceBadge}>Thông tin tham khảo nghề tại Mỹ</div>
             <div className={styles.actions}>
-              <Link className={styles.primaryLink} to={`${paths.careerProfile}?target=${encodeURIComponent(career.id)}`}>Chọn làm mục tiêu trong hồ sơ</Link>
-              <a href={career.sourceUrl} target="_blank" rel="noreferrer">Đọc nguồn nghề gốc</a>
+              <Link className={styles.primaryLink} to={`${paths.careerProfile}?target=${encodeURIComponent(career.id)}`}>Chọn làm mục tiêu</Link>
+              <a href={career.sourceUrl} target="_blank" rel="noreferrer">Xem nguồn gốc</a>
             </div>
           </div>
           <div className={styles.photo} data-ce-photo-frame="">
             <img src={student} alt="Sinh viên học tập với laptop · ảnh minh họa" />
-            <span className={styles.photoBadge} data-ce-photo-badge="">Khám phá tương lai · Ảnh minh họa</span>
+            <span className={styles.photoBadge} data-ce-photo-badge="">Ảnh minh họa</span>
           </div>
         </section>
         <dl className={styles.infoGrid} data-ce-enter="">
-          {unavailable.map(label => <div key={label}><dt>{label}</dt><dd>Chưa có dữ liệu có nguồn.</dd></div>)}
+          {unavailable.map(label => <div key={label}><dt>{label}</dt><dd>Chưa có thông tin được xác minh.</dd></div>)}
         </dl>
         <div className={styles.bodyGrid}>
           <div className={styles.sections}>
             <section className={styles.section} data-ce-enter="">
               <h2>Mô tả công việc</h2>
-              <p>{career.description || "Chưa có mô tả từ nguồn nghề."}</p>
+              <p>{career.description || "Nguồn tham khảo chưa có mô tả."}</p>
             </section>
             <section className={styles.section} data-ce-enter="">
               <h2>Kỹ năng tham khảo</h2>
-              {!career.skills.length ? <p>Chưa có dữ liệu kỹ năng.</p> : <div className={styles.tableWrap}>
+              {!career.skills.length ? <p>Chưa có thông tin kỹ năng.</p> : <div className={styles.tableWrap}>
                 <table>
                   <caption>Kỹ năng nghề từ {career.sourceVersion}</caption>
                   <thead><tr><th scope="col">Kỹ năng</th><th scope="col">Tầm quan trọng /5</th><th scope="col">Mức yêu cầu /5</th></tr></thead>
@@ -73,25 +73,25 @@ export function CareerRuntimeDetailPage() {
                   </tr>)}</tbody>
                 </table>
               </div>}
-              <p>Mức yêu cầu được quy đổi từ thang O*NET; tự đánh giá cùng thang chỉ mang tính tham khảo.</p>
+              <p>Mức yêu cầu được quy đổi từ O*NET. So sánh với tự đánh giá chỉ để tham khảo.</p>
             </section>
             <section className={styles.section} data-ce-enter="">
-              <h2>Bước tiếp theo của bạn</h2>
-              <p>Chọn nghề làm mục tiêu trong hồ sơ, bổ sung tự đánh giá kỹ năng rồi xem gợi ý và khoảng cách kỹ năng.</p>
-              <Link to={`${paths.recommendations}?career=${encodeURIComponent(career.id)}`}>Xem gợi ý cá nhân và khoảng cách kỹ năng</Link>
+              <h2>Bạn có thể bắt đầu từ đây</h2>
+              <p>Chọn nghề làm mục tiêu, cập nhật kỹ năng rồi xem điều cần rèn thêm.</p>
+              <Link to={`${paths.recommendations}?career=${encodeURIComponent(career.id)}`}>Xem nghề phù hợp</Link>
             </section>
           </div>
           <aside className={styles.sidebar} aria-label="Thông tin tham khảo nghề">
             <section className={styles.panel} data-ce-enter="">
               <h2>Hồ sơ sở thích nghề (1–7)</h2>
-              <p>Đặc điểm của nghề theo O*NET, không phải điểm phù hợp cá nhân.</p>
+              <p>Đặc điểm nghề theo O*NET, không phải điểm phù hợp của bạn.</p>
               {codes.map((code, index) => <RiasecBar key={code} code={code} label={groupLabels[index]!}
                 percentage={career.riasec[code] / 7 * 100} valueLabel={`${code}: ${career.riasec[code]} / 7`} />)}
             </section>
             <section className={styles.panel} data-ce-enter="">
               <h2>Nguồn tham khảo</h2>
               <p>{career.id} · {career.sourceVersion} · Phiên bản dữ liệu {career.revision}</p>
-              <p>Chưa có dữ liệu nghề liên quan có nguồn trong phản hồi này.</p>
+              <p>Chưa có thông tin được xác minh về nghề liên quan.</p>
             </section>
           </aside>
         </div>

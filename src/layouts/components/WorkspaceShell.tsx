@@ -74,7 +74,7 @@ export function WorkspaceShell({
         <Navigation items={items} />
         <footer className="sidebar-footer">
           <span>AIHN Career</span>
-          <small>Định hướng tương lai của bạn</small>
+          <small>Tìm hướng đi của bạn</small>
         </footer>
       </aside>
       <div className="workspace-main">

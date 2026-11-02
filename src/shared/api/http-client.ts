@@ -49,7 +49,7 @@ export function createHttpClient(options: {
       if (safeRead && !config.retried && current.tokens && options.credentials !== 'explicit' && options.refresh) {
         // Other reads may already have refreshed this same account. Reuse its token.
         const refreshed = current.tokens.accessToken !== config.sessionToken || await options.refresh(config.sessionRevision);
-        if (config.sessionRevision !== options.session.read().revision) throw new ApiError('session-changed', 'Phiên đã thay đổi.');
+        if (config.sessionRevision !== options.session.read().revision) throw new ApiError('session-changed', 'Phiên đăng nhập đã thay đổi.');
         if (refreshed) {
           const retry: ScopedRequest = { ...config, retried: true };
           return client.request(retry);

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Link, useNavigate, useNavigation } from 'react-router';
+import { Link, useLocation, useNavigate, useNavigation } from 'react-router';
 import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { paths } from '@/routes/paths';
@@ -12,6 +12,7 @@ import { usePageEntrance } from '@/shared/ui/ce/usePageEntrance';
 import { RecoverySteps } from '../components/RecoverySteps';
 import { sendRecoveryOtp } from '../../api/auth.api';
 import { recoveryState } from '../../model/recovery-state';
+import { withAuthReturn } from '../../model/post-login-path';
 import { recoveryEmailSchema } from '../model/reset-password.schema';
 import type { RecoveryEmailForm } from '../model/reset-password.schema';
 import { useRecoveryState } from '../model/useRecoveryState';
@@ -21,6 +22,7 @@ import authStyles from '../../components/AuthScreen.module.css';
 export function ForgotPasswordPage(): React.JSX.Element {
   const http = useHttpClient();
   const navigate = useNavigate();
+  const location = useLocation();
   const navigation = useNavigation();
   const currentSession = useSession();
   const { flow, now } = useRecoveryState();
@@ -57,12 +59,12 @@ export function ForgotPasswordPage(): React.JSX.Element {
     try {
       await sendRecoveryOtp(http, fields.email, controller.signal);
       if (!valid()) return;
-      if (recoveryState.resent(revision)) await navigate(paths.verifyOtp);
+      if (recoveryState.resent(revision)) await navigate(withAuthReturn(paths.verifyOtp, location.search));
     } catch (failure) {
       if (!valid()) return;
       const unknown = failure instanceof ApiError && failure.outcomeUnknown;
-      const message = failure instanceof ApiError ? failure.message : 'Không thể gửi mã OTP.';
-      setError(unknown ? `${message} Chưa xác nhận OTP đã được gửi. Hãy kiểm tra email trước khi thử lại; email được giữ trong tab này.` : message);
+      const message = failure instanceof ApiError ? failure.message : 'Chưa gửi được mã OTP.';
+      setError(unknown ? 'Chưa xác nhận đã gửi mã OTP. Kiểm tra email trước khi gửi lại. Email vẫn được giữ trong tab này.' : message);
       if (failure instanceof ApiError && failure.status === 409) recoveryState.clear();
     } finally {
       pending.current = false; request.current = null;
@@ -74,7 +76,7 @@ export function ForgotPasswordPage(): React.JSX.Element {
     <div className="recovery-intro" data-ce-enter="">
       <span className="brand-badge" aria-hidden="true">AI</span>
       <h1>Khôi phục mật khẩu</h1>
-      <p>Nhập email bạn đã đăng ký để nhận mã OTP đặt lại mật khẩu.</p>
+      <p>Nhập email đã đăng ký để nhận mã OTP.</p>
     </div>
     <RecoverySteps active={1} />
     <form data-ce-enter="" className="recovery-form" noValidate aria-busy={isSubmitting} onSubmit={event => {
@@ -86,12 +88,12 @@ export function ForgotPasswordPage(): React.JSX.Element {
         <legend className="recovery-legend">Email khôi phục</legend>
         <Field id="recovery-email" label="Email tài khoản" type="email" inputMode="email" autoComplete="email" placeholder="name@email.com" error={errors.email?.message} control={control} name="email" />
       </fieldset>
-      <p className="recovery-hint">💡 <strong>Mẹo:</strong> Kiểm tra cả thư mục Spam, đặc biệt nếu bạn dùng email trường (.edu.vn).</p>
+      <p className="recovery-hint">💡 <strong>Lưu ý:</strong> Nếu chưa thấy mã, kiểm tra cả thư mục thư rác.</p>
       {error && <p className="recovery-error" role="alert">{error}</p>}
-      {wait > 0 && <p className="recovery-wait" role="status">Có thể yêu cầu gửi lại sau {wait} giây.</p>}
+      {wait > 0 && <p className="recovery-wait" role="status">Gửi lại sau {wait} giây.</p>}
       <Button className="btn btn-primary recovery-submit" htmlType="submit" disabled={isSubmitting || leaving || wait > 0}>{isSubmitting ? 'Đang gửi OTP…' : 'Gửi mã OTP'} <span aria-hidden="true">→</span></Button>
       {!isSubmitting && flow?.email === email && <Link className="recovery-link" to={paths.verifyOtp}>Tôi đã nhận mã OTP</Link>}
     </form>
-    <div className="recovery-footer"><span>Đã nhớ ra mật khẩu?</span><Link to={paths.login}>Quay lại đăng nhập</Link></div>
+    <div className="recovery-footer"><span>Bạn đã nhớ mật khẩu?</span><Link to={withAuthReturn(paths.login, location.search)}>Đăng nhập</Link></div>
   </div>;
 }

@@ -6,6 +6,6 @@ import { AsyncState } from '@/shared/ui/AsyncState';
 export function GuestOnly() {
   const current = useSession();
   const [params] = useSearchParams();
-  if (current.status === 'loading') return <AsyncState state="loading" title="Đang khôi phục phiên…" />;
+  if (current.status === 'loading') return <AsyncState state="loading" title="Đang mở tài khoản…" />;
   return current.status === 'anonymous' ? <Outlet /> : <Navigate to={postLoginPath(current.user!, params.get('returnTo'))} replace />;
 }

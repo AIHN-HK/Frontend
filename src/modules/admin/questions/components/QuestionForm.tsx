@@ -36,7 +36,7 @@ export function QuestionForm({
           if (command.busy || draft.review || locked) return;
           const parsed = questionInputSchema.safeParse(draft.input);
           if (!parsed.success) {
-            setError('Nhập nội dung từ 1 đến 2000 ký tự và chọn nhóm, khía cạnh hợp lệ.');
+            setError('Nhập 1–2.000 ký tự, chọn nhóm và khía cạnh.');
             return;
           }
           setError('');
@@ -58,8 +58,8 @@ export function QuestionForm({
             const conflict = err instanceof ApiError && err.status === 409;
             setError(
               conflict
-                ? 'Dữ liệu bị khóa hoặc vừa thay đổi. Bản nháp được giữ lại; đọc dữ liệu hiện tại để đối chiếu.'
-                : 'Chưa xác nhận câu hỏi đã lưu. Giữ bản nháp; đọc dữ liệu hiện tại trước khi thử lại.',
+                ? 'Câu hỏi bị khóa hoặc vừa thay đổi. Bản nháp vẫn còn. Tải dữ liệu mới để đối chiếu.'
+                : 'Chưa xác nhận đã lưu câu hỏi. Bản nháp vẫn còn. Kiểm tra dữ liệu mới trước khi thử lại.',
             );
           }
         }}
@@ -110,11 +110,11 @@ export function QuestionForm({
         {error && <p role="alert">{error}</p>}
         {notice && <p role="status">{notice}</p>}
         {!draft.stored && (
-          <p role="alert">Không lưu được bản nháp trên thiết bị. Giữ trang mở để tránh mất nội dung.</p>
+          <p role="alert">Chưa lưu được bản nháp. Giữ trang mở để tránh mất nội dung.</p>
         )}
         {draft.review && (
           <>
-            <p>Hãy đối chiếu bản nháp với bảng dữ liệu sau khi đọc lại; không tự gửi lại yêu cầu.</p>
+            <p>Tải lại dữ liệu và đối chiếu bản nháp trước khi lưu tiếp.</p>
             <button
               type="button"
               className="btn btn-secondary"
@@ -126,7 +126,7 @@ export function QuestionForm({
                 }
               }}
             >
-              Đọc dữ liệu hiện tại để đối chiếu
+              Tải dữ liệu để đối chiếu
             </button>
           </>
         )}

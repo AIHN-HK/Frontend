@@ -26,14 +26,14 @@ export function useAvatarMutation() {
     mutationKey: ['profile-avatar', 'upload'],
     retry: false,
     mutationFn: async (command: { file: File; scope: ProfileScope; signal: AbortSignal }) => {
-      if (!valid(command)) throw new ApiError('session-changed', 'Phiên đã thay đổi.');
+      if (!valid(command)) throw new ApiError('session-changed', 'Phiên đăng nhập đã thay đổi.');
       await client.cancelQueries({ queryKey: avatarKey(command.scope), exact: true });
-      if (!valid(command)) throw new ApiError('session-changed', 'Phiên đã thay đổi.');
+      if (!valid(command)) throw new ApiError('session-changed', 'Phiên đăng nhập đã thay đổi.');
       await uploadAvatar(http, command.file, command.signal);
       try {
         const saved = await readAvatar(http, command.signal);
         if (!saved) throw new Error('Missing saved avatar');
-        if (!valid(command)) throw new ApiError('session-changed', 'Phiên đã thay đổi.');
+        if (!valid(command)) throw new ApiError('session-changed', 'Phiên đăng nhập đã thay đổi.');
         return saved;
       } catch {
         throw new ApiError('configuration', 'Chưa đọc lại được ảnh đã lưu.', undefined, true);

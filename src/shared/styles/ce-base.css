@@ -3,7 +3,6 @@
   min-height: 100dvh;
   background: var(--ce-bg-main);
   color: var(--ce-text-primary);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   --bg-app: var(--ce-bg-main);
   --bg-app-deep: var(--ce-bg-sidebar);
   --bg-surface: var(--ce-bg-nav);
@@ -37,13 +36,13 @@
 .ce-app :where(h1, h2, h3, h4) { color: var(--ce-text-primary); }
 .ce-app :where(p) { color: var(--ce-text-secondary); }
 .ce-app :where(a, button, input, select, textarea) { -webkit-tap-highlight-color: transparent; }
-.ce-app :where(button, input, select, textarea) { font: inherit; }
 .ce-app :focus-visible { outline: 2px solid var(--ce-violet); outline-offset: 3px; }
 .ce-app :where(.ant-btn, .ant-input, .ant-input-affix-wrapper, .ant-select-selector) { min-height: 44px; }
 .ce-app :where(.ant-btn) { white-space: normal; height: auto; }
 .ce-app :where(img, svg) { max-width: 100%; }
 .ce-app :where(.async-state) { color: var(--ce-text-secondary); }
 .ce-app :where(.btn) { min-height: 44px; }
+
 @media (prefers-reduced-motion: reduce) {
   .ce-app *, .ce-app *::before, .ce-app *::after {
     animation-duration: .01ms !important;

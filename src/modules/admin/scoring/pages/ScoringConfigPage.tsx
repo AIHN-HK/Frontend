@@ -11,7 +11,7 @@ export function ScoringConfigPage() {
     <div className="admin-page">
       <header>
         <h1>Thứ tự ưu tiên Holland</h1>
-        <p>Cấu hình xử lý đồng điểm của bộ đề hiện tại.</p>
+        <p>Chọn nhóm được ưu tiên khi có cùng điểm.</p>
       </header>
       <AdminDataState query={query}>
         {(data) => <PriorityEditor initial={data} reload={async () => !(await query.refetch()).isError} />}
@@ -19,8 +19,7 @@ export function ScoringConfigPage() {
       <section className="admin-panel">
         <h2>Quy tắc hiện tại</h2>
         <p>
-          Giữ thang trả lời Có/Không. Giao diện chưa hỗ trợ chỉnh độ dài TopCode, ngưỡng, trọng số hay mô
-          phỏng thuật toán.
+          Thang trả lời là Có/Không. Chưa hỗ trợ đổi độ dài TopCode, ngưỡng, trọng số hoặc thử thuật toán.
         </p>
         <Link className="btn btn-secondary" to={paths.adminHollandContent}>
           Chỉnh sửa nội dung Holland

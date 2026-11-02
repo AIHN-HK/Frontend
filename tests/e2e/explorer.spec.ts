@@ -10,7 +10,7 @@ test('runtime catalog failure never falls back to preview data', async ({ page }
   page.on('request', r => { if (/catalog-preview|\/api\/.*career/.test(r.url())) requests.push(r.url()); });
   await page.route('**/api/v1/careers**', route => route.fulfill({ status: 503, json: { message: 'fixture unavailable' } }));
   await page.goto('/careers?q=phan+mem');
-  await expect(page.getByText('Không tải được dữ liệu nghề. Hãy kiểm tra kết nối và thử lại.')).toBeVisible();
+  await expect(page.getByText('Chưa tải được thông tin nghề. Kiểm tra mạng rồi thử lại.')).toBeVisible();
   await page.reload();
   await expect(page.getByRole('article')).toHaveCount(0);
   expect(requests.some(url => url.includes('catalog-preview'))).toBe(false);
@@ -68,11 +68,11 @@ test('pagination, browser history and reset preserve source-derived state', asyn
 
 test('no results and out-of-range page have honest distinct recovery', async ({ page }) => {
   await page.goto(`${preview}?q=khongco-nghe-nay`);
-  await expect(page.getByRole('heading', { name: 'Không có nghề mẫu phù hợp' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Chưa tìm thấy nghề mẫu' })).toBeVisible();
   await expect(page.getByRole('article')).toHaveCount(0);
   await expect(page.getByRole('navigation', { name: 'Phân trang nghề mẫu' })).toHaveCount(0);
   await page.goto(`${preview}?category=data&page=999`);
-  await expect(page.getByRole('heading', { name: 'Trang này vượt quá kết quả' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Trang này không có kết quả' })).toBeVisible();
   await page.getByRole('button', { name: 'Về trang đầu' }).click();
   await expect(page).toHaveURL(/category=data/);
   await expect(page).not.toHaveURL(/page=999/);
@@ -107,13 +107,13 @@ test('source failure has explicit retry and malformed fixture is rejected', asyn
   let count = 0;
   await page.route(fixture, route => ++count === 1 ? route.fulfill({ status: 503, body: '' }) : route.continue());
   await page.goto(preview);
-  await expect(page.getByRole('heading', { name: 'Không thể tải dữ liệu mẫu' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Chưa tải được dữ liệu mẫu' })).toBeVisible();
   await expect(page.getByRole('article')).toHaveCount(0);
   await page.getByRole('button', { name: 'Thử lại' }).click();
   await expect(page.getByRole('article')).toHaveCount(4);
   await page.route(fixture, route => route.fulfill({ json: { careers: [{ id: 'real-fake' }] } }));
   await page.reload();
-  await expect(page.getByRole('heading', { name: 'Không thể tải dữ liệu mẫu' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Chưa tải được dữ liệu mẫu' })).toBeVisible();
 });
 
 test('mobile filter drawer traps focus, applies shared filters, Escape restores focus and resize closes', async ({ page }) => {
@@ -198,14 +198,14 @@ test('runtime catalog distinguishes empty source, no results, out-of-range and r
   await page.goto('/careers');
   await expect(page.getByRole('alert')).toBeVisible();
   fail = false;
-  await page.getByRole('button', { name: 'Thử tải lại dữ liệu nghề' }).click();
-  await expect(page.getByRole('heading', { name: 'Danh mục nghề chưa có dữ liệu' })).toBeVisible();
+  await page.getByRole('button', { name: 'Tải lại' }).click();
+  await expect(page.getByRole('heading', { name: 'Danh mục đang được bổ sung' })).toBeVisible();
   await page.getByRole('searchbox').fill('missing');
   await page.getByRole('searchbox').press('Enter');
-  await expect(page.getByRole('heading', { name: 'Không có nghề phù hợp' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Chưa tìm thấy nghề theo tiêu chí này' })).toBeVisible();
   await expect(page.getByRole('navigation', { name: 'Phân trang nghề', exact: true })).toHaveCount(0);
   await page.goto('/careers?page=999');
-  await expect(page.getByRole('heading', { name: 'Trang này vượt quá kết quả' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Trang này không có kết quả' })).toBeVisible();
   await page.getByRole('button', { name: 'Về trang đầu' }).click();
   await expect(page).toHaveURL(/page=1/);
 });
@@ -261,19 +261,22 @@ test('runtime catalog fits breakpoints, has one shell and keeps source cards vis
   expect(errors).toEqual([]);
 });
 
-test('runtime catalog returns to the guarded filtered URL after login', async ({ page }) => {
-  const { resultFixture } = await import('./result.fixture');
-  await resultFixture(page, { authenticated: false });
+test('guests can open and reload a filtered catalog without personal requests', async ({ page }) => {
   const fixture = await careerPlatformFixture(page, { anonymous: true });
+  const requests: string[] = [];
+  page.on('request', request => {
+    if (['fetch', 'xhr', 'websocket'].includes(request.resourceType())) requests.push(new URL(request.url()).pathname);
+  });
   await page.goto('/careers?q=Software&code=I&page=1');
-  await expect(page).toHaveURL(/\/login\?returnTo=/);
-  await expect(page.getByRole('article')).toHaveCount(0);
-  expect(fixture.calls).toHaveLength(0);
-  await page.getByLabel('Email trường hoặc cá nhân').fill('student@example.test');
-  await page.getByLabel('Mật khẩu', { exact: true }).fill('password123');
-  await page.getByRole('button', { name: 'Đăng nhập vào Trang của tôi →' }).click();
   await expect(page).toHaveURL('/careers?q=Software&code=I&page=1');
   await expect(page.getByRole('heading', { name: 'Software Developers' })).toBeVisible();
   await expect(page.getByRole('searchbox')).toHaveValue('Software');
   await expect(page.getByRole('combobox', { name: 'Nhóm RIASEC nổi bật' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Đăng nhập', exact: true })).toBeVisible();
+  await page.reload();
+  await expect(page).toHaveURL('/careers?q=Software&code=I&page=1');
+  await expect(page.getByRole('heading', { name: 'Software Developers' })).toBeVisible();
+  expect(fixture.calls.length).toBeGreaterThan(0);
+  expect(requests.length).toBeGreaterThan(0);
+  expect(requests.every(path => path === '/api/v1/careers')).toBe(true);
 });

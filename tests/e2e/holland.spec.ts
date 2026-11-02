@@ -31,9 +31,9 @@ async function fixture(page: Page, options: Options = {}) {
     await route.fulfill({ status, headers, contentType: 'application/json', body: JSON.stringify({ status, data }) });
   }); return calls;
 }
-const start = (page: Page) => page.getByRole('button', { name: 'Bắt đầu bài trắc nghiệm', exact: true });
-const yes = (page: Page) => page.getByRole('radio', { name: 'Có — Tôi thích', exact: true });
-const no = (page: Page) => page.getByRole('radio', { name: 'Không — Tôi không thích', exact: true });
+const start = (page: Page) => page.getByRole('button', { name: 'Bắt đầu', exact: true });
+const yes = (page: Page) => page.getByRole('radio', { name: 'Có, mình thích', exact: true });
+const no = (page: Page) => page.getByRole('radio', { name: 'Không, mình không thích', exact: true });
 async function fill(page: Page, allNo = false) {
   await start(page).click(); await (allNo ? no(page) : yes(page)).check(); await page.getByRole('button', { name: 'Tiếp theo', exact: true }).click();
   await no(page).check(); await page.getByRole('button', { name: 'Tiếp theo', exact: true }).click(); await no(page).check();
@@ -73,11 +73,11 @@ test('all-No validation follows backend rule and does not submit', async ({ page
 test('changed account never sees the other owner draft', async ({ page }) => {
   const options: Options = {}, calls = await fixture(page, options); await page.goto('/assessment'); await start(page).click(); await yes(page).check();
   await page.getByRole('button', { name: 'Đăng xuất', exact: true }).click(); options.owner = 72;
-  await page.goto('/login'); await page.getByLabel('Email trường hoặc cá nhân').fill('b@example.test'); await page.getByLabel('Mật khẩu', { exact: true }).fill('Password123!'); await page.getByRole('button', { name: 'Đăng nhập vào Trang của tôi →', exact: true }).click();
+  await page.goto('/login'); await page.getByLabel('Email').fill('b@example.test'); await page.getByLabel('Mật khẩu', { exact: true }).fill('Password123!'); await page.getByRole('button', { name: 'Đăng nhập', exact: true }).click();
   await page.goto('/assessment'); await expect(start(page)).toBeVisible(); await expect(yes(page)).toHaveCount(0);
   expect(await page.evaluate(() => localStorage.getItem('aihn.assessment.boolean.v1.71'))).not.toBeNull(); expect(await page.evaluate(() => localStorage.getItem('aihn.assessment.boolean.v1.72'))).toBeNull();
   await page.getByRole('button', { name: 'Đăng xuất', exact: true }).click(); options.owner = 71;
-  await page.goto('/login'); await page.getByLabel('Email trường hoặc cá nhân').fill('a@example.test'); await page.getByLabel('Mật khẩu', { exact: true }).fill('Password123!'); await page.getByRole('button', { name: 'Đăng nhập vào Trang của tôi →', exact: true }).click();
+  await page.goto('/login'); await page.getByLabel('Email').fill('a@example.test'); await page.getByLabel('Mật khẩu', { exact: true }).fill('Password123!'); await page.getByRole('button', { name: 'Đăng nhập', exact: true }).click();
   await page.goto('/assessment'); await expect(yes(page)).toBeChecked(); expect(calls.filter(c => c.path.endsWith('/test-session'))).toHaveLength(1);
 });
 for (const width of [320, 390, 768, 769, 1024, 1025, 1440]) test(`long question, keyboard and touch targets at ${width}px`, async ({ page }) => {
@@ -90,20 +90,20 @@ for (const width of [320, 390, 768, 769, 1024, 1025, 1440]) test(`long question,
 test('GET retry and empty bank do not create attempts', async ({ page }) => {
   const options: Options = { getError: true }, calls = await fixture(page, options); await page.goto('/assessment');
   await expect(page.getByRole('heading', { name: 'Không tải được bộ câu hỏi.' })).toBeVisible(); options.getError = false; options.empty = true;
-  await page.getByRole('button', { name: 'Thử lại câu hỏi' }).click(); await expect(page.getByRole('heading', { name: 'Bộ đề chưa có câu hỏi.' })).toBeVisible(); await expect(start(page)).toHaveCount(0);
+  await page.getByRole('button', { name: 'Tải lại câu hỏi' }).click(); await expect(page.getByRole('heading', { name: 'Bộ đề chưa có câu hỏi.' })).toBeVisible(); await expect(start(page)).toHaveCount(0);
   options.empty = false; await page.getByRole('button', { name: 'Tải lại câu hỏi' }).click(); await expect(start(page)).toBeVisible(); expect(calls.filter(c => c.path.endsWith('/test-session'))).toHaveLength(0);
 });
 test('incompatible version is reported and preserved until explicit discard', async ({ page }) => {
   await fixture(page); await page.goto('/assessment'); await start(page).click(); await yes(page).check();
   const raw = await page.evaluate(() => { const key = 'aihn.assessment.boolean.v1.71', draft = JSON.parse(localStorage.getItem(key)!); draft.version = 2; const raw = JSON.stringify(draft); localStorage.setItem(key, raw); return raw; });
-  await page.reload(); await expect(page.getByRole('heading', { name: 'Bản nháp không tương thích' })).toBeVisible(); expect(await page.evaluate(() => localStorage.getItem('aihn.assessment.boolean.v1.71'))).toBe(raw);
-  await page.getByRole('button', { name: 'Xem xét bỏ bản nháp' }).click(); await page.getByRole('button', { name: 'Giữ bản nháp' }).click(); expect(await page.evaluate(() => localStorage.getItem('aihn.assessment.boolean.v1.71'))).toBe(raw);
-  await page.getByRole('button', { name: 'Xem xét bỏ bản nháp' }).click(); await page.getByRole('button', { name: 'Bỏ bản nháp trên thiết bị' }).click(); await expect(start(page)).toBeVisible();
+  await page.reload(); await expect(page.getByRole('heading', { name: 'Bản nháp cần kiểm tra lại' })).toBeVisible(); expect(await page.evaluate(() => localStorage.getItem('aihn.assessment.boolean.v1.71'))).toBe(raw);
+  await page.getByRole('button', { name: 'Bỏ bản nháp' }).click(); await page.getByRole('button', { name: 'Giữ bản nháp' }).click(); expect(await page.evaluate(() => localStorage.getItem('aihn.assessment.boolean.v1.71'))).toBe(raw);
+  await page.getByRole('button', { name: 'Bỏ bản nháp' }).click(); await page.getByRole('region', { name: 'Xác nhận bỏ bản nháp', exact: true }).getByRole('button', { name: 'Bỏ bản nháp', exact: true }).click(); await expect(start(page)).toBeVisible();
 });
 test('changed question content blocks stale draft without overwriting it', async ({ page }) => {
   const options: Options = {}; await fixture(page, options); await page.goto('/assessment'); await start(page).click(); await yes(page).check();
   const saved = await page.evaluate(() => localStorage.getItem('aihn.assessment.boolean.v1.71')); options.long = true; await page.reload();
-  await expect(page.getByRole('heading', { name: 'Bản nháp không tương thích' })).toBeVisible(); expect(await page.evaluate(() => localStorage.getItem('aihn.assessment.boolean.v1.71'))).toBe(saved);
+  await expect(page.getByRole('heading', { name: 'Bản nháp cần kiểm tra lại' })).toBeVisible(); expect(await page.evaluate(() => localStorage.getItem('aihn.assessment.boolean.v1.71'))).toBe(saved);
 });
 test('session count mismatch preserves known attempt through reload without creating again', async ({ page }) => {
   const calls = await fixture(page, { count: 4 }); await page.goto('/assessment'); await start(page).click();
@@ -111,21 +111,21 @@ test('session count mismatch preserves known attempt through reload without crea
   await page.getByRole('button', { name: 'Tiếp tục lần làm #501' }).click(); await expect(page.getByRole('alert')).toContainText('Chưa khớp'); expect(calls.filter(c => c.path.endsWith('/test-session'))).toHaveLength(1);
 });
 test('unknown start survives reload and needs explicit decision to start a new attempt', async ({ page }) => {
-  const calls = await fixture(page, { startFailure: true }); await page.goto('/assessment'); await start(page).click(); await expect(page.getByRole('alert')).toContainText('Chưa xác nhận lần làm bài'); await page.reload();
-  await expect(start(page)).toHaveCount(0); await expect(page.getByRole('button', { name: 'Xem xét bắt đầu lần mới' })).toBeVisible(); expect(calls.filter(c => c.path.endsWith('/test-session'))).toHaveLength(1);
+  const calls = await fixture(page, { startFailure: true }); await page.goto('/assessment'); await start(page).click(); await expect(page.getByRole('alert')).toContainText('Chưa xác nhận đã mở được bài'); await page.reload();
+  await expect(start(page)).toHaveCount(0); await expect(page.getByRole('button', { name: 'Bắt đầu bài mới' })).toBeVisible(); expect(calls.filter(c => c.path.endsWith('/test-session'))).toHaveLength(1);
 });
 test('storage denial is honest and choices remain usable in the current page', async ({ page }) => {
   await fixture(page); await page.addInitScript(() => {
     const get = Storage.prototype.getItem, set = Storage.prototype.setItem;
     Storage.prototype.getItem = function(key) { if (key.startsWith('aihn.assessment.')) throw new Error('denied'); return get.call(this, key); };
     Storage.prototype.setItem = function(key, value) { if (key.startsWith('aihn.assessment.')) throw new Error('denied'); return set.call(this, key, value); };
-  }); await page.goto('/assessment'); await expect(page.getByRole('note')).toContainText('Không truy cập'); await start(page).click(); await yes(page).check();
+  }); await page.goto('/assessment'); await expect(page.getByRole('note')).toContainText('Chưa lưu được trên thiết bị'); await start(page).click(); await yes(page).check();
   await expect(page.getByRole('status')).toHaveText('Chưa lưu trên thiết bị'); await expect(yes(page)).toBeChecked();
 });
 test('unknown 404 preserves the draft and only explicit retry sends another request', async ({ page }) => {
   const options: Options = { failure: 'network' }, calls = await fixture(page, options); await page.goto('/assessment'); await fill(page); await page.getByRole('button', { name: 'Nộp bài', exact: true }).click();
   await expect(page.getByRole('alert')).toBeVisible(); const retry = page.getByRole('button', { name: 'Nộp lại sau khi kiểm tra' }); await expect(retry).toBeDisabled();
-  await page.getByRole('button', { name: 'Kiểm tra kết quả đã nộp' }).click(); await expect(page.getByRole('alert')).toContainText('có thể còn xử lý'); await expect(retry).toBeEnabled();
+  await page.getByRole('button', { name: 'Kiểm tra kết quả đã nộp' }).click(); await expect(page.getByRole('alert')).toContainText('có thể đang được xử lý'); await expect(retry).toBeEnabled();
   expect(calls.filter(c => c.path.endsWith('/submit-v2'))).toHaveLength(1); options.failure = undefined; await retry.click(); await expect(page).toHaveURL(/\/assessment\/results\/501$/); expect(calls.filter(c => c.path.endsWith('/submit-v2'))).toHaveLength(2);
 });
 test('pending submission aborted by navigation keeps uncertainty on remount', async ({ page }) => {
@@ -143,15 +143,15 @@ test('401 never replays a POST and preserves the owner draft', async ({ page }) 
 test('welcome carousel wraps without starting an attempt and overview preserves a No draft', async ({ page }) => {
   const calls = await fixture(page); await page.goto('/assessment');
   await expect(page.getByRole('heading', { name: 'Trắc nghiệm Holland RIASEC', exact: true })).toBeVisible();
-  const carousel = page.getByRole('region', { name: 'Giới thiệu hành trình Holland' });
+  const carousel = page.getByRole('region', { name: 'Giới thiệu bài Holland' });
   await carousel.getByRole('button', { name: 'Nội dung giới thiệu trước' }).click();
-  await expect(carousel.getByRole('heading')).toHaveText('Từng bước xây dựng mục tiêu và lộ trình của riêng bạn.');
+  await expect(carousel.getByRole('heading')).toHaveText('Thử một bước nhỏ về phía mình muốn đến.');
   await carousel.getByRole('button', { name: 'Nội dung giới thiệu tiếp theo' }).click();
-  await expect(carousel.getByRole('heading')).toHaveText('Khám phá nghề nghiệp từ những điều bạn yêu thích.');
+  await expect(carousel.getByRole('heading')).toHaveText('Bắt đầu từ điều bạn thích.');
   expect(calls.filter(c => c.path.endsWith('/test-session'))).toHaveLength(0);
   await start(page).click(); await no(page).check();
   await page.getByRole('button', { name: 'Quay lại giới thiệu' }).click();
-  await page.getByRole('button', { name: 'Tiếp tục bài đang làm' }).click();
+  await page.getByRole('button', { name: 'Tiếp tục' }).click();
   await expect(no(page)).toBeChecked(); await expect(page.getByRole('progressbar')).toHaveAttribute('aria-valuenow', '1');
   expect(calls.filter(c => c.path.endsWith('/test-session'))).toHaveLength(1);
   const sidebar = page.getByRole('complementary', { name: 'Tiến trình' });

@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 
 type State = 'loading' | 'empty' | 'error' | 'unavailable' | 'success';
 const labels: Record<Exclude<State, 'success'>, string> = {
-  loading: 'Đang tải…', empty: 'Chưa có dữ liệu', error: 'Không thể tải trang', unavailable: 'Trang đang được chuẩn bị',
+  loading: 'Đang tải…', empty: 'Chưa có gì ở đây', error: 'Chưa tải được trang', unavailable: 'Nội dung chưa sẵn sàng',
 };
 
 export function AsyncState({ state, title, description, action, children }: {

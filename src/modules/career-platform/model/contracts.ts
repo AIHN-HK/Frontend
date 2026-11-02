@@ -167,7 +167,7 @@ export type RecommendationRun = z.infer<typeof runSchema>;
 export type Goal = z.infer<typeof goalSchema>;
 
 export const componentLabels = {
-  riasec: "Hình dạng RIASEC",
+  riasec: "Sở thích RIASEC",
   skills: "Kỹ năng tự đánh giá",
   interests: "Sở thích bổ sung",
 };

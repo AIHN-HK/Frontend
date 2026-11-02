@@ -1,0 +1,9 @@
+.workspace { position:relative; isolation:isolate; background:#131225; min-height:calc(100dvh - 64px); --ce-bg-elevated:#211e38; --ce-bg-sidebar:#151329; }
+.atmosphere { position:absolute; inset:0; overflow:hidden; pointer-events:none; z-index:-1; }
+.wash { position:absolute; inset:-15%; background:radial-gradient(ellipse at 65% 15%,rgba(116,84,196,.16),transparent 55%),radial-gradient(ellipse at 85% 90%,rgba(48,81,128,.1),transparent 55%); }
+.atmosphere svg { position:absolute; inset:0; width:100%; height:100%; color:#b4a0ef; opacity:.045; }
+.caption { font-size: var(--text-sm); line-height:1.7; color:var(--ce-text-secondary); }
+@media(min-width:1025px) and (prefers-reduced-motion:no-preference) { .wash { animation:drift 32s ease-in-out infinite alternate; } }
+.atmosphere[data-paused=true] .wash { animation-play-state:paused; }
+@keyframes drift { to { transform:translate3d(-3%,2%,0) scale(1.05); } }
+@media(prefers-reduced-motion:reduce) { .wash { animation:none; } }

@@ -1,14 +1,18 @@
 import { expect, test } from '@playwright/test';
+import { careerPlatformFixture } from './career-platform.fixture';
 
 test('catalog route and direct unknown URLs keep distinct states', async ({ page }) => {
+  await careerPlatformFixture(page, { anonymous: true });
   await page.goto('/careers');
-  await expect(page.getByRole('heading', { name: 'Đăng nhập AIHN', exact: true })).toBeVisible();
+  await expect(page).toHaveURL('/careers');
+  await expect(page.getByRole('heading', { name: 'Tìm hiểu nghề', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Software Developers', exact: true })).toBeVisible();
   await page.goto('/khong-ton-tai/deep-link');
   await page.reload();
   await expect(page.getByRole('heading', { name: 'Không tìm thấy trang' })).toBeVisible();
   await page.getByRole('link', { name: 'Về trang chủ' }).click();
   await expect(page).toHaveURL('/');
-  await expect(page.getByRole('heading', { level: 1 })).toContainText('Khám phá con đường');
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Hiểu mình trước');
 });
 
 for (const [width, sidebarWidth] of [
@@ -150,7 +154,7 @@ for (const route of ['/dashboard', '/admin', '/admin/questions']) {
   }) => {
     await page.goto(route);
     await expect(page).toHaveURL(/\/login(?:\?|$)/);
-    await expect(page.getByRole('heading', { name: 'Đăng nhập AIHN' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Đăng nhập' })).toBeVisible();
     await expect(page.getByTestId('workspace-shell')).toHaveCount(0);
   });
 }
@@ -163,7 +167,7 @@ test('public entry does not eagerly request workspace layouts or legacy runtime 
   });
   page.on('pageerror', (error) => errors.push(error.message));
   await page.goto('/');
-  await expect(page.getByRole('heading', { level: 1 })).toContainText('Khám phá con đường');
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Hiểu mình trước');
   expect(scripts.join('\n')).not.toMatch(
     /AdminLayout|StudentLayout|WorkspaceShell|LoginPage|socket|expo|react-native/i,
   );
@@ -194,7 +198,7 @@ test('a failed lazy route chunk offers an explicit recovery action', async ({ pa
   await page.route('**/assets/AdminLayout-*.js', (route) => route.abort());
   await page.goto('/preview/student');
   await page.getByRole('link', { name: 'Xem giao diện quản trị', exact: true }).click();
-  await expect(page.getByRole('heading', { name: 'Không thể tải trang' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Chưa tải được trang' })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Tải lại trang' })).toBeVisible();
 });
 
@@ -209,7 +213,7 @@ test('shell review screenshots at the three reference viewports', async ({ page 
       await page.goto(`/preview/${kind}`);
       await expect(
         page.getByRole('heading', {
-          name: kind === 'admin' ? 'Không gian quản trị' : 'Chào mừng đến với AIHN Career',
+          name: kind === 'admin' ? 'Không gian quản trị' : 'AIHN Career',
           exact: true,
         }),
       ).toBeVisible();

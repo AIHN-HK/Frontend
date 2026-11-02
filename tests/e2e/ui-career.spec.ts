@@ -5,9 +5,9 @@ test('recommendation filters keep the saved run and explicit career detail conte
   await page.emulateMedia({reducedMotion:'reduce'});
   const fixture=await careerPlatformFixture(page);
   await page.goto('/recommendations');
-  await page.getByRole('button',{name:'Tạo gợi ý nghề',exact:true}).click();
+  await page.getByRole('button',{name:'Xem nghề phù hợp',exact:true}).click();
   await expect(page.getByRole('heading',{name:'1. Software Developers'})).toBeVisible();
-  await expect(page.getByRole('link',{name:'Xem gợi ý nghề này'})).toHaveAttribute('href',/\/recommendations\/[^?]+\?careerId=15-1252.00$/);
+  await expect(page.getByRole('link',{name:'Xem lý do gợi ý'})).toHaveAttribute('href',/\/recommendations\/[^?]+\?careerId=15-1252.00$/);
   await page.getByRole('button',{name:'Có điểm xếp hạng',exact:true}).click();
   await expect(page.getByText('80.0 / 100',{exact:true})).toBeVisible();
   expect(fixture.calls.filter(c=>c.method==='POST'&&c.path==='/api/v1/career/recommendations')).toHaveLength(1);
@@ -32,7 +32,7 @@ test('saved recommendation detail reloads the explicit item and preserves old ru
   await page.route('**/api/v1/career/recommendations/run-detail',route=>route.fulfill({json:{status:200,data:detailRun()}}));
   await page.goto('/recommendations/run-detail?careerId=15-2051.00');
   await expect(page.getByRole('heading',{level:1})).toHaveText('Data Scientists');
-  await expect(page.getByRole('link',{name:'Nguồn nghề của bản gợi ý'})).toHaveAttribute('href','https://www.onetonline.org/link/summary/15-2051.00');
+  await expect(page.getByRole('link',{name:'Nguồn tham khảo của gợi ý'})).toHaveAttribute('href','https://www.onetonline.org/link/summary/15-2051.00');
   await page.reload();
   await expect(page.getByRole('heading',{level:1})).toHaveText('Data Scientists');
   for(const width of [320,390,768,769,1024,1025,1440,1600]){
@@ -43,9 +43,9 @@ test('saved recommendation detail reloads the explicit item and preserves old ru
     await page.screenshot({path:`.superpowers/ui-sync/P06/detail-${width}.png`,fullPage:true});
   }
   await page.goto('/recommendations/run-detail');
-  await expect(page.getByRole('heading',{name:'Chọn nghề trong bản gợi ý đã lưu'})).toBeVisible();
+  await expect(page.getByRole('heading',{name:'Chọn nghề để xem lý do'})).toBeVisible();
   await expect(page.locator('[data-ce-photo-frame]')).toHaveCount(0);
-  await page.getByRole('link',{name:'Xem gợi ý nghề này'}).nth(1).click();
+  await page.getByRole('link',{name:'Xem lý do gợi ý'}).nth(1).click();
   await expect(page.getByRole('heading',{level:1})).toHaveText('Data Scientists');
   expect(fixture.calls.filter(c=>c.method==='POST')).toHaveLength(0);
 });
@@ -55,7 +55,7 @@ for(const query of ['careerId=unknown','careerId=15-1252.00&careerId=15-2051.00'
     await careerPlatformFixture(page);
     await page.route('**/api/v1/career/recommendations/run-detail',route=>route.fulfill({json:{status:200,data:detailRun()}}));
     await page.goto(`/recommendations/run-detail?${query}`);
-    await expect(page.getByRole('alert')).toContainText('không thuộc bản gợi ý này');
+    await expect(page.getByRole('alert')).toContainText('không thuộc bản gợi ý');
     await expect(page.locator('[data-ce-photo-frame]')).toHaveCount(0);
   });
 }
@@ -65,7 +65,7 @@ for(const invalid of ['owner','run'] as const) {
     const run=detailRun(); if(invalid==='owner')run.userId=72;else run.id='other-run';
     await page.route('**/api/v1/career/recommendations/run-detail',route=>route.fulfill({json:{status:200,data:run}}));
     await page.goto('/recommendations/run-detail?careerId=15-1252.00');
-    await expect(page.getByRole('alert')).toContainText('Không tìm thấy bản gợi ý đã lưu');
+    await expect(page.getByRole('alert')).toContainText('Chưa tìm thấy bản gợi ý này');
     await expect(page.getByText('72.0 / 100',{exact:true})).toHaveCount(0);
   });
 }
@@ -82,7 +82,7 @@ test('delayed saved run reveals its requested career after the entrance complete
   });
   try {
     await page.goto('/recommendations/run-detail?careerId=15-2051.00');
-    await expect(page.getByRole('status')).toHaveText('Đang tải dữ liệu nghề…');
+    await expect(page.getByRole('status')).toHaveText('Đang tải thông tin nghề…');
     await expect(page.locator('[data-ce-photo-frame]')).toHaveCount(0);
     release();
     const title = page.getByRole('heading',{level:1,name:'Data Scientists'});
@@ -101,8 +101,8 @@ test('missing ranking and component scores remain unavailable rather than becomi
   await page.route('**/api/v1/career/recommendations/run-detail', route => route.fulfill({json:{status:200,data:unavailable}}));
   await page.goto('/recommendations/run-detail?careerId=15-2051.00');
   await expect(page.getByRole('heading',{level:1})).toHaveText('Data Scientists');
-  await expect(page.getByText('Chưa đủ tín hiệu',{exact:true})).toBeVisible();
-  await expect(page.getByText('Chưa có dữ liệu',{exact:true})).toBeVisible();
+  await expect(page.getByText('Cần thêm thông tin',{exact:true})).toBeVisible();
+  await expect(page.getByText('Chưa đủ thông tin',{exact:true})).toBeVisible();
   await expect(page.getByText('0.0 / 100',{exact:true})).toHaveCount(0);
 });
 
@@ -111,7 +111,7 @@ for (const status of [403,404]) {
     const fixture = await careerPlatformFixture(page);
     await page.route('**/api/v1/career/recommendations/run-detail', route => route.fulfill({status,json:{message:'Unavailable run'}}));
     await page.goto('/recommendations/run-detail?careerId=15-2051.00');
-    await expect(page.getByRole('alert')).toContainText('Không tải được dữ liệu nghề');
+    await expect(page.getByRole('alert')).toContainText('Chưa tải được thông tin nghề');
     await expect(page.locator('[data-ce-photo-frame]')).toHaveCount(0);
     expect(fixture.calls.every(call => call.method === 'GET')).toBe(true);
   });
@@ -127,11 +127,11 @@ test('logout discards a pending saved recommendation without revealing its caree
   });
   try {
     await page.goto('/recommendations/run-detail?careerId=15-2051.00');
-    await expect(page.getByRole('status')).toHaveText('Đang tải dữ liệu nghề…');
+    await expect(page.getByRole('status')).toHaveText('Đang tải thông tin nghề…');
     await page.getByRole('button',{name:'Đăng xuất',exact:true}).click();
     await expect(page).toHaveURL(/\/login/);
     release();
-    await expect(page.getByRole('heading',{name:'Đăng nhập AIHN'})).toBeVisible();
+    await expect(page.getByRole('heading',{name:'Đăng nhập'})).toBeVisible();
     await expect(page.getByText('Data Scientists',{exact:true})).toHaveCount(0);
   } finally { release(); }
 });

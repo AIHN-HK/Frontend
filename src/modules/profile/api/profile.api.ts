@@ -32,6 +32,6 @@ export async function updateProfile(http: AxiosInstance, input: ProfilePatch, si
     if (response.status !== 200) throw new Error('Unexpected save status');
     return unwrap(response.data);
   } catch {
-    throw new ApiError('configuration', 'Chưa xác nhận hồ sơ đã được lưu. Vui lòng kiểm tra dữ liệu đã lưu trước khi thử lại.', undefined, true);
+    throw new ApiError('configuration', 'Chưa xác nhận đã lưu hồ sơ. Kiểm tra bản đã lưu trước khi thử lại.', undefined, true);
   }
 }

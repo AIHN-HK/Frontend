@@ -5,11 +5,12 @@ import gsap from 'gsap';
 import { paths } from '@/routes/paths';
 import { Icon } from '@/shared/ui/Icon';
 import { Button } from '@/shared/ui/ce/Button';
+import { ShinyText } from '@/shared/ui/ShinyText';
 import advisorMascot from '@/assets/dashboard/aihn-advisor-mascot.svg';
 import { useDashboardQueries } from '../queries/dashboard.queries';
 import styles from './DashboardPage.module.css';
 
-const tabs = ['Gợi ý nghề nghiệp', 'Lộ trình mục tiêu', 'Khoảng cách kỹ năng'];
+const tabs = ['Nghề phù hợp', 'Lộ trình', 'Khoảng cách kỹ năng'];
 
 export function DashboardPage() {
   const { profile, history, latest } = useDashboardQueries();
@@ -18,7 +19,7 @@ export function DashboardPage() {
   const resultPath = latest ? paths.assessmentResult(latest.attemptId) : paths.assessment;
   const historyError = (
     <div role="alert" className={[styles['dashboard-state']].join(' ')}>
-      <p>Không tải được kết quả. Vui lòng thử lại.</p>
+      <p>Chưa tải được kết quả. Bạn thử lại nhé.</p>
       <Button
         variant="secondary"
         disabled={history.isFetching}
@@ -43,14 +44,14 @@ export function DashboardPage() {
           {latest.primaryAnalyze.description && <p>{latest.primaryAnalyze.description}</p>}
         </>
       ) : (
-        <p>Phân tích kết quả chưa sẵn sàng.</p>
+        <p>Chưa có phần diễn giải kết quả.</p>
       )}
       <Link className={['btn', 'btn-secondary'].join(' ')} to={resultPath}>
-        Xem chi tiết Holland
+        Xem kết quả
       </Link>
     </>
   ) : (
-    <p>Chưa có kết quả hoàn thành</p>
+    <p>Làm trắc nghiệm để bắt đầu</p>
   );
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -91,40 +92,40 @@ export function DashboardPage() {
               <span className={[styles['dashboard-journey']].join(' ')}>Học sinh lớp {profile.data.class}</span>
             )}
           </div>
-          <p>Khám phá ngành học và nghề nghiệp tương lai phù hợp với bạn.</p>
+          <p>Bạn có thể bắt đầu từ điều mình đang tò mò.</p>
         </div>
       </section>
       <CareerDashboardSummary resultPath={resultPath} hasResult={Boolean(latest)} />
       <div className={[styles['db-main-grid']].join(' ')}>
         <div className={[styles['dashboard-main-col']].join(' ')}>
-          <section className={[styles['dashboard-next']].join(' ')} aria-label="Hành động tiếp theo">
+          <section className={[styles['dashboard-next']].join(' ')} aria-label="Bước tiếp theo">
             <div>
-              <span className={[styles['dashboard-next-badge']].join(' ')}>Hành động trọng tâm tiếp theo</span>
+              <span className={[styles['dashboard-next-badge']].join(' ')}><ShinyText>Bạn có thể bắt đầu từ đây</ShinyText></span>
               <h2>
                 {history.isPending
                   ? 'Đang kiểm tra kết quả của bạn'
                   : history.isError
                     ? 'Kiểm tra lại kết quả trắc nghiệm'
                     : latest
-                      ? 'Tìm hiểu kết quả Holland của bạn'
-                      : 'Khám phá bản thân với Holland'}
+                      ? 'Đọc lại kết quả Holland'
+                      : 'Bắt đầu từ sở thích của bạn'}
               </h2>
               <p>
                 {latest
-                  ? 'Xem phân tích từ lần trắc nghiệm gần nhất trước khi lựa chọn bước tiếp theo.'
-                  : 'Trắc nghiệm giúp bạn có thêm thông tin về sở thích nghề nghiệp của mình.'}
+                  ? 'Đọc lại kết quả gần nhất để cân nhắc bước tiếp theo.'
+                  : 'Một bài trắc nghiệm để nhìn lại những hoạt động bạn thích.'}
               </p>
             </div>
             {history.isSuccess && (
               <Link className={['btn', 'btn-primary'].join(' ')} to={resultPath}>
-                {latest ? 'Xem kết quả gần nhất' : 'Bắt đầu / tiếp tục trắc nghiệm'}
+                {latest ? 'Xem kết quả gần nhất' : 'Làm trắc nghiệm'}
               </Link>
             )}
-            {history.isError && <p>Thử tải lại kết quả trong phần thông tin bên dưới.</p>}
+            {history.isError && <p>Tải lại kết quả ở phần bên dưới.</p>}
           </section>
           <section className={[styles['dashboard-snapshot']].join(' ')} aria-labelledby="snapshot-title">
             <div className={[styles['dashboard-snapshot-heading']].join(' ')}>
-              <h2 id="snapshot-title">AIHN đang hiểu bạn như thế nào?</h2>
+              <h2 id="snapshot-title">Những điều bạn đã biết về mình</h2>
               {latest?.primaryAnalyze && (
                 <span className={[styles['dashboard-code']].join(' ')}>Mã phân tích: {latest.primaryAnalyze.code}</span>
               )}
@@ -137,7 +138,7 @@ export function DashboardPage() {
                   <p role="status">Đang tải hồ sơ…</p>
                 ) : profile.isError ? (
                   <div role="alert" className={[styles['dashboard-state']].join(' ')}>
-                    <p>Không tải được hồ sơ. Vui lòng thử lại.</p>
+                    <p>Chưa tải được hồ sơ. Bạn thử lại nhé.</p>
                     <Button
                       variant="secondary"
                       disabled={profile.isFetching}
@@ -150,9 +151,9 @@ export function DashboardPage() {
                   </div>
                 ) : (
                   <>
-                    <p>{profile.data.fullname.trim() || 'Chưa có tên trong hồ sơ'}</p>
+                    <p>{profile.data.fullname.trim() || 'Bạn chưa thêm tên'}</p>
                     <p>
-                      {profile.data.class === null ? 'Chưa có thông tin lớp' : `Lớp ${profile.data.class}`}
+                      {profile.data.class === null ? 'Bạn chưa thêm lớp' : `Lớp ${profile.data.class}`}
                     </p>
                     <p className={[styles['dashboard-source']].join(' ')}>Nguồn: hồ sơ tài khoản</p>
                   </>
@@ -162,12 +163,12 @@ export function DashboardPage() {
                 </Link>
               </div>
             </div>
-            <p className={[styles['dashboard-source']].join(' ')}>Chưa thể xác định bài đang làm từ dữ liệu hiện có.</p>
+            <p className={[styles['dashboard-source']].join(' ')}>Chưa tìm được bài đang làm.</p>
           </section>
           <section className={[styles['dashboard-opportunities']].join(' ')} aria-labelledby="opportunities-title">
-            <h2 id="opportunities-title">Không gian Định hướng &amp; Cơ hội Nghề nghiệp</h2>
-            <p>Các thông tin cá nhân hóa sẽ xuất hiện khi có dữ liệu.</p>
-            <div className={[styles['dashboard-tabs']].join(' ')} role="tablist" aria-label="Tab phân tích Dashboard">
+            <h2 id="opportunities-title">Nghề và những bước chuẩn bị</h2>
+            <p>Thông tin sẽ rõ hơn khi bạn bổ sung hồ sơ và kết quả.</p>
+            <div className={[styles['dashboard-tabs']].join(' ')} role="tablist" aria-label="Các phần thông tin của bạn">
               {tabs.map((label, index) => (
                 <button
                   key={label}
@@ -214,10 +215,10 @@ export function DashboardPage() {
               <h3>{tabs[tab]}</h3>
               <p>
                 {tab === 0
-                  ? 'Xem bản gợi ý có giải thích từ kết quả Holland và hồ sơ.'
+                  ? 'Xem nghề được gợi ý và lý do từ Holland, hồ sơ của bạn.'
                   : tab === 1
-                    ? 'Mở lộ trình để chọn mục tiêu và theo dõi nhiệm vụ.'
-                    : 'Mở lộ trình để xem khoảng cách kỹ năng của nghề mục tiêu.'}
+                    ? 'Chọn mục tiêu và theo dõi từng việc cần làm.'
+                    : 'Xem kỹ năng cần rèn thêm cho nghề bạn chọn.'}
               </p>
             </div>
           </section>
@@ -227,16 +228,16 @@ export function DashboardPage() {
             <div className={[styles['dashboard-advisor-heading']].join(' ')}>
               <img src={advisorMascot} width="68" height="68" alt="" />
               <div>
-                <h2>Cố vấn AIHN</h2>
-                <p>Cùng bạn tìm hướng đi</p>
+                <h2>Hỏi AIHN</h2>
+                <p>Cùng gỡ điều còn phân vân</p>
               </div>
             </div>
-            <span className={[styles['dashboard-context']].join(' ')}>Tư vấn tại trang Cố vấn</span>
+            <span className={[styles['dashboard-context']].join(' ')}>Trao đổi với AIHN</span>
             <p className={[styles['dashboard-advisor-note']].join(' ')}>
-              Đọc lại các phiên đã lưu hoặc bắt đầu hội thoại mới tại trang Cố vấn AIHN.
+              Đọc lại hội thoại cũ hoặc hỏi AIHN về điều còn phân vân.
             </p>
             <Link className={['btn', 'btn-secondary'].join(' ')} to={paths.advisor}>
-              Mở trang Cố vấn
+              Hỏi AIHN
             </Link>
           </section>
           <section className={[styles['dashboard-activity']].join(' ')}>
@@ -253,12 +254,12 @@ export function DashboardPage() {
                   <p>Hoàn thành trắc nghiệm Holland</p>
                   <p className={[styles['dashboard-source']].join(' ')}>{latest.finishAt}</p>
                   <Link className={['btn', 'btn-ghost'].join(' ')} to={resultPath}>
-                    Mở kết quả hoạt động
+                    Xem kết quả
                   </Link>
                 </div>
               </div>
             ) : (
-              <p>Chưa có hoạt động trắc nghiệm hoàn thành.</p>
+              <p>Chưa có bài trắc nghiệm nào hoàn thành.</p>
             )}
           </section>
         </div>

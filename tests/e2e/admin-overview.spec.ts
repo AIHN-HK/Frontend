@@ -8,6 +8,6 @@ test('admin overview uses server counts and preserves snapshot on failed refresh
   await expect(page.getByTestId('count-students')).toHaveText('3');
   options.overviewStatus = 503;
   await page.getByRole('button', { name: 'Làm mới dữ liệu' }).click();
-  await expect(page.getByRole('alert')).toContainText('Không thể làm mới');
+  await expect(page.getByRole('alert')).toContainText('Chưa làm mới được');
   await expect(page.getByTestId('count-students')).toHaveText('3');
 });

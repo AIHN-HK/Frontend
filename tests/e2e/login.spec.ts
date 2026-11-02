@@ -65,19 +65,19 @@ async function fixture(
   return calls;
 }
 async function fill(page: Page) {
-  await page.getByLabel('Email trường hoặc cá nhân').fill('student@example.test');
+  await page.getByLabel('Email').fill('student@example.test');
   await page.getByLabel('Mật khẩu', { exact: true }).fill(' exact password ');
 }
 
 test('validates locally, preserves failed credentials and never enters a private page', async ({ page }) => {
   const calls = await fixture(page, { invalid: true });
   await page.goto('/login');
-  await page.getByRole('button', { name: 'Đăng nhập vào Trang của tôi →' }).click();
-  await expect(page.getByText('Vui lòng nhập email hợp lệ.')).toBeVisible();
-  await expect(page.getByLabel('Email trường hoặc cá nhân')).toBeFocused();
+  await page.getByRole('button', { name: 'Đăng nhập', exact: true }).click();
+  await expect(page.getByText('Nhập email hợp lệ.')).toBeVisible();
+  await expect(page.getByLabel('Email')).toBeFocused();
   expect(calls).toHaveLength(0);
   await fill(page);
-  await page.getByRole('button', { name: 'Đăng nhập vào Trang của tôi →' }).click();
+  await page.getByRole('button', { name: 'Đăng nhập', exact: true }).click();
   await expect(page.getByRole('alert')).toContainText('Email hoặc mật khẩu không đúng');
   await expect(page.getByLabel('Mật khẩu', { exact: true })).toHaveValue(' exact password ');
   await expect(page).toHaveURL(/\/login$/);
@@ -99,8 +99,8 @@ for (const remember of [false, true]) {
     });
     await page.goto('/login?returnTo=%2Fassessment%3Ffrom%3Dhome');
     await fill(page);
-    await page.getByLabel('Ghi nhớ đăng nhập trên thiết bị này').setChecked(remember);
-    await page.getByRole('button', { name: 'Đăng nhập vào Trang của tôi →' }).click();
+    await page.getByLabel('Ghi nhớ đăng nhập').setChecked(remember);
+    await page.getByRole('button', { name: 'Đăng nhập', exact: true }).click();
     await expect(page.getByRole('button', { name: 'Đang đăng nhập…' })).toBeDisabled();
     await page.getByLabel('Mật khẩu', { exact: true }).press('Enter');
     await expect.poll(() => calls.length).toBe(1);
@@ -121,14 +121,14 @@ for (const remember of [false, true]) {
     await fixture(sibling);
     await sibling.goto('/dashboard');
     if (remember) await expect(sibling.getByText('Người dùng thử', { exact: true })).toBeVisible();
-    else await expect(sibling.getByRole('heading', { name: 'Đăng nhập AIHN' })).toBeVisible();
+    else await expect(sibling.getByRole('heading', { name: 'Đăng nhập' })).toBeVisible();
     await page.getByRole('button', { name: 'Đăng xuất', exact: true }).click();
     await expect(page).toHaveURL(/\/login/);
     expect(
       await page.evaluate((key) => localStorage.getItem(key) ?? sessionStorage.getItem(key), key),
     ).toBeNull();
     expect(calls.filter((call) => call.path.endsWith('/logout'))).toHaveLength(1);
-    await expect(sibling.getByRole('heading', { name: 'Đăng nhập AIHN' })).toBeVisible();
+    await expect(sibling.getByRole('heading', { name: 'Đăng nhập' })).toBeVisible();
     await sibling.close();
   });
 }
@@ -137,7 +137,7 @@ test('ADMIN defaults to admin and re-verifies its role after reload', async ({ p
   const calls = await fixture(page, { admin: true });
   await page.goto('/login?returnTo=https%3A%2F%2Fevil.test');
   await fill(page);
-  await page.getByRole('button', { name: 'Đăng nhập vào Trang của tôi →' }).click();
+  await page.getByRole('button', { name: 'Đăng nhập', exact: true }).click();
   await expect(page).toHaveURL(/\/admin$/);
   await expect(page.getByRole('heading', { name: 'Tổng quan hệ thống' })).toBeVisible();
   await page.reload();
@@ -164,8 +164,8 @@ test('refresh failure on reload ends the session after one attempt and preserves
     { key },
   );
   await page.goto('/roadmap');
-  await expect(page.getByRole('heading', { name: 'Đăng nhập AIHN' })).toBeVisible();
-  await expect(page.getByRole('alert')).toContainText('Không thể khôi phục phiên');
+  await expect(page.getByRole('heading', { name: 'Đăng nhập' })).toBeVisible();
+  await expect(page.getByRole('alert')).toContainText('Chưa mở lại được phiên');
   await expect(page).toHaveURL(/returnTo=%2Froadmap/);
   expect(calls.filter((call) => call.path.endsWith('/refresh'))).toHaveLength(1);
 });
@@ -176,7 +176,7 @@ test('failed server logout clears device identity and reports the unconfirmed re
   await fixture(page, { logoutFails: true });
   await page.goto('/login');
   await fill(page);
-  await page.getByRole('button', { name: 'Đăng nhập vào Trang của tôi →' }).click();
+  await page.getByRole('button', { name: 'Đăng nhập', exact: true }).click();
   await expect(page).toHaveURL(/\/dashboard$/);
   await page.getByRole('button', { name: 'Đăng xuất', exact: true }).click();
   await expect(page.getByRole('alert')).toContainText('Chưa xác nhận');
@@ -193,15 +193,15 @@ for (const failure of ['network', 'server'] as const) {
     });
     await page.goto('/login');
     await fill(page);
-    await page.getByLabel('Ghi nhớ đăng nhập trên thiết bị này').check();
-    await page.getByRole('button', { name: 'Đăng nhập vào Trang của tôi →' }).click();
+    await page.getByLabel('Ghi nhớ đăng nhập').check();
+    await page.getByRole('button', { name: 'Đăng nhập', exact: true }).click();
     await expect(page.getByRole('alert')).toBeVisible();
-    await expect(page.getByLabel('Email trường hoặc cá nhân')).toHaveValue('student@example.test');
+    await expect(page.getByLabel('Email')).toHaveValue('student@example.test');
     await expect(page.getByLabel('Mật khẩu', { exact: true })).toHaveValue(' exact password ');
-    await expect(page.getByLabel('Ghi nhớ đăng nhập trên thiết bị này')).toBeChecked();
+    await expect(page.getByLabel('Ghi nhớ đăng nhập')).toBeChecked();
     expect(calls).toBe(1);
-    await expect(page.getByRole('button', { name: 'Đăng nhập vào Trang của tôi →' })).toBeEnabled();
-    await page.getByRole('button', { name: 'Đăng nhập vào Trang của tôi →' }).click();
+    await expect(page.getByRole('button', { name: 'Đăng nhập', exact: true })).toBeEnabled();
+    await page.getByRole('button', { name: 'Đăng nhập', exact: true }).click();
     await expect.poll(() => calls).toBe(2);
   });
 }
@@ -217,7 +217,7 @@ test('Login supports password visibility, keyboard and links to registered auth 
   await page.getByRole('link', { name: 'Quên mật khẩu?' }).click();
   await expect(page).toHaveURL(/\/forgot-password$/);
   await page.goto('/login');
-  await page.getByRole('link', { name: 'Đăng ký miễn phí' }).click();
+  await page.getByRole('link', { name: 'Đăng ký' }).click();
   await expect(page).toHaveURL(/\/signup$/);
 });
 
@@ -233,11 +233,11 @@ test('Login review screenshots and touch targets at standard and boundary viewpo
   ]) {
     await page.setViewportSize({ width: width!, height: height! });
     await page.goto('/login');
-    await expect(page.getByRole('heading', { name: 'Đăng nhập AIHN' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Đăng nhập' })).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     if (width === 390) {
       const text = await page
-        .getByRole('button', { name: 'Đăng nhập vào Trang của tôi →' })
+        .getByRole('button', { name: 'Đăng nhập', exact: true })
         .evaluate((node) => {
           const range = document.createRange();
           range.selectNodeContents(node);
@@ -269,6 +269,6 @@ test('login dark source card remains scrollable on short screens and OAuth is ex
   await expect(page.getByRole('button',{name:'Đăng nhập với Google'})).toBeDisabled();
   await reviewResponsive(page,'P14','main>div');
   await page.setViewportSize({width:320,height:450});
-  await page.getByRole('button',{name:'Đăng nhập vào Trang của tôi →'}).scrollIntoViewIfNeeded();
-  await expect(page.getByRole('button',{name:'Đăng nhập vào Trang của tôi →'})).toBeInViewport();
+  await page.getByRole('button',{name:'Đăng nhập',exact:true}).scrollIntoViewIfNeeded();
+  await expect(page.getByRole('button',{name:'Đăng nhập',exact:true})).toBeInViewport();
 });

@@ -20,8 +20,7 @@ export function CareersPreviewPage() {
       <header>
         <h1>Dữ liệu nghề · Bản mẫu</h1>
         <p role="note">
-          Chỉ đọc · Các bản ghi minh họa T12/T13, chưa xuất bản vào hệ thống. Không phải dataset O*NET đã
-          chuẩn hóa.
+          Chỉ đọc · Nghề mẫu chưa xuất bản, không phải dữ liệu O*NET đã chuẩn hóa.
         </p>
       </header>
       <AdminDataState query={query}>
@@ -92,8 +91,8 @@ export function CareersPreviewPage() {
         }}
       </AdminDataState>
       <section className="admin-panel">
-        <h2>Quản lý &amp; Xuất bản</h2>
-        <p>Thêm/sửa nghề, biên tập nguồn, xuất dataset và đồng bộ chưa sẵn sàng.</p>
+        <h2>Quản lý và xuất bản</h2>
+        <p>Chưa hỗ trợ thêm, sửa nghề, biên tập nguồn, xuất dữ liệu hay đồng bộ.</p>
       </section>
       <Drawer
         open={selected !== null}
@@ -109,8 +108,7 @@ export function CareersPreviewPage() {
               <h3>{selected.name}</h3>
               <p>{selected.summary}</p>
               <p>
-                Thông tin do bản mẫu nội bộ cung cấp. Tài liệu dưới đây là nguồn học tập chung, không xác nhận
-                dữ liệu nghề hay mức độ phù hợp cá nhân.
+                Thông tin mẫu nội bộ. Tài liệu chỉ để học thêm, không xác minh nghề hay mức phù hợp của bạn.
               </p>
               {selected.detail?.references?.length ? (
                 selected.detail.references.map((ref) => (

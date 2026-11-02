@@ -13,14 +13,14 @@ test('real detail never fetches preview records or claims a verified career', as
     if (/catalog-preview|\/api\/.*career/.test(r.url())) requests.push(r.url());
   });
   await page.goto('/careers/preview-software');
-  await expect(page).toHaveURL(/\/login\?returnTo=%2Fcareers%2Fpreview-software$/);
-  await expect(page.getByRole('heading', { name: 'Đăng nhập AIHN' })).toBeVisible();
+  await expect(page).toHaveURL('/careers/preview-software');
+  await expect(page.getByText('Đường dẫn nghề chưa đúng.')).toBeVisible();
   expect(requests).toEqual([]);
   await careerPlatformFixture(page);
   await page.goto('/careers/preview-software');
-  await expect(page.getByText('Mã nghề không hợp lệ.')).toBeVisible();
+  await expect(page.getByText('Đường dẫn nghề chưa đúng.')).toBeVisible();
   await page.reload();
-  await expect(page.getByRole('heading', { name: 'Nhiệm vụ & Trách nhiệm điển hình' })).toHaveCount(0);
+  await expect(page.getByRole('heading', { name: 'Công việc thường làm' })).toHaveCount(0);
   expect(requests).toEqual([]);
 });
 
@@ -34,7 +34,7 @@ test('public preview loads the requested record on direct entry and reload witho
   await page.goto(software);
   await expect(page.getByRole('heading', { level: 1, name: 'Kỹ sư Phần mềm' })).toBeVisible();
   await expect(page.getByRole('note')).toContainText('Dữ liệu mẫu');
-  await expect(page.getByRole('heading', { name: 'Nhiệm vụ & Trách nhiệm điển hình' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Công việc thường làm' })).toBeVisible();
   await expect(
     page.getByText('Phân tích yêu cầu và thiết kế giải pháp phần mềm.', { exact: true }),
   ).toBeVisible();
@@ -61,7 +61,7 @@ test('partial detail keeps section structure and shows missing salary/admissions
   await expect(page.getByText('Chưa có nhiệm vụ minh họa cho nghề mẫu này.', { exact: true })).toBeVisible();
   await expect(page.getByText('Chưa có kỹ năng chuyên môn minh họa.', { exact: true })).toBeVisible();
   await expect(page.getByText('Chưa có kỹ năng mềm minh họa.', { exact: true })).toBeVisible();
-  await expect(page.getByText('Chưa có nguồn lương được xác nhận.', { exact: true })).toBeVisible();
+  await expect(page.getByText('Chưa có nguồn xác minh mức lương.', { exact: true })).toBeVisible();
   await expect(page.getByText('Chưa có dữ liệu tuyển sinh được xác nhận.', { exact: true })).toBeVisible();
   await expect(page.getByText('Chưa có tài liệu tham khảo cho nghề mẫu này.', { exact: true })).toBeVisible();
   await expect(page.getByRole('link', { name: /MDN|PostgreSQL/ })).toHaveCount(0);
@@ -82,7 +82,7 @@ for (const id of ['123', 'preview-', 'preview-software%2Fextra']) {
 test('unknown valid ID is not found and supports return to the filtered explorer', async ({ page }) => {
   await page.goto('/preview/careers/preview-does-not-exist?category=data');
   await expect(page.getByRole('heading', { name: 'Không tìm thấy nghề mẫu' })).toBeVisible();
-  await page.getByRole('link', { name: 'Quay lại khám phá nghề' }).click();
+  await page.getByRole('link', { name: 'Về danh mục nghề mẫu' }).click();
   await expect(page).toHaveURL(/\/preview\/careers\?category=data$/);
   await expect(page.getByRole('article')).toHaveCount(2);
 });
@@ -95,7 +95,7 @@ test('Explorer to Detail to reload and back retains search, all filters and page
   await expect(page).toHaveURL(`/preview/careers/preview-psychology${query}`);
   await page.reload();
   await expect(page.getByRole('heading', { level: 1, name: 'Chuyên viên Tâm lý học' })).toBeVisible();
-  await page.getByRole('link', { name: 'Quay lại khám phá nghề' }).click();
+  await page.getByRole('link', { name: 'Về danh mục nghề mẫu' }).click();
   await expect(page).toHaveURL(`/preview/careers${query}`);
   await expect(page.getByRole('searchbox')).toHaveValue('vi du');
   await expect(page.getByRole('status')).toContainText('5–6');
@@ -193,7 +193,7 @@ test('learning references belong to the current record and open safely; they are
   await expect(mdn).toHaveAttribute('target', '_blank');
   await expect(mdn).toHaveAttribute('rel', 'noopener noreferrer');
   await expect(
-    page.getByText('Không dùng các tài liệu này để xác nhận mức lương hoặc tuyển sinh.', { exact: true }),
+    page.getByText('Tài liệu này không xác minh mức lương hay tuyển sinh.', { exact: true }),
   ).toBeVisible();
   await context.route('https://developer.mozilla.org/en-US/docs/Learn_web_development', (route) =>
     route.fulfill({ contentType: 'text/html', body: '<h1>External link navigation fixture</h1>' }),
@@ -215,11 +215,11 @@ test('guest personal CTAs go through login without creating chat or fake match',
   });
   await page.goto(software);
   await expect(page.getByRole('region', { name: 'Độ phù hợp cá nhân' })).toContainText(
-    'Phân tích độ phù hợp cho nghề này chưa có dữ liệu.',
+    'Chưa đủ thông tin để xem nghề này có phù hợp với bạn.',
   );
-  await page.getByRole('link', { name: 'Trao đổi với Cố vấn AI', exact: true }).click();
+  await page.getByRole('link', { name: 'Hỏi AIHN', exact: true }).click();
   await expect(page).toHaveURL(/\/login\?returnTo=%2Fadvisor$/);
-  await expect(page.getByRole('heading', { name: 'Đăng nhập AIHN' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Đăng nhập' })).toBeVisible();
   expect(requests).toEqual([]);
 });
 
@@ -228,9 +228,9 @@ test('a verified signed-in session still gets no invented match or automatic soc
 }) => {
   const backend = await advisorFixture(page);
   await page.goto(software);
-  await expect(page.getByRole('region', { name: 'Độ phù hợp cá nhân' })).toContainText('Bạn đã đăng nhập.');
+  await expect(page.getByRole('region', { name: 'Độ phù hợp cá nhân' })).toContainText('Bạn có thể làm trắc nghiệm Holland hoặc hỏi AIHN.');
   await expect(page.getByRole('region', { name: 'Độ phù hợp cá nhân' })).toContainText(
-    'Phân tích độ phù hợp cho nghề này chưa có dữ liệu.',
+    'Chưa đủ thông tin để xem nghề này có phù hợp với bạn.',
   );
   expect(backend.handshakes).toHaveLength(0);
   expect(backend.requests.filter((r) => /chat|history-by-user/.test(r.path))).toEqual([]);
@@ -253,7 +253,7 @@ test('long text renders as text and the back target cannot become an external re
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(name.trim());
   await expect(page.locator('.career-detail img[onerror]')).toHaveCount(0);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-  await expect(page.getByRole('link', { name: 'Quay lại khám phá nghề' })).toHaveAttribute(
+  await expect(page.getByRole('link', { name: 'Về danh mục nghề mẫu' })).toHaveAttribute(
     'href',
     '/preview/careers?category=data',
   );

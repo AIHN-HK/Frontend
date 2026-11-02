@@ -5,7 +5,7 @@ import { paths } from '@/routes/paths';
 import { studentNavigation } from '../navigation';
 import styles from './AppHeader.module.css';
 
-export function AppHeader({ account }: { account?: ReactNode }) {
+export function AppHeader({ account, brandTo = paths.dashboard }: { account?: ReactNode; brandTo?: string }) {
   const [open, setOpen] = useState(false);
   const opener = useRef<HTMLButtonElement>(null);
   const { key } = useLocation();
@@ -21,7 +21,7 @@ export function AppHeader({ account }: { account?: ReactNode }) {
     if (event.key === 'Escape' && open) { setOpen(false); opener.current?.focus(); }
   }}>
     <div className={styles.container}>
-      <Link to={paths.dashboard} className={styles.brand} aria-label="AIHN Career · Trang của tôi"><span aria-hidden="true" />AIHN Career</Link>
+      <Link to={brandTo} className={styles.brand} aria-label={brandTo === paths.home ? 'AIHN Career · Trang chủ' : 'AIHN Career · Trang của tôi'}><span aria-hidden="true" />AIHN Career</Link>
       <nav className={styles.primary} aria-label="Điều hướng AIHN">{primary.map(item => <NavLink key={item.path} to={item.path} className={({ isActive }) => isActive ? styles.active : undefined}>{item.label}</NavLink>)}</nav>
       <div className={styles.actions}>
         {account}

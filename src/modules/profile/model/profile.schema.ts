@@ -2,10 +2,10 @@ import { z } from 'zod';
 import type { Profile, ProfilePatch } from './profile.types';
 
 export const profileSchema = z.object({
-  fullname: z.string().trim().min(1, 'Vui lòng nhập họ và tên.').max(120, 'Họ và tên tối đa 120 ký tự.'),
+  fullname: z.string().trim().min(1, 'Nhập họ và tên.').max(120, 'Họ và tên tối đa 120 ký tự.'),
   phone: z.string().trim().regex(/^0\d{9}$/, 'Số điện thoại cần 10 chữ số, bắt đầu bằng 0.'),
   address: z.string().trim().max(500, 'Địa chỉ tối đa 500 ký tự.'),
-  gender: z.enum(['', 'MALE', 'FEMALE', 'OTHER'], { error: 'Vui lòng chọn giới tính hợp lệ.' }),
+  gender: z.enum(['', 'MALE', 'FEMALE', 'OTHER'], { error: 'Chọn giới tính trong danh sách.' }),
   class: z.string().refine(value => value === '' || /^(?:[1-9]|1[0-2])$/.test(value), 'Lớp cần là số nguyên từ 1 đến 12.'),
 });
 export type ProfileForm = z.infer<typeof profileSchema>;

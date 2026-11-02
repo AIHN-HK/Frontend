@@ -43,7 +43,7 @@ export function AdminCareerDataPage() {
       true,
     );
   return (
-    <PlatformFrame title="Dữ liệu nghề và phân tích hệ thống">
+    <PlatformFrame title="Dữ liệu nghề và thống kê">
       <SourceNote />
       <ReadState
         pending={data.isPending}
@@ -59,7 +59,7 @@ export function AdminCareerDataPage() {
             mục tiêu
           </p>
           <p>
-            Nhiệm vụ tự báo cáo hoàn thành: {stats.data.completedTasks}/
+            Nhiệm vụ người dùng xác nhận đã xong: {stats.data.completedTasks}/
             {stats.data.totalTasks}
           </p>
           <h3>Phân bố mã Holland của các kết quả</h3>
@@ -158,7 +158,7 @@ export function AdminCareerDataPage() {
         </>
       )}
       <section className="platform-card">
-        <h2>Từ điển kỹ năng nguồn</h2>
+        <h2>Danh mục kỹ năng từ nguồn</h2>
         <ReadState
           pending={skills.isPending}
           error={skills.isError}
@@ -172,9 +172,7 @@ export function AdminCareerDataPage() {
           ))}
         </ul>
         <p>
-          Thông số nghề/kỹ năng được nhập từ dataset có checksum bằng CLI, không
-          sửa số liệu nguồn trực tiếp trên UI. Thao tác xuất bản/ẩn ghi audit và
-          giữ nguyên các bản gợi ý cũ.
+          Dữ liệu nghề, kỹ năng được nhập qua CLI từ bộ dữ liệu có checksum. Giao diện chỉ xuất bản hoặc ẩn nghề, có nhật ký thay đổi. Các gợi ý cũ vẫn được giữ.
         </p>
       </section>
     </PlatformFrame>

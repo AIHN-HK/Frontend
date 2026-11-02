@@ -11,24 +11,24 @@ import {studentDetailFixture} from './admin-student-detail.fixture';
 type Screen={source:string;route:string;title:RegExp;setup?:(page:Page)=>Promise<unknown>;ready?:(page:Page)=>Promise<unknown>};
 const student=(page:Page)=>careerPlatformFixture(page,{seedProfile:true});
 const savedRun=async(page:Page)=>{
-  await student(page);await page.goto('/recommendations');await page.getByRole('button',{name:'Tạo gợi ý nghề',exact:true}).click();await expect(page.getByRole('heading',{name:'1. Software Developers',exact:true})).toBeVisible();
+  await student(page);await page.goto('/recommendations');await page.getByRole('button',{name:'Xem nghề phù hợp',exact:true}).click();await expect(page.getByRole('heading',{name:'1. Software Developers',exact:true})).toBeVisible();
 };
 const screens:Screen[]=[
-  {source:'screens/home.html',route:'/',title:/Khám phá con đường/},
-  {source:'screens/login.html',route:'/login',title:/Đăng nhập AIHN/},
+  {source:'screens/home.html',route:'/',title:/Hiểu mình trước/},
+  {source:'screens/login.html',route:'/login',title:/Đăng nhập/},
   {source:'screens/signup.html',route:'/signup',title:/Tạo tài khoản|Đăng ký/},
   {source:'screens/forgot-reset-password.html',route:'/forgot-password',title:/Khôi phục mật khẩu/},
-  {source:'screens/holland-test.html',route:'/assessment',title:/Trắc nghiệm.*Holland/,setup:student,ready:page=>expect(page.getByRole('button',{name:'Bắt đầu bài trắc nghiệm',exact:true})).toBeVisible()},
+  {source:'screens/holland-test.html',route:'/assessment',title:/Trắc nghiệm.*Holland/,setup:student,ready:page=>expect(page.getByRole('button',{name:'Bắt đầu',exact:true})).toBeVisible()},
   {source:'screens/assessment-result.html',route:'/assessment/results/812',title:/TopCode: ISC/,setup:student},
-  {source:'screens/dashboard.html',route:'/dashboard',title:/Xin chào/,setup:student,ready:page=>expect(page.getByRole('link',{name:'Mở kết quả Holland',exact:true})).toBeVisible()},
-  {source:'screens/recommendations.html',route:'/recommendations',title:/Gợi ý nghề nghiệp/,setup:student,ready:async page=>{await page.getByRole('button',{name:'Tạo gợi ý nghề',exact:true}).click();await expect(page.getByRole('heading',{name:'1. Software Developers',exact:true})).toBeVisible();}},
+  {source:'screens/dashboard.html',route:'/dashboard',title:/Xin chào/,setup:student,ready:page=>expect(page.getByRole('region',{name:'Trắc nghiệm Holland',exact:true}).getByRole('link',{name:'Xem kết quả',exact:true})).toBeVisible()},
+  {source:'screens/recommendations.html',route:'/recommendations',title:/Những nghề nên tìm hiểu thêm/,setup:student,ready:async page=>{await page.getByRole('button',{name:'Xem nghề phù hợp',exact:true}).click();await expect(page.getByRole('heading',{name:'1. Software Developers',exact:true})).toBeVisible();}},
   {source:'screens/recommendation-detail.html',route:'/recommendations/run-fixture-1?careerId=15-1252.00',title:/Software Developers/,setup:savedRun},
-  {source:'screens/career-explorer.html',route:'/careers',title:/Khám phá nghề nghiệp/,setup:student,ready:page=>expect(page.getByRole('article')).toHaveCount(1)},
+  {source:'screens/career-explorer.html',route:'/careers',title:/Tìm hiểu nghề/,setup:student,ready:page=>expect(page.getByRole('article')).toHaveCount(1)},
   {source:'screens/career-detail.html',route:'/careers/15-1252.00',title:/Software Developers/,setup:student},
-  {source:'screens/career-profile.html',route:'/career-profile',title:/Hồ sơ Năng lực/,setup:student,ready:page=>expect(page.getByLabel('Mã nghề mục tiêu')).toHaveValue('15-1252.00')},
-  {source:'screens/roadmap.html',route:'/roadmap',title:/Lộ trình và tiến độ/,setup:student,ready:async page=>{await page.getByRole('button',{name:'Tạo lộ trình từ mục tiêu',exact:true}).click();await expect(page.getByText('0/4 nhiệm vụ hoàn thành · phiên bản 1',{exact:true})).toBeVisible();}},
-  {source:'screens/advisor.html',route:'/advisor',title:/Cố vấn AIHN|Cố vấn AI/,setup:advisorFixture},
-  {source:'screens/history.html',route:'/history',title:/Lịch sử/,setup:historyFixture,ready:page=>expect(page.getByRole('article',{name:'Lần làm #812',exact:true})).toBeVisible()},
+  {source:'screens/career-profile.html',route:'/career-profile',title:/Hồ sơ của bạn/,setup:student,ready:page=>expect(page.getByLabel('Mã nghề mục tiêu')).toHaveValue('15-1252.00')},
+  {source:'screens/roadmap.html',route:'/roadmap',title:/Con đường phía trước/,setup:student,ready:async page=>{await page.getByRole('button',{name:'Tạo lộ trình',exact:true}).click();await expect(page.getByText('0/4 nhiệm vụ hoàn thành · phiên bản 1',{exact:true})).toBeVisible();}},
+  {source:'screens/advisor.html',route:'/advisor',title:/Hỏi AIHN/,setup:advisorFixture},
+  {source:'screens/history.html',route:'/history',title:/Lịch sử của bạn/,setup:historyFixture,ready:page=>expect(page.getByRole('article',{name:'Lần làm #812',exact:true})).toBeVisible()},
   {source:'screens/settings.html',route:'/settings',title:/Cài đặt/,setup:student},
   {source:'admin/overview.html',route:'/admin',title:/Tổng quan hệ thống/,setup:adminFixture,ready:page=>expect(page.getByTestId('count-students')).toHaveText('3')},
   {source:'admin/questions.html',route:'/admin/questions',title:/Ngân hàng câu hỏi Holland/,setup:questionsFixture,ready:page=>expect(page.getByText('Tôi thích tìm hiểu máy móc',{exact:true})).toBeVisible()},

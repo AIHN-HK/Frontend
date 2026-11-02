@@ -17,7 +17,7 @@ export function OverviewPage() {
       <header className="admin-page-heading">
         <div>
           <h1>Tổng quan hệ thống</h1>
-          <p>Số liệu hiện có từ hệ thống hướng nghiệp.</p>
+          <p>Số liệu đang được ghi nhận trong hệ thống.</p>
         </div>
         <button
           className="btn btn-secondary"
@@ -73,7 +73,7 @@ export function OverviewPage() {
             </section>
             <section className="admin-panel">
               <h2>Thống kê mở rộng</h2>
-              <p>Chưa có dữ liệu tăng trưởng, phân bố nhóm, xếp hạng hay nhật ký hoạt động.</p>
+              <p>Chưa có thống kê tăng trưởng, phân bố nhóm, xếp hạng và hoạt động.</p>
             </section>
           </>
         )}
