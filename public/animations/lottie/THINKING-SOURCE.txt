@@ -12,4 +12,4 @@ Replaces the former cartoon chatbot asset at `advisor.json` / `advisor.svg`.
 - Poster: a small AIHN-authored static SVG approximation of the recolored orb, avoiding the 96 KB flattened player frame. The original motion was checked with the SVG light renderer.
 - Playback uses the already-installed lottie-web SVG light runtime and local JSON, without image/font/CDN requests. Kept JSON to avoid adding another WASM/runtime solely for the compressed container.
 
-This third-party asset is governed by its own license, not the repository's 0BSD license. Attribution and other existing assets are documented separately in ATTRIBUTION.md and sources.json.
+This third-party asset is governed by its own license, not the repository's 0BSD license. Attribution and other existing assets are documented separately in ATTRIBUTION.txt and sources.json.
