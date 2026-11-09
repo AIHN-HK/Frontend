@@ -10,7 +10,6 @@ export function HomeStory() {
   const selectStep = (index:number) => { setActive(index); scrollToStep(index); };
   return <section ref={root} id="how-it-works" className={`${styles['aihn-howitworks']} ${styles['section--dark']}`} data-home-surface="dark" aria-label="AIHN hoạt động thế nào">
     <div className={styles['aihn-howitworks__header']}>
-      <span className={styles['editorial-tag']}>Cách sử dụng AIHN</span>
       <h2 className={styles['editorial-statement']}>Hiểu mình rồi chọn bước tiếp theo.</h2>
     </div>
     <div className={styles['aihn-howitworks__layout']}>

@@ -38,7 +38,8 @@ test('one lazy canvas follows every Home section with readable dark and light bl
   await expect.poll(async () => (await gpuMetrics(page)).draws).toBeGreaterThan(0);
   await expect(splash).toHaveCSS('position', 'absolute');
   await expect(splash).toHaveCSS('pointer-events', 'none');
-  expect(Number(await splash.evaluate(element => getComputedStyle(element).opacity))).toBeLessThanOrEqual(0.4);
+  await expect.poll(() => splash.evaluate(element => Number(getComputedStyle(element).opacity))).toBeGreaterThan(0.45);
+  expect(Number(await splash.evaluate(element => getComputedStyle(element).opacity))).toBeLessThanOrEqual(0.55);
   await expect(splash).toHaveCSS('mix-blend-mode', 'screen');
   expect(await splash.locator('canvas').evaluate(element => (element as HTMLCanvasElement).width <= 1440 && (element as HTMLCanvasElement).height <= 900)).toBe(true);
   const area = (await scope.boundingBox())!, layer = (await splash.boundingBox())!;

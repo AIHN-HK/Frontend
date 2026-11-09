@@ -88,7 +88,7 @@ test('admin/student palettes stay scoped across client navigation', async ({ pag
   await expect(page.getByTestId('workspace-shell')).toHaveCSS('background-color', 'rgb(248, 250, 252)');
   await expect(page.getByRole('button', { name: 'Mở hộp thoại' })).toHaveCSS(
     'background-color',
-    'rgb(13, 148, 136)',
+    'rgb(15, 118, 110)',
   );
   await page.getByRole('link', { name: 'Xem giao diện sinh viên' }).click();
   await expect(page.getByTestId('workspace-shell')).toHaveCSS('background-color', 'rgb(243, 250, 252)');

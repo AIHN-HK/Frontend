@@ -129,7 +129,7 @@
   min-width: 0;
   min-height: 0;
   overflow: hidden;
-  background: var(--ce-bg-main);
+  background: transparent;
 }
 .page :global(.advisor-chat-header) {
   display: flex;
