@@ -7,17 +7,12 @@ export function HomeHero() {
     <section className={styles["aihn-hero"] + " " + styles["section--dark"]} data-home-surface="dark" aria-label="Tìm hướng đi của bạn">
       <div className={styles["aihn-hero__container"]}>
         <div className={styles["aihn-hero__content"]}>
-          <div className={styles["hero-pill-badge"]}>
-            <span>
-              {"Bắt đầu bằng Holland RIASEC"}
-            </span>
-          </div>
           <h1 className={styles["aihn-hero__title"]}>
-            <span data-home-title-line="">{"Hiểu mình trước"}</span>
+            <span data-home-title-line="">{"Hiểu mình trước "}</span>
             <br />
-            <em data-home-title-line="">
+            <span data-home-title-line="">
               {"khi chọn đường."}
-            </em>
+            </span>
           </h1>
           <p className={styles["aihn-hero__desc"]}>
             {"Nhìn lại điều bạn thích, tìm hiểu nghề và chọn một bước để bắt đầu."}
@@ -55,9 +50,9 @@ export function HomeHero() {
                   {"94 / 100"}
                 </span>
               </div>
-              <h3 className={styles["journey-card-title"]}>
+              <h2 className={styles["journey-card-title"]}>
                 {"Kỹ sư phần mềm"}
-              </h3>
+              </h2>
               <p className={styles["journey-card-desc"]}>
                 {"Thiết kế hệ thống và giải các bài toán bằng phần mềm."}
               </p>
@@ -68,7 +63,7 @@ export function HomeHero() {
                 <span className={styles["riasec-micro-pill"]} style={{"color": "#f59e0b"}}>
                   {"R • Thực tế"}
                 </span>
-                <span className={styles["riasec-micro-pill"]} style={{"color": "#8b5cf6"}}>
+                <span className={styles["riasec-micro-pill"]} style={{"color": "#c4b5fd"}}>
                   {"E • Quản lý"}
                 </span>
               </div>
@@ -82,20 +77,20 @@ export function HomeHero() {
                   {"89 / 100"}
                 </span>
               </div>
-              <h3 className={styles["journey-card-title"]}>
+              <h2 className={styles["journey-card-title"]}>
                 {"Thiết kế trải nghiệm"}
-              </h3>
+              </h2>
               <p className={styles["journey-card-desc"]}>
                 {"Tìm hiểu người dùng để thiết kế trải nghiệm dễ sử dụng."}
               </p>
               <div className={styles["journey-riasec-pills"]}>
-                <span className={styles["riasec-micro-pill"]} style={{"color": "#ec4899"}}>
+                <span className={styles["riasec-micro-pill"]} style={{"color": "#f9a8d4"}}>
                   {"A • Nghệ thuật"}
                 </span>
                 <span className={styles["riasec-micro-pill"]} style={{"color": "#06b6d4"}}>
                   {"I • Nghiên cứu"}
                 </span>
-                <span className={styles["riasec-micro-pill"]} style={{"color": "#3b82f6"}}>
+                <span className={styles["riasec-micro-pill"]} style={{"color": "#93c5fd"}}>
                   {"S • Xã hội"}
                 </span>
               </div>
@@ -109,9 +104,9 @@ export function HomeHero() {
                   {"86 / 100"}
                 </span>
               </div>
-              <h3 className={styles["journey-card-title"]}>
+              <h2 className={styles["journey-card-title"]}>
                 {"Phân tích dữ liệu"}
-              </h3>
+              </h2>
               <p className={styles["journey-card-desc"]}>
                 {"Phân tích dữ liệu để hiểu vấn đề và hỗ trợ quyết định."}
               </p>
@@ -122,7 +117,7 @@ export function HomeHero() {
                 <span className={styles["riasec-micro-pill"]} style={{"color": "#94a3b8"}}>
                   {"C • Nghiệp vụ"}
                 </span>
-                <span className={styles["riasec-micro-pill"]} style={{"color": "#8b5cf6"}}>
+                <span className={styles["riasec-micro-pill"]} style={{"color": "#c4b5fd"}}>
                   {"E • Quản lý"}
                 </span>
               </div>
@@ -139,9 +134,6 @@ export function HomeIntroduction() {
     <section className={styles["aihn-intro"] + " " + styles["section--light"]} data-home-surface="light">
       <div className={styles["aihn-intro__container"]}>
         <div className={styles["aihn-intro__header"]}>
-          <span className={styles["editorial-tag"]}>
-            {"Cách AIHN giúp bạn"}
-          </span>
           <h2 className={styles["editorial-statement"]}>
             {"Chọn nghề cũng cần hiểu lý do."}
           </h2>
@@ -191,9 +183,6 @@ export function HomeRiasec() {
     <section className={styles["aihn-riasec"] + " " + styles["section--light"]} data-home-surface="light" aria-label="Ví dụ kết quả RIASEC">
       <div className={styles["aihn-riasec__container"]}>
         <div className={styles["aihn-riasec__header"]}>
-          <span className={styles["editorial-tag"]}>
-            {"Sở thích của bạn"}
-          </span>
           <h2 className={styles["editorial-statement"]}>
             {"Một góc nhìn để hiểu mình hơn."}
           </h2>
@@ -335,25 +324,25 @@ export function HomeRiasec() {
           </div>
           <div className={styles["riasec-insights-col"]}>
             <div className={styles["insight-block"]}>
-              <h4 className={styles["insight-block__title"]}>
+              <h3 className={styles["insight-block__title"]}>
                 {"Cách bạn tiếp cận vấn đề"}
-              </h4>
+              </h3>
               <p className={styles["insight-block__p"]}>
                 {"Trong ví dụ này, nhóm Nghiên cứu và Nghệ thuật gợi ý sở thích tìm nguyên nhân và thử cách làm mới."}
               </p>
             </div>
             <div className={styles["insight-block"]}>
-              <h4 className={styles["insight-block__title"]}>
+              <h3 className={styles["insight-block__title"]}>
                 {"Môi trường đáng thử"}
-              </h4>
+              </h3>
               <p className={styles["insight-block__p"]}>
                 {"Công việc có khoảng riêng để tập trung và thử ý tưởng có thể là một hướng tìm hiểu."}
               </p>
             </div>
             <div className={styles["insight-block"]}>
-              <h4 className={styles["insight-block__title"]}>
+              <h3 className={styles["insight-block__title"]}>
                 {"Cách làm việc cùng nhau"}
-              </h4>
+              </h3>
               <p className={styles["insight-block__p"]}>
                 {"Nhóm Xã hội gợi ý sự quan tâm đến con người. Trải nghiệm thực tế sẽ giúp hiểu rõ hơn cách cộng tác."}
               </p>
@@ -370,9 +359,6 @@ export function HomeMatches() {
     <section className={styles["aihn-matches"] + " " + styles["section--dark"]} data-home-surface="dark" aria-label="Ví dụ nghề nên tìm hiểu">
       <div className={styles["aihn-matches__container"]}>
         <div className={styles["aihn-matches__header"]}>
-          <span className={styles["editorial-tag"]}>
-            {"Những hướng đáng cân nhắc"}
-          </span>
           <h2 className={styles["editorial-statement"]}>
             {"Có nhiều hướng đáng để bạn thử."}
           </h2>
@@ -528,9 +514,6 @@ export function HomeSkillGap() {
     <section className={styles["aihn-skillgap"] + " " + styles["section--light"]} data-home-surface="light" aria-label="Ví dụ khoảng cách kỹ năng">
       <div className={styles["aihn-skillgap__container"]}>
         <div className={styles["aihn-skillgap__header"]}>
-          <span className={styles["editorial-tag"]}>
-            {"Kỹ năng cần rèn thêm"}
-          </span>
           <h2 className={styles["editorial-statement"]}>
             {"Biết mình cần học thêm gì."}
           </h2>
@@ -581,7 +564,7 @@ export function HomeSkillGap() {
             </div>
             <div className={styles["bridge-connector-line"]}>
             </div>
-            <span style={{"fontSize": "var(--text-xs)", "fontWeight": "700", "color": "#858099", "textTransform": "uppercase"}}>
+            <span style={{"fontSize": "var(--text-xs)", "fontWeight": "700", "color": "#475569", "textTransform": "uppercase"}}>
               {"LỘ TRÌNH"}
             </span>
           </div>
@@ -640,9 +623,6 @@ export function HomeRoadmap() {
     <section className={styles["aihn-roadmap"] + " " + styles["section--dark"]} data-home-surface="dark" aria-label="Ví dụ lộ trình phát triển">
       <div className={styles["aihn-roadmap__container"]}>
         <div className={styles["aihn-roadmap__header"]}>
-          <span className={styles["editorial-tag"]}>
-            {"Con đường phía trước"}
-          </span>
           <h2 className={styles["editorial-statement"]}>
             {"Mỗi bước đều có thể bắt đầu."}
           </h2>
@@ -744,9 +724,6 @@ export function HomeAdvisor() {
     <section className={styles["aihn-advisor"] + " " + styles["section--light"]} data-home-surface="light" aria-label="Ví dụ giao diện Cố vấn AI">
       <div className={styles["aihn-advisor__container"]}>
         <div className={styles["aihn-advisor__header"]}>
-          <span className={styles["editorial-tag"]}>
-            {"Hỏi AIHN"}
-          </span>
           <h2 className={styles["editorial-statement"]}>
             {"Cùng gỡ từng điều còn phân vân."}
           </h2>
@@ -817,18 +794,12 @@ export function HomeTrust() {
     <section className={styles["aihn-trust"] + " " + styles["section--dark"]} data-home-surface="dark">
       <div className={styles["aihn-trust__container"]}>
         <div className={styles["aihn-trust__header"]}>
-          <span className={styles["editorial-tag"]}>
-            {"Cơ sở của gợi ý"}
-          </span>
           <h2 className={styles["editorial-statement"]}>
             {"Mỗi gợi ý đều cần có lý do."}
           </h2>
         </div>
         <div className={styles["aihn-trust__grid"]}>
           <div className={styles["trust-card"]}>
-            <div className={styles["trust-card__tag"]}>
-              {"MÔ HÌNH THAM KHẢO"}
-            </div>
             <h3 className={styles["trust-card__heading"]}>
               {"Holland RIASEC"}
             </h3>
@@ -837,9 +808,6 @@ export function HomeTrust() {
             </p>
           </div>
           <div className={styles["trust-card"]}>
-            <div className={styles["trust-card__tag"]}>
-              {"MINH BẠCH DỮ LIỆU"}
-            </div>
             <h3 className={styles["trust-card__heading"]}>
               {"Lý do gợi ý nghề"}
             </h3>
@@ -848,9 +816,6 @@ export function HomeTrust() {
             </p>
           </div>
           <div className={styles["trust-card"]}>
-            <div className={styles["trust-card__tag"]}>
-              {"THEO HỒ SƠ CỦA BẠN"}
-            </div>
             <h3 className={styles["trust-card__heading"]}>
               {"Hồ sơ và mục tiêu"}
             </h3>

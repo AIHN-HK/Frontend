@@ -1,25 +1,3 @@
-.shiny { color: inherit; }
-
-@supports (background-clip: text) {
-  .shiny {
-    background-image: linear-gradient(110deg, currentColor 40%, var(--ce-text-primary, #fff) 50%, currentColor 60%);
-    background-size: 300% 100%;
-    background-repeat: no-repeat;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: sweep 1.3s ease-in-out both;
-  }
-}
-
-@keyframes sweep {
-  from { background-position: 100% 0; }
-  to { background-position: 0% 0; }
-}
-
-@media (prefers-reduced-motion: reduce), (forced-colors: active) {
-  .shiny { animation: none; background: none; -webkit-text-fill-color: currentColor; }
-}
-
-@media print {
-  .shiny { animation: none; background: none; -webkit-text-fill-color: currentColor; }
+.shiny {
+  color: inherit;
 }

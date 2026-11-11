@@ -16,9 +16,9 @@ export function HomeStoryViews({active,id}:{active:number;id:string}) {
             <div style={{"fontSize": "var(--text-sm)", "fontWeight": "700", "color": "#7a74cb", "textTransform": "uppercase", "marginBottom": "12px"}}>
               {"Hồ sơ minh họa"}
             </div>
-            <h4 style={{"fontFamily": "var(--font-family-serif)", "fontSize": "var(--text-xl)", "color": "#ffffff", "marginBottom": "20px"}}>
+            <h3 style={{"fontFamily": "var(--font-family-serif)", "fontSize": "var(--text-xl)", "color": "#ffffff", "marginBottom": "20px"}}>
               {"TopCode minh họa: I • A • S"}
-            </h4>
+            </h3>
             <div style={{"display": "flex", "flexDirection": "column", "gap": "14px"}}>
               <div>
                 <div style={{"display": "flex", "justifyContent": "space-between", "fontSize": "var(--text-sm)", "marginBottom": "4px", "color": "#c2bdd8"}}>
@@ -75,9 +75,9 @@ export function HomeStoryViews({active,id}:{active:number;id:string}) {
                 {"94 / 100 · ví dụ"}
               </span>
             </div>
-            <h4 style={{"fontFamily": "var(--font-family-serif)", "fontSize": "var(--text-xl)", "color": "#ffffff", "marginBottom": "10px"}}>
+            <h3 style={{"fontFamily": "var(--font-family-serif)", "fontSize": "var(--text-xl)", "color": "#ffffff", "marginBottom": "10px"}}>
               {"Kỹ sư phần mềm"}
-            </h4>
+            </h3>
             <p style={{"fontSize": "var(--text-base)", "color": "#c2bdd8", "lineHeight": "1.5", "marginBottom": "16px"}}>
               {"Trong ví dụ này, nghề được gợi ý từ sở thích nghiên cứu và giải quyết vấn đề."}
             </p>
@@ -91,9 +91,9 @@ export function HomeStoryViews({active,id}:{active:number;id:string}) {
             <div style={{"fontSize": "var(--text-sm)", "color": "#7a74cb", "fontWeight": "700", "textTransform": "uppercase", "marginBottom": "12px"}}>
               {"Kỹ năng cần rèn thêm"}
             </div>
-            <h4 style={{"fontFamily": "var(--font-family-serif)", "fontSize": "var(--text-lg)", "color": "#ffffff", "marginBottom": "16px"}}>
+            <h3 style={{"fontFamily": "var(--font-family-serif)", "fontSize": "var(--text-lg)", "color": "#ffffff", "marginBottom": "16px"}}>
               {"Kỹ năng nghề kỹ sư phần mềm"}
-            </h4>
+            </h3>
             <div style={{"display": "grid", "gridTemplateColumns": "1fr 1fr", "gap": "12px"}}>
               <div style={{"background": "rgba(16, 185, 129, 0.1)", "border": "1px solid rgba(16, 185, 129, 0.25)", "padding": "12px", "borderRadius": "12px"}}>
                 <div style={{"fontSize": "var(--text-xs)", "fontWeight": "700", "color": "#34d399", "marginBottom": "6px"}}>
@@ -125,9 +125,9 @@ export function HomeStoryViews({active,id}:{active:number;id:string}) {
             <div style={{"fontSize": "var(--text-sm)", "color": "#7a74cb", "fontWeight": "700", "textTransform": "uppercase", "marginBottom": "12px"}}>
               {"Lộ trình cá nhân"}
             </div>
-            <h4 style={{"fontFamily": "var(--font-family-serif)", "fontSize": "var(--text-lg)", "color": "#ffffff", "marginBottom": "16px"}}>
+            <h3 style={{"fontFamily": "var(--font-family-serif)", "fontSize": "var(--text-lg)", "color": "#ffffff", "marginBottom": "16px"}}>
               {"Mục tiêu: lập trình backend"}
-            </h4>
+            </h3>
             <div style={{"display": "flex", "flexDirection": "column", "gap": "10px", "fontSize": "var(--text-sm)"}}>
               <div style={{"display": "flex", "alignItems": "center", "gap": "10px", "color": "#34d399"}}>
                 <span style={{"width": "8px", "height": "8px", "borderRadius": "50%", "background": "#34d399"}}>
@@ -178,7 +178,7 @@ function AssessmentDemo() {
   const [answer,setAnswer] = useState(true);
   return <div className={styles['assessment-mock-card']}>
     <p className={styles['mock-q-meta']}>Câu hỏi minh họa · Nhóm Nghiên cứu (I)</p>
-    <h4 className={styles['mock-q-text']}>Bạn thích phân tích dữ liệu để tìm quy luật?</h4>
+    <h3 className={styles['mock-q-text']}>Bạn thích phân tích dữ liệu để tìm quy luật?</h3>
     <div className={styles['mock-options-list']} aria-label="Trả lời minh họa">
       {[true,false].map(value => <button type="button" key={String(value)} aria-pressed={answer===value} onClick={()=>setAnswer(value)} className={`${styles['mock-opt-pill']} ${answer===value?styles.selected:''}`}>{value?'Có, mình thích':'Không, mình không thích'}</button>)}
     </div>

@@ -6,6 +6,25 @@
 .card li { display:flex; gap:8px; align-items:center; background:var(--ce-glass-subtle); border:1px solid var(--ce-border); border-radius:8px; padding:10px 12px; font-size: var(--text-base); }
 .card li span { color:var(--ce-violet); }
 .controls { position:absolute; top:50%; left:-22px; right:-22px; display:flex; justify-content:space-between; align-items:center; pointer-events:none; transform:translateY(-50%); }
-.controls button { pointer-events:auto; border:0; border-radius:50%; width:44px; height:44px; background:#fff; color:#111; font-size: var(--text-stat); cursor:pointer; }
+.controls button {
+  pointer-events: auto;
+  border: 0;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  background: #ffffff;
+  color: #17151f;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  transition: transform 0.15s ease, background-color 0.15s ease;
+}
+.controls button:hover {
+  background-color: #f1f0f7;
+  transform: scale(1.05);
+}
 .controls span { position:absolute; top:190px; left:50%; transform:translateX(-50%); font-size: var(--text-sm); color:var(--ce-text-secondary); }
 @media(max-width:1024px) { .card h2 { font-size: var(--text-lg); } .controls { position:static; transform:none; justify-content:center; gap:20px; margin-top:12px; } .controls span { position:static; transform:none; } }

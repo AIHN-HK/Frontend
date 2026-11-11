@@ -41,7 +41,7 @@
   /* Typography / Text Colors (High Contrast Friendly Slate-Navy) */
   --text-primary: #162736;        /* Friendly Deep Navy: Crisp, readable */
   --text-secondary: #5A6E7C;      /* Soft Slate Neutral: Comfortable reading */
-  --text-muted: #869BA8;          /* Soft Slate: Secondary metadata & captions */
+  --text-muted: #526778;          /* Readable metadata on light surfaces */
   --text-inverse: #FFFFFF;
 
   /* Brand / Primary (Vibrant Ocean Teal from Reference Image) */
@@ -206,8 +206,6 @@
   /* Transitions */
   --ce-ease: cubic-bezier(0.16, 1, 0.3, 1);
 }
-/* Explicit prompt easing takes precedence over the design CSS value. */
-:root { --ce-ease: cubic-bezier(0.34, 1.56, 0.64, 1); }
 
 :root {
   --ce-shadow-deep: rgba(0,0,0,.6);

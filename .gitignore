@@ -56,14 +56,16 @@ _vscode/
 *.tsbuildinfo
 
 # Project documentation and local tooling
+/doc/
 /docs/
 /.serena/
+/.claude/
+/.codex/
+/.agents/
 
 # Local notes and execution reports
-*.md
-*.MD
-*.mdx
-*.MDX
+*.[mM][dD]
+*.[mM][dD][xX]
 
 # Local migration/reference material (kept outside the application source)
 /legacy/
@@ -75,15 +77,4 @@ playwright-report/
 test-results/
 .superpowers/
 
-# Keep repository and coding-agent guidance files versioned
-!**/README.md
-!**/AGENTS.md
-!**/CLAUDE.md
-!**/CODEX.md
-!**/GEMINI.md
-!**/COPILOT.md
-!**/AIDER.md
-
-# Keep attribution and asset provenance with the distributed assets
-!/public/animations/lottie/ATTRIBUTION.md
-!/public/animations/lottie/THINKING-SOURCE.md
+# Runtime HTML, configuration, and third-party license notices remain versioned.

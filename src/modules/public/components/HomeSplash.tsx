@@ -19,7 +19,7 @@ export function HomeSplash() {
         let section: HTMLElement | null = hero, strength = -1;
         const pointer = { x: innerWidth / 2, y: innerHeight / 2 };
         const opacity = gsap.quickTo(host, 'opacity', { duration: 0.35, ease: 'power2.out' });
-        gsap.set(host, { opacity: 0.38 });
+        gsap.set(host, { opacity: 0.52 });
         host.dataset.splashState = 'idle';
         const stop = () => {
           generation++; loading = false;
@@ -35,7 +35,7 @@ export function HomeSplash() {
           section = candidate && scope.contains(candidate) ? candidate : null;
           const light = section?.dataset.homeSurface === 'light';
           host.dataset.splashSurface = light ? 'light' : 'dark';
-          let next = section ? light ? 0.24 : 0.38 : 0;
+          let next = section ? light ? 0.28 : 0.52 : 0;
           if (section === hero) {
             const rect = hero.getBoundingClientRect();
             next *= 1 - 0.5 * Math.min(1, Math.max(0, -rect.top) / Math.max(1, rect.height));

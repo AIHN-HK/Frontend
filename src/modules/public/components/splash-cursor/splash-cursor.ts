@@ -2,7 +2,7 @@
  * React Bits Splash Cursor by David Haz, adapted for AIHN's bounded homepage sections.
  * Source: https://github.com/DavidHDev/react-bits/tree/main/src/ts-default/Animations/SplashCursor
  * License: public/licenses/react-bits.txt (MIT + Commons Clause).
- * AIHN: low resolution, 30 fps, slow simulation, mouse-only scoped events, no bursts.
+ * AIHN: bounded 30 fps simulation, mouse-only scoped events, stronger fluid trails.
  */
 type RGB = [number, number, number];
 
@@ -43,7 +43,7 @@ interface Pointer {
   offset: number;
 }
 
-const QUALITY = { low: { sim: 64, dye: 512, iterations: 10 } };
+const QUALITY = { low: { sim: 64, dye: 768, iterations: 10 } };
 
 const VERTEX = `#version 300 es
 precision highp float;
@@ -216,8 +216,8 @@ const parseColor = (value: string): RGB => {
 
 const settings = {
   palette: ['#4034b8', '#9877ec', '#61b8ee', '#7255c4', '#df85ba'].map(parseColor),
-  colorSpeed: 0.16, intensity: 2, size: 0.65, force: 0.5,
-  swirl: 2, trail: 1.4, momentum: 0.85, shading: 0.15,
+  colorSpeed: 0.16, intensity: 3, size: 0.8, force: 0.65,
+  swirl: 2, trail: 1.2, momentum: 0.85, shading: 0.15,
   quality: 'low' as const, light: false, contained: true,
 };
 
@@ -720,4 +720,3 @@ export function createSplashCursor(canvas: HTMLCanvasElement, scope: HTMLElement
   };
 
 }
-

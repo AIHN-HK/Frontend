@@ -1,4 +1,6 @@
 .ce-app {
+  position: relative;
+  isolation: isolate;
   color-scheme: dark;
   min-height: 100dvh;
   background: var(--ce-bg-main);
